@@ -7,6 +7,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/JhuangLab/bget/log"
 	"github.com/JhuangLab/bget/utils"
@@ -22,6 +23,7 @@ var saveLog bool
 var wd, _ = os.Getwd()
 var logDir string
 var version = "v0.1.0"
+var filePool string
 
 type downloadCliT struct {
 	downloadDir  string
@@ -34,6 +36,8 @@ type downloadCliT struct {
 	urls         string
 	urlsFile     string
 	separator    string
+	keys         string
+	keysAll      bool
 	axelThread   int
 	concurrency  int
 	ignore       bool
@@ -51,6 +55,8 @@ var downloadClis = downloadCliT{
 	"",
 	"",
 	"",
+	"",
+	false,
 	1,
 	1,
 	false,
@@ -58,7 +64,7 @@ var downloadClis = downloadCliT{
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "bget",
+	Use:   "bget [url1 url2... | -k key1 key2]",
 	Short: "Lightweight downloader for bioinformatics data, databases and files.",
 	Long:  `Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/JhuangLab/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -81,37 +87,43 @@ func Execute() {
 func init() {
 	osType = runtime.GOOS
 	wd, _ := os.Getwd()
-	rootCmd.Flags().BoolVar(&(downloadClis.installSpack), "get-spack", false, "Logical indicating that whether to install spack in tools directory.")
-	rootCmd.Flags().StringVarP(&(downloadClis.installConda), "get-miniconda", "", "", "Install miniconda2 or miniconda3 in tools directory. Optional (2 or 3).")
-	rootCmd.Flags().StringVarP(&(downloadClis.installReffa), "get-reffa", "", "", "Download reference in download directory. Format is genomeVersion_site_releaseVersion.\nOptional (GRCh38_genecode_31, GRCh37_genecode_31, hg38_ucsc, hg19_ucsc, GRCh38_ensemble_97, GRCh38_defuse_97).\nMultiple use comma to seperate (e.g. hg38_ucsc,hg19_ucsc).")
+	rootCmd.Flags().BoolVar(&(downloadClis.installSpack), "spack", false, "Logical indicating that whether to install spack in tools directory.")
+	rootCmd.Flags().StringVarP(&(downloadClis.installConda), "miniconda", "", "", "Install miniconda2 or miniconda3 in tools directory. Optional (2 or 3).")
+	rootCmd.Flags().StringVarP(&(downloadClis.installReffa), "reffa", "", "", "Download reference in download directory. Format is genomeVersion %site #releaseVersion.\nOptional (GRCh38 %genecode #31, GRCh37 %genecode #31, hg38 %ucsc, hg19 %ucsc, GRCh38 %ensemble #97, GRCh38 %defuse #97).\nMultiple use comma to seperate (e.g. GRCh38 %genecode #31,GRCh37 %genecode #31).")
+	rootCmd.Flags().StringVarP(&(downloadClis.urls), "urls", "u", "", "URLs to be download.")
+	rootCmd.Flags().StringVarP(&(downloadClis.urlsFile), "urls-list", "l", "", "A file contains URLs for download.")
+	rootCmd.Flags().StringVarP(&(downloadClis.keys), "keys", "k", "", "String key to be download. item@version %site #releaseVersion, e.g. bwa, GRCh38 %defuse #97")
+	rootCmd.Flags().BoolVarP(&(downloadClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
 	rootCmd.Flags().StringVarP(&(downloadClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")
+	rootCmd.Flags().IntVarP(&(downloadClis.concurrency), "thread", "t", 1, "Concurrency download thread.")
 	rootCmd.Flags().IntVarP(&(downloadClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")
 	rootCmd.Flags().StringVarP(&(downloadClis.downloadDir), "outdir", "o", filepath.Join(wd, "_download"), "Set the download dir for get-urls.")
-	rootCmd.Flags().StringVarP(&(downloadClis.urls), "get-urls", "u", "", "URLs to be download.")
-	rootCmd.Flags().StringVarP(&(downloadClis.urlsFile), "get-urls-list", "l", "", "A file contains URLs for download.")
-	rootCmd.Flags().StringVarP(&(downloadClis.separator), "separator", "s", ",", "Separator for --get-reffa and -u.")
-	rootCmd.Flags().IntVarP(&(downloadClis.concurrency), "thread", "n", 1, "Concurrency download thread.")
+	rootCmd.Flags().StringVarP(&(downloadClis.separator), "separator", "s", ",", "Separator for --reffa,-k, and -u flag.")
 	rootCmd.Flags().StringVarP(&(downloadClis.mirror), "mirror", "m", "", "Set the mirror of resources.")
 	rootCmd.Flags().BoolVar(&(downloadClis.ignore), "ignore", false, "Contine to download and skip the check of existed files.")
-	rootCmd.Flags().BoolVar(&(downloadClis.autoPath), "autopath", true, "Logical indicating that whether to create subdir in download dir: e.g. reffa/{{site}}/{{version}}")
+	rootCmd.Flags().BoolVar(&(downloadClis.autoPath), "autopath", true, "Logical indicating that whether to create subdir in download dir (for --reffa): e.g. reffa/{{site}}/{{version}}")
 	rootCmd.Flags().StringVarP(&cmdExtraFromFlag, "extra-cmd", "e", "", "Extra flags and values pass to internal CMDs")
 	rootCmd.Flags().BoolVarP(&overwrite, "overwrite", "f", false, "Logical indicating that whether to overwrite existing files.")
-	rootCmd.Flags().StringVarP(&taskID, "task-id", "k", utils.GetRandomString(15), "Task ID.")
+	rootCmd.Flags().StringVarP(&taskID, "task-id", "", utils.GetRandomString(15), "Task ID (random).")
 	rootCmd.Flags().StringVarP(&logDir, "log-dir", "", path.Join(wd, "_log"), "Log dir.")
 	rootCmd.Flags().BoolVarP(&quiet, "quiet", "q", false, "No output.")
 	rootCmd.Flags().BoolVarP(&saveLog, "save-log", "", true, "Save download log to local file].")
-	rootCmd.Example = `  urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | sed 's/,/\n/g'> /tmp/urls.list
+	rootCmd.Example = `  urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | tr "," "\n"> /tmp/urls.list
 
-  bget -u ${urls} -n 2 -o /tmp/download
-  bget -u ${urls} -n 3 -o /tmp/download -f -g wget
-  bget -u ${urls} -n 3 -o /tmp/download -g wget --ignore
-  bget -l /tmp/urls.list -o /tmp/download -f -n 3
-  bget --get-spack
-  bget --get-miniconda 3 -o /tmp/testenv
-  bget --get-miniconda 3 --engine wget
-  bget --get-miniconda 3 --engine axel
-  bget --get-reffa GRCh38_defuse_97 -n 10
-  bget --get-reffa hg38_ucsc,GRCh37_genecode_31`
+  bget ${urls}
+  bget https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe
+  bget -u ${urls} -t 2 -o /tmp/download
+  bget -u ${urls} -t 3 -o /tmp/download -f -g wget
+  bget -u ${urls} -t 3 -o /tmp/download -g wget --ignore
+  bget -l /tmp/urls.list -o /tmp/download -f -t 3
+  bget -k bwa
+  bget --spack
+  bget --miniconda 3 -o /tmp/testenv
+  bget --miniconda 3 --engine wget
+  bget --miniconda 3 --engine axel
+  bget -k "reffa@GRCh38 %defuse #97" -t 10 -f
+  bget --reffa "GRCh38 %defuse #97" -t 10
+  bget --reffa "hg38 %ucsc, GRCh37 %genecode #31"`
 
 	rootCmd.Version = version
 }
@@ -122,10 +134,18 @@ func rootCmdRunOptions(cmd *cobra.Command, bamClis *downloadCliT) {
 	} else {
 		log.SetOutput(os.Stderr)
 	}
-
+	if len(cmd.Flags().Args()) == 1 && downloadClis.keys == "" {
+		downloadClis.urls = cmd.Flags().Args()[0]
+	} else if len(cmd.Flags().Args()) == 1 && downloadClis.keys != "" {
+		downloadClis.keys = strings.Join(append([]string{downloadClis.keys}, cmd.Flags().Args()...), downloadClis.separator)
+	} else if len(cmd.Flags().Args()) > 1 && downloadClis.keys == "" {
+		downloadClis.urls = strings.Join(cmd.Flags().Args(), downloadClis.separator)
+	} else {
+		downloadClis.keys = strings.Join(append([]string{downloadClis.keys}, cmd.Flags().Args()...), downloadClis.separator)
+	}
 	if hasDir, _ := utils.PathExists(downloadClis.downloadDir); !hasDir {
 		if downloadClis.installSpack || downloadClis.installConda != "" ||
-			downloadClis.installReffa != "" || downloadClis.urls != "" || downloadClis.urlsFile != "" {
+			downloadClis.installReffa != "" || downloadClis.urls != "" || downloadClis.urlsFile != "" || downloadClis.keys != "" {
 			if err := utils.CreateDir(downloadClis.downloadDir); err != nil {
 				log.FATAL(fmt.Sprintf("Could not to create %s", downloadClis.downloadDir))
 			}
@@ -145,6 +165,14 @@ func rootCmdRunOptions(cmd *cobra.Command, bamClis *downloadCliT) {
 	}
 	if downloadClis.urls != "" || downloadClis.urlsFile != "" {
 		downloadUrls()
+		downloadClis.helpFlags = false
+	}
+	if downloadClis.keysAll {
+		getAllKeys()
+		downloadClis.helpFlags = false
+	}
+	if downloadClis.keys != "" {
+		downloadKey()
 		downloadClis.helpFlags = false
 	}
 	if downloadClis.helpFlags {

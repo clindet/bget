@@ -135,6 +135,9 @@ func AsyncURL(url string, destFn string, engine string, taskID string, mirror st
 		}
 		url = mirror + filepath.Base(url)
 	}
+	if checkGitEngine(url) == "git" {
+		engine = "git"
+	}
 	if engine == "wget" {
 		Wget(url, destFn, taskID, quiet, saveLog)
 	} else if engine == "curl" {
@@ -152,6 +155,9 @@ func AsyncURL(url string, destFn string, engine string, taskID string, mirror st
 // external commandline tools including wget, curl, axel, git and rsync
 func AsyncURL2(url string, destFn string, engine string, taskID string, mirror string,
 	p *mpb.Progress, index int, axelThread int, quiet bool, saveLog bool) {
+	if checkGitEngine(url) == "git" {
+		engine = "git"
+	}
 	if engine == "go-http" {
 		if mirror != "" {
 			if !strings.HasSuffix(mirror, "/") {
@@ -169,6 +175,9 @@ func AsyncURL2(url string, destFn string, engine string, taskID string, mirror s
 // external commandline tools including wget, curl, axel, git and rsync
 func AsyncURL3(url string, destFn string, engine string, taskID string, mirror string,
 	axelThread int, quiet bool, saveLog bool) {
+	if checkGitEngine(url) == "git" {
+		engine = "git"
+	}
 	index := 1
 	if engine == "go-http" {
 		if mirror != "" {
@@ -266,6 +275,20 @@ func gunzipLog(oldPath string, destFn string) {
 	} else {
 		log.Infof("%s existed.", destFn)
 	}
+}
+
+func checkGitEngine(url string) string {
+	if utils.StrDetect(url, "^git@") {
+		return "git"
+	}
+	sites := []string{"https://github.com", "http://github.com",
+		"https://gitlab.com", "https://gitlab.com", "https://bitbucket.org", "http://bitbucket.org"}
+	for _, v := range sites {
+		if utils.StrDetect(url, v) && strings.Count(url, "/") == 4 {
+			return "git"
+		}
+	}
+	return ""
 }
 
 func init() {

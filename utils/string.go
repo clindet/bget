@@ -35,3 +35,13 @@ func StrDetect(s string, pattern string) bool {
 	}
 	return false
 }
+
+// StrSplit Split string with pattern
+func StrSplit(s string, pattern string, n int) (arr []string) {
+	if ok, _ := regexp.Match(pattern, []byte(s)); ok {
+		re, _ := regexp.Compile(pattern)
+		arr := re.Split(s, n)
+		return arr
+	}
+	return []string{s}
+}

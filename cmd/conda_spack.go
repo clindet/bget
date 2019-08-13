@@ -19,7 +19,7 @@ func installSpack() {
 }
 
 func installMiniconda() {
-	url := getEnvToolsURL("miniconda", "latest", downloadClis.installConda)
+	url := getEnvToolsURL("miniconda"+downloadClis.installConda, "latest", downloadClis.installConda)
 	destFn := path.Join(os.TempDir(), path.Base(url))
 	destDir := ""
 	destDir = path.Join(downloadClis.downloadDir, "miniconda"+downloadClis.installConda)

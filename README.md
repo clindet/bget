@@ -4,6 +4,8 @@
 
 Lightweight downloader for bioinformatics data, databases and files. Golang `http` library, `wget`, `curl`, `axel`, `git`, and `rsync` were supported as the download engine.
 
+[![asciicast](https://asciinema.org/a/262357.svg)](https://asciinema.org/a/262357)
+
 Possible URLs pool:
 
 - Reference genomes
@@ -24,46 +26,52 @@ go get -u github.com/JhuangLab/bget
 Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/JhuangLab/bget.
 
 Usage:
-  bget [flags]
+  bget [url1 url2... | -k key1 key2] [flags]
 
 Examples:
-  urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | sed 's/,/\n/g'> /tmp/urls.list
+  urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | tr "," "\n"> /tmp/urls.list
 
-  bget -u ${urls} -n 2 -o /tmp/download
-  bget -u ${urls} -n 3 -o /tmp/download -f -g wget
-  bget -u ${urls} -n 3 -o /tmp/download -g wget --ignore
-  bget -l /tmp/urls.list -o /tmp/download -f -n 3
-  bget --get-spack
-  bget --get-miniconda 3 -o /tmp/testenv
-  bget --get-miniconda 3 --engine wget
-  bget --get-miniconda 3 --engine axel
-  bget --get-reffa GRCh38_defuse_97 -n 10
-  bget --get-reffa hg38_ucsc,GRCh37_genecode_31
+  bget ${urls}
+  bget https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe
+  bget -u ${urls} -t 2 -o /tmp/download
+  bget -u ${urls} -t 3 -o /tmp/download -f -g wget
+  bget -u ${urls} -t 3 -o /tmp/download -g wget --ignore
+  bget -l /tmp/urls.list -o /tmp/download -f -t 3
+  bget -k bwa
+  bget --spack
+  bget --miniconda 3 -o /tmp/testenv
+  bget --miniconda 3 --engine wget
+  bget --miniconda 3 --engine axel
+  bget -k "reffa@GRCh38 %defuse #97" -t 10 -f
+  bget --reffa "GRCh38 %defuse #97" -t 10
+  bget --reffa "hg38 %ucsc, GRCh37 %genecode #31"
 
 Flags:
-      --autopath               Logical indicating that whether to create subdir in download dir: e.g. reffa/{{site}}/{{version}} (default true)
-  -g, --engine string          Point the download engine: go-http, wget, curl, axel, git, and rsync. (default "go-http")
-  -e, --extra-cmd string       Extra flags and values pass to internal CMDs
-      --get-miniconda string   Install miniconda2 or miniconda3 in tools directory. Optional (2 or 3).
-      --get-reffa string       Download reference in download directory. Format is genomeVersion_site_releaseVersion.
-                               Optional (GRCh38_genecode_31, GRCh37_genecode_31, hg38_ucsc, hg19_ucsc, GRCh38_ensemble_97, GRCh38_defuse_97).
-                               Multiple use comma to seperate (e.g. hg38_ucsc,hg19_ucsc).
-      --get-spack              Logical indicating that whether to install spack in tools directory.
-  -u, --get-urls string        URLs to be download.
-  -l, --get-urls-list string   A file contains URLs for download.
-  -h, --help                   help for bget
-      --ignore                 Contine to download and skip the check of existed files.
-      --log-dir string         Log dir. (default "/home/ljf/repositories/github/JhuangLab/bget/_log")
-  -m, --mirror string          Set the mirror of resources.
-  -o, --outdir string          Set the download dir for get-urls. (default "/home/ljf/repositories/github/JhuangLab/bget/_download")
-  -f, --overwrite              Logical indicating that whether to overwrite existing files.
-  -q, --quiet                  No output.
-      --save-log               Save download log to local file]. (default true)
-  -s, --separator string       Separator for --get-reffa and -u. (default ",")
-  -k, --task-id string         Task ID. (default "bxmzndet179wx9k")
-  -n, --thread int             Concurrency download thread. (default 1)
-      --thread-axel int        Set the thread of axel. (default 5)
-      --version                version for bget
+      --autopath           Logical indicating that whether to create subdir in download dir (for --reffa): e.g. reffa/{{site}}/{{version}} (default true)
+  -g, --engine string      Point the download engine: go-http, wget, curl, axel, git, and rsync. (default "go-http")
+  -e, --extra-cmd string   Extra flags and values pass to internal CMDs
+  -h, --help               help for bget
+      --ignore             Contine to download and skip the check of existed files.
+  -k, --keys string        String key to be download. item@version %site #releaseVersion, e.g. bwa, GRCh38 %defuse #97
+  -a, --keys-all           Show all available string key can be download.
+      --log-dir string     Log dir. (default "/home/ljf/repositories/github/JhuangLab/bget/_log")
+      --miniconda string   Install miniconda2 or miniconda3 in tools directory. Optional (2 or 3).
+  -m, --mirror string      Set the mirror of resources.
+  -o, --outdir string      Set the download dir for get-urls. (default "/home/ljf/repositories/github/JhuangLab/bget/_download")
+  -f, --overwrite          Logical indicating that whether to overwrite existing files.
+  -q, --quiet              No output.
+      --reffa string       Download reference in download directory. Format is genomeVersion %site #releaseVersion.
+                           Optional (GRCh38 %genecode #31, GRCh37 %genecode #31, hg38 %ucsc, hg19 %ucsc, GRCh38 %ensemble #97, GRCh38 %defuse #97).
+                           Multiple use comma to seperate (e.g. GRCh38 %genecode #31,GRCh37 %genecode #31).
+      --save-log           Save download log to local file]. (default true)
+  -s, --separator string   Separator for --reffa,-k, and -u flag. (default ",")
+      --spack              Logical indicating that whether to install spack in tools directory.
+      --task-id string     Task ID (random). (default "eztv4fnzvlmsrre")
+  -t, --thread int         Concurrency download thread. (default 1)
+      --thread-axel int    Set the thread of axel. (default 5)
+  -u, --urls string        URLs to be download.
+  -l, --urls-list string   A file contains URLs for download.
+      --version            version for bget
 ```
 
 ## Maintainer

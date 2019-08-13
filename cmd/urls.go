@@ -1,9 +1,10 @@
 package cmd
 
 import (
-	"github.com/JhuangLab/bget/utils"
 	"strconv"
 	"strings"
+
+	"github.com/JhuangLab/bget/utils"
 )
 
 type envToolsURLType struct {
@@ -24,10 +25,15 @@ var envToolsURLs = []envToolsURLType{
 		"Mac":   "https://github.com/spack/spack",
 		"Win":   "https://github.com/spack/spack",
 	}},
-	{Name: "miniconda", URL: map[string]string{
-		"Linux": "https://repo.anaconda.com/miniconda/Miniconda{{release}}-{{version}}-Linux-x86_64.sh",
-		"Mac":   "https://repo.anaconda.com/miniconda/Miniconda{{release}}-{{version}}-MacOSX-x86_64.sh",
-		"Win":   "https://repo.anaconda.com/miniconda/Miniconda{{release}}-{version}}-Windows-x86_64.exe",
+	{Name: "miniconda2", URL: map[string]string{
+		"Linux": "https://repo.anaconda.com/miniconda/Miniconda2-{{version}}-Linux-x86_64.sh",
+		"Mac":   "https://repo.anaconda.com/miniconda/Miniconda2-{{version}}-MacOSX-x86_64.sh",
+		"Win":   "https://repo.anaconda.com/miniconda/Miniconda2-{version}}-Windows-x86_64.exe",
+	}},
+	{Name: "miniconda3", URL: map[string]string{
+		"Linux": "https://repo.anaconda.com/miniconda/Miniconda3-{{version}}-Linux-x86_64.sh",
+		"Mac":   "https://repo.anaconda.com/miniconda/Miniconda3-{{version}}-MacOSX-x86_64.sh",
+		"Win":   "https://repo.anaconda.com/miniconda/Miniconda3-{version}}-Windows-x86_64.exe",
 	}},
 }
 
@@ -69,6 +75,11 @@ var envFilesURLs = []envFilesURLType{
 			"http://ftp.ncbi.nlm.nih.gov/repository/UniGene/Homo_sapiens/Hs.seq.uniq.gz",
 			"http://hgdownload.cse.ucsc.edu/goldenPath/{{version}}/database/rmsk.txt.gz"},
 	},
+	{
+		Name: "bwa",
+		Site: "github",
+		URL:  []string{"https://github.com/lh3/bwa"},
+	},
 }
 
 func getEnvToolsURL(name string, version string, release string) string {
@@ -98,7 +109,7 @@ func getEnvFilesURL(name string, site string, version string, release string) []
 	}
 	chrom = append(chrom, "X", "Y", "MT")
 	for i := range envFilesURLs {
-		if envFilesURLs[i].Name == name && envFilesURLs[i].Site == site {
+		if envFilesURLs[i].Name == name && (site == "" || envFilesURLs[i].Site == site) {
 			rep := []string{}
 			for j := range envFilesURLs[i].URL {
 				tmp := strings.Replace(envFilesURLs[i].URL[j], "{{release}}", release, 100)
