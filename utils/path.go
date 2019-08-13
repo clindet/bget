@@ -5,7 +5,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/JhuangLab/bioget/log"
+	"github.com/JhuangLab/bget/log"
 )
 
 // PathExists check wheather file is existed

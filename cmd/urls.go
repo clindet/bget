@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/JhuangLab/bioget/utils"
+	"github.com/JhuangLab/bget/utils"
 	"strconv"
 	"strings"
 )
@@ -134,4 +134,23 @@ func genomeVersionConvertor(url string, version string) string {
 		}
 	}
 	return version
+}
+
+func downloadUrls() {
+	urls := []string{}
+	if downloadClis.urls != "" && strings.Contains(downloadClis.urls, downloadClis.separator) {
+		urls = strings.Split(downloadClis.urls, downloadClis.separator)
+	} else if downloadClis.urls != "" {
+		urls = []string{downloadClis.urls}
+	} else if downloadClis.urlsFile != "" {
+		urls = utils.ReadLines(downloadClis.urlsFile)
+	}
+	var destDirArray []string
+	for i := range urls {
+		urls[i] = strings.TrimSpace(urls[i])
+		destDirArray = append(destDirArray, downloadClis.downloadDir)
+	}
+
+	HTTPGetURLs(urls, destDirArray, downloadClis.engine, taskID, downloadClis.mirror,
+		downloadClis.concurrency, downloadClis.axelThread, overwrite, downloadClis.ignore, quiet, saveLog)
 }

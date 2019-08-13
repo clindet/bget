@@ -7,7 +7,7 @@ import (
 	"path"
 	"strings"
 
-	log "github.com/JhuangLab/bioget/log"
+	log "github.com/JhuangLab/bget/log"
 )
 
 // ConnectFile open connect to file using os.OpenFile (auto create if not exist the file)

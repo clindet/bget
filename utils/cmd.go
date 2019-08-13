@@ -2,11 +2,12 @@ package utils
 
 import (
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
 
-	log "github.com/JhuangLab/bioget/log"
+	log "github.com/JhuangLab/bget/log"
 )
 
 var stdout, stderr []byte
@@ -15,11 +16,11 @@ var logPub = log.New()
 
 // RunExecCmd exec shell cmd using exec.Cmd object
 func RunExecCmd(logPath string, cmd *exec.Cmd) bool {
-	return RunExecCmdConsole(logPath, cmd, true)
+	return RunExecCmdConsole(logPath, cmd, true, true)
 }
 
 // RunExecCmdConsole exec shell cmd using exec.Cmd object (can control wheature output to console)
-func RunExecCmdConsole(logPath string, cmd *exec.Cmd, console bool) bool {
+func RunExecCmdConsole(logPath string, cmd *exec.Cmd, quiet bool, saveLog bool) bool {
 	stdoutIn, _ := cmd.StdoutPipe()
 	stderrIn, _ := cmd.StderrPipe()
 	logFn, err := ConnectFile(logPath)
@@ -36,7 +37,13 @@ func RunExecCmdConsole(logPath string, cmd *exec.Cmd, console bool) bool {
 	} else {
 		cmdStr = strings.Join(cmd.Args, " ")
 	}
-	log.SetOutput(io.MultiWriter(os.Stderr, logFn))
+	if quiet && saveLog {
+		log.SetOutput(io.Writer(logFn))
+	} else if quiet && !saveLog {
+		log.SetOutput(ioutil.Discard)
+	} else if !quiet && saveLog {
+		log.SetOutput(io.MultiWriter(os.Stderr, logFn))
+	}
 	logBash.Info(cmdStr)
 	var con *os.File
 	if logPath != "" {
@@ -47,10 +54,10 @@ func RunExecCmdConsole(logPath string, cmd *exec.Cmd, console bool) bool {
 	}
 	err = cmd.Start()
 	go func() {
-		stdout, errStdout = copyAndCapture(os.Stdout, stdoutIn, console, con)
+		stdout, errStdout = copyAndCapture(os.Stdout, stdoutIn, quiet, con)
 	}()
 	go func() {
-		stderr, errStderr = copyAndCapture(os.Stderr, stderrIn, console, con)
+		stderr, errStderr = copyAndCapture(os.Stderr, stderrIn, quiet, con)
 	}()
 	cmd.Wait()
 	con.Close()
@@ -63,7 +70,7 @@ func RunExecCmdConsole(logPath string, cmd *exec.Cmd, console bool) bool {
 	return true
 }
 
-func copyAndCapture(w io.Writer, r io.Reader, console bool, con *os.File) ([]byte, error) {
+func copyAndCapture(w io.Writer, r io.Reader, quiet bool, con *os.File) ([]byte, error) {
 	var out []byte
 	buf := make([]byte, 1024, 1024)
 	for {
@@ -71,7 +78,7 @@ func copyAndCapture(w io.Writer, r io.Reader, console bool, con *os.File) ([]byt
 		if n > 0 {
 			d := buf[:n]
 			out = append(out, d...)
-			if console {
+			if !quiet {
 				os.Stderr.Write(d)
 			}
 			if con != nil {

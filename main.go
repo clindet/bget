@@ -1,4 +1,4 @@
-// Copyright © 2019 NAME HERE <EMAIL ADDRESS>
+// Copyright © 2019 Jianfeng Li lee_jianfeng@openbiox.org
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 package main
 
 import (
-	"github.com/JhuangLab/bioget/cmd"
+	"github.com/JhuangLab/bget/cmd"
 )
 
 func main() {

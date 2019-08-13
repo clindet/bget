@@ -1,0 +1,4 @@
+2019-8-13 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
+		* add tryCatch in conda.env.list
+

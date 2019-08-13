@@ -2,6 +2,7 @@ package log
 
 import (
 	"fmt"
+	"io"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -72,6 +73,11 @@ func Infoln(args ...interface{}) {
 // Infof print info
 func Infof(format string, args ...interface{}) {
 	Lg.Infof(format, args...)
+}
+
+// SetOutput set log output
+func SetOutput(output io.Writer) {
+	Lg.SetOutput(output)
 }
 
 // Fatal print fatal info

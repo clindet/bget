@@ -1,4 +1,4 @@
-module github.com/JhuangLab/bioget
+module github.com/JhuangLab/bget
 
 go 1.12
 
