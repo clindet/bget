@@ -1,0 +1,7 @@
+_STARtmp
+Log.out
+.*/Log.out
+*.log
+_download
+vendor
+.DS_Store
