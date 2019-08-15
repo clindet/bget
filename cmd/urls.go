@@ -19,7 +19,7 @@ type envFilesURLType struct {
 	URL  []string
 }
 
-var envToolsURLs = []envToolsURLType{
+var bgetToolsURLs = []envToolsURLType{
 	{Name: "spack", URL: map[string]string{
 		"Linux": "https://github.com/spack/spack",
 		"Mac":   "https://github.com/spack/spack",
@@ -37,7 +37,7 @@ var envToolsURLs = []envToolsURLType{
 	}},
 }
 
-var envFilesURLs = []envFilesURLType{
+var bgetFilesURLs = []envFilesURLType{
 	{
 		Name: "reffa",
 		Site: "ucsc",
@@ -84,16 +84,16 @@ var envFilesURLs = []envFilesURLType{
 
 func getEnvToolsURL(name string, version string, release string) string {
 	tmp := ""
-	for i := range envToolsURLs {
-		if envToolsURLs[i].Name == name {
+	for i := range bgetToolsURLs {
+		if bgetToolsURLs[i].Name == name {
 			if osType == "linux" {
-				tmp = strings.Replace(envToolsURLs[i].URL["Linux"], "{{version}}", version, 100)
+				tmp = strings.Replace(bgetToolsURLs[i].URL["Linux"], "{{version}}", version, 100)
 				tmp = strings.Replace(tmp, "{{release}}", release, 100)
 			} else if osType == "windows" {
-				tmp = strings.Replace(envToolsURLs[i].URL["Win"], "{{version}}", version, 100)
+				tmp = strings.Replace(bgetToolsURLs[i].URL["Win"], "{{version}}", version, 100)
 				tmp = strings.Replace(tmp, "{{release}}", release, 100)
 			} else {
-				tmp = strings.Replace(envToolsURLs[i].URL["Mac"], "{{version}}", version, 100)
+				tmp = strings.Replace(bgetToolsURLs[i].URL["Mac"], "{{version}}", version, 100)
 				tmp = strings.Replace(tmp, "{{release}}", release, 100)
 			}
 			return tmp
@@ -108,11 +108,11 @@ func getEnvFilesURL(name string, site string, version string, release string) []
 		chrom = append(chrom, strconv.Itoa(i))
 	}
 	chrom = append(chrom, "X", "Y", "MT")
-	for i := range envFilesURLs {
-		if envFilesURLs[i].Name == name && (site == "" || envFilesURLs[i].Site == site) {
+	for i := range bgetFilesURLs {
+		if bgetFilesURLs[i].Name == name && (site == "" || bgetFilesURLs[i].Site == site) {
 			rep := []string{}
-			for j := range envFilesURLs[i].URL {
-				tmp := strings.Replace(envFilesURLs[i].URL[j], "{{release}}", release, 100)
+			for j := range bgetFilesURLs[i].URL {
+				tmp := strings.Replace(bgetFilesURLs[i].URL[j], "{{release}}", release, 100)
 				version = genomeVersionConvertor(tmp, version)
 				tmp = strings.Replace(tmp, "{{version}}", version, 100)
 				if utils.StrDetect(tmp, "{{chrom}}") {

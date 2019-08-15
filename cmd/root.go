@@ -22,8 +22,7 @@ var quiet bool
 var saveLog bool
 var wd, _ = os.Getwd()
 var logDir string
-var version = "v0.1.0"
-var filePool string
+var version = "v0.1.0-1"
 
 type downloadCliT struct {
 	downloadDir  string
@@ -33,6 +32,7 @@ type downloadCliT struct {
 	installSpack bool
 	installConda string
 	engine       string
+	doi          string
 	urls         string
 	urlsFile     string
 	separator    string
@@ -56,6 +56,7 @@ var downloadClis = downloadCliT{
 	"",
 	"",
 	"",
+	"",
 	false,
 	1,
 	1,
@@ -68,7 +69,7 @@ var rootCmd = &cobra.Command{
 	Short: "Lightweight downloader for bioinformatics data, databases and files.",
 	Long:  `Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/JhuangLab/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		rootCmdRunOptions(cmd, &downloadClis)
+		rootCmdRunOptions(cmd)
 	},
 }
 
@@ -89,7 +90,8 @@ func init() {
 	wd, _ := os.Getwd()
 	rootCmd.Flags().BoolVar(&(downloadClis.installSpack), "spack", false, "Logical indicating that whether to install spack in tools directory.")
 	rootCmd.Flags().StringVarP(&(downloadClis.installConda), "miniconda", "", "", "Install miniconda2 or miniconda3 in tools directory. Optional (2 or 3).")
-	rootCmd.Flags().StringVarP(&(downloadClis.installReffa), "reffa", "", "", "Download reference in download directory. Format is genomeVersion %site #releaseVersion.\nOptional (GRCh38 %genecode #31, GRCh37 %genecode #31, hg38 %ucsc, hg19 %ucsc, GRCh38 %ensemble #97, GRCh38 %defuse #97).\nMultiple use comma to seperate (e.g. GRCh38 %genecode #31,GRCh37 %genecode #31).")
+	rootCmd.Flags().StringVarP(&(downloadClis.installReffa), "reffa", "", "", "Download reference in download directory. Format is genomeVersion %site #releaseVersion.\nOptional (GRCh38 %genecode #31, GRCh37 %genecode #31, hg38 %ucsc, hg19 %ucsc, GRCh38 %ensemble #97, GRCh38 %defuse #97).\nMultiple use comma to seperate (e.g. GRCh38 %genecode #31,GRCh37 %genecode #31, %fusioncatcher #95).")
+	rootCmd.Flags().StringVarP(&(downloadClis.doi), "doi", "", "", "Doi to be download.")
 	rootCmd.Flags().StringVarP(&(downloadClis.urls), "urls", "u", "", "URLs to be download.")
 	rootCmd.Flags().StringVarP(&(downloadClis.urlsFile), "urls-list", "l", "", "A file contains URLs for download.")
 	rootCmd.Flags().StringVarP(&(downloadClis.keys), "keys", "k", "", "String key to be download. item@version %site #releaseVersion, e.g. bwa, GRCh38 %defuse #97")
@@ -117,6 +119,7 @@ func init() {
   bget -u ${urls} -t 3 -o /tmp/download -g wget --ignore
   bget -l /tmp/urls.list -o /tmp/download -f -t 3
   bget -k bwa
+  bget --doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
   bget --spack
   bget --miniconda 3 -o /tmp/testenv
   bget --miniconda 3 --engine wget
@@ -128,24 +131,33 @@ func init() {
 	rootCmd.Version = version
 }
 
-func rootCmdRunOptions(cmd *cobra.Command, bamClis *downloadCliT) {
+func checkArgs(cmd *cobra.Command) {
+	items := []string{}
+	if len(cmd.Flags().Args()) >= 1 && downloadClis.keys == "" && downloadClis.doi == "" {
+		items = []string{downloadClis.urls}
+		items = append(items, cmd.Flags().Args()...)
+		downloadClis.urls = strings.Join(items, downloadClis.separator)
+	} else if len(cmd.Flags().Args()) >= 1 && downloadClis.urls == "" && downloadClis.doi == "" {
+		items = []string{downloadClis.keys}
+		items = append(items, cmd.Flags().Args()...)
+		downloadClis.keys = strings.Join(items, downloadClis.separator)
+	} else if len(cmd.Flags().Args()) >= 1 && downloadClis.urls == "" && downloadClis.keys == "" {
+		items = []string{downloadClis.doi}
+		items = append(items, cmd.Flags().Args()...)
+		downloadClis.doi = strings.Join(items, downloadClis.separator)
+	}
+}
+
+func rootCmdRunOptions(cmd *cobra.Command) {
 	if quiet {
 		log.SetOutput(ioutil.Discard)
 	} else {
 		log.SetOutput(os.Stderr)
 	}
-	if len(cmd.Flags().Args()) == 1 && downloadClis.keys == "" {
-		downloadClis.urls = cmd.Flags().Args()[0]
-	} else if len(cmd.Flags().Args()) == 1 && downloadClis.keys != "" {
-		downloadClis.keys = strings.Join(append([]string{downloadClis.keys}, cmd.Flags().Args()...), downloadClis.separator)
-	} else if len(cmd.Flags().Args()) > 1 && downloadClis.keys == "" {
-		downloadClis.urls = strings.Join(cmd.Flags().Args(), downloadClis.separator)
-	} else {
-		downloadClis.keys = strings.Join(append([]string{downloadClis.keys}, cmd.Flags().Args()...), downloadClis.separator)
-	}
+	checkArgs(cmd)
 	if hasDir, _ := utils.PathExists(downloadClis.downloadDir); !hasDir {
 		if downloadClis.installSpack || downloadClis.installConda != "" ||
-			downloadClis.installReffa != "" || downloadClis.urls != "" || downloadClis.urlsFile != "" || downloadClis.keys != "" {
+			downloadClis.installReffa != "" || downloadClis.urls != "" || downloadClis.urlsFile != "" || downloadClis.keys != "" || downloadClis.doi != "" {
 			if err := utils.CreateDir(downloadClis.downloadDir); err != nil {
 				log.FATAL(fmt.Sprintf("Could not to create %s", downloadClis.downloadDir))
 			}
@@ -173,6 +185,10 @@ func rootCmdRunOptions(cmd *cobra.Command, bamClis *downloadCliT) {
 	}
 	if downloadClis.keys != "" {
 		downloadKey()
+		downloadClis.helpFlags = false
+	}
+	if downloadClis.doi != "" {
+		downloadDoi()
 		downloadClis.helpFlags = false
 	}
 	if downloadClis.helpFlags {

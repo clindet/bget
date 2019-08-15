@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/JhuangLab/bget/utils"
+	"net/url"
 	"strings"
+
+	"github.com/JhuangLab/bget/utils"
 )
 
 func downloadKey() {
@@ -17,7 +19,8 @@ func downloadKey() {
 	urls = keys2urls(keys)
 	var destDirArray []string
 	for i := range urls {
-		urls[i] = strings.TrimSpace(urls[i])
+		u, _ := url.Parse(urls[i])
+		urls[i] = strings.TrimSpace(u.String())
 		destDirArray = append(destDirArray, downloadClis.downloadDir)
 	}
 
@@ -118,11 +121,11 @@ func parseMeta(key string) (keyNew string, version string, site string, release 
 }
 
 func getAllKeys() (keys []string) {
-	for i := range envFilesURLs {
-		keys = append(keys, envFilesURLs[i].Name)
+	for i := range bgetFilesURLs {
+		keys = append(keys, bgetFilesURLs[i].Name)
 	}
-	for i := range envToolsURLs {
-		keys = append(keys, envToolsURLs[i].Name)
+	for i := range bgetToolsURLs {
+		keys = append(keys, bgetToolsURLs[i].Name)
 	}
 	keys = utils.RemoveRepeatEle(keys)
 	fmt.Printf("%s\n", strings.Join(keys, "\n"))

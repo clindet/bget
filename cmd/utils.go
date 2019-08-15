@@ -218,7 +218,6 @@ func HTTPGetURLs(urls []string, destDir []string, engine string, taskID string, 
 			url := urls[j]
 			sem <- true
 			go func(url string, destFn string) {
-				time.Sleep(time.Second)
 				defer func() {
 					<-sem
 				}()
