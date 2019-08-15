@@ -42,22 +42,13 @@ func downloadDoi() {
 		downloadClis.concurrency, downloadClis.axelThread, overwrite, downloadClis.ignore, quiet, saveLog)
 }
 
-type doiSpiderType struct {
-	doiOrg string
-	spider map[string]interface{}
-}
-
-var doiSpidersPool = map[string]func(doi string) []string{
-	"10.5281": spider.ZenodoSpider,
-}
-
 func doiSpiders(doi string) (urls []string) {
 	doiOrg := ""
 	doiTmp := strings.Split(doi, "/")
 	doiOrg = doiTmp[0]
-	for k := range doiSpidersPool {
+	for k := range spider.DoiSpidersPool {
 		if k == doiOrg {
-			urls = doiSpidersPool[doiOrg](doi)
+			urls = spider.DoiSpidersPool[doiOrg](doi)
 		}
 	}
 	return urls
