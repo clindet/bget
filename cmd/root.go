@@ -22,7 +22,7 @@ var quiet bool
 var saveLog bool
 var wd, _ = os.Getwd()
 var logDir string
-var version = "v0.1.0-1"
+var version = "v0.1.0-2"
 
 type downloadCliT struct {
 	downloadDir  string
@@ -134,14 +134,22 @@ func init() {
 func checkArgs(cmd *cobra.Command) {
 	items := []string{}
 	if len(cmd.Flags().Args()) >= 1 && downloadClis.keys == "" && downloadClis.doi == "" {
-		items = []string{downloadClis.urls}
+		if downloadClis.urls != "" {
+			items = []string{downloadClis.urls}
+		}
 		items = append(items, cmd.Flags().Args()...)
 		downloadClis.urls = strings.Join(items, downloadClis.separator)
 	} else if len(cmd.Flags().Args()) >= 1 && downloadClis.urls == "" && downloadClis.doi == "" {
+		if downloadClis.keys != "" {
+			items = []string{downloadClis.keys}
+		}
 		items = []string{downloadClis.keys}
 		items = append(items, cmd.Flags().Args()...)
 		downloadClis.keys = strings.Join(items, downloadClis.separator)
 	} else if len(cmd.Flags().Args()) >= 1 && downloadClis.urls == "" && downloadClis.keys == "" {
+		if downloadClis.doi != "" {
+			items = []string{downloadClis.doi}
+		}
 		items = []string{downloadClis.doi}
 		items = append(items, cmd.Flags().Args()...)
 		downloadClis.doi = strings.Join(items, downloadClis.separator)

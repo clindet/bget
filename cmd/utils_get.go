@@ -141,17 +141,6 @@ func httpGetURL(url string, destFn string, pg *mpb.Progress, index int, quiet bo
 	defer dest.Close()
 }
 
-func init() {
-	pg = mpb.New(
-		mpb.WithWidth(45),
-		mpb.WithRefreshRate(180*time.Millisecond),
-	)
-
-	gCurCookies = nil
-	//var err error;
-	gCurCookieJar, _ = cookiejar.New(nil)
-}
-
 var gCurCookies []*http.Cookie
 var gCurCookieJar *cookiejar.Jar
 
@@ -259,4 +248,15 @@ func HTTPGetURLs(urls []string, destDir []string, engine string, taskID string, 
 		sem <- true
 	}
 	pg.Wait()
+}
+
+func init() {
+	pg = mpb.New(
+		mpb.WithWidth(45),
+		mpb.WithRefreshRate(180*time.Millisecond),
+	)
+
+	gCurCookies = nil
+	//var err error;
+	gCurCookieJar, _ = cookiejar.New(nil)
 }

@@ -28,6 +28,10 @@ func formatURLfileName(url string) (fname string) {
 		fname = path.Base(url) + ".pdf"
 	} else if utils.StrDetect(url, "showPdf[?]pii=") {
 		fname = path.Base(utils.StrReplaceAll(url, "showPdf[?]pii=", "")) + ".pdf"
+	} else if utils.StrDetect(url, "track/pdf") {
+		fname = path.Base(url) + ".pdf"
+	} else if utils.StrDetect(url, "&type=printable") {
+		fname = strings.ReplaceAll(path.Base(url), "&type=printable", "") + ".pdf"
 	}
 	return fname
 }

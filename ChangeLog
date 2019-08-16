@@ -1,3 +1,7 @@
+2019-8-16 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
+		* support CNS, biorxiv, biomedcentral and plos
+
 2019-8-15 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* suuport zenodo doi parse and files download

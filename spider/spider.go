@@ -11,53 +11,8 @@ import (
 	"github.com/gocolly/colly/extensions"
 )
 
-type doiSpiderType struct {
-	doiOrg string
-	spider map[string]interface{}
-}
-
-// DoiSpidersPool map doi to golang function
-var DoiSpidersPool = map[string]func(doi string) []string{
-	"10.5281": ZenodoSpider,
-	"10.1038": NatureComSpider,
-	"10.1126": ScienseComSpider,
-	"10.1016": CellComSpider,
-}
-
-// ZenodoSpider access Zendo files via spider
-func ZenodoSpider(doi string) []string {
-	urls := []string{}
-	// Instantiate default collector
-	c := colly.NewCollector(
-		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
-		colly.AllowedDomains("doi.org", "zenodo.org"),
-		colly.MaxDepth(1),
-	)
-	extensions.RandomUserAgent(c)
-
-	// On every a element which has href attribute call callback
-	c.OnHTML("tbody a.filename[href]", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		if strings.Contains(link, "?download=1") {
-			u, _ := url.Parse(link)
-			link = "https://zenodo.org" + u.Host + u.Path
-			urls = append(urls, link)
-		}
-	})
-	// Before making a request print "Visiting ..."
-	c.OnRequest(func(r *colly.Request) {
-		r.Headers.Set("Connection", "keep-alive")
-		log.Infof("Visiting %s", r.URL.String())
-	})
-
-	// Start scraping on https://hackerspaces.org
-	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
-	return urls
-}
-
 // NatureComSpider access Nature.com files via spider
-func NatureComSpider(doi string) []string {
-	urls := []string{}
+func NatureComSpider(doi string) (urls []string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
@@ -111,8 +66,7 @@ func NatureComSpider(doi string) []string {
 }
 
 // ScienseComSpider access sciencemag.org journal files via spider
-func ScienseComSpider(doi string) []string {
-	urls := []string{}
+func ScienseComSpider(doi string) (urls []string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
@@ -200,12 +154,14 @@ func CellComSpider(doi string) []string {
 	c.OnHTML("div.PdfDownloadButton a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		link = "https://www.sciencedirect.com" + link
-		c.Visit(link)
+		urls = append(urls, link)
+		//c.Visit(link)
+		//link2 := utils.StrReplaceAll(link, "/pdfft?.*", "") + "?via%3Dihub#app2"
+		//c.Visit(link2)
 	})
 
 	c.OnHTML("span.article-attachment a.download-link[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		fmt.Println(link)
 		urls = append(urls, link)
 	})
 	// cell stem cell end
@@ -216,14 +172,17 @@ func CellComSpider(doi string) []string {
 			link = "https://www.cell.com" + link
 			urls = append(urls, link)
 		}
+	})
 
+	c.OnResponse(func(r *colly.Response) {
+		fmt.Println(string(r.Body))
 	})
 
 	c.OnHTML("meta[HTTP-EQUIV=REFRESH]", func(e *colly.HTMLElement) {
 		link := e.Attr("content")
 		link = utils.StrReplaceAll(link, ".* url='", "")
 		link = utils.StrReplaceAll(link, "'$", "")
-		link = "https://linkinghub.elsevier.com/" + link
+		link = "https://linkinghub.elsevier.com" + link
 		c.Visit(link)
 	})
 
