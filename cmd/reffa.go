@@ -3,6 +3,8 @@ package cmd
 import (
 	"path"
 	"strings"
+
+	"github.com/JhuangLab/bget/utils"
 )
 
 func installReffa() {
@@ -37,6 +39,6 @@ func installReffa() {
 		downloadClis.concurrency, downloadClis.axelThread,
 		overwrite, downloadClis.ignore, quiet, saveLog)
 	if defuse != "" {
-		gunzipDefuseReffa(defuse)
+		utils.GunzipDefuseReffa(defuse)
 	}
 }

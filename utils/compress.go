@@ -5,8 +5,12 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
+	"path"
 	"strings"
+
+	log "github.com/JhuangLab/bget/log"
 )
 
 // TarGz compress files and get .tar.gz file
@@ -140,4 +144,49 @@ func createFile(name string) (*os.File, error) {
 		return nil, err
 	}
 	return os.Create(name)
+}
+
+// GunzipDefuseReffa gunzip and rename defuse reference dir
+func GunzipDefuseReffa(destDir string) {
+	dirList, e := ioutil.ReadDir(destDir)
+	if e != nil {
+		fmt.Println("read dir error")
+		return
+	}
+	for _, v := range dirList {
+		destFn := ""
+		oldPath := path.Join(destDir, v.Name())
+		if path.Base(v.Name()) == "rmsk.txt.gz" {
+			destFn = path.Join(destDir, "repeats.txt.gz")
+			log.Infof("Rename %s => %s", oldPath, destFn)
+			err := os.Rename(oldPath, destFn)
+			if err != nil {
+				log.Warn(err)
+			}
+			destFn2 := StrReplaceAll(destFn, ".gz$", "")
+			GunzipLog(destFn, destFn2)
+		} else if StrDetect(v.Name(), ".fa.gz$") && StrDetect(v.Name(), ".dna.") {
+			destFn = StrReplaceAll(v.Name(), ".fa.gz$", ".fa")
+			destFn = StrReplaceAll(destFn, "Homo_sapiens.*.dna.chromosome.", "defuse.dna.chromosomes.")
+			destFn = path.Join(destDir, destFn)
+			GunzipLog(oldPath, destFn)
+		} else if StrDetect(v.Name(), ".gz$") {
+			destFn = StrReplaceAll(v.Name(), ".gz$", "")
+			destFn = path.Join(destDir, destFn)
+			GunzipLog(oldPath, destFn)
+		}
+	}
+}
+
+// GunzipLog gunzip files with "Uncompressing =>" log
+func GunzipLog(oldPath string, destFn string) {
+	if hasFn, _ := PathExists(destFn); !hasFn {
+		log.Infof("Uncompressing %s => %s", oldPath, destFn)
+		_, err := Gunzip(oldPath, destFn)
+		if err != nil {
+			log.Warn(err)
+		}
+	} else {
+		log.Infof("%s existed.", destFn)
+	}
 }

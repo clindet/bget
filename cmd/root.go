@@ -65,7 +65,7 @@ var downloadClis = downloadCliT{
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "bget [url1 url2... | -k key1 key2]",
+	Use:   "bget [url1 url2... | -k key1 key2... | --doi doi1 doi2...]",
 	Short: "Lightweight downloader for bioinformatics data, databases and files.",
 	Long:  `Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/JhuangLab/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
