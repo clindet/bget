@@ -162,7 +162,7 @@ func PlosSpider(doi string) (urls []string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
-		colly.AllowedDomains("doi.org", "journals.plos.org", "dx.plos.org", ""),
+		colly.AllowedDomains("doi.org", "journals.plos.org", "dx.plos.org"),
 		colly.MaxDepth(1),
 	)
 	extensions.RandomUserAgent(c)
@@ -180,9 +180,41 @@ func PlosSpider(doi string) (urls []string) {
 		urls = append(urls, link)
 	})
 
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
+
+// FrontiersSpider access Frontiers files via spider
+func FrontiersinSpider(doi string) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "www.frontiersin.org", "journal.frontiersin.org"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	// On every a element which has href attribute call callback
+	c.OnHTML("a.download-files-pdf", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://www.frontiersin.org" + link
+		urls = append(urls, link)
+	})
+
+	c.OnHTML("a.fs-download-button[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		urls = append(urls, link)
+	})
+
 	c.OnResponse(func(r *colly.Response) {
-		if !strings.HasSuffix(r.Request.URL.String(), "/tab-figures-data") {
-			c.Visit(r.Request.URL.String() + "/tab-figures-data")
+		if !strings.HasSuffix(r.Request.URL.String(), "#supplementary-material") {
+			c.Visit(r.Request.URL.String() + "#supplementary-material")
 		}
 	})
 
@@ -195,3 +227,46 @@ func PlosSpider(doi string) (urls []string) {
 	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
 	return urls
 }
+
+// PeerjSpider access Peerj files via spider
+func PeerjSpider(doi string) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "peerj.com"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML("a[data-format=PDF]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://peerj.com" + link
+		urls = append(urls, link)
+	})
+	c.OnHTML("a[data-format=BibText]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://peerj.com" + link
+		urls = append(urls, link)
+	})
+
+	c.OnHTML("a.article-supporting-download[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		urls = append(urls, link)
+	})
+
+	c.OnResponse(func(r *colly.Response) {
+		if !strings.HasSuffix(r.Request.URL.String(), "#supplementary-material") {
+			c.Visit(r.Request.URL.String() + "#supplementary-material")
+		}
+	})
+
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
+

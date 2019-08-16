@@ -15,4 +15,6 @@ var DoiSpidersPool = map[string]func(doi string) []string{
 	"10.1186": BiomedcentralSpider,
 	"10.1073": PnasSpider,
 	"10.1371": PlosSpider,
+	"10.3389": FrontiersinSpider,
+	"10.7717": PeerjSpider,
 }

@@ -41,18 +41,7 @@ func NatureComSpider(doi string) (urls []string) {
 	// On every a element which has href attribute call callback
 	c.OnHTML("a.c-pdf-download__link[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		if !strings.HasPrefix(link, "http") {
-			urls = append(urls, "https://nature.com"+link)
-		} else {
-			u, _ := url.Parse(link)
-			linkTmp := strings.Split(u.Path, "/")
-			linkTmp[2] = utils.StrReplaceAll(linkTmp[2], "art:", "art%3A")
-			newLink := append(linkTmp[0:1], strings.Join(linkTmp[2:3], "%2F"))
-			newLink = append(newLink, linkTmp[4:len(linkTmp)]...)
-			link = strings.Join(newLink, "/")
-			link = u.Scheme + "://" + u.Host + link
-			urls = append(urls, link)
-		}
+		urls = append(urls, "https://nature.com"+link)
 	})
 
 	// Before making a request print "Visiting ..."
