@@ -118,11 +118,12 @@ func ScienseComSpider(doi string) []string {
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
 		colly.AllowedDomains("doi.org", "advances.sciencemag.org", "immunology.sciencemag.org",
 			"robotics.sciencemag.org", "stke.sciencemag.org", "stm.sciencemag.org", "secure.jbs.elsevierhealth.com",
-			"id.elsevier.com"),
+			"id.elsevier.com", "science.sciencemag.org", "www.sciencemag.org"),
 		colly.MaxDepth(2),
 	)
 	extensions.RandomUserAgent(c)
 
+	// Sciense advance
 	c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
 		link := e.Attr("content")
 		u, _ := url.Parse(link)
@@ -135,6 +136,11 @@ func ScienseComSpider(doi string) []string {
 			urls = append(urls, link)
 		})
 		c.Visit(strings.Replace(link, ".full.pdf", "", 1) + "/tab-figures-data")
+	})
+
+	c.OnHTML("div.panels-ajax-tab-wrap-jnl_sci_tab_pdf a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		urls = append(urls, link)
 	})
 
 	// Before making a request print "Visiting ..."
