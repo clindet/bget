@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"net/url"
 	"path"
 	"strings"
 
@@ -27,9 +26,7 @@ func downloadDoi() {
 			}()
 			urlsTmp := doiSpiders(v)
 			urlsTmp = utils.RemoveRepeatEle(urlsTmp)
-			for i := range urlsTmp {
-				u, _ := url.Parse(urlsTmp[i])
-				urlsTmp[i] = strings.TrimSpace(u.Scheme + "://" + u.Host + u.Path)
+			for range urlsTmp {
 				destDirArray = append(destDirArray, path.Join(downloadClis.downloadDir, v))
 			}
 			urls = append(urls, urlsTmp...)
