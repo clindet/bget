@@ -20,6 +20,7 @@ type doiSpiderType struct {
 var DoiSpidersPool = map[string]func(doi string) []string{
 	"10.5281": ZenodoSpider,
 	"10.1038": NatureComSpider,
+	"10.1126": ScienseComSpider,
 }
 
 // ZenodoSpider access Zendo files via spider
@@ -53,7 +54,7 @@ func ZenodoSpider(doi string) []string {
 	return urls
 }
 
-// NatureComSpider access Zendo files via spider
+// NatureComSpider access Nature.com files via spider
 func NatureComSpider(doi string) []string {
 	urls := []string{}
 	// Instantiate default collector
@@ -96,6 +97,42 @@ func NatureComSpider(doi string) []string {
 			link = u.Scheme + "://" + u.Host + link
 			urls = append(urls, link)
 		}
+	})
+
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
+
+// ScienseComSpider access sciencemag.org journal files via spider
+func ScienseComSpider(doi string) []string {
+	urls := []string{}
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "advances.sciencemag.org", "immunology.sciencemag.org",
+			"robotics.sciencemag.org", "stke.sciencemag.org", "stm.sciencemag.org"),
+		colly.MaxDepth(2),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+		link := e.Attr("content")
+		u, _ := url.Parse(link)
+		link = u.Scheme + "://" + u.Host + u.Path
+		urls = append(urls, link)
+		c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			u2, _ := url.Parse(link)
+			link = u.Scheme + "://" + u.Host + u2.Path
+			urls = append(urls, link)
+		})
+		c.Visit(strings.Replace(link, ".full.pdf", "", 1) + "/tab-figures-data")
 	})
 
 	// Before making a request print "Visiting ..."
