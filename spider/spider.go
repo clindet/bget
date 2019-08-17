@@ -65,6 +65,7 @@ func ScienseComSpider(doi string) (urls []string) {
 		colly.MaxDepth(2),
 	)
 	extensions.RandomUserAgent(c)
+	extensions.Referer(c)
 
 	// Sciense advance
 	c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
@@ -103,10 +104,12 @@ func CellComSpider(doi string) []string {
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
 		colly.AllowedDomains("doi.org", "www.cell.com", "cell.com", "linkinghub.elsevier.com", "secure.jbs.elsevierhealth.com",
-			"id.elsevier.com", "www.cancercell.org", "www.sciencedirect.com"),
-		colly.MaxDepth(2),
+			"id.elsevier.com", "www.cancercell.org", "www.sciencedirect.com",
+			"pdf.sciencedirectassets.com"),
+		colly.MaxDepth(3),
 	)
 	extensions.RandomUserAgent(c)
+	extensions.Referer(c)
 
 	c.OnHTML("#redirectURL", func(e *colly.HTMLElement) {
 		link := e.Attr("value")
@@ -144,9 +147,6 @@ func CellComSpider(doi string) []string {
 		link := e.Attr("href")
 		link = "https://www.sciencedirect.com" + link
 		urls = append(urls, link)
-		//c.Visit(link)
-		//link2 := utils.StrReplaceAll(link, "/pdfft?.*", "") + "?via%3Dihub#app2"
-		//c.Visit(link2)
 	})
 
 	c.OnHTML("span.article-attachment a.download-link[href]", func(e *colly.HTMLElement) {
@@ -204,6 +204,39 @@ func BloodJournalSpider(doi string) (urls []string) {
 	c.OnHTML("a.[data-panel-name=jnl_bloodjournal_tab_data]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		c.Visit(link)
+	})
+
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
+
+// NejmSpider access http://www.nejm.org files via spider
+func NejmSpider(doi string) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "www.nejm.org"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML("a[data-tooltip='Download PDF']", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://www.nejm.org" + link
+		urls = append(urls, link)
+	})
+	c.OnHTML("a[data-interactionType=multimedia_download]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		if strings.Contains(link, "doi/suppl") {
+			link = "https://www.nejm.org" + link
+			urls = append(urls, link)
+		}
 	})
 
 	// Before making a request print "Visiting ..."

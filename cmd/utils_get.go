@@ -21,6 +21,8 @@ import (
 )
 
 var pg *mpb.Progress
+var gCurCookies []*http.Cookie
+var gCurCookieJar *cookiejar.Jar
 
 // Wget use wget to download files
 func Wget(url string, destFn string, taskID string, quiet bool, saveLog bool) {
@@ -140,9 +142,6 @@ func httpGetURL(url string, destFn string, pg *mpb.Progress, index int, quiet bo
 	}
 	defer dest.Close()
 }
-
-var gCurCookies []*http.Cookie
-var gCurCookieJar *cookiejar.Jar
 
 // AsyncURL can access URL via using external commandline tools including wget, curl, axel, git and rsync
 func AsyncURL(url string, destFn string, engine string, taskID string, mirror string, axelThread int, quiet bool, saveLog bool) {

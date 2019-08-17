@@ -38,7 +38,10 @@ func formatURLfileName(url string) (fname string) {
 		fname = utils.StrReplaceAll(fname, "[?]Expires=.*", "")
 	} else if utils.StrDetect(url, "/action/downloadSupplement[?].*") {
 		fname = utils.StrReplaceAll(fname, "downloadSupplement.*file=", "")
-	} else if utils.StrDetect(url, "(www.embopress.org/doi/pdf)|(ascopubs.org/doi/pdfdirect)") {
+	} else if utils.StrDetect(url, "(.com/doi/pdf/)|(.org/doi/pdf/)|(.org/doi/pdfdirect/)") {
+		if utils.StrDetect(url, "[?]articleTools=true") {
+			fname = utils.StrReplaceAll(fname, "[?]articleTools=true", "")
+		}
 		fname = fname + ".pdf"
 	}
 	return fname
