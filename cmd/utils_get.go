@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
 	"os"
@@ -69,6 +70,16 @@ func Rsync(url string, destFn string, taskID string, quiet bool, saveLog bool) {
 	utils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
 }
 
+func checkHttpGetURLRdirect(resp *http.Response, url string, destFn string, pg *mpb.Progress, index int, quiet bool, saveLog bool) (status bool) {
+	if strings.Contains(url, "https://www.sciencedirect.com") {
+		v, _ := ioutil.ReadAll(resp.Body)
+		url = utils.StrExtract(string(v), `https://pdf.sciencedirectassets.com/.*&type=client`, 1)
+		httpGetURL(url, destFn, pg, index, quiet, saveLog)
+		return true
+	}
+	return false
+}
+
 // httpGetURL can use golang http.Get to query URL with progress bar
 func httpGetURL(url string, destFn string, pg *mpb.Progress, index int, quiet bool, saveLog bool) {
 	client := &http.Client{
@@ -97,6 +108,9 @@ func httpGetURL(url string, destFn string, pg *mpb.Progress, index int, quiet bo
 			log.Warnf("Access failed: %s", url)
 			fmt.Println("")
 		}
+		return
+	}
+	if checkHttpGetURLRdirect(resp, url, destFn, pg, index, quiet, saveLog) {
 		return
 	}
 	size := resp.ContentLength

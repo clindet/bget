@@ -5,6 +5,8 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/JhuangLab/bget/chromedp"
+
 	"github.com/JhuangLab/bget/log"
 	"github.com/JhuangLab/bget/utils"
 	"github.com/gocolly/colly"
@@ -174,6 +176,9 @@ func CellComSpider(doi string) []string {
 	// Before making a request print "Visiting ..."
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
+		if utils.StrDetect(r.URL.String(), "^https://www.sciencedirect.com") {
+			urls = append(urls, chromedp.Chrome2URLs(r.URL.String())...)
+		}
 	})
 
 	// Start scraping on https://hackerspaces.org

@@ -43,6 +43,8 @@ func formatURLfileName(url string) (fname string) {
 			fname = utils.StrReplaceAll(fname, "[?]articleTools=true", "")
 		}
 		fname = fname + ".pdf"
+	} else if utils.StrDetect(url, "[?]md5=.*&pid=.*") {
+		fname = utils.StrReplaceAll(fname, "[?]md5=.*&pid=", "")
 	}
 	return fname
 }

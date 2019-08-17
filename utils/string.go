@@ -45,3 +45,13 @@ func StrSplit(s string, pattern string, n int) (arr []string) {
 	}
 	return []string{s}
 }
+
+// StrExtract extract string with pattern
+func StrExtract(s string, pattern string, n int) (arr string) {
+	if ok, _ := regexp.Match(pattern, []byte(s)); ok {
+		re, _ := regexp.Compile(pattern)
+		arr := re.FindString(s)
+		return arr
+	}
+	return s
+}
