@@ -163,15 +163,46 @@ func CellComSpider(doi string) []string {
 		}
 	})
 
-	c.OnResponse(func(r *colly.Response) {
-		fmt.Println(string(r.Body))
-	})
-
 	c.OnHTML("meta[HTTP-EQUIV=REFRESH]", func(e *colly.HTMLElement) {
 		link := e.Attr("content")
 		link = utils.StrReplaceAll(link, ".* url='", "")
 		link = utils.StrReplaceAll(link, "'$", "")
 		link = "https://linkinghub.elsevier.com" + link
+		c.Visit(link)
+	})
+
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
+
+// BloodJournalSpider access http://www.bloodjournal.org files via spider
+func BloodJournalSpider(doi string) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "www.bloodjournal.org", "signin.hematology.org"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML("a[data-panel-name=jnl_bloodjournal_tab_pdf]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "http://www.bloodjournal.org" + link
+		urls = append(urls, link)
+	})
+	c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "http://www.bloodjournal.org" + link
+		urls = append(urls, link)
+	})
+	c.OnHTML("a.[data-panel-name=jnl_bloodjournal_tab_data]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
 		c.Visit(link)
 	})
 

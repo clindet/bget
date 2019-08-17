@@ -176,7 +176,11 @@ func PlosSpider(doi string) (urls []string) {
 
 	c.OnHTML(".supplementary-material a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		link = "https://journals.plos.org" + link
+		if strings.Contains(link, "supplementary") && utils.StrDetect(link, "^/") {
+			link = "https://journals.plos.org" + link
+		} else if strings.Contains(link, "supplementary") && !utils.StrDetect(link, "^/") {
+			link = "https://journals.plos.org/" + link
+		}
 		urls = append(urls, link)
 	})
 
@@ -270,3 +274,176 @@ func PeerjSpider(doi string) (urls []string) {
 	return urls
 }
 
+// OupComSpider access academic.oup.com files via spider
+func OupComSpider(doi string) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "academic.oup.com", "oup.silverchair-cdn.com"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	// On every a element which has href attribute call callback
+	c.OnHTML("a.article-pdfLink", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://academic.oup.com" + link
+		urls = append(urls, link)
+	})
+
+	c.OnHTML(".dataSuppLink a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		urls = append(urls, link)
+	})
+
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
+
+// GenomeResSpider access https://genome.cshlp.org files via spider
+func GenomeResSpider(doi string) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "genome.cshlp.org"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML("a[rel=view-full-text]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://genome.cshlp.org" + link + ".pdf"
+		urls = append(urls, link)
+	})
+	c.OnHTML("div.auto-clean a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://genome.cshlp.org" + link
+		urls = append(urls, link)
+	})
+
+	c.OnHTML("a[rel=supplemental-data]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		c.Visit("https://genome.cshlp.org" + link)
+	})
+
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
+
+// EmbopressSpider access https://www.embopress.org files via spider
+func EmbopressSpider(doi string) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "onlinelibrary.wiley.com", "www.embopress.org"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML("div.article-action a[aria-label=PDF]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://www.embopress.org" + link
+		urls = append(urls, link)
+	})
+	c.OnHTML(".article-section__supporting a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://www.embopress.org" + link
+		urls = append(urls, link)
+	})
+
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
+
+// AscopubsSpider access https://ascopubs.org/ files via spider
+func AscopubsSpider(doi string) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "ascopubs.org"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML(".pdfTools a[download]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://ascopubs.org" + link
+		urls = append(urls, link)
+	})
+	c.OnHTML("article.article ul li a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://ascopubs.org" + link
+		urls = append(urls, link)
+	})
+
+	c.OnResponse(func(r *colly.Response) {
+		if r.Request.URL.String() == "https://ascopubs.org/doi/"+doi {
+			c.Visit("https://ascopubs.org/doi/pdf/" + doi)
+			c.Visit("https://ascopubs.org/doi/suppl/" + doi)
+		}
+	})
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
+
+// HaematologicaSpider access https://ascopubs.org/ files via spider
+func HaematologicaSpider(doi string) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "www.haematologica.org"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML(".pdfTools a[download]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://ascopubs.org" + link
+		urls = append(urls, link)
+	})
+	c.OnHTML("article.article ul li a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://ascopubs.org" + link
+		urls = append(urls, link)
+	})
+
+	c.OnResponse(func(r *colly.Response) {
+		if !strings.HasSuffix(r.Request.URL.String(), ".figures-only") {
+			urls = append(urls, r.Request.URL.String()+".pdf")
+		} else {
+			c.Visit(r.Request.URL.String() + ".figures-only")
+		}
+	})
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
