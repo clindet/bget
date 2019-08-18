@@ -50,19 +50,23 @@ func downloadDoi() {
 }
 
 func doiSpiders(doi string) (urls []string) {
-	doiOrg := ""
 	if !strings.Contains(doi, "/") {
 		return urls
 	}
 	doiTmp := strings.Split(doi, "/")
-	doiOrg = doiTmp[0]
+	doiOrg := doiTmp[0]
+	runFlag := false
 	for k := range spider.DoiSpidersPool {
 		if k == "10.1101" && strings.Contains(doiTmp[1], "gr.") {
 			urls = spider.DoiSpidersPool[doiOrg+".gr"](doi)
+			runFlag = true
 		} else if k == doiOrg {
 			urls = spider.DoiSpidersPool[doiOrg](doi)
+			runFlag = true
 		}
-
+	}
+	if !runFlag {
+		urls = spider.ScihubSpider(doi)
 	}
 	return urls
 }
@@ -86,5 +90,5 @@ func doiCmdRunOptions(cmd *cobra.Command) {
 
 func init() {
 	doiCmd.Example = `  bget doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
-  bget doi 10.1016/j.ccell.2019.07.003 10.1016/j.stem.2019.07.009 10.1016/j.acax.2019.100009 -t 2`
+  bget doi 10.1016/j.devcel.2017.03.001 10.1016/j.stem.2019.07.009 10.1016/j.celrep.2018.03.072 -t 2`
 }

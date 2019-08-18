@@ -49,6 +49,8 @@ func formatURLfileName(url string) (fname string) {
 		fname = fname + ".pdf"
 	} else if butils.StrDetect(url, "[?]md5=.*&pid=.*") {
 		fname = butils.StrReplaceAll(fname, "[?]md5=.*&pid=", "")
+	} else if butils.StrDetect(fname, "[?]download=true") {
+		fname = butils.StrReplaceAll(fname, "[?]download=true", "")
 	}
 	return fname
 }
