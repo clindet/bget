@@ -5,8 +5,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/JhuangLab/butils/log"
 	butils "github.com/JhuangLab/butils"
+	"github.com/JhuangLab/butils/log"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
 )

@@ -23,7 +23,7 @@ func ScihubSpider(doi string) (urls []string) {
 		link := e.Attr("onclick")
 		link = butils.StrExtract(link, "//.*", 1)
 		link = "http:" + link
-		fmt.Println(link)
+		link = butils.StrReplaceAll(link, "'$", "")
 		urls = append(urls, link)
 	})
 
