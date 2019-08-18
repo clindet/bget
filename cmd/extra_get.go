@@ -15,8 +15,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	log "github.com/JhuangLab/bget/log"
-	"github.com/JhuangLab/bget/utils"
+	log "github.com/JhuangLab/butils/log"
+	butils "github.com/JhuangLab/butils"
 	mpb "github.com/vbauerster/mpb/v4"
 	"github.com/vbauerster/mpb/v4/decor"
 )
@@ -30,8 +30,8 @@ func Wget(url string, destFn string, taskID string, quiet bool, saveLog bool) {
 	args := []string{"-c", url, "-O", destFn}
 	cmd := exec.Command("wget", args...)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_wget.log", taskID, path.Base(destFn)))
-	utils.CreateFileParDir(logPath)
-	utils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
+	butils.CreateFileParDir(logPath)
+	butils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
 }
 
 // Curl use curl to download files
@@ -39,8 +39,8 @@ func Curl(url string, destFn string, taskID string, quiet bool, saveLog bool) {
 	args := []string{url, "-o", destFn}
 	cmd := exec.Command("curl", args...)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_curl.log", taskID, path.Base(destFn)))
-	utils.CreateFileParDir(logPath)
-	utils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
+	butils.CreateFileParDir(logPath)
+	butils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
 }
 
 // Axel use axel to download files
@@ -48,8 +48,8 @@ func Axel(url string, destFn string, thread int, taskID string, quiet bool, save
 	args := []string{url, "-N", "-o", destFn, "-n", strconv.Itoa(thread)}
 	cmd := exec.Command("axel", args...)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_axel.log", taskID, path.Base(destFn)))
-	utils.CreateFileParDir(logPath)
-	utils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
+	butils.CreateFileParDir(logPath)
+	butils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
 }
 
 // Git use git to download files
@@ -57,8 +57,8 @@ func Git(url string, destFn string, taskID string, quiet bool, saveLog bool) {
 	args := []string{"clone", "--recursive", url, destFn}
 	cmd := exec.Command("git", args...)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_git.log", taskID, path.Base(destFn)))
-	utils.CreateFileParDir(logPath)
-	utils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
+	butils.CreateFileParDir(logPath)
+	butils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
 }
 
 // Rsync use rsync to download files
@@ -66,14 +66,14 @@ func Rsync(url string, destFn string, taskID string, quiet bool, saveLog bool) {
 	args := []string{url, destFn}
 	cmd := exec.Command("rsync", args...)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_rsync.log", taskID, path.Base(destFn)))
-	utils.CreateFileParDir(logPath)
-	utils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
+	butils.CreateFileParDir(logPath)
+	butils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
 }
 
 func checkHttpGetURLRdirect(resp *http.Response, url string, destFn string, pg *mpb.Progress, index int, quiet bool, saveLog bool) (status bool) {
 	if strings.Contains(url, "https://www.sciencedirect.com") {
 		v, _ := ioutil.ReadAll(resp.Body)
-		url = utils.StrExtract(string(v), `https://pdf.sciencedirectassets.com/.*&type=client`, 1)
+		url = butils.StrExtract(string(v), `https://pdf.sciencedirectassets.com/.*&type=client`, 1)
 		httpGetURL(url, destFn, pg, index, quiet, saveLog)
 		return true
 	}
@@ -115,8 +115,8 @@ func httpGetURL(url string, destFn string, pg *mpb.Progress, index int, quiet bo
 	}
 	size := resp.ContentLength
 
-	if hasParDir, _ := utils.PathExists(filepath.Dir(destFn)); !hasParDir {
-		err := utils.CreateFileParDir(destFn)
+	if hasParDir, _ := butils.PathExists(filepath.Dir(destFn)); !hasParDir {
+		err := butils.CreateFileParDir(destFn)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -236,7 +236,7 @@ func HTTPGetURLs(urls []string, destDir []string, engine string, taskID string, 
 		quiet = true
 	}
 	for j := range urls {
-		utils.CreateDir(destDir[j])
+		butils.CreateDir(destDir[j])
 		destFn := path.Join(destDir[j], formatURLfileName(urls[j]))
 		if overwrite {
 			err := os.RemoveAll(destFn)
@@ -244,7 +244,7 @@ func HTTPGetURLs(urls []string, destDir []string, engine string, taskID string, 
 				log.Warnf("Can not remove %s.", destFn)
 			}
 		}
-		if hasDestFn, _ := utils.PathExists(destFn); !hasDestFn || ignore {
+		if hasDestFn, _ := butils.PathExists(destFn); !hasDestFn || ignore {
 			url := urls[j]
 			sem <- true
 			go func(url string, destFn string) {

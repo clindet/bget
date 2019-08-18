@@ -5,27 +5,37 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/JhuangLab/bget/utils"
+	butils "github.com/JhuangLab/butils"
+	"github.com/spf13/cobra"
 )
+
+var keyCmd = &cobra.Command{
+	Use:   "key [key1 key2 key3...]",
+	Short: "Can be used to access URLs via a key string.",
+	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version %site #releaseVersion', : bwa, GRCh38 %defuse #97. More see here https://github.com/JhuangLab/bget.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		keyCmdRunOptions(cmd)
+	},
+}
 
 func downloadKey() {
 	keys := []string{}
 	urls := []string{}
-	if downloadClis.keys != "" && strings.Contains(downloadClis.keys, downloadClis.separator) {
-		keys = strings.Split(downloadClis.keys, downloadClis.separator)
-	} else if downloadClis.keys != "" {
-		keys = []string{downloadClis.keys}
+	if bgetClis.keys != "" && strings.Contains(bgetClis.keys, bgetClis.separator) {
+		keys = strings.Split(bgetClis.keys, bgetClis.separator)
+	} else if bgetClis.keys != "" {
+		keys = []string{bgetClis.keys}
 	}
 	urls = keys2urls(keys)
 	var destDirArray []string
 	for i := range urls {
 		u, _ := url.Parse(urls[i])
 		urls[i] = strings.TrimSpace(u.String())
-		destDirArray = append(destDirArray, downloadClis.downloadDir)
+		destDirArray = append(destDirArray, bgetClis.downloadDir)
 	}
 
-	HTTPGetURLs(urls, destDirArray, downloadClis.engine, taskID, downloadClis.mirror,
-		downloadClis.concurrency, downloadClis.axelThread, overwrite, downloadClis.ignore, quiet, saveLog)
+	HTTPGetURLs(urls, destDirArray, bgetClis.engine, taskID, bgetClis.mirror,
+		bgetClis.concurrency, bgetClis.axelThread, overwrite, bgetClis.ignore, quiet, saveLog)
 }
 
 func keys2urls(keys []string) (urls []string) {
@@ -50,10 +60,10 @@ func keys2urls(keys []string) (urls []string) {
 }
 
 func parseMeta(key string) (keyNew string, version string, site string, release string) {
-	info := utils.StrSplit(key, "@|%|#", 4)
-	info1 := utils.StrSplit(key, "@", 2)
-	info2 := utils.StrSplit(key, "%", 2)
-	info3 := utils.StrSplit(key, "#", 2)
+	info := butils.StrSplit(key, "@|%|#", 4)
+	info1 := butils.StrSplit(key, "@", 2)
+	info2 := butils.StrSplit(key, "%", 2)
+	info3 := butils.StrSplit(key, "#", 2)
 	keyNew = strings.TrimSpace(info[0])
 
 	if len(info) == 2 {
@@ -127,7 +137,34 @@ func getAllKeys() (keys []string) {
 	for i := range bgetToolsURLs {
 		keys = append(keys, bgetToolsURLs[i].Name)
 	}
-	keys = utils.RemoveRepeatEle(keys)
+	keys = butils.RemoveRepeatEle(keys)
 	fmt.Printf("%s\n", strings.Join(keys, "\n"))
 	return keys
+}
+
+func keyCmdRunOptions(cmd *cobra.Command) {
+	checkQuiet()
+	items := []string{}
+	if len(cmd.Flags().Args()) >= 1 {
+		items = append(items, cmd.Flags().Args()...)
+		bgetClis.keys = strings.Join(items, bgetClis.separator)
+	}
+	checkDownloadDir(bgetClis.keys != "")
+	if bgetClis.keysAll {
+		getAllKeys()
+		bgetClis.helpFlags = false
+	}
+	if bgetClis.keys != "" {
+		downloadKey()
+		bgetClis.helpFlags = false
+	}
+	if bgetClis.helpFlags {
+		cmd.Help()
+	}
+}
+
+func init() {
+	keyCmd.Flags().BoolVarP(&(bgetClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
+	keyCmd.Example = `  bget key bwa
+  bget key "reffa@GRCh38 %defuse #97" -t 10 -f`
 }

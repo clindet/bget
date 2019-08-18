@@ -4,7 +4,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/JhuangLab/bget/utils"
+	butils "github.com/JhuangLab/butils"
+	"github.com/spf13/cobra"
 )
 
 type envToolsURLType struct {
@@ -17,6 +18,15 @@ type envFilesURLType struct {
 	Name string
 	Site string
 	URL  []string
+}
+
+var urlCmd = &cobra.Command{
+	Use:   "url [url1 url2 url3...]",
+	Short: "Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync.",
+	Long:  `Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync. More see here https://github.com/JhuangLab/bget.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		urlCmdRunOptions(cmd)
+	},
 }
 
 var bgetToolsURLs = []envToolsURLType{
@@ -115,14 +125,14 @@ func getEnvFilesURL(name string, site string, version string, release string) []
 				tmp := strings.Replace(bgetFilesURLs[i].URL[j], "{{release}}", release, 100)
 				version = genomeVersionConvertor(tmp, version)
 				tmp = strings.Replace(tmp, "{{version}}", version, 100)
-				if utils.StrDetect(tmp, "{{chrom}}") {
+				if butils.StrDetect(tmp, "{{chrom}}") {
 					raw := tmp
 					for k := range chrom {
 						tmp = strings.Replace(raw, "{{chrom}}", chrom[k], 100)
 						rep = append(rep, tmp)
 					}
 				}
-				if !utils.StrDetect(tmp, "{{chrom}}") {
+				if !butils.StrDetect(tmp, "{{chrom}}") {
 					rep = append(rep, tmp)
 				}
 			}
@@ -133,7 +143,7 @@ func getEnvFilesURL(name string, site string, version string, release string) []
 }
 
 func genomeVersionConvertor(url string, version string) string {
-	if utils.StrDetect(url, "http://hgdownload.cse.ucsc.edu/goldenPath") {
+	if butils.StrDetect(url, "http://hgdownload.cse.ucsc.edu/goldenPath") {
 		if strings.ToLower(version) == "grch38" {
 			version = "hg38"
 		} else if strings.ToLower(version) == "grch37" {
@@ -149,19 +159,47 @@ func genomeVersionConvertor(url string, version string) string {
 
 func downloadUrls() {
 	urls := []string{}
-	if downloadClis.urls != "" && strings.Contains(downloadClis.urls, downloadClis.separator) {
-		urls = strings.Split(downloadClis.urls, downloadClis.separator)
-	} else if downloadClis.urls != "" {
-		urls = []string{downloadClis.urls}
-	} else if downloadClis.urlsFile != "" {
-		urls = utils.ReadLines(downloadClis.urlsFile)
+	if bgetClis.urls != "" && strings.Contains(bgetClis.urls, bgetClis.separator) {
+		urls = strings.Split(bgetClis.urls, bgetClis.separator)
+	} else if bgetClis.urls != "" {
+		urls = []string{bgetClis.urls}
+	} else if bgetClis.urlsFile != "" {
+		urls = butils.ReadLines(bgetClis.urlsFile)
 	}
 	var destDirArray []string
 	for i := range urls {
 		urls[i] = strings.TrimSpace(urls[i])
-		destDirArray = append(destDirArray, downloadClis.downloadDir)
+		destDirArray = append(destDirArray, bgetClis.downloadDir)
 	}
 
-	HTTPGetURLs(urls, destDirArray, downloadClis.engine, taskID, downloadClis.mirror,
-		downloadClis.concurrency, downloadClis.axelThread, overwrite, downloadClis.ignore, quiet, saveLog)
+	HTTPGetURLs(urls, destDirArray, bgetClis.engine, taskID, bgetClis.mirror,
+		bgetClis.concurrency, bgetClis.axelThread, overwrite, bgetClis.ignore, quiet, saveLog)
+}
+func urlCmdRunOptions(cmd *cobra.Command) {
+	checkQuiet()
+	items := []string{}
+	if len(cmd.Flags().Args()) >= 1 {
+		items = append(items, cmd.Flags().Args()...)
+		bgetClis.urls = strings.Join(items, bgetClis.separator)
+	}
+	checkDownloadDir(bgetClis.urls != "" || bgetClis.urlsFile != "")
+
+	if bgetClis.urls != "" || bgetClis.urlsFile != "" {
+		downloadUrls()
+		bgetClis.helpFlags = false
+	}
+	if bgetClis.helpFlags {
+		cmd.Help()
+	}
+}
+func init() {
+	urlCmd.Flags().StringVarP(&(bgetClis.urlsFile), "list-file", "l", "", "A file contains URLs for download.")
+	urlCmd.Example = `  urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | tr "," "\n"> /tmp/urls.list
+
+  bget url ${urls}
+  bget url https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe
+  bget url ${urls} -t 2 -o /tmp/download
+  bget url ${urls} -t 3 -o /tmp/download -f -g wget
+  bget url ${urls} -t 3 -o /tmp/download -g wget --ignore
+  bget url -l /tmp/urls.list -o /tmp/download -f -t 3`
 }

@@ -3,7 +3,7 @@ package chromedp
 import (
 	"context"
 
-	"github.com/JhuangLab/bget/log"
+	"github.com/JhuangLab/butils/log"
 
 	"github.com/chromedp/chromedp"
 )

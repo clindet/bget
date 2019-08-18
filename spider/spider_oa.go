@@ -5,8 +5,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/JhuangLab/bget/log"
-	"github.com/JhuangLab/bget/utils"
+	"github.com/JhuangLab/butils/log"
+	butils "github.com/JhuangLab/butils"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
 )
@@ -65,7 +65,7 @@ func BiorxivSpider(doi string) (urls []string) {
 
 	c.OnHTML(".supplementary-material-expansion a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		link = utils.StrReplaceAll(link, "[?]download=true$", "")
+		link = butils.StrReplaceAll(link, "[?]download=true$", "")
 		urls = append(urls, link)
 	})
 
@@ -99,7 +99,7 @@ func BiomedcentralSpider(doi string) (urls []string) {
 
 	c.OnHTML(".c-article-supplementary__item a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		link = utils.StrReplaceAll(link, "[?]download=true$", "")
+		link = butils.StrReplaceAll(link, "[?]download=true$", "")
 		urls = append(urls, link)
 	})
 
@@ -176,9 +176,9 @@ func PlosSpider(doi string) (urls []string) {
 
 	c.OnHTML(".supplementary-material a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		if strings.Contains(link, "supplementary") && utils.StrDetect(link, "^/") {
+		if strings.Contains(link, "supplementary") && butils.StrDetect(link, "^/") {
 			link = "https://journals.plos.org" + link
-		} else if strings.Contains(link, "supplementary") && !utils.StrDetect(link, "^/") {
+		} else if strings.Contains(link, "supplementary") && !butils.StrDetect(link, "^/") {
 			link = "https://journals.plos.org/" + link
 		}
 		urls = append(urls, link)

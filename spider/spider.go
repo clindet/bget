@@ -7,8 +7,8 @@ import (
 
 	"github.com/JhuangLab/bget/chromedp"
 
-	"github.com/JhuangLab/bget/log"
-	"github.com/JhuangLab/bget/utils"
+	butils "github.com/JhuangLab/butils"
+	"github.com/JhuangLab/butils/log"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
 )
@@ -31,7 +31,7 @@ func NatureComSpider(doi string) (urls []string) {
 		} else {
 			u, _ := url.Parse(link)
 			linkTmp := strings.Split(u.Path, "/")
-			linkTmp[2] = utils.StrReplaceAll(linkTmp[2], "art:", "art%3A")
+			linkTmp[2] = butils.StrReplaceAll(linkTmp[2], "art:", "art%3A")
 			newLink := append(linkTmp[0:2], strings.Join(linkTmp[2:4], "%2F"))
 			newLink = append(newLink, linkTmp[4:len(linkTmp)]...)
 			link = strings.Join(newLink, "/")
@@ -108,7 +108,7 @@ func CellComSpider(doi string) []string {
 		colly.AllowedDomains("doi.org", "www.cell.com", "cell.com", "linkinghub.elsevier.com", "secure.jbs.elsevierhealth.com",
 			"id.elsevier.com", "www.cancercell.org", "www.sciencedirect.com",
 			"pdf.sciencedirectassets.com"),
-		colly.MaxDepth(3),
+		colly.MaxDepth(1),
 	)
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
@@ -167,8 +167,8 @@ func CellComSpider(doi string) []string {
 
 	c.OnHTML("meta[HTTP-EQUIV=REFRESH]", func(e *colly.HTMLElement) {
 		link := e.Attr("content")
-		link = utils.StrReplaceAll(link, ".* url='", "")
-		link = utils.StrReplaceAll(link, "'$", "")
+		link = butils.StrReplaceAll(link, ".* url='", "")
+		link = butils.StrReplaceAll(link, "'$", "")
 		link = "https://linkinghub.elsevier.com" + link
 		c.Visit(link)
 	})
@@ -176,7 +176,7 @@ func CellComSpider(doi string) []string {
 	// Before making a request print "Visiting ..."
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
-		if utils.StrDetect(r.URL.String(), "^https://www.sciencedirect.com") {
+		if butils.StrDetect(r.URL.String(), "^https://www.sciencedirect.com") {
 			urls = append(urls, chromedp.Chrome2URLs(r.URL.String())...)
 		}
 	})

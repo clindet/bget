@@ -5,18 +5,28 @@ import (
 	"strings"
 
 	"github.com/JhuangLab/bget/spider"
-	"github.com/JhuangLab/bget/utils"
+	butils "github.com/JhuangLab/butils"
+	"github.com/spf13/cobra"
 )
 
+var doiCmd = &cobra.Command{
+	Use:   "doi [doi1 doi2 doi3...]",
+	Short: "Can be used to access files via DOI.",
+	Long:  `Can be used to access files via DOI. More see here https://github.com/JhuangLab/bget.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		doiCmdRunOptions(cmd)
+	},
+}
+
 func downloadDoi() {
-	sem := make(chan bool, downloadClis.concurrency)
+	sem := make(chan bool, bgetClis.concurrency)
 	doi := []string{}
 	urls := []string{}
 	var destDirArray []string
-	if downloadClis.doi != "" && strings.Contains(downloadClis.doi, downloadClis.separator) {
-		doi = strings.Split(downloadClis.doi, downloadClis.separator)
-	} else if downloadClis.doi != "" {
-		doi = []string{downloadClis.doi}
+	if bgetClis.doi != "" && strings.Contains(bgetClis.doi, bgetClis.separator) {
+		doi = strings.Split(bgetClis.doi, bgetClis.separator)
+	} else if bgetClis.doi != "" {
+		doi = []string{bgetClis.doi}
 	}
 	for _, v := range doi {
 		sem <- true
@@ -25,9 +35,9 @@ func downloadDoi() {
 				<-sem
 			}()
 			urlsTmp := doiSpiders(v)
-			urlsTmp = utils.RemoveRepeatEle(urlsTmp)
+			urlsTmp = butils.RemoveRepeatEle(urlsTmp)
 			for range urlsTmp {
-				destDirArray = append(destDirArray, path.Join(downloadClis.downloadDir, v))
+				destDirArray = append(destDirArray, path.Join(bgetClis.downloadDir, v))
 			}
 			urls = append(urls, urlsTmp...)
 		}(v)
@@ -35,12 +45,15 @@ func downloadDoi() {
 	for i := 0; i < cap(sem); i++ {
 		sem <- true
 	}
-	HTTPGetURLs(urls, destDirArray, downloadClis.engine, taskID, downloadClis.mirror,
-		downloadClis.concurrency, downloadClis.axelThread, overwrite, downloadClis.ignore, quiet, saveLog)
+	HTTPGetURLs(urls, destDirArray, bgetClis.engine, taskID, bgetClis.mirror,
+		bgetClis.concurrency, bgetClis.axelThread, overwrite, bgetClis.ignore, quiet, saveLog)
 }
 
 func doiSpiders(doi string) (urls []string) {
 	doiOrg := ""
+	if !strings.Contains(doi, "/") {
+		return urls
+	}
 	doiTmp := strings.Split(doi, "/")
 	doiOrg = doiTmp[0]
 	for k := range spider.DoiSpidersPool {
@@ -52,4 +65,26 @@ func doiSpiders(doi string) (urls []string) {
 
 	}
 	return urls
+}
+
+func doiCmdRunOptions(cmd *cobra.Command) {
+	checkQuiet()
+	checkDownloadDir(bgetClis.doi != "")
+	items := []string{}
+	if len(cmd.Flags().Args()) >= 1 {
+		items = append(items, cmd.Flags().Args()...)
+		bgetClis.doi = strings.Join(items, bgetClis.separator)
+	}
+	if bgetClis.doi != "" {
+		downloadDoi()
+		bgetClis.helpFlags = false
+	}
+	if bgetClis.helpFlags {
+		cmd.Help()
+	}
+}
+
+func init() {
+	doiCmd.Example = `  bget doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
+  bget doi 10.1016/j.ccell.2019.07.003 10.1016/j.stem.2019.07.009 10.1016/j.acax.2019.100009 -t 2`
 }
