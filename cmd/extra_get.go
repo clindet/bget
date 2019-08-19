@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -15,8 +16,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	log "github.com/JhuangLab/butils/log"
 	butils "github.com/JhuangLab/butils"
+	log "github.com/JhuangLab/butils/log"
 	mpb "github.com/vbauerster/mpb/v4"
 	"github.com/vbauerster/mpb/v4/decor"
 )
@@ -70,7 +71,7 @@ func Rsync(url string, destFn string, taskID string, quiet bool, saveLog bool) {
 	butils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
 }
 
-func checkHttpGetURLRdirect(resp *http.Response, url string, destFn string, pg *mpb.Progress, index int, quiet bool, saveLog bool) (status bool) {
+func checkHTTPGetURLRdirect(resp *http.Response, url string, destFn string, pg *mpb.Progress, index int, quiet bool, saveLog bool) (status bool) {
 	if strings.Contains(url, "https://www.sciencedirect.com") {
 		v, _ := ioutil.ReadAll(resp.Body)
 		url = butils.StrExtract(string(v), `https://pdf.sciencedirectassets.com/.*&type=client`, 1)
@@ -80,10 +81,17 @@ func checkHttpGetURLRdirect(resp *http.Response, url string, destFn string, pg *
 	return false
 }
 
+func defaultCheckRedirect(req *http.Request, via []*http.Request) error {
+	if len(via) >= 20 {
+		return errors.New("stopped after 20 redirects")
+	}
+	return nil
+}
+
 // httpGetURL can use golang http.Get to query URL with progress bar
 func httpGetURL(url string, destFn string, pg *mpb.Progress, index int, quiet bool, saveLog bool) {
 	client := &http.Client{
-		CheckRedirect: nil,
+		CheckRedirect: defaultCheckRedirect,
 		Jar:           gCurCookieJar,
 	}
 
@@ -110,7 +118,7 @@ func httpGetURL(url string, destFn string, pg *mpb.Progress, index int, quiet bo
 		}
 		return
 	}
-	if checkHttpGetURLRdirect(resp, url, destFn, pg, index, quiet, saveLog) {
+	if checkHTTPGetURLRdirect(resp, url, destFn, pg, index, quiet, saveLog) {
 		return
 	}
 	size := resp.ContentLength

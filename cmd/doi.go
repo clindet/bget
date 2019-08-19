@@ -65,7 +65,7 @@ func doiSpiders(doi string) (urls []string) {
 			runFlag = true
 		}
 	}
-	if !runFlag {
+	if !runFlag || len(urls) == 0 {
 		urls = spider.ScihubSpider(doi)
 	}
 	return urls
