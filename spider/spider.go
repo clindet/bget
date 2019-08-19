@@ -332,7 +332,8 @@ func AacrJournalsSpider(doi string) (urls []string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
-		colly.AllowedDomains("doi.org", "aacrjournals.org", "cancerdiscovery.aacrjournals.org"),
+		colly.AllowedDomains("doi.org", "aacrjournals.org", "cancerdiscovery.aacrjournals.org",
+			"clincancerres.aacrjournals.org"),
 		colly.MaxDepth(1),
 	)
 	extensions.RandomUserAgent(c)

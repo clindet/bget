@@ -40,12 +40,21 @@ func ZenodoSpider(doi string) (urls []string) {
 	return urls
 }
 
-// BiorxivSpider access Biorxiv files via spider
-func BiorxivSpider(doi string) (urls []string) {
+// CshlpSpider access CshlpSpider files via spider
+func CshlpSpider(doi string) (urls []string) {
+	host := ""
+	if strings.Contains(doi, "10.1101/gad") {
+		host = "http://genesdev.cshlp.org"
+	} else if strings.Contains(doi, "10.1101/gr") {
+		host = "https://genome.cshlp.org"
+	} else {
+		host = "https://biorxiv.org"
+	}
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
-		colly.AllowedDomains("doi.org", "biorxiv.org", "www.biorxiv.org"),
+		colly.AllowedDomains("doi.org", "biorxiv.org", "www.biorxiv.org",
+			"genome.cshlp.org", "genesdev.cshlp.org"),
 		colly.MaxDepth(1),
 	)
 	extensions.RandomUserAgent(c)
@@ -54,19 +63,35 @@ func BiorxivSpider(doi string) (urls []string) {
 	c.OnHTML(".pane-highwire-variant-link a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		u, _ := url.Parse(link)
-		link = "https://www.biorxiv.org" + u.Host + u.Path
+		link = host + u.Host + u.Path
 		urls = append(urls, link)
 	})
 
 	c.OnHTML(".pane-biorxiv-supplementary-fragment a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		c.Visit("https://www.biorxiv.org" + link)
+		c.Visit(host + link)
 	})
 
 	c.OnHTML(".supplementary-material-expansion a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		link = butils.StrReplaceAll(link, "[?]download=true$", "")
 		urls = append(urls, link)
+	})
+
+	c.OnHTML("a[rel=view-full-text]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = host + link + ".pdf"
+		urls = append(urls, link)
+	})
+	c.OnHTML("div.auto-clean a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = host + link
+		urls = append(urls, link)
+	})
+
+	c.OnHTML("a[rel=supplemental-data]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		c.Visit(host + link)
 	})
 
 	// Before making a request print "Visiting ..."
@@ -294,42 +319,6 @@ func OupComSpider(doi string) (urls []string) {
 	c.OnHTML(".dataSuppLink a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		urls = append(urls, link)
-	})
-
-	// Before making a request print "Visiting ..."
-	c.OnRequest(func(r *colly.Request) {
-		log.Infof("Visiting %s", r.URL.String())
-	})
-
-	// Start scraping on https://hackerspaces.org
-	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
-	return urls
-}
-
-// GenomeResSpider access https://genome.cshlp.org files via spider
-func GenomeResSpider(doi string) (urls []string) {
-	// Instantiate default collector
-	c := colly.NewCollector(
-		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
-		colly.AllowedDomains("doi.org", "genome.cshlp.org"),
-		colly.MaxDepth(1),
-	)
-	extensions.RandomUserAgent(c)
-
-	c.OnHTML("a[rel=view-full-text]", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		link = "https://genome.cshlp.org" + link + ".pdf"
-		urls = append(urls, link)
-	})
-	c.OnHTML("div.auto-clean a[href]", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		link = "https://genome.cshlp.org" + link
-		urls = append(urls, link)
-	})
-
-	c.OnHTML("a[rel=supplemental-data]", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		c.Visit("https://genome.cshlp.org" + link)
 	})
 
 	// Before making a request print "Visiting ..."

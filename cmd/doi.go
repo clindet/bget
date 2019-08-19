@@ -57,10 +57,7 @@ func doiSpiders(doi string) (urls []string) {
 	doiOrg := doiTmp[0]
 	runFlag := false
 	for k := range spider.DoiSpidersPool {
-		if k == "10.1101" && strings.Contains(doiTmp[1], "gr.") {
-			urls = spider.DoiSpidersPool[doiOrg+".gr"](doi)
-			runFlag = true
-		} else if k == doiOrg {
+		if k == doiOrg {
 			urls = spider.DoiSpidersPool[doiOrg](doi)
 			runFlag = true
 		}
