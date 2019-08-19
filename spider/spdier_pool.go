@@ -19,6 +19,7 @@ var DoiSpidersPool = map[string]func(doi string) []string{
 	"10.1111":  WileyComSpider,
 	"10.1126":  ScienseComSpider,
 	"10.1161":  AhajournalsSpider,
+	"10.1172":  JciSpider,
 	"10.1182":  BloodJournalSpider,
 	"10.1186":  BiomedcentralSpider,
 	"10.1200":  AscopubsSpider,
@@ -29,5 +30,6 @@ var DoiSpidersPool = map[string]func(doi string) []string{
 	"10.3324":  HaematologicaSpider,
 	"10.3389":  FrontiersinSpider,
 	"10.5281":  ZenodoSpider,
+	"10.7554":  ElifeSpider,
 	"10.7717":  PeerjSpider,
 }

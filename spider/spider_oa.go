@@ -474,3 +474,70 @@ func WileyComSpider(doi string) (urls []string) {
 	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
 	return urls
 }
+
+// ElifeSpider access https://elifesciences.org files via spider
+func ElifeSpider(doi string) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "elifesciences.org"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML("a[data-download-type='pdf-article']", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		urls = append(urls, link)
+	})
+	c.OnHTML("a.additional-asset__link--download[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		urls = append(urls, link)
+	})
+	c.OnResponse(func(r *colly.Response) {
+		if strings.Contains(r.Request.URL.String(), "elifesciences.org") && !strings.HasSuffix(r.Request.URL.String(), "figures") {
+			c.Visit(r.Request.URL.String() + "/figures")
+		}
+	})
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
+
+// JciSpider access https://www.jci.org files via spider
+func JciSpider(doi string) (urls []string) {
+	host := "https://www.jci.org"
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "www.jci.org"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML("h3 a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		urls = append(urls, host+link)
+	})
+	c.OnHTML("#supplemental-material a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		c.Visit(host + link)
+	})
+	c.OnResponse(func(r *colly.Response) {
+		if strings.Contains(r.Request.URL.String(), "https://www.jci.org") && !strings.HasSuffix(r.Request.URL.String(), "pdf") {
+			c.Visit(r.Request.URL.String() + "/pdf")
+		}
+	})
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
