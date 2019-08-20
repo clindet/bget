@@ -365,3 +365,34 @@ func AacrJournalsSpider(doi string) (urls []string) {
 	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
 	return urls
 }
+
+// TandfonlineSpider access https://www.tandfonline.com files via spider
+// not support now, need chromedp
+func TandfonlineSpider(doi string) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("doi.org", "www.tandfonline.com"),
+		colly.MaxDepth(1),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML("a.show-pdf[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		urls = append(urls, link)
+		c.Visit(butils.StrReplaceAll(link, "/doi/pdf/", "/doi/suppl/"))
+	})
+	c.OnHTML("a[title='Download all']", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		urls = append(urls, link)
+	})
+
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://doi.org/%s", doi))
+	return urls
+}
