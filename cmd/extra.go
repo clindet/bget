@@ -9,6 +9,7 @@ import (
 
 	butils "github.com/JhuangLab/butils"
 	"github.com/JhuangLab/butils/log"
+	neturl "net/url"
 )
 
 func checkGitEngine(url string) string {
@@ -55,6 +56,9 @@ func formatURLfileName(url string) (fname string) {
 		fname = butils.StrReplaceAll(fname, "[?]_hash=.*", "")
 	} else if butils.StrDetect(url, "sd/pdf/render") {
 		fname = "supp." + fname + ".pdf"
+	} else if strings.Contains(url, "https://www.ncbi.nlm.nih.gov/geo/download/?acc=") {
+		fname = butils.StrReplaceAll(fname, "[?].*=", "")
+		fname, _ = neturl.QueryUnescape(fname)
 	}
 	return fname
 }

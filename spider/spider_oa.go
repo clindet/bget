@@ -526,7 +526,11 @@ func JciSpider(doi string) (urls []string) {
 
 	c.OnHTML("h3 a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		urls = append(urls, host+link)
+		if strings.Contains(link, "cloudfront.net") {
+			urls = append(urls, "http:"+link)
+		} else {
+			urls = append(urls, host+link)
+		}
 	})
 	c.OnHTML("#supplemental-material a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")

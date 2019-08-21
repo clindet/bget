@@ -71,12 +71,16 @@ func Rsync(url string, destFn string, taskID string, quiet bool, saveLog bool) {
 	butils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
 }
 
-func checkHTTPGetURLRdirect(resp *http.Response, url string, destFn string, pg *mpb.Progress, index int, quiet bool, saveLog bool) (status bool) {
+func checkHTTPGetURLRdirect(resp *http.Response, url string, destFn string, pg *mpb.Progress, quiet bool, saveLog bool) (status bool) {
 	if strings.Contains(url, "https://www.sciencedirect.com") {
-		v, _ := ioutil.ReadAll(resp.Body)
-		url = butils.StrExtract(string(v), `https://pdf.sciencedirectassets.com/.*&type=client`, 1)
-		httpGetURL(url, destFn, pg, index, quiet, saveLog)
-		return true
+		v, err := ioutil.ReadAll(resp.Body)
+		if err == nil {
+			if butils.StrDetect(string(v), "https://pdf.sciencedirectassets.com") {
+				url = butils.StrExtract(string(v), `https://pdf.sciencedirectassets.com/.*&type=client`, 1)
+				httpGetURL(url, destFn, pg, quiet, saveLog)
+				return true
+			}
+		}
 	}
 	return false
 }
@@ -89,7 +93,7 @@ func defaultCheckRedirect(req *http.Request, via []*http.Request) error {
 }
 
 // httpGetURL can use golang http.Get to query URL with progress bar
-func httpGetURL(url string, destFn string, pg *mpb.Progress, index int, quiet bool, saveLog bool) {
+func httpGetURL(url string, destFn string, pg *mpb.Progress, quiet bool, saveLog bool) {
 	client := &http.Client{
 		CheckRedirect: defaultCheckRedirect,
 		Jar:           gCurCookieJar,
@@ -118,7 +122,7 @@ func httpGetURL(url string, destFn string, pg *mpb.Progress, index int, quiet bo
 		}
 		return
 	}
-	if checkHTTPGetURLRdirect(resp, url, destFn, pg, index, quiet, saveLog) {
+	if checkHTTPGetURLRdirect(resp, url, destFn, pg, quiet, saveLog) {
 		return
 	}
 	size := resp.ContentLength
@@ -141,11 +145,12 @@ func httpGetURL(url string, destFn string, pg *mpb.Progress, index int, quiet bo
 	if prefixStrLen > 35 {
 		prefixStr = prefixStr[0:31] + "..."
 	}
+	prefixStr = fmt.Sprintf("%-35s\t", prefixStr)
 	if !quiet {
 		bar := pg.AddBar(size,
 			mpb.BarStyle("[=>-|"),
 			mpb.PrependDecorators(
-				decor.Name(fmt.Sprintf("%-35s\t", prefixStr), decor.WC{W: index, C: decor.DidentRight}),
+				decor.Name(prefixStr, decor.WC{W: len(prefixStr) + 1, C: decor.DidentRight}),
 				decor.CountersKibiByte("% -.1f / % -.1f\t"),
 				decor.OnComplete(decor.Percentage(decor.WC{W: 5}), " "+"√"),
 			),
@@ -192,7 +197,7 @@ func AsyncURL(url string, destFn string, engine string, taskID string, mirror st
 // AsyncURL2 can access URL via using golang http library (with mbp progress bar) and
 // external commandline tools including wget, curl, axel, git and rsync
 func AsyncURL2(url string, destFn string, engine string, taskID string, mirror string,
-	p *mpb.Progress, index int, axelThread int, quiet bool, saveLog bool) {
+	p *mpb.Progress, axelThread int, quiet bool, saveLog bool) {
 	if checkGitEngine(url) == "git" {
 		engine = "git"
 	}
@@ -203,7 +208,7 @@ func AsyncURL2(url string, destFn string, engine string, taskID string, mirror s
 			}
 			url = mirror + filepath.Base(url)
 		}
-		httpGetURL(url, destFn, p, index, quiet, saveLog)
+		httpGetURL(url, destFn, p, quiet, saveLog)
 	} else {
 		AsyncURL(url, destFn, engine, taskID, mirror, axelThread, quiet, saveLog)
 	}
@@ -216,7 +221,6 @@ func AsyncURL3(url string, destFn string, engine string, taskID string, mirror s
 	if checkGitEngine(url) == "git" {
 		engine = "git"
 	}
-	index := 1
 	if engine == "go-http" {
 		if mirror != "" {
 			if !strings.HasSuffix(mirror, "/") {
@@ -224,7 +228,7 @@ func AsyncURL3(url string, destFn string, engine string, taskID string, mirror s
 			}
 			url = mirror + filepath.Base(url)
 		}
-		httpGetURL(url, destFn, pg, index, quiet, saveLog)
+		httpGetURL(url, destFn, pg, quiet, saveLog)
 		pg.Wait()
 	} else {
 		AsyncURL(url, destFn, engine, taskID, mirror, axelThread, quiet, saveLog)
@@ -259,7 +263,7 @@ func HTTPGetURLs(urls []string, destDir []string, engine string, taskID string, 
 				defer func() {
 					<-sem
 				}()
-				AsyncURL2(url, destFn, engine, taskID, mirror, pg, j, axelThread, quiet, saveLog)
+				AsyncURL2(url, destFn, engine, taskID, mirror, pg, axelThread, quiet, saveLog)
 			}(url, destFn)
 		} else {
 			log.Infof("%s existed.", destFn)

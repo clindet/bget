@@ -169,6 +169,9 @@ func downloadUrls() {
 	var destDirArray []string
 	for i := range urls {
 		urls[i] = strings.TrimSpace(urls[i])
+		if !strings.Contains(urls[i], "://") && !strings.Contains(urls[i], "git@") {
+			urls[i] = "https://" + urls[i]
+		}
 		destDirArray = append(destDirArray, bgetClis.downloadDir)
 	}
 

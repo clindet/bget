@@ -329,6 +329,7 @@ func JamaNetworkSpider(doi string) (urls []string) {
 
 // AacrJournalsSpider access aacrjournals.org files via spider
 func AacrJournalsSpider(doi string) (urls []string) {
+	host := ""
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
@@ -340,12 +341,11 @@ func AacrJournalsSpider(doi string) (urls []string) {
 
 	c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		if strings.Contains(doi, ".CD-") {
-			link = "https://cancerdiscovery.aacrjournals.org" + link
-		}
+		link = "https://" + host + link
 		urls = append(urls, link)
 	})
 	c.OnResponse(func(r *colly.Response) {
+		host = r.Request.URL.Hostname()
 		cd1 := !butils.StrDetect(r.Request.URL.String(), ".figures-only$")
 		cd2 := !butils.StrDetect(r.Request.URL.String(), ".full-text.pdf$")
 		if strings.Contains(r.Request.URL.String(), "aacrjournals.org") && cd1 && cd2 {
@@ -358,7 +358,6 @@ func AacrJournalsSpider(doi string) (urls []string) {
 	// Before making a request print "Visiting ..."
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
-
 	})
 
 	// Start scraping on https://hackerspaces.org
