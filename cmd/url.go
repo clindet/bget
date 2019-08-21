@@ -163,8 +163,8 @@ func downloadUrls() {
 		urls = strings.Split(bgetClis.urls, bgetClis.separator)
 	} else if bgetClis.urls != "" {
 		urls = []string{bgetClis.urls}
-	} else if bgetClis.urlsFile != "" {
-		urls = butils.ReadLines(bgetClis.urlsFile)
+	} else if bgetClis.listFile != "" {
+		urls = butils.ReadLines(bgetClis.listFile)
 	}
 	var destDirArray []string
 	for i := range urls {
@@ -182,9 +182,9 @@ func urlCmdRunOptions(cmd *cobra.Command) {
 		items = append(items, cmd.Flags().Args()...)
 		bgetClis.urls = strings.Join(items, bgetClis.separator)
 	}
-	checkDownloadDir(bgetClis.urls != "" || bgetClis.urlsFile != "")
+	checkDownloadDir(bgetClis.urls != "" || bgetClis.listFile != "")
 
-	if bgetClis.urls != "" || bgetClis.urlsFile != "" {
+	if bgetClis.urls != "" || bgetClis.listFile != "" {
 		downloadUrls()
 		bgetClis.helpFlags = false
 	}
@@ -193,7 +193,7 @@ func urlCmdRunOptions(cmd *cobra.Command) {
 	}
 }
 func init() {
-	urlCmd.Flags().StringVarP(&(bgetClis.urlsFile), "list-file", "l", "", "A file contains URLs for download.")
+	urlCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains URLs for download.")
 	urlCmd.Example = `  urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | tr "," "\n"> /tmp/urls.list
 
   bget url ${urls}

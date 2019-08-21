@@ -25,6 +25,8 @@ func downloadKey() {
 		keys = strings.Split(bgetClis.keys, bgetClis.separator)
 	} else if bgetClis.keys != "" {
 		keys = []string{bgetClis.keys}
+	} else if bgetClis.listFile != "" {
+		keys = butils.ReadLines(bgetClis.listFile)
 	}
 	urls = keys2urls(keys)
 	var destDirArray []string
@@ -154,7 +156,7 @@ func keyCmdRunOptions(cmd *cobra.Command) {
 		getAllKeys()
 		bgetClis.helpFlags = false
 	}
-	if bgetClis.keys != "" {
+	if bgetClis.keys != "" || bgetClis.listFile != "" {
 		downloadKey()
 		bgetClis.helpFlags = false
 	}
@@ -164,6 +166,7 @@ func keyCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
+	keyCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains keys for download.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
 	keyCmd.Example = `  bget key bwa
   bget key "reffa@GRCh38 %defuse #97" -t 10 -f`

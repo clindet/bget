@@ -32,7 +32,7 @@ type bgetCliT struct {
 	engine       string
 	doi          string
 	urls         string
-	urlsFile     string
+	listFile     string
 	separator    string
 	keys         string
 	keysAll      bool

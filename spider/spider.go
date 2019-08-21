@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/JhuangLab/bget/chromedp"
+	//"github.com/JhuangLab/bget/chromedp"
 
 	butils "github.com/JhuangLab/butils"
 	"github.com/JhuangLab/butils/log"
@@ -188,7 +188,7 @@ func CellComSpider(doi string) []string {
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 		if butils.StrDetect(r.URL.String(), "^https://www.sciencedirect.com") {
-			urls = append(urls, chromedp.Chrome2URLs(r.URL.String())...)
+			//urls = append(urls, chromedp.Chrome2URLs(r.URL.String())...)
 		}
 	})
 

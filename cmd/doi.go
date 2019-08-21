@@ -27,6 +27,8 @@ func downloadDoi() {
 		doi = strings.Split(bgetClis.doi, bgetClis.separator)
 	} else if bgetClis.doi != "" {
 		doi = []string{bgetClis.doi}
+	} else if bgetClis.listFile != "" {
+		doi = butils.ReadLines(bgetClis.listFile)
 	}
 	for _, v := range doi {
 		sem <- true
@@ -63,7 +65,7 @@ func doiSpiders(doi string) (urls []string) {
 		}
 	}
 	if !runFlag || len(urls) == 0 {
-		urls = spider.ScihubSpider(doi)
+		//urls = spider.ScihubSpider(doi)
 	}
 	return urls
 }
@@ -76,7 +78,7 @@ func doiCmdRunOptions(cmd *cobra.Command) {
 		items = append(items, cmd.Flags().Args()...)
 		bgetClis.doi = strings.Join(items, bgetClis.separator)
 	}
-	if bgetClis.doi != "" {
+	if bgetClis.doi != "" || bgetClis.listFile != "" {
 		downloadDoi()
 		bgetClis.helpFlags = false
 	}
@@ -86,6 +88,7 @@ func doiCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
+	doiCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains dois for download.")
 	doiCmd.Example = `  bget doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
   bget doi 10.1016/j.devcel.2017.03.001 10.1016/j.stem.2019.07.009 10.1016/j.celrep.2018.03.072 -t 2`
 }
