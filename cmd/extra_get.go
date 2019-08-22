@@ -237,7 +237,7 @@ func AsyncURL3(url string, destFn string, engine string, taskID string, mirror s
 
 // HTTPGetURLs can use golang http.Get and external commandline tools including wget, curl, axel, git and rsync
 // to query URL with progress bar
-func HTTPGetURLs(urls []string, destDir []string, engine string, taskID string, mirror string, concurrency int, axelThread int, overwrite bool, ignore bool, quiet bool, saveLog bool) {
+func HTTPGetURLs(urls []string, destDir []string, engine string, taskID string, mirror string, concurrency int, axelThread int, overwrite bool, ignore bool, quiet bool, saveLog bool) (destFns []string) {
 	sem := make(chan bool, concurrency)
 	for j := range urls {
 		url := urls[j]
@@ -264,8 +264,10 @@ func HTTPGetURLs(urls []string, destDir []string, engine string, taskID string, 
 					<-sem
 				}()
 				AsyncURL2(url, destFn, engine, taskID, mirror, pg, axelThread, quiet, saveLog)
+				destFns = append(destFns, destFn)
 			}(url, destFn)
 		} else {
+			destFns = append(destFns, destFn)
 			log.Infof("%s existed.", destFn)
 		}
 	}
@@ -273,6 +275,7 @@ func HTTPGetURLs(urls []string, destDir []string, engine string, taskID string, 
 		sem <- true
 	}
 	pg.Wait()
+	return destFns
 }
 
 func init() {

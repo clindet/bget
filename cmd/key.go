@@ -3,11 +3,19 @@ package cmd
 import (
 	"fmt"
 	"net/url"
+	"os/exec"
+	"path"
 	"strings"
 
+	"github.com/JhuangLab/bget/urlpool"
+	vers "github.com/JhuangLab/bget/versions"
 	butils "github.com/JhuangLab/butils"
+	log "github.com/JhuangLab/butils/log"
+	"github.com/mholt/archiver"
 	"github.com/spf13/cobra"
 )
+
+var keyVs map[string][]string
 
 var keyCmd = &cobra.Command{
 	Use:   "key [key1 key2 key3...]",
@@ -18,9 +26,7 @@ var keyCmd = &cobra.Command{
 	},
 }
 
-func downloadKey() {
-	keys := []string{}
-	urls := []string{}
+func parseKeys() (keys []string) {
 	if bgetClis.keys != "" && strings.Contains(bgetClis.keys, bgetClis.separator) {
 		keys = strings.Split(bgetClis.keys, bgetClis.separator)
 	} else if bgetClis.keys != "" {
@@ -28,116 +34,75 @@ func downloadKey() {
 	} else if bgetClis.listFile != "" {
 		keys = butils.ReadLines(bgetClis.listFile)
 	}
-	urls = keys2urls(keys)
+	return keys
+}
+
+func downloadKey() {
+	keys := parseKeys()
+	urls, postShellCmd := vers.QueryKeysInfo(keys, osType)
+	done := make(map[string][]string)
 	var destDirArray []string
-	for i := range urls {
-		u, _ := url.Parse(urls[i])
-		urls[i] = strings.TrimSpace(u.String())
-		destDirArray = append(destDirArray, bgetClis.downloadDir)
+	sem := make(chan bool, bgetClis.concurrency)
+	for key, v := range urls {
+		for i := range v {
+			u, _ := url.Parse(v[i])
+			v[i] = strings.TrimSpace(u.String())
+			destDirArray = append(destDirArray, bgetClis.downloadDir)
+		}
+		sem <- true
+		go func(key string, v []string, destDirArray []string) {
+			defer func() {
+				<-sem
+			}()
+			done[key] = HTTPGetURLs(v, destDirArray, bgetClis.engine, taskID, bgetClis.mirror,
+				bgetClis.concurrency, bgetClis.axelThread, overwrite, bgetClis.ignore, quiet, saveLog)
+		}(key, v, destDirArray)
 	}
-
-	HTTPGetURLs(urls, destDirArray, bgetClis.engine, taskID, bgetClis.mirror,
-		bgetClis.concurrency, bgetClis.axelThread, overwrite, bgetClis.ignore, quiet, saveLog)
+	for i := 0; i < cap(sem); i++ {
+		sem <- true
+	}
+	dest := ""
+	for key := range done {
+		for i := range postShellCmd[key] {
+			args := postShellCmd[key][i]
+			dest = done[key][i]
+			args = postCmdRender(args, dest)
+			if args == "" {
+				continue
+			}
+			cmd := exec.Command("sh", "-c", args)
+			logFn := path.Join(logDir, taskID+"_postShellCmd_"+key+".log")
+			if args != "" {
+				butils.RunExecCmdConsole(logFn, cmd, quiet, saveLog)
+			}
+			if _, err := archiver.ByExtension(dest); err != nil {
+				butils.UnarchiveLog(dest, path.Dir(dest))
+			}
+		}
+		urlpool.PostKeyCmds(key, done[key], bgetClis.keys)
+	}
 }
 
-func keys2urls(keys []string) (urls []string) {
-	version := ""
-	site := ""
-	release := ""
-	key := ""
-	for k := range keys {
-		key, version, site, release = parseMeta(keys[k])
-		if version == "" {
-			version = "latest"
-		}
-		if tmp := getEnvToolsURL(key, version, release); tmp != "" {
-			urls = append(urls, tmp)
-		}
-
-		if tmp := getEnvFilesURL(key, site, version, release); len(tmp) > 0 {
-			urls = append(urls, tmp...)
-		}
+func postCmdRender(oldCmd string, dest string) (newCmd string) {
+	if hasDest, _ := butils.PathExists(dest); !hasDest {
+		return ""
 	}
-	return urls
-}
-
-func parseMeta(key string) (keyNew string, version string, site string, release string) {
-	info := butils.StrSplit(key, "@|%|#", 4)
-	info1 := butils.StrSplit(key, "@", 2)
-	info2 := butils.StrSplit(key, "%", 2)
-	info3 := butils.StrSplit(key, "#", 2)
-	keyNew = strings.TrimSpace(info[0])
-
-	if len(info) == 2 {
-		if len(info1) > 1 {
-			version = info[1]
-		} else if len(info2) > 1 {
-			site = info[1]
-		} else if len(info3) > 1 {
-			release = info[1]
-		}
-	} else if len(info) == 3 {
-		if len(info1) > 1 && len(info2) > 1 {
-			if strings.Contains(info1[1], "%") {
-				version = info[1]
-				site = info[2]
-			} else {
-				version = info[2]
-				site = info[1]
-			}
-		} else if len(info1) > 1 && len(info3) > 1 {
-			if strings.Contains(info1[1], "#") {
-				version = info[1]
-				release = info[2]
-			} else {
-				version = info[2]
-				release = info[1]
-			}
-		} else if len(info2) > 1 && len(info3) > 1 {
-			if strings.Contains(info2[1], "#") {
-				site = info[1]
-				release = info[2]
-			} else {
-				site = info[2]
-				release = info[1]
-			}
-		}
-	} else if len(info) == 4 {
-		if strings.Contains(info1[1], "#") && strings.Contains(info1[1], "%") {
-			version = info[1]
-		} else if !strings.Contains(info1[1], "#") && !strings.Contains(info1[1], "%") {
-			version = info[3]
-		} else {
-			version = info[2]
-		}
-		if strings.Contains(info2[1], "@") && strings.Contains(info2[1], "#") {
-			site = info[1]
-		} else if !strings.Contains(info2[1], "@") && !strings.Contains(info2[1], "#") {
-			site = info[3]
-		} else {
-			site = info[2]
-		}
-		if strings.Contains(info3[1], "@") && strings.Contains(info3[1], "%") {
-			release = info[1]
-		} else if !strings.Contains(info3[1], "@") && !strings.Contains(info3[1], "%") {
-			release = info[3]
-		} else {
-			release = info[2]
-		}
+	if cmdExtraFromFlag != "" {
+		newCmd = oldCmd + " " + cmdExtraFromFlag
 	}
-	keyNew = strings.TrimSpace(keyNew)
-	site = strings.TrimSpace(site)
-	version = strings.TrimSpace(version)
-	release = strings.TrimSpace(release)
-	return keyNew, version, site, release
+	// define your pattern replace
+	newCmd = strings.Replace(oldCmd, "{{downloadDir}}", bgetClis.downloadDir, 100)
+	newCmd = strings.Replace(newCmd, "{{dest}}", dest, 100)
+	newCmd = strings.Replace(newCmd, "{{pdir}}", path.Dir(dest), 100)
+	return newCmd
 }
 
 func getAllKeys() (keys []string) {
-	for i := range bgetFilesURLs {
-		keys = append(keys, bgetFilesURLs[i].Name)
+	for i := range urlpool.BgetToolsPool {
+		keys = append(keys, urlpool.BgetToolsPool[i].Name)
 	}
-	for i := range bgetToolsURLs {
-		keys = append(keys, bgetToolsURLs[i].Name)
+	for i := range urlpool.BgetFilesPool {
+		keys = append(keys, urlpool.BgetFilesPool[i].Name)
 	}
 	keys = butils.RemoveRepeatEle(keys)
 	fmt.Printf("%s\n", strings.Join(keys, "\n"))
@@ -151,11 +116,18 @@ func keyCmdRunOptions(cmd *cobra.Command) {
 		items = append(items, cmd.Flags().Args()...)
 		bgetClis.keys = strings.Join(items, bgetClis.separator)
 	}
-	checkDownloadDir(bgetClis.keys != "")
+	if bgetClis.getKeyVersions != "" {
+		log.Infoln("Featching versions from local and remote website...")
+		keys := parseKeys()
+		keyVs = vers.QueryKeysVersions(keys, osType, bgetClis.getKeyVersions)
+		return
+	}
 	if bgetClis.keysAll {
 		getAllKeys()
 		bgetClis.helpFlags = false
+		return
 	}
+	checkDownloadDir(bgetClis.keys != "")
 	if bgetClis.keys != "" || bgetClis.listFile != "" {
 		downloadKey()
 		bgetClis.helpFlags = false
@@ -166,6 +138,7 @@ func keyCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
+	keyCmd.Flags().StringVarP(&(bgetClis.getKeyVersions), "versions", "v", "", "Show all available versions of key. Optional (txt, json, table)")
 	keyCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains keys for download.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
 	keyCmd.Example = `  bget key bwa

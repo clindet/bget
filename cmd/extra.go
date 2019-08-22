@@ -7,9 +7,10 @@ import (
 	"path"
 	"strings"
 
+	neturl "net/url"
+
 	butils "github.com/JhuangLab/butils"
 	"github.com/JhuangLab/butils/log"
-	neturl "net/url"
 )
 
 func checkGitEngine(url string) string {

@@ -20,42 +20,40 @@ var quiet bool
 var saveLog bool
 var wd, _ = os.Getwd()
 var logDir string
-var version = "v0.1.0-2"
+var version = "v0.1.0-3"
 
 type bgetCliT struct {
-	downloadDir  string
-	mirror       string
-	installReffa string
-	autoPath     bool
-	installSpack bool
-	installConda string
-	engine       string
-	doi          string
-	urls         string
-	listFile     string
-	separator    string
-	keys         string
-	keysAll      bool
-	axelThread   int
-	concurrency  int
-	ignore       bool
-	helpFlags    bool
+	downloadDir    string
+	mirror         string
+	autoPath       bool
+	engine         string
+	doi            string
+	urls           string
+	listFile       string
+	separator      string
+	keys           string
+	uncompress     bool
+	keysAll        bool
+	getKeyVersions string
+	axelThread     int
+	concurrency    int
+	ignore         bool
+	helpFlags      bool
 }
 
 var bgetClis = bgetCliT{
 	"",
 	"",
+	false,
+	"",
+	"",
+	"",
+	"",
+	"",
 	"",
 	false,
 	false,
 	"",
-	"go-http",
-	"",
-	"",
-	"",
-	"",
-	"",
-	false,
 	1,
 	1,
 	false,
@@ -96,31 +94,6 @@ func checkArgs(cmd *cobra.Command) {
 }
 
 func rootCmdRunOptions(cmd *cobra.Command) {
-	checkQuiet()
-	checkArgs(cmd)
-	checkDownloadDir(bgetClis.installSpack || bgetClis.installConda != "" ||
-		bgetClis.installReffa != "" || bgetClis.keys != "")
-
-	if bgetClis.installSpack {
-		installSpack()
-		bgetClis.helpFlags = false
-	}
-	if bgetClis.installConda != "" {
-		installMiniconda()
-		bgetClis.helpFlags = false
-	}
-	if bgetClis.installReffa != "" {
-		installReffa()
-		bgetClis.helpFlags = false
-	}
-	if bgetClis.keysAll {
-		getAllKeys()
-		bgetClis.helpFlags = false
-	}
-	if bgetClis.keys != "" {
-		downloadKey()
-		bgetClis.helpFlags = false
-	}
 	if bgetClis.helpFlags {
 		cmd.Help()
 	}
@@ -132,8 +105,8 @@ func init() {
 	rootCmd.AddCommand(urlCmd)
 	rootCmd.AddCommand(doiCmd)
 	rootCmd.AddCommand(keyCmd)
-	rootCmd.AddCommand(envCmd)
 
+	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.uncompress), "uncompress", "", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files.")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")
 	rootCmd.PersistentFlags().IntVarP(&(bgetClis.concurrency), "thread", "t", 1, "Concurrency download thread.")
 	rootCmd.PersistentFlags().IntVarP(&(bgetClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")

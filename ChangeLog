@@ -1,3 +1,8 @@
+2019-8-22 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
+		* support --uncompress and add 80+ GitHub URLs
+		* support table and json format key versions
+
 2019-8-19 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* support AacrJournals and Ahajournals
