@@ -24,13 +24,6 @@ type bgetFilesURLType struct {
 
 // BgetToolsPool an object bioinformatics tools URL
 var BgetToolsPool = []bgetToolsURLType{
-	{Name: "spack",
-		Site: "github",
-		URL: map[string]string{
-			"Linux": "https://github.com/spack/spack",
-			"Mac":   "https://github.com/spack/spack",
-			"Win":   "https://github.com/spack/spack"},
-		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"}},
 	{Name: "miniconda2", URL: map[string]string{
 		"Linux": "https://repo.anaconda.com/miniconda/Miniconda2-{{version}}-Linux-x86_64.sh",
 		"Mac":   "https://repo.anaconda.com/miniconda/Miniconda2-{{version}}-MacOSX-x86_64.sh",
