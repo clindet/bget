@@ -159,9 +159,9 @@ func QueryKeysVersions(keys []string, osType string, printFormat string) map[str
 	for k := range versions {
 		if len(versions[k]) > 0 {
 			if printFormat == "table" {
-				table.Append([]string{k, strings.Join(versions[k], ", @")})
+				table.Append([]string{k, strings.Join(versions[k], ", ")})
 			} else if printFormat == "txt" {
-				fmt.Println(fmt.Sprintf("key> %s\n@%s\n-----------", k, strings.Join(versions[k], ", @")))
+				fmt.Println(fmt.Sprintf("key> %s\nversions> %s\n-----------", k, strings.Join(versions[k], ", ")))
 			}
 		}
 	}

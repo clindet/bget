@@ -20,7 +20,8 @@ var quiet bool
 var saveLog bool
 var wd, _ = os.Getwd()
 var logDir string
-var version = "v0.1.0-3"
+var version = "v0.1.0-4"
+var ignore bool
 
 type bgetCliT struct {
 	downloadDir    string
@@ -32,12 +33,13 @@ type bgetCliT struct {
 	listFile       string
 	separator      string
 	keys           string
+	seqs           string
+	gdcToken       string
 	uncompress     bool
 	keysAll        bool
 	getKeyVersions string
 	axelThread     int
 	concurrency    int
-	ignore         bool
 	helpFlags      bool
 }
 
@@ -51,12 +53,13 @@ var bgetClis = bgetCliT{
 	"",
 	"",
 	"",
+	"",
+	"",
 	false,
 	false,
 	"",
 	1,
 	1,
-	false,
 	true,
 }
 
@@ -105,16 +108,12 @@ func init() {
 	rootCmd.AddCommand(urlCmd)
 	rootCmd.AddCommand(doiCmd)
 	rootCmd.AddCommand(keyCmd)
+	rootCmd.AddCommand(seqCmd)
 
-	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.uncompress), "uncompress", "", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")
 	rootCmd.PersistentFlags().IntVarP(&(bgetClis.concurrency), "thread", "t", 1, "Concurrency download thread.")
-	rootCmd.PersistentFlags().IntVarP(&(bgetClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.downloadDir), "outdir", "o", filepath.Join(wd, "_download"), "Set the download dir for get-urls.")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.separator), "separator", "s", ",", "Separator for --reffa,-k, and -u flag.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.mirror), "mirror", "m", "", "Set the mirror of resources.")
-	rootCmd.PersistentFlags().BoolVar(&(bgetClis.ignore), "ignore", false, "Contine to download and skip the check of existed files.")
-	rootCmd.PersistentFlags().BoolVar(&(bgetClis.autoPath), "autopath", true, "Logical indicating that whether to create subdir in download dir (for --reffa): e.g. reffa/{{site}}/{{version}}")
+	rootCmd.PersistentFlags().BoolVar(&ignore, "ignore", false, "Contine to download and skip the check of existed files.")
 	rootCmd.PersistentFlags().StringVarP(&cmdExtraFromFlag, "extra-cmd", "e", "", "Extra flags and values pass to internal CMDs")
 	rootCmd.PersistentFlags().BoolVarP(&overwrite, "overwrite", "f", false, "Logical indicating that whether to overwrite existing files.")
 	rootCmd.PersistentFlags().StringVarP(&taskID, "task-id", "", butils.GetRandomString(15), "Task ID (random).")

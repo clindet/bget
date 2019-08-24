@@ -27,8 +27,12 @@ var gCurCookies []*http.Cookie
 var gCurCookieJar *cookiejar.Jar
 
 // Wget use wget to download files
-func Wget(url string, destFn string, taskID string, quiet bool, saveLog bool) {
+func Wget(url string, destFn string, extraArgs string, taskID string, quiet bool, saveLog bool) {
 	args := []string{"-c", url, "-O", destFn}
+	if extraArgs != "" {
+		extraArgsList := strings.Split(extraArgs, " ")
+		args = append(args, extraArgsList...)
+	}
 	cmd := exec.Command("wget", args...)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_wget.log", taskID, path.Base(destFn)))
 	butils.CreateFileParDir(logPath)
@@ -36,8 +40,12 @@ func Wget(url string, destFn string, taskID string, quiet bool, saveLog bool) {
 }
 
 // Curl use curl to download files
-func Curl(url string, destFn string, taskID string, quiet bool, saveLog bool) {
+func Curl(url string, destFn string, extraArgs string, taskID string, quiet bool, saveLog bool) {
 	args := []string{url, "-o", destFn}
+	if extraArgs != "" {
+		extraArgsList := strings.Split(extraArgs, " ")
+		args = append(args, extraArgsList...)
+	}
 	cmd := exec.Command("curl", args...)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_curl.log", taskID, path.Base(destFn)))
 	butils.CreateFileParDir(logPath)
@@ -45,8 +53,12 @@ func Curl(url string, destFn string, taskID string, quiet bool, saveLog bool) {
 }
 
 // Axel use axel to download files
-func Axel(url string, destFn string, thread int, taskID string, quiet bool, saveLog bool) {
+func Axel(url string, destFn string, thread int, extraArgs string, taskID string, quiet bool, saveLog bool) {
 	args := []string{url, "-N", "-o", destFn, "-n", strconv.Itoa(thread)}
+	if extraArgs != "" {
+		extraArgsList := strings.Split(extraArgs, " ")
+		args = append(args, extraArgsList...)
+	}
 	cmd := exec.Command("axel", args...)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_axel.log", taskID, path.Base(destFn)))
 	butils.CreateFileParDir(logPath)
@@ -54,8 +66,13 @@ func Axel(url string, destFn string, thread int, taskID string, quiet bool, save
 }
 
 // Git use git to download files
-func Git(url string, destFn string, taskID string, quiet bool, saveLog bool) {
-	args := []string{"clone", "--recursive", url, destFn}
+func Git(url string, destFn string, extraArgs string, taskID string, quiet bool, saveLog bool) {
+	args := []string{"clone", "--recursive"}
+	if extraArgs != "" {
+		extraArgsList := strings.Split(extraArgs, " ")
+		args = append(args, extraArgsList...)
+	}
+	args = append(args, url, destFn)
 	cmd := exec.Command("git", args...)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_git.log", taskID, path.Base(destFn)))
 	butils.CreateFileParDir(logPath)
@@ -63,10 +80,54 @@ func Git(url string, destFn string, taskID string, quiet bool, saveLog bool) {
 }
 
 // Rsync use rsync to download files
-func Rsync(url string, destFn string, taskID string, quiet bool, saveLog bool) {
+func Rsync(url string, destFn string, extraArgs string, taskID string, quiet bool, saveLog bool) {
 	args := []string{url, destFn}
+	if extraArgs != "" {
+		extraArgsList := strings.Split(extraArgs, " ")
+		args = append(args, extraArgsList...)
+	}
 	cmd := exec.Command("rsync", args...)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_rsync.log", taskID, path.Base(destFn)))
+	butils.CreateFileParDir(logPath)
+	butils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
+}
+
+// GdcClient use gdc-client to download files
+func GdcClient(fileID string, manifest string, outDir string, token string, extraArgs string, taskID string, quiet bool, saveLog bool) {
+	args := []string{}
+	if manifest == "" {
+		args = []string{"download", fileID, "-d", outDir}
+	} else {
+		args = []string{"download", "-m", manifest, "-d", outDir}
+	}
+	if extraArgs != "" {
+		extraArgsList := strings.Split(extraArgs, " ")
+		args = append(args, extraArgsList...)
+	}
+	if token != "" {
+		args = append(args, "-t", token)
+	}
+	cmd := exec.Command("gdc-client", args...)
+	logPath := path.Join(logDir, fmt.Sprintf("%s_gdc-client.log", taskID))
+	butils.CreateFileParDir(logPath)
+	butils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
+}
+
+// Prefetch use sra-tools prefetch to download files
+func Prefetch(srr string, krt string, outDir string, extraArgs string, taskID string, quiet bool, saveLog bool) {
+	args := []string{"-O", outDir, "-X", "500GB"}
+	if extraArgs != "" {
+		extraArgsList := strings.Split(extraArgs, " ")
+		args = append(args, extraArgsList...)
+	}
+	if krt == "" {
+		args = append(args, srr)
+	} else {
+		args = append(args, krt)
+	}
+
+	cmd := exec.Command("prefetch", args...)
+	logPath := path.Join(logDir, fmt.Sprintf("%s_prefetch.log", taskID))
 	butils.CreateFileParDir(logPath)
 	butils.RunExecCmdConsole(logPath, cmd, quiet, saveLog)
 }
@@ -171,7 +232,7 @@ func httpGetURL(url string, destFn string, pg *mpb.Progress, quiet bool, saveLog
 }
 
 // AsyncURL can access URL via using external commandline tools including wget, curl, axel, git and rsync
-func AsyncURL(url string, destFn string, engine string, taskID string, mirror string, axelThread int, quiet bool, saveLog bool) {
+func AsyncURL(url string, destFn string, engine string, extraArgs string, taskID string, mirror string, axelThread int, quiet bool, saveLog bool) {
 	if mirror != "" {
 		if !strings.HasSuffix(mirror, "/") {
 			mirror = mirror + "/"
@@ -182,21 +243,21 @@ func AsyncURL(url string, destFn string, engine string, taskID string, mirror st
 		engine = "git"
 	}
 	if engine == "wget" {
-		Wget(url, destFn, taskID, quiet, saveLog)
+		Wget(url, destFn, extraArgs, taskID, quiet, saveLog)
 	} else if engine == "curl" {
-		Curl(url, destFn, taskID, quiet, saveLog)
+		Curl(url, destFn, extraArgs, taskID, quiet, saveLog)
 	} else if engine == "axel" {
-		Axel(url, destFn, axelThread, taskID, quiet, saveLog)
+		Axel(url, destFn, axelThread, extraArgs, taskID, quiet, saveLog)
 	} else if engine == "git" {
-		Git(url, destFn, taskID, quiet, saveLog)
+		Git(url, destFn, extraArgs, taskID, quiet, saveLog)
 	} else if engine == "rsync" {
-		Rsync(url, destFn, taskID, quiet, saveLog)
+		Rsync(url, destFn, extraArgs, taskID, quiet, saveLog)
 	}
 }
 
 // AsyncURL2 can access URL via using golang http library (with mbp progress bar) and
 // external commandline tools including wget, curl, axel, git and rsync
-func AsyncURL2(url string, destFn string, engine string, taskID string, mirror string,
+func AsyncURL2(url string, destFn string, engine string, extraArgs string, taskID string, mirror string,
 	p *mpb.Progress, axelThread int, quiet bool, saveLog bool) {
 	if checkGitEngine(url) == "git" {
 		engine = "git"
@@ -210,13 +271,13 @@ func AsyncURL2(url string, destFn string, engine string, taskID string, mirror s
 		}
 		httpGetURL(url, destFn, p, quiet, saveLog)
 	} else {
-		AsyncURL(url, destFn, engine, taskID, mirror, axelThread, quiet, saveLog)
+		AsyncURL(url, destFn, engine, extraArgs, taskID, mirror, axelThread, quiet, saveLog)
 	}
 }
 
 // AsyncURL3 can access URL via using golang http library (with mbp progress bar) and
 // external commandline tools including wget, curl, axel, git and rsync
-func AsyncURL3(url string, destFn string, engine string, taskID string, mirror string,
+func AsyncURL3(url string, destFn string, engine string, extraArgs string, taskID string, mirror string,
 	axelThread int, quiet bool, saveLog bool) {
 	if checkGitEngine(url) == "git" {
 		engine = "git"
@@ -231,13 +292,13 @@ func AsyncURL3(url string, destFn string, engine string, taskID string, mirror s
 		httpGetURL(url, destFn, pg, quiet, saveLog)
 		pg.Wait()
 	} else {
-		AsyncURL(url, destFn, engine, taskID, mirror, axelThread, quiet, saveLog)
+		AsyncURL(url, destFn, engine, extraArgs, taskID, mirror, axelThread, quiet, saveLog)
 	}
 }
 
 // HTTPGetURLs can use golang http.Get and external commandline tools including wget, curl, axel, git and rsync
 // to query URL with progress bar
-func HTTPGetURLs(urls []string, destDir []string, engine string, taskID string, mirror string, concurrency int, axelThread int, overwrite bool, ignore bool, quiet bool, saveLog bool) (destFns []string) {
+func HTTPGetURLs(urls []string, destDir []string, engine string, extraArgs string, taskID string, mirror string, concurrency int, axelThread int, overwrite bool, ignore bool, quiet bool, saveLog bool) (destFns []string) {
 	sem := make(chan bool, concurrency)
 	for j := range urls {
 		url := urls[j]
@@ -263,7 +324,7 @@ func HTTPGetURLs(urls []string, destDir []string, engine string, taskID string, 
 				defer func() {
 					<-sem
 				}()
-				AsyncURL2(url, destFn, engine, taskID, mirror, pg, axelThread, quiet, saveLog)
+				AsyncURL2(url, destFn, engine, extraArgs, taskID, mirror, pg, axelThread, quiet, saveLog)
 				destFns = append(destFns, destFn)
 			}(url, destFn)
 		} else {

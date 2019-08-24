@@ -5,8 +5,7 @@ import (
 	"strings"
 
 	butils "github.com/JhuangLab/butils"
-	"github.com/JhuangLab/butils/log"
-	"github.com/mholt/archiver"
+	log "github.com/JhuangLab/butils/log"
 	"github.com/spf13/cobra"
 )
 
@@ -37,13 +36,13 @@ func downloadUrls() {
 		destDirArray = append(destDirArray, bgetClis.downloadDir)
 	}
 
-	done := HTTPGetURLs(urls, destDirArray, bgetClis.engine, taskID, bgetClis.mirror,
-		bgetClis.concurrency, bgetClis.axelThread, overwrite, bgetClis.ignore, quiet, saveLog)
+	done := HTTPGetURLs(urls, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID, bgetClis.mirror,
+		bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog)
 	for _, dest := range done {
-		if _, err := archiver.ByExtension(dest); err == nil {
-			butils.UnarchiveLog(dest, path.Dir(dest))
-		} else {
-			log.Warn(err)
+		if bgetClis.uncompress {
+			if err := butils.UnarchiveLog(dest, path.Dir(dest)); err != nil {
+				log.Warn(err)
+			}
 		}
 	}
 }
@@ -65,7 +64,11 @@ func urlCmdRunOptions(cmd *cobra.Command) {
 	}
 }
 func init() {
+	urlCmd.Flags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")
+	urlCmd.Flags().IntVarP(&(bgetClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")
+	urlCmd.Flags().StringVarP(&(bgetClis.mirror), "mirror", "m", "", "Set the mirror of resources.")
 	urlCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains URLs for download.")
+	urlCmd.Flags().BoolVarP(&(bgetClis.uncompress), "uncompress", "u", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files.")
 	urlCmd.Example = `  urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | tr "," "\n"> /tmp/urls.list
 
   bget url ${urls}

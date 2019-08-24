@@ -11,14 +11,13 @@ import (
 	vers "github.com/JhuangLab/bget/versions"
 	butils "github.com/JhuangLab/butils"
 	log "github.com/JhuangLab/butils/log"
-	"github.com/mholt/archiver"
 	"github.com/spf13/cobra"
 )
 
 var keyVs map[string][]string
 
 var keyCmd = &cobra.Command{
-	Use:   "key [key1 key2 key3...]",
+	Use:   "url-key [key1 key2 key3...]",
 	Short: "Can be used to access URLs via a key string.",
 	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version %site #releaseVersion', : bwa, GRCh38 %defuse #97. More see here https://github.com/JhuangLab/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -47,15 +46,19 @@ func downloadKey() {
 		for i := range v {
 			u, _ := url.Parse(v[i])
 			v[i] = strings.TrimSpace(u.String())
-			destDirArray = append(destDirArray, bgetClis.downloadDir)
+			if bgetClis.autoPath {
+				destDirArray = append(destDirArray, path.Join(bgetClis.downloadDir, key))
+			} else {
+				destDirArray = append(destDirArray, bgetClis.downloadDir)
+			}
 		}
 		sem <- true
 		go func(key string, v []string, destDirArray []string) {
 			defer func() {
 				<-sem
 			}()
-			done[key] = HTTPGetURLs(v, destDirArray, bgetClis.engine, taskID, bgetClis.mirror,
-				bgetClis.concurrency, bgetClis.axelThread, overwrite, bgetClis.ignore, quiet, saveLog)
+			done[key] = HTTPGetURLs(v, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID, bgetClis.mirror,
+				bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog)
 		}(key, v, destDirArray)
 	}
 	for i := 0; i < cap(sem); i++ {
@@ -63,10 +66,18 @@ func downloadKey() {
 	}
 	dest := ""
 	for key := range done {
-		for i := range postShellCmd[key] {
-			args := postShellCmd[key][i]
+		for i := range done[key] {
+			args := ""
 			dest = done[key][i]
-			args = postCmdRender(args, dest)
+			if len(postShellCmd[key]) > i {
+				args = postShellCmd[key][i]
+				args = postCmdRender(args, dest)
+			}
+			if bgetClis.uncompress {
+				if err := butils.UnarchiveLog(dest, path.Dir(dest)); err != nil {
+					log.Warn(err)
+				}
+			}
 			if args == "" {
 				continue
 			}
@@ -74,9 +85,6 @@ func downloadKey() {
 			logFn := path.Join(logDir, taskID+"_postShellCmd_"+key+".log")
 			if args != "" {
 				butils.RunExecCmdConsole(logFn, cmd, quiet, saveLog)
-			}
-			if _, err := archiver.ByExtension(dest); err != nil {
-				butils.UnarchiveLog(dest, path.Dir(dest))
 			}
 		}
 		urlpool.PostKeyCmds(key, done[key], bgetClis.keys)
@@ -138,9 +146,14 @@ func keyCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
-	keyCmd.Flags().StringVarP(&(bgetClis.getKeyVersions), "versions", "v", "", "Show all available versions of key. Optional (txt, json, table)")
+	keyCmd.PersistentFlags().BoolVar(&(bgetClis.autoPath), "autopath", false, "Logical indicating that whether to create subdir in download dir: e.g. reffa/{{key}}/")
+	keyCmd.Flags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")
+	keyCmd.Flags().IntVarP(&(bgetClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")
+	keyCmd.Flags().StringVarP(&(bgetClis.mirror), "mirror", "m", "", "Set the mirror of resources.")
+	keyCmd.Flags().StringVarP(&(bgetClis.getKeyVersions), "show-versions", "v", "", "Show all available versions of key. Optional (txt, json, table)")
 	keyCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains keys for download.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
-	keyCmd.Example = `  bget key bwa
-  bget key "reffa@GRCh38 %defuse #97" -t 10 -f`
+	keyCmd.Flags().BoolVarP(&(bgetClis.uncompress), "uncompress", "u", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files.")
+	keyCmd.Example = `  bget url-key bwa
+  bget url-key "reffa@GRCh38 %defuse #97" -t 10 -f`
 }

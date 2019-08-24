@@ -47,8 +47,8 @@ func downloadDoi() {
 	for i := 0; i < cap(sem); i++ {
 		sem <- true
 	}
-	HTTPGetURLs(urls, destDirArray, bgetClis.engine, taskID, bgetClis.mirror,
-		bgetClis.concurrency, bgetClis.axelThread, overwrite, bgetClis.ignore, quiet, saveLog)
+	HTTPGetURLs(urls, destDirArray, cmdExtraFromFlag, bgetClis.engine, taskID, bgetClis.mirror,
+		bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog)
 }
 
 func doiSpiders(doi string) (urls []string) {
@@ -88,6 +88,9 @@ func doiCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
+	doiCmd.Flags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")
+	doiCmd.Flags().IntVarP(&(bgetClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")
+	doiCmd.Flags().StringVarP(&(bgetClis.mirror), "mirror", "m", "", "Set the mirror of resources.")
 	doiCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains dois for download.")
 	doiCmd.Example = `  bget doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
   bget doi 10.1016/j.devcel.2017.03.001 10.1016/j.stem.2019.07.009 10.1016/j.celrep.2018.03.072 -t 2`

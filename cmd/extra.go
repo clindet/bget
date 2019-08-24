@@ -58,7 +58,12 @@ func formatURLfileName(url string) (fname string) {
 	} else if butils.StrDetect(url, "sd/pdf/render") {
 		fname = "supp." + fname + ".pdf"
 	} else if strings.Contains(url, "https://www.ncbi.nlm.nih.gov/geo/download/?acc=") {
-		fname = butils.StrReplaceAll(fname, "[?].*=", "")
+		if strings.Contains(url, "file&file=") {
+			fname = butils.StrReplaceAll(fname, "[?].*file=", "")
+		} else {
+			fname = butils.StrReplaceAll(fname, "&format=file", "")
+			fname = butils.StrReplaceAll(fname, "[?]acc=", "") + ".tar"
+		}
 		fname, _ = neturl.QueryUnescape(fname)
 	}
 	return fname
