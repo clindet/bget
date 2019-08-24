@@ -1,9 +1,12 @@
 package cmd
 
 import (
+	"path"
 	"strings"
 
+	"github.com/JhuangLab/bget/spider"
 	butils "github.com/JhuangLab/butils"
+	log "github.com/JhuangLab/butils/log"
 	"github.com/spf13/cobra"
 )
 
@@ -27,7 +30,9 @@ func parseSeq() (seqs map[string][]string) {
 		seqsTmp = butils.ReadLines(bgetClis.seqs)
 	}
 	for i := range seqsTmp {
-		if butils.StrDetect(strings.ToUpper(seqsTmp[i]), "^SRR|^ERR") {
+		if butils.StrDetect(strings.ToUpper(seqsTmp[i]), "^GSE|^GPL|^GDS") {
+			seqs["geo"] = append(seqs["geo"], seqsTmp[i])
+		} else if butils.StrDetect(strings.ToUpper(seqsTmp[i]), "^SRR|^ERR") {
 			seqs["sra"] = append(seqs["sra"], seqsTmp[i])
 		} else if butils.StrDetect(strings.ToLower(seqsTmp[i]), ".krt$") {
 			seqs["sraKrt"] = append(seqs["sraKrt"], seqsTmp[i])
@@ -54,17 +59,20 @@ func downloadSeq() {
 				defer func() {
 					<-sem
 				}()
-				if k == "sra" {
-					clientGetSeq(seqs[k][i], "", "", "", "", bgetClis.downloadDir, "", cmdExtraFromFlag,
+				if k == "geo" {
+					clientGetSeq(seqs[k][i], "", "", "", "", "", bgetClis.downloadDir, "", cmdExtraFromFlag,
+						taskID, overwrite, ignore, quiet, saveLog)
+				} else if k == "sra" {
+					clientGetSeq("", seqs[k][i], "", "", "", "", bgetClis.downloadDir, "", cmdExtraFromFlag,
 						taskID, overwrite, ignore, quiet, saveLog)
 				} else if k == "sraKrt" {
-					clientGetSeq("", seqs[k][i], "", "", "", bgetClis.downloadDir, "", cmdExtraFromFlag,
+					clientGetSeq("", "", seqs[k][i], "", "", "", bgetClis.downloadDir, "", cmdExtraFromFlag,
 						taskID, overwrite, ignore, quiet, saveLog)
 				} else if k == "tcgaManifest" {
-					clientGetSeq("", "", "", seqs[k][i], "", bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag,
+					clientGetSeq("", "", "", "", seqs[k][i], "", bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag,
 						taskID, overwrite, ignore, quiet, saveLog)
 				} else if k == "tcgaFileID" {
-					clientGetSeq("", "", "", "", seqs[k][i], bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag,
+					clientGetSeq("", "", "", "", "", seqs[k][i], bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag,
 						taskID, overwrite, ignore, quiet, saveLog)
 				}
 			}(k, i)
@@ -75,13 +83,29 @@ func downloadSeq() {
 	}
 }
 
-func clientGetSeq(sra string, sraKrt string, ega string, tcgaManifest string, tcgaFileID string, destDir string, token string, extraArgs string, taskID string, overwrite bool, ignore bool, quiet bool, saveLog bool) (done []string) {
+func clientGetSeq(geo string, sra string, sraKrt string, ega string, tcgaManifest string, tcgaFileID string, destDir string, token string, extraArgs string, taskID string, overwrite bool, ignore bool, quiet bool, saveLog bool) (done []string) {
 	if sra != "" || sraKrt != "" {
 		Prefetch(sra, sraKrt, destDir, extraArgs, taskID, quiet, saveLog)
 	} else if ega != "" {
 
 	} else if tcgaFileID != "" || tcgaManifest != "" {
 		GdcClient(tcgaFileID, tcgaManifest, destDir, token, extraArgs, taskID, quiet, saveLog)
+	} else if geo != "" {
+		gseURLs, gplURLs := spider.GeoSpider(geo)
+		urls := append(gseURLs, gplURLs...)
+		destDirArray := []string{}
+		for range urls {
+			destDirArray = append(destDirArray, bgetClis.downloadDir)
+		}
+		done := HTTPGetURLs(urls, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID, bgetClis.mirror,
+			bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog)
+		for _, dest := range done {
+			if bgetClis.uncompress {
+				if err := butils.UnarchiveLog(dest, path.Dir(dest)); err != nil {
+					log.Warn(err)
+				}
+			}
+		}
 	}
 	return done
 }
@@ -105,6 +129,7 @@ func seqCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
+	seqCmd.Flags().BoolVarP(&(bgetClis.uncompress), "uncompress", "u", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files (now support GEO database).")
 	seqCmd.Flags().StringVarP(&(bgetClis.gdcToken), "gdc-token", "", "", "Token to access TCGA portal files.")
 	seqCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains seq id (e.g. SRR) or manifest files for download.")
 	seqCmd.Example = `  bget seq ERR3324530

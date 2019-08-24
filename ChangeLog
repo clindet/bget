@@ -2,6 +2,7 @@
 
 		* add bget seq subcmd to access TCGA and dbGAP files
 		* rename bget subcmd key to url-key 
+		* support GEO files download
 
 2019-8-22 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
