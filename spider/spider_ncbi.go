@@ -6,13 +6,14 @@ import (
 
 	//"github.com/JhuangLab/bget/chromedp"
 
+	butils "github.com/JhuangLab/butils"
 	"github.com/JhuangLab/butils/log"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
 )
 
 // GeoSpider access https://www.ncbi.nlm.nih.gov/geo files via spider
-func GeoSpider(query string) (gseURLs []string, gplURLs []string) {
+func GeoSpider(query string) (gseURLs []string, gplURLs []string, sraLink string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
@@ -30,10 +31,27 @@ func GeoSpider(query string) (gseURLs []string, gplURLs []string) {
 		}
 	})
 
+	c.OnHTML("input[name=fulltable]", func(e *colly.HTMLElement) {
+		link := e.Attr("onclick")
+		if strings.Contains(link, "OpenLink") {
+			link = "https://www.ncbi.nlm.nih.gov" + butils.StrReplaceAll(link, "(OpenLink[(])|(')", "")
+			link = butils.StrReplaceAll(link, ",.*", "")
+			gplURLs = append(gplURLs, link)
+		}
+	})
+
 	c.OnHTML("table td a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		if strings.Contains(link, "geo/query/acc.cgi?acc=GPL") && !strings.Contains(link, "targ=self") {
 			c.Visit("https://www.ncbi.nlm.nih.gov" + link)
+		}
+	})
+
+	c.OnHTML("tr td a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		if strings.Contains(link, "/Traces/study/?acc=") {
+			link = "https://www.ncbi.nlm.nih.gov" + e.Attr("href")
+			sraLink = link
 		}
 	})
 
@@ -44,5 +62,5 @@ func GeoSpider(query string) (gseURLs []string, gplURLs []string) {
 
 	// Start scraping on https://hackerspaces.org
 	c.Visit(fmt.Sprintf("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s", query))
-	return gseURLs, gplURLs
+	return gseURLs, gplURLs, sraLink
 }

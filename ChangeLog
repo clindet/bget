@@ -1,3 +1,7 @@
+2019-8-25 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
+		* support to export SRA run table and list (from GEO entry)
+
 2019-8-24 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* add bget seq subcmd to access TCGA and dbGAP files

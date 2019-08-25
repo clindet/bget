@@ -28,6 +28,8 @@ func checkGitEngine(url string) string {
 }
 
 func formatURLfileName(url string) (fname string) {
+	u, _ := neturl.Parse(url)
+	uQ := u.Query()
 	fname = path.Base(url)
 	// cell.com
 	if butils.StrDetect(url, "/pdfExtended/") {
@@ -59,12 +61,21 @@ func formatURLfileName(url string) (fname string) {
 		fname = "supp." + fname + ".pdf"
 	} else if strings.Contains(url, "https://www.ncbi.nlm.nih.gov/geo/download/?acc=") {
 		if strings.Contains(url, "file&file=") {
-			fname = butils.StrReplaceAll(fname, "[?].*file=", "")
+			fname = uQ["file"][0]
 		} else {
-			fname = butils.StrReplaceAll(fname, "&format=file", "")
-			fname = butils.StrReplaceAll(fname, "[?]acc=", "") + ".tar"
+			fname = uQ["acc"][0] + ".tar"
 		}
 		fname, _ = neturl.QueryUnescape(fname)
+	} else if strings.Contains(url, "www.ncbi.nlm.nih.gov/geo/query/acc") {
+		fname = uQ["acc"][0] + ".txt"
+	} else if strings.Contains(url, "https://www.ncbi.nlm.nih.gov/Traces/study/backends") &&
+		strings.Contains(url, "rt_all") &&
+		strings.Contains(url, "rs=") {
+		fname = butils.StrReplaceAll(uQ["rs"][0], `[(]primary_search_ids:|[)]|"`, "") + "_SraRunTable.txt"
+	} else if strings.Contains(url, "https://www.ncbi.nlm.nih.gov/Traces/study/backends") &&
+		strings.Contains(url, "acc_all") &&
+		strings.Contains(url, "rs=") {
+		fname = butils.StrReplaceAll(uQ["rs"][0], `[(]primary_search_ids:|[)]|"`, "") + "_SraAccList.txt"
 	}
 	return fname
 }

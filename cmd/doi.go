@@ -47,7 +47,7 @@ func downloadDoi() {
 	for i := 0; i < cap(sem); i++ {
 		sem <- true
 	}
-	HTTPGetURLs(urls, destDirArray, cmdExtraFromFlag, bgetClis.engine, taskID, bgetClis.mirror,
+	HTTPGetURLs(urls, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID, bgetClis.mirror,
 		bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog)
 }
 
