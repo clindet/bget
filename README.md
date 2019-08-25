@@ -4,8 +4,6 @@
 
 Lightweight downloader for bioinformatics data, databases and files. Golang `http` library, `wget`, `curl`, `axel`, `git`, and `rsync` were supported as the download engine.
 
-[![asciicast](https://asciinema.org/a/262357.svg)](https://asciinema.org/a/262357)
-
 Possible URLs pool:
 
 - Reference genomes
@@ -26,62 +24,95 @@ go get -u github.com/JhuangLab/bget
 Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/JhuangLab/bget.
 
 Usage:
-  bget [url1 url2... | -k key1 key2... | --doi doi1 doi2...] [flags]
+  bget [flags]
+  bget [command]
 
-Examples:
-  urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | tr "," "\n"> /tmp/urls.list
-
-  bget ${urls}
-  bget https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe
-  bget -u ${urls} -t 2 -o /tmp/download
-  bget -u ${urls} -t 3 -o /tmp/download -f -g wget
-  bget -u ${urls} -t 3 -o /tmp/download -g wget --ignore
-  bget -l /tmp/urls.list -o /tmp/download -f -t 3
-  bget -k bwa
-  bget --doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
-  bget --spack
-  bget --miniconda 3 -o /tmp/testenv
-  bget --miniconda 3 --engine wget
-  bget --miniconda 3 --engine axel
-  bget -k "reffa@GRCh38 %defuse #97" -t 10 -f
-  bget --reffa "GRCh38 %defuse #97" -t 10
-  bget --reffa "hg38 %ucsc, GRCh37 %genecode #31"
+Available Commands:
+  doi         Can be used to access files via DOI.
+  help        Help about any command
+  seq         Can be used to access sequence data via unique id (dbGAP and EGA) or manifest files (TCGA).
+  url         Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync.
+  url-key     Can be used to access URLs via a key string.
 
 Flags:
-      --autopath           Logical indicating that whether to create subdir in download dir (for --reffa): e.g. reffa/{{site}}/{{version}} (default true)
-      --doi string         Doi to be download.
-  -g, --engine string      Point the download engine: go-http, wget, curl, axel, git, and rsync. (default "go-http")
+      --clean              Remove _download and _log in current dir.
   -e, --extra-cmd string   Extra flags and values pass to internal CMDs
   -h, --help               help for bget
       --ignore             Contine to download and skip the check of existed files.
-  -k, --keys string        String key to be download. item@version %site #releaseVersion, e.g. bwa, GRCh38 %defuse #97
-  -a, --keys-all           Show all available string key can be download.
-      --log-dir string     Log dir. (default "/home/ljf/repositories/github/JhuangLab/bget/_log")
-      --miniconda string   Install miniconda2 or miniconda3 in tools directory. Optional (2 or 3).
-  -m, --mirror string      Set the mirror of resources.
-  -o, --outdir string      Set the download dir for get-urls. (default "/home/ljf/repositories/github/JhuangLab/bget/_download")
+      --log-dir string     Log dir. (default "/Users/apple/Documents/bget/_log")
+  -o, --outdir string      Set the download dir for get-urls. (default "/Users/apple/Documents/bget/_download")
   -f, --overwrite          Logical indicating that whether to overwrite existing files.
   -q, --quiet              No output.
-      --reffa string       Download reference in download directory. Format is genomeVersion %site #releaseVersion.
-                           Optional (GRCh38 %genecode #31, GRCh37 %genecode #31, hg38 %ucsc, hg19 %ucsc, GRCh38 %ensemble #97, GRCh38 %defuse #97).
-                           Multiple use comma to seperate (e.g. GRCh38 %genecode #31,GRCh37 %genecode #31, %fusioncatcher #95).
       --save-log           Save download log to local file]. (default true)
   -s, --separator string   Separator for --reffa,-k, and -u flag. (default ",")
-      --spack              Logical indicating that whether to install spack in tools directory.
-      --task-id string     Task ID (random). (default "gp82no1hz9kygmk")
+      --task-id string     Task ID (random). (default "9iscp3s1s8sg6f1")
   -t, --thread int         Concurrency download thread. (default 1)
-      --thread-axel int    Set the thread of axel. (default 5)
-  -u, --urls string        URLs to be download.
-  -l, --urls-list string   A file contains URLs for download.
       --version            version for bget
+
+Use "bget [command] --help" for more information about a command.
 ```
 
 You can also to use DOI download article and its supplementary Data. The supported website and journals will be continue increased.
 
 ```bash
-bget --doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
-bget --doi 10.1016/j.chembiol.2017.08.011 10.1016/j.ccell.2016.11.002 10.1016/j.cell.2017.07.016 -t 2
-bget --doi 10.1016/j.molcel.2017.10.018 10.1126/sciadv.aax3387 10.1016/j.neuron.2017.09.008 -t 2
+bget doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
+bget doi 10.1016/j.chembiol.2017.08.011 10.1016/j.ccell.2016.11.002 10.1016/j.cell.2017.07.016 -t 2
+bget doi 10.1016/j.molcel.2017.10.018 10.1126/sciadv.aax3387 10.1016/j.neuron.2017.09.008 -t 2
+```
+
+`bget seq` can be used to access [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo), [Sequence Read Archive (SRA)](https://www.ncbi.nlm.nih.gov/sra/), and [GDC Data Portal](https://portal.gdc.cancer.gov/) are supported.
+
+```bash
+  bget seq ERR3324530 SRR544879 # download files from SRA databaes
+  bget seq GSE23543 # download files from GEO databaes (auto download SRA acc list and run info)
+  bget dbgap.krt # download files from dbGap database using krt files
+
+  # download TCGA files using file id
+  bget seq b7670817-9d6b-494e-9e22-8494e2fd430d
+
+  # download TCGA files using manifest files
+  # split for parallel
+  split -a 3 --additional-suffix=.txt -l 100 gdc_manifest.2019-08-23-TCGA.txt -d
+  for i in x*.txt
+  do
+    head -n 1 x000.txt > ${i}.tmp
+    cat ${i} >> ${i}.tmp
+    mv ${i}.tmp ${i}
+  done
+  sed -i '1d' x000.txt
+  bget seq *.txt -t 5
+
+  # support auto (if you do not have *.krt, TCGA manifest, please not include it for test)
+  bget seq SRR544879 GSE23543 b7670817-9d6b-494e-9e22-8494e2fd430d dbgap.krt *.txt -t 5
+```
+
+`bget url` can be used to access files via input URLs. Golang http, wget, curl, axel and git, and rsync are support for download process. 
+
+```bash
+urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | tr "," "\n"> /tmp/urls.list
+
+bget url ${urls}
+bget url https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe
+bget url ${urls} -t 2 -o /tmp/download
+bget url ${urls} -t 3 -o /tmp/download -f -g wget
+bget url ${urls} -t 3 -o /tmp/download -g wget --ignore
+bget url -l /tmp/urls.list -o /tmp/download -f -t 3
+```
+
+`bget url-key` can be used to access files via using a key string. key-value pairs for URLs.
+
+```bash
+# Get all supported key
+bget url-key -a
+# Get all versions of supported key (table format)
+bget url-key gdc-client bwa -v table
+# Get all versions of supported key (json format)
+bget url-key gdc-client bwa -v json
+# Get all versions of supported key (text format)
+bget url-key gdc-client bwa -v txt
+
+# Download files (2 thread)
+bget url-key gdc-client bwa -t 2
 ```
 
 ## Maintainer

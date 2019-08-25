@@ -56,10 +56,7 @@ func downloadSeq() {
 				defer func() {
 					<-sem
 				}()
-				if k == "geo" {
-					Geofetch(seqs[k][i], bgetClis.downloadDir, bgetClis.engine, bgetClis.concurrency,
-						bgetClis.axelThread, cmdExtraFromFlag, taskID, overwrite, ignore, quiet, saveLog)
-				} else if k == "sra" {
+				if k == "sra" {
 					Prefetch(seqs[k][i], "", bgetClis.downloadDir, cmdExtraFromFlag, taskID, quiet, saveLog)
 				} else if k == "sraKrt" {
 					Prefetch("", seqs[k][i], bgetClis.downloadDir, cmdExtraFromFlag, taskID, quiet, saveLog)
@@ -67,6 +64,25 @@ func downloadSeq() {
 					GdcClient("", seqs[k][i], bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag, taskID, quiet, saveLog)
 				} else if k == "tcgaFileID" {
 					GdcClient(seqs[k][i], "", bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag, taskID, quiet, saveLog)
+				}
+			}(k, i)
+		}
+	}
+	for i := 0; i < cap(sem); i++ {
+		sem <- true
+	}
+	sem = make(chan bool, bgetClis.concurrency)
+	for k, v := range seqs {
+		for i := range v {
+			sem <- true
+			done[k] = append(done[k], seqs[k][i])
+			go func(k string, i int) {
+				defer func() {
+					<-sem
+				}()
+				if k == "geo" {
+					Geofetch(seqs[k][i], bgetClis.downloadDir, bgetClis.engine, bgetClis.concurrency,
+						bgetClis.axelThread, cmdExtraFromFlag, taskID, overwrite, ignore, quiet, saveLog)
 				}
 			}(k, i)
 		}
@@ -99,7 +115,15 @@ func init() {
 	seqCmd.Flags().BoolVarP(&(bgetClis.uncompress), "uncompress", "u", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files (now support GEO database).")
 	seqCmd.Flags().StringVarP(&(bgetClis.gdcToken), "gdc-token", "", "", "Token to access TCGA portal files.")
 	seqCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains seq id (e.g. SRR) or manifest files for download.")
-	seqCmd.Example = `  bget seq ERR3324530
+	seqCmd.Example = `  bget seq ERR3324530 SRR544879 # download files from SRA databaes
+  bget seq GSE23543 # download files from GEO databaes (auto download SRA acc list and run info)
+  bget dbgap.krt # download files from dbGap database using krt files
+  
+  # download TCGA files using file id
+  bget seq b7670817-9d6b-494e-9e22-8494e2fd430d
+
+  # download TCGA files using manifest files
+  # split for parallel
   split -a 3 --additional-suffix=.txt -l 100 gdc_manifest.2019-08-23-TCGA.txt -d
   for i in x*.txt
   do
@@ -108,5 +132,8 @@ func init() {
     mv ${i}.tmp ${i}
   done
   sed -i '1d' x000.txt
-  bget seq *.txt -t 5`
+  bget seq *.txt -t 5
+
+  # support auto (if you do not have *.krt, TCGA manifest, please not include it for test)
+  bget seq SRR544879 GSE23543 b7670817-9d6b-494e-9e22-8494e2fd430d dbgap.krt *.txt -t 5`
 }

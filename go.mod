@@ -15,6 +15,7 @@ require (
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/google/go-github/v27 v27.0.6
 	github.com/kennygrant/sanitize v1.2.4 // indirect
+	github.com/klauspost/compress v1.8.0 // indirect
 	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/olekukonko/tablewriter v0.0.1
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect

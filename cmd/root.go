@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	butils "github.com/JhuangLab/butils"
+	"github.com/JhuangLab/butils/log"
 	"github.com/spf13/cobra"
 )
 
@@ -37,6 +38,7 @@ type bgetCliT struct {
 	gdcToken       string
 	uncompress     bool
 	keysAll        bool
+	clean          bool
 	getKeyVersions string
 	axelThread     int
 	concurrency    int
@@ -55,6 +57,7 @@ var bgetClis = bgetCliT{
 	"",
 	"",
 	"",
+	false,
 	false,
 	false,
 	"",
@@ -97,6 +100,15 @@ func checkArgs(cmd *cobra.Command) {
 }
 
 func rootCmdRunOptions(cmd *cobra.Command) {
+	if bgetClis.clean {
+		if err := os.RemoveAll("_download"); err != nil {
+			log.Warn(err)
+		}
+		if err := os.RemoveAll("_log"); err != nil {
+			log.Warn(err)
+		}
+		bgetClis.helpFlags = false
+	}
 	if bgetClis.helpFlags {
 		cmd.Help()
 	}
@@ -110,6 +122,7 @@ func init() {
 	rootCmd.AddCommand(keyCmd)
 	rootCmd.AddCommand(seqCmd)
 
+	rootCmd.Flags().BoolVarP(&(bgetClis.clean), "clean", "", false, "Remove _download and _log in current dir.")
 	rootCmd.PersistentFlags().IntVarP(&(bgetClis.concurrency), "thread", "t", 1, "Concurrency download thread.")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.downloadDir), "outdir", "o", filepath.Join(wd, "_download"), "Set the download dir for get-urls.")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.separator), "separator", "s", ",", "Separator for --reffa,-k, and -u flag.")
