@@ -163,7 +163,7 @@ func checkHTTPGetURLRdirect(resp *http.Response, url string, destFn string, pg *
 		v, err := ioutil.ReadAll(resp.Body)
 		if err == nil {
 			if butils.StrDetect(string(v), "https://pdf.sciencedirectassets.com") {
-				url = butils.StrExtract(string(v), `https://pdf.sciencedirectassets.com/.*&type=client`, 1)
+				url = butils.StrExtract(string(v), `https://pdf.sciencedirectassets.com/.*&type=client`, 1)[0]
 				httpGetURL(url, destFn, pg, quiet, saveLog)
 				return true
 			}

@@ -3,7 +3,7 @@ module github.com/JhuangLab/bget
 go 1.12
 
 require (
-	github.com/JhuangLab/butils v0.0.0-20190824085120-14f8c071e59a
+	github.com/JhuangLab/butils v0.0.0-20190826061439-4f72c89f374e
 	github.com/PuerkitoBio/goquery v1.5.0 // indirect
 	github.com/antchfx/htmlquery v1.0.0 // indirect
 	github.com/antchfx/xmlquery v1.0.0 // indirect
@@ -25,5 +25,6 @@ require (
 	golang.org/x/crypto v0.0.0-20190820162420-60c769a6c586 // indirect
 	golang.org/x/net v0.0.0-20190813141303-74dc4d7220e7 // indirect
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
+	golang.org/x/sys v0.0.0-20190825160603-fb81701db80f // indirect
 	google.golang.org/appengine v1.6.1 // indirect
 )

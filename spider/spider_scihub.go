@@ -21,7 +21,7 @@ func ScihubSpider(doi string) (urls []string) {
 
 	c.OnHTML("#buttons a[onclick]", func(e *colly.HTMLElement) {
 		link := e.Attr("onclick")
-		link = butils.StrExtract(link, "//.*", 1)
+		link = butils.StrExtract(link, "//.*", 1)[0]
 		link = "http:" + link
 		link = butils.StrReplaceAll(link, "'$", "")
 		urls = append(urls, link)
