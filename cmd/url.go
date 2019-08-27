@@ -36,8 +36,8 @@ func downloadUrls() {
 		destDirArray = append(destDirArray, bgetClis.downloadDir)
 	}
 
-	done := HTTPGetURLs(urls, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID, bgetClis.mirror,
-		bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog)
+	done := HTTPGetURLs(urls, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID,
+		bgetClis.mirror, bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime, bgetClis.remoteName)
 	for _, dest := range done {
 		if bgetClis.uncompress {
 			if err := butils.UnarchiveLog(dest, path.Dir(dest)); err != nil {

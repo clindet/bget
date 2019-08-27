@@ -3,10 +3,12 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
+	"mime"
 	"os"
 	"path"
 	"strings"
 
+	"net/http"
 	neturl "net/url"
 
 	butils "github.com/JhuangLab/butils"
@@ -27,7 +29,24 @@ func checkGitEngine(url string) string {
 	return ""
 }
 
-func formatURLfileName(url string) (fname string) {
+func formatURLfileName(url string, remoteName bool) (fname string) {
+	if remoteName {
+		resp, err := http.Head(url)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer resp.Body.Close()
+		contentDis := resp.Header.Get("Content-Disposition")
+		if contentDis != "" && strings.Contains(contentDis, "filename") {
+			_, params, err := mime.ParseMediaType(contentDis)
+			if err != nil {
+				log.Warn(err)
+			} else {
+				fname = params["filename"]
+				return fname
+			}
+		}
+	}
 	u, _ := neturl.Parse(url)
 	uQ := u.Query()
 	fname = path.Base(url)

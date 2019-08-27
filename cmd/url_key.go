@@ -57,8 +57,8 @@ func downloadKey() {
 			defer func() {
 				<-sem
 			}()
-			done[key] = HTTPGetURLs(v, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID, bgetClis.mirror,
-				bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog)
+			done[key] = HTTPGetURLs(v, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID,
+				bgetClis.mirror, bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime, bgetClis.remoteName)
 		}(key, v, destDirArray)
 	}
 	for i := 0; i < cap(sem); i++ {

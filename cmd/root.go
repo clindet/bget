@@ -42,6 +42,10 @@ type bgetCliT struct {
 	getKeyVersions string
 	axelThread     int
 	concurrency    int
+	timeout        int
+	retSleepTime   int
+	retries        int
+	remoteName     bool
 	helpFlags      bool
 }
 
@@ -63,6 +67,10 @@ var bgetClis = bgetCliT{
 	"",
 	1,
 	1,
+	30,
+	5,
+	5,
+	false,
 	true,
 }
 
@@ -133,6 +141,10 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&logDir, "log-dir", "", path.Join(wd, "_log"), "Log dir.")
 	rootCmd.PersistentFlags().BoolVarP(&quiet, "quiet", "q", false, "No output.")
 	rootCmd.PersistentFlags().BoolVarP(&saveLog, "save-log", "", true, "Save download log to local file].")
+	rootCmd.PersistentFlags().IntVarP(&bgetClis.retries, "retries", "r", 5, "Retry specifies the number of attempts to retrieve the data.")
+	rootCmd.PersistentFlags().IntVarP(&bgetClis.timeout, "timeout", "", 35, "Set the timeout of per request.")
+	rootCmd.PersistentFlags().IntVarP(&bgetClis.retSleepTime, "retries-sleep-time", "", 5, "Sleep time after one retry.")
+	rootCmd.PersistentFlags().BoolVarP(&bgetClis.remoteName, "remote-name", "n", false, "Use remote defined filename.")
 
 	rootCmd.Version = version
 }

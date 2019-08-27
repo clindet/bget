@@ -201,12 +201,14 @@ func PlosSpider(doi string) (urls []string) {
 
 	c.OnHTML(".supplementary-material a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		if strings.Contains(link, "supplementary") && butils.StrDetect(link, "^/") {
-			link = "https://journals.plos.org" + link
-		} else if strings.Contains(link, "supplementary") && !butils.StrDetect(link, "^/") {
-			link = "https://journals.plos.org/" + link
+		//if strings.Contains(link, "supplementary") && butils.StrDetect(link, "^/") {
+		//	link = "https://journals.plos.org" + link
+		//} else if strings.Contains(link, "supplementary") && !butils.StrDetect(link, "^/") {
+		//	link = "https://journals.plos.org/" + link
+		//}
+		if strings.Contains(link, "doi.org") {
+			urls = append(urls, link)
 		}
-		urls = append(urls, link)
 	})
 
 	// Before making a request print "Visiting ..."

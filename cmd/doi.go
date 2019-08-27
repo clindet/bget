@@ -48,7 +48,7 @@ func downloadDoi() {
 		sem <- true
 	}
 	HTTPGetURLs(urls, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID, bgetClis.mirror,
-		bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog)
+		bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime, bgetClis.remoteName)
 }
 
 func doiSpiders(doi string) (urls []string) {

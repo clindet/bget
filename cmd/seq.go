@@ -57,13 +57,13 @@ func downloadSeq() {
 					<-sem
 				}()
 				if k == "sra" {
-					Prefetch(seqs[k][i], "", bgetClis.downloadDir, cmdExtraFromFlag, taskID, quiet, saveLog)
+					Prefetch(seqs[k][i], "", bgetClis.downloadDir, cmdExtraFromFlag, taskID, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime)
 				} else if k == "sraKrt" {
-					Prefetch("", seqs[k][i], bgetClis.downloadDir, cmdExtraFromFlag, taskID, quiet, saveLog)
+					Prefetch("", seqs[k][i], bgetClis.downloadDir, cmdExtraFromFlag, taskID, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime)
 				} else if k == "tcgaManifest" {
-					GdcClient("", seqs[k][i], bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag, taskID, quiet, saveLog)
+					GdcClient("", seqs[k][i], bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag, taskID, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime)
 				} else if k == "tcgaFileID" {
-					GdcClient(seqs[k][i], "", bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag, taskID, quiet, saveLog)
+					GdcClient(seqs[k][i], "", bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag, taskID, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime)
 				}
 			}(k, i)
 		}
@@ -81,8 +81,9 @@ func downloadSeq() {
 					<-sem
 				}()
 				if k == "geo" {
-					Geofetch(seqs[k][i], bgetClis.downloadDir, bgetClis.engine, bgetClis.concurrency,
-						bgetClis.axelThread, cmdExtraFromFlag, taskID, overwrite, ignore, quiet, saveLog)
+					Geofetch(seqs[k][i], bgetClis.downloadDir, bgetClis.engine, bgetClis.concurrency, bgetClis.axelThread, cmdExtraFromFlag,
+						taskID, overwrite, ignore, quiet, saveLog, bgetClis.retries,
+						bgetClis.timeout, bgetClis.retSleepTime, bgetClis.remoteName)
 				}
 			}(k, i)
 		}
