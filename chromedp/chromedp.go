@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/JhuangLab/butils/log"
+	"github.com/openbiox/butils/log"
 
 	cdp "github.com/chromedp/chromedp"
 )

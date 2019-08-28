@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	//"github.com/JhuangLab/bget/chromedp"
+	//"github.com/Miachol/bget/chromedp"
 
-	butils "github.com/JhuangLab/butils"
-	"github.com/JhuangLab/butils/log"
+	butils "github.com/openbiox/butils"
+	"github.com/openbiox/butils/log"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
 )

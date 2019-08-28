@@ -3,14 +3,14 @@ package cmd
 import (
 	"strings"
 
-	butils "github.com/JhuangLab/butils"
+	butils "github.com/openbiox/butils"
 	"github.com/spf13/cobra"
 )
 
 var seqCmd = &cobra.Command{
 	Use:   "seq [id1 id2 id3... | manifest1 manifest2 manifest3...]",
 	Short: "Can be used to access sequence data via unique id (dbGAP and EGA) or manifest files (TCGA).",
-	Long:  `Can be used to access sequence data via unique id or manifest files. More see here https://github.com/JhuangLab/bget.`,
+	Long:  `Can be used to access sequence data via unique id or manifest files. More see here https://github.com/Miachol/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		seqCmdRunOptions(cmd)
 	},

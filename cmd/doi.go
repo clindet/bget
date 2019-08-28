@@ -4,15 +4,15 @@ import (
 	"path"
 	"strings"
 
-	"github.com/JhuangLab/bget/spider"
-	butils "github.com/JhuangLab/butils"
+	"github.com/Miachol/bget/spider"
+	butils "github.com/openbiox/butils"
 	"github.com/spf13/cobra"
 )
 
 var doiCmd = &cobra.Command{
 	Use:   "doi [doi1 doi2 doi3...]",
 	Short: "Can be used to access files via DOI.",
-	Long:  `Can be used to access files via DOI. More see here https://github.com/JhuangLab/bget.`,
+	Long:  `Can be used to access files via DOI. More see here https://github.com/Miachol/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		doiCmdRunOptions(cmd)
 	},

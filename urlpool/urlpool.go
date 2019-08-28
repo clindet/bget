@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	butils "github.com/JhuangLab/butils"
+	butils "github.com/openbiox/butils"
 )
 
 type bgetToolsURLType struct {

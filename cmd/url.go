@@ -4,15 +4,15 @@ import (
 	"path"
 	"strings"
 
-	butils "github.com/JhuangLab/butils"
-	log "github.com/JhuangLab/butils/log"
+	butils "github.com/openbiox/butils"
+	log "github.com/openbiox/butils/log"
 	"github.com/spf13/cobra"
 )
 
 var urlCmd = &cobra.Command{
 	Use:   "url [url1 url2 url3...]",
 	Short: "Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync.",
-	Long:  `Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync. More see here https://github.com/JhuangLab/bget.`,
+	Long:  `Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync. More see here https://github.com/Miachol/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		urlCmdRunOptions(cmd)
 	},

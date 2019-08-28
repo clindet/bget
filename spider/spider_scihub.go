@@ -3,8 +3,8 @@ package spider
 import (
 	"fmt"
 
-	butils "github.com/JhuangLab/butils"
-	"github.com/JhuangLab/butils/log"
+	butils "github.com/openbiox/butils"
+	"github.com/openbiox/butils/log"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
 )

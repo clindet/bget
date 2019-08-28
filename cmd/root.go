@@ -4,12 +4,11 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"path/filepath"
 	"runtime"
 	"strings"
 
-	butils "github.com/JhuangLab/butils"
-	"github.com/JhuangLab/butils/log"
+	butils "github.com/openbiox/butils"
+	"github.com/openbiox/butils/log"
 	"github.com/spf13/cobra"
 )
 
@@ -77,7 +76,7 @@ var bgetClis = bgetCliT{
 var rootCmd = &cobra.Command{
 	Use:   "bget",
 	Short: "Lightweight downloader for bioinformatics data, databases and files.",
-	Long:  `Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/JhuangLab/bget.`,
+	Long:  `Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/Miachol/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		rootCmdRunOptions(cmd)
 	},
@@ -132,7 +131,7 @@ func init() {
 
 	rootCmd.Flags().BoolVarP(&(bgetClis.clean), "clean", "", false, "Remove _download and _log in current dir.")
 	rootCmd.PersistentFlags().IntVarP(&(bgetClis.concurrency), "thread", "t", 1, "Concurrency download thread.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.downloadDir), "outdir", "o", filepath.Join(wd, "_download"), "Set the download dir for get-urls.")
+	rootCmd.PersistentFlags().StringVarP(&(bgetClis.downloadDir), "outdir", "o", wd, "Set the download dir for get-urls.")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.separator), "separator", "s", ",", "Separator for --reffa,-k, and -u flag.")
 	rootCmd.PersistentFlags().BoolVar(&ignore, "ignore", false, "Contine to download and skip the check of existed files.")
 	rootCmd.PersistentFlags().StringVarP(&cmdExtraFromFlag, "extra-cmd", "e", "", "Extra flags and values pass to internal CMDs")
@@ -140,7 +139,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&taskID, "task-id", "", butils.GetRandomString(15), "Task ID (random).")
 	rootCmd.PersistentFlags().StringVarP(&logDir, "log-dir", "", path.Join(wd, "_log"), "Log dir.")
 	rootCmd.PersistentFlags().BoolVarP(&quiet, "quiet", "q", false, "No output.")
-	rootCmd.PersistentFlags().BoolVarP(&saveLog, "save-log", "", true, "Save download log to local file].")
+	rootCmd.PersistentFlags().BoolVarP(&saveLog, "save-log", "", false, "Save download log to local file].")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.retries, "retries", "r", 5, "Retry specifies the number of attempts to retrieve the data.")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.timeout, "timeout", "", 35, "Set the timeout of per request.")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.retSleepTime, "retries-sleep-time", "", 5, "Sleep time after one retry.")

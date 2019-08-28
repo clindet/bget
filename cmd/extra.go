@@ -11,8 +11,8 @@ import (
 	"net/http"
 	neturl "net/url"
 
-	butils "github.com/JhuangLab/butils"
-	"github.com/JhuangLab/butils/log"
+	butils "github.com/openbiox/butils"
+	"github.com/openbiox/butils/log"
 )
 
 func checkGitEngine(url string) string {

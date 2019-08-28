@@ -15,7 +15,7 @@
 package main
 
 import (
-	"github.com/JhuangLab/bget/cmd"
+	"github.com/Miachol/bget/cmd"
 )
 
 func main() {

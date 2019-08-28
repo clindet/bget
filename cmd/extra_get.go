@@ -18,9 +18,9 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/JhuangLab/bget/spider"
-	butils "github.com/JhuangLab/butils"
-	log "github.com/JhuangLab/butils/log"
+	"github.com/Miachol/bget/spider"
+	butils "github.com/openbiox/butils"
+	log "github.com/openbiox/butils/log"
 	mpb "github.com/vbauerster/mpb/v4"
 	"github.com/vbauerster/mpb/v4/decor"
 )
@@ -32,7 +32,7 @@ var gCurCookieJar *cookiejar.Jar
 // Wget use wget to download files
 func Wget(url string, destFn string, extraArgs string, taskID string, quiet bool, saveLog bool, retries int, timeout int, retSleepTime int) (err error) {
 	if url == "" {
-		return errors.New("At least one of URL is required.")
+		return errors.New("at least one of URL is required")
 	}
 	args := []string{"-c", url, "-O", destFn, "--timeout=" + strconv.Itoa(timeout)}
 	if extraArgs != "" {
@@ -52,7 +52,7 @@ func Wget(url string, destFn string, extraArgs string, taskID string, quiet bool
 // Curl use curl to download files
 func Curl(url string, destFn string, extraArgs string, taskID string, quiet bool, saveLog bool, retries int, timeout int, retSleepTime int) (err error) {
 	if url == "" {
-		return errors.New("At least one of URL is required.")
+		return errors.New("at least one of URL is required")
 	}
 	args := []string{url, "-o", destFn, "--connect-timeout", strconv.Itoa(timeout)}
 	if extraArgs != "" {
@@ -72,7 +72,7 @@ func Curl(url string, destFn string, extraArgs string, taskID string, quiet bool
 // Axel use axel to download files
 func Axel(url string, destFn string, thread int, extraArgs string, taskID string, quiet bool, saveLog bool, retries int, timeout int, retSleepTime int) (err error) {
 	if url == "" {
-		return errors.New("At least one of URL is required.")
+		return errors.New("at least one of URL is required")
 	}
 	args := []string{url, "-N", "-o", destFn, "-n", strconv.Itoa(thread),
 		"--timeout=" + strconv.Itoa(timeout)}
@@ -93,9 +93,9 @@ func Axel(url string, destFn string, thread int, extraArgs string, taskID string
 // Git use git to download files
 func Git(url string, destFn string, extraArgs string, taskID string, quiet bool, saveLog bool, retries int, timeout int, retSleepTime int) (err error) {
 	if url == "" {
-		return errors.New("At least one of URL is required.")
+		return errors.New("at least one of URL is required")
 	}
-	args := []string{"clone", "--recursive"}
+	args := []string{"clone", "--recursive", "--progress"}
 	if extraArgs != "" {
 		extraArgsList := strings.Split(extraArgs, " ")
 		args = append(args, extraArgsList...)
@@ -114,7 +114,7 @@ func Git(url string, destFn string, extraArgs string, taskID string, quiet bool,
 // Rsync use rsync to download files
 func Rsync(url string, destFn string, extraArgs string, taskID string, quiet bool, saveLog bool, retries int, timeout int, retSleepTime int) (err error) {
 	if url == "" {
-		return errors.New("At least one of URL is required.")
+		return errors.New("at least one of URL is required")
 	}
 	args := []string{url, destFn}
 	if extraArgs != "" {
@@ -134,7 +134,7 @@ func Rsync(url string, destFn string, extraArgs string, taskID string, quiet boo
 // GdcClient use gdc-client to download files
 func GdcClient(fileID string, manifest string, outDir string, token string, extraArgs string, taskID string, quiet bool, saveLog bool, retries int, timeout int, retSleepTime int) (err error) {
 	if fileID == "" && manifest == "" {
-		return errors.New("At least one of fileID or manifest is required.")
+		return errors.New("at least one of fileID or manifest is required")
 	}
 	args := []string{}
 	if manifest == "" {
@@ -168,7 +168,7 @@ func GdcClient(fileID string, manifest string, outDir string, token string, extr
 // Prefetch use sra-tools prefetch to download files
 func Prefetch(srr string, krt string, outDir string, extraArgs string, taskID string, quiet bool, saveLog bool, retries int, timeout int, retSleepTime int) (err error) {
 	if srr == "" && krt == "" {
-		return errors.New("At least one of srr or krt is required.")
+		return errors.New("at least one of srr or krt is required")
 	}
 	args := []string{"-O", outDir, "-X", "500GB"}
 	if extraArgs != "" {
@@ -200,7 +200,7 @@ func Prefetch(srr string, krt string, outDir string, extraArgs string, taskID st
 // Geofetch get GEO files
 func Geofetch(geo string, outDir string, engine string, concurrency int, axelThread int, extraArgs string, taskID string, overwrite bool, ignore bool, quiet bool, saveLog bool, retries int, timeout int, retSleepTime int, remoteName bool) (err error) {
 	if geo == "" {
-		return errors.New("At least one of geo is required.")
+		return errors.New("at least one of geo is required")
 	}
 	gseURLs, gplURLs, sraLink := spider.GeoSpider(geo)
 	u, _ := neturl.Parse(sraLink)

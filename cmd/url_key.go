@@ -7,10 +7,10 @@ import (
 	"path"
 	"strings"
 
-	"github.com/JhuangLab/bget/urlpool"
-	vers "github.com/JhuangLab/bget/versions"
-	butils "github.com/JhuangLab/butils"
-	log "github.com/JhuangLab/butils/log"
+	"github.com/Miachol/bget/urlpool"
+	vers "github.com/Miachol/bget/versions"
+	butils "github.com/openbiox/butils"
+	log "github.com/openbiox/butils/log"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +19,7 @@ var keyVs map[string][]string
 var keyCmd = &cobra.Command{
 	Use:   "url-key [key1 key2 key3...]",
 	Short: "Can be used to access URLs via a key string.",
-	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version %site #releaseVersion', : bwa, GRCh38 %defuse #97. More see here https://github.com/JhuangLab/bget.`,
+	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version %site #releaseVersion', : bwa, GRCh38 %defuse #97. More see here https://github.com/Miachol/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		keyCmdRunOptions(cmd)
 	},

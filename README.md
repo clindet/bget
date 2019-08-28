@@ -1,4 +1,4 @@
-<img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Life cycle: experimental"> [![GoDoc](https://godoc.org/github.com/JhuangLab/bget?status.svg)](https://godoc.org/github.com/JhuangLab/bget)
+<img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Life cycle: experimental"> [![GoDoc](https://godoc.org/github.com/Miachol/bget?status.svg)](https://godoc.org/github.com/Miachol/bget)
 
 # bget
 
@@ -15,13 +15,13 @@ Possible URLs pool:
 ## Installation
 
 ```bash
-go get -u github.com/JhuangLab/bget
+go get -u github.com/Miachol/bget
 ```
 
 ## Usage
 
 ```bash
-Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/JhuangLab/bget.
+Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/Miachol/bget.
 
 Usage:
   bget [flags]

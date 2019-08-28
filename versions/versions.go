@@ -9,9 +9,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/JhuangLab/bget/urlpool"
-	butils "github.com/JhuangLab/butils"
-	log "github.com/JhuangLab/butils/log"
+	"github.com/Miachol/bget/urlpool"
+	butils "github.com/openbiox/butils"
+	log "github.com/openbiox/butils/log"
 	"github.com/google/go-github/v27/github"
 	"github.com/olekukonko/tablewriter"
 	"golang.org/x/oauth2"

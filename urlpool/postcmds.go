@@ -5,8 +5,8 @@ import (
 	"path"
 	"strings"
 
-	butils "github.com/JhuangLab/butils"
-	log "github.com/JhuangLab/butils/log"
+	butils "github.com/openbiox/butils"
+	log "github.com/openbiox/butils/log"
 )
 
 func PostKeyCmds(key string, dest []string, rawKey string) {
