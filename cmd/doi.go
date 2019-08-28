@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/Miachol/bget/spider"
 	butils "github.com/openbiox/butils"
+	"github.com/openbiox/butils/log"
 	"github.com/spf13/cobra"
 )
 
@@ -59,10 +61,20 @@ func doiSpiders(doi string) (urls []string) {
 	doiTmp := strings.Split(doi, "/")
 	doiOrg := doiTmp[0]
 	runFlag := false
+	var t int
 	for k := range spider.DoiSpidersPool {
 		if k == doiOrg {
-			urls = spider.DoiSpidersPool[doiOrg](doi)
-			runFlag = true
+			for t = 0; t < bgetClis.retries; t++ {
+				urls = spider.DoiSpidersPool[doiOrg](doi, bgetClis.proxy, bgetClis.timeout)
+				if len(urls) == 0 {
+					log.Warnf("%s returns empty, on attempt %d... retrying after %d seconds.", doi, t+1, bgetClis.retSleepTime)
+					time.Sleep(time.Duration(bgetClis.retSleepTime) * time.Second)
+					continue
+				} else {
+					runFlag = true
+					break
+				}
+			}
 		}
 	}
 	if !runFlag || len(urls) == 0 {
@@ -93,11 +105,13 @@ func init() {
 	doiCmd.Flags().IntVarP(&(bgetClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")
 	doiCmd.Flags().StringVarP(&(bgetClis.mirror), "mirror", "m", "", "Set the mirror of resources.")
 	doiCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains dois for download.")
+	exampleXML2Json := "`bapi ncbi --xml2json pubmed titleSearch.XML |grep Doi| tr -d ' ,(Doi:)\"'`"
 	doiCmd.Example = fmt.Sprintf(`  bget doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
   bget doi 10.1016/j.devcel.2017.03.001 10.1016/j.stem.2019.07.009 10.1016/j.celrep.2018.03.072 -t 2
 
   bapi ncbi -q '((The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability[Title]) OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR[Title])' -o titleSearch.XML
   dois=%s
   echo ${dois}
-  bget doi ${dois}`, "`bapi ncbi --xml2json pubmed titleSearch.XML |grep Doi| tr -d ' ,(Doi:)\"'`")
+  bget doi ${dois}
+  bget doi 10.1080/15548627.2018.1505155 --proxy http://username:password@hostname:port`, exampleXML2Json)
 }

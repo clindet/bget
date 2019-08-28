@@ -14,13 +14,14 @@ import (
 )
 
 // NatureComSpider access Nature.com files via spider
-func NatureComSpider(doi string) (urls []string) {
+func NatureComSpider(doi, proxy string, timeout int) (urls []string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
 		colly.AllowedDomains("doi.org", "www.nature.com", "idp.nature.com"),
 		colly.MaxDepth(1),
 	)
+	setSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	// On every a element which has href attribute call callback
@@ -57,7 +58,7 @@ func NatureComSpider(doi string) (urls []string) {
 }
 
 // ScienseComSpider access sciencemag.org journal files via spider
-func ScienseComSpider(doi string) (urls []string) {
+func ScienseComSpider(doi, proxy string, timeout int) (urls []string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
@@ -66,6 +67,7 @@ func ScienseComSpider(doi string) (urls []string) {
 			"id.elsevier.com", "science.sciencemag.org", "www.sciencemag.org"),
 		colly.MaxDepth(2),
 	)
+	setSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
 
@@ -100,7 +102,7 @@ func ScienseComSpider(doi string) (urls []string) {
 }
 
 // CellComSpider access cell.com journal files via spider
-func CellComSpider(doi string) []string {
+func CellComSpider(doi, proxy string, timeout int) []string {
 	urls := []string{}
 	// Instantiate default collector
 	c := colly.NewCollector(
@@ -110,6 +112,7 @@ func CellComSpider(doi string) []string {
 			"pdf.sciencedirectassets.com", "www.thelancet.com", "www.gastrojournal.org"),
 		colly.MaxDepth(1),
 	)
+	setSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
 
@@ -198,13 +201,14 @@ func CellComSpider(doi string) []string {
 }
 
 // BloodJournalSpider access http://www.bloodjournal.org files via spider
-func BloodJournalSpider(doi string) (urls []string) {
+func BloodJournalSpider(doi, proxy string, timeout int) (urls []string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
 		colly.AllowedDomains("doi.org", "www.bloodjournal.org", "signin.hematology.org"),
 		colly.MaxDepth(1),
 	)
+	setSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("a[data-panel-name=jnl_bloodjournal_tab_pdf]", func(e *colly.HTMLElement) {
@@ -233,13 +237,14 @@ func BloodJournalSpider(doi string) (urls []string) {
 }
 
 // NejmSpider access http://www.nejm.org files via spider
-func NejmSpider(doi string) (urls []string) {
+func NejmSpider(doi, proxy string, timeout int) (urls []string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
 		colly.AllowedDomains("doi.org", "www.nejm.org"),
 		colly.MaxDepth(1),
 	)
+	setSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("a[data-tooltip='Download PDF']", func(e *colly.HTMLElement) {
@@ -266,13 +271,14 @@ func NejmSpider(doi string) (urls []string) {
 }
 
 // AhajournalsSpider access https://www.ahajournals.org files via spider
-func AhajournalsSpider(doi string) (urls []string) {
+func AhajournalsSpider(doi, proxy string, timeout int) (urls []string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
 		colly.AllowedDomains("doi.org", "www.ahajournals.org"),
 		colly.MaxDepth(1),
 	)
+	setSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML(".citation__access__actions a[href]", func(e *colly.HTMLElement) {
@@ -297,13 +303,14 @@ func AhajournalsSpider(doi string) (urls []string) {
 }
 
 // JamaNetworkSpider access https://jamanetwork.com files via spider
-func JamaNetworkSpider(doi string) (urls []string) {
+func JamaNetworkSpider(doi, proxy string, timeout int) (urls []string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
 		colly.AllowedDomains("doi.org", "jamanetwork.com"),
 		colly.MaxDepth(1),
 	)
+	setSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML(".citation__access__actions a[href]", func(e *colly.HTMLElement) {
@@ -328,7 +335,7 @@ func JamaNetworkSpider(doi string) (urls []string) {
 }
 
 // AacrJournalsSpider access aacrjournals.org files via spider
-func AacrJournalsSpider(doi string) (urls []string) {
+func AacrJournalsSpider(doi, proxy string, timeout int) (urls []string) {
 	host := ""
 	// Instantiate default collector
 	c := colly.NewCollector(
@@ -337,6 +344,7 @@ func AacrJournalsSpider(doi string) (urls []string) {
 			"clincancerres.aacrjournals.org"),
 		colly.MaxDepth(1),
 	)
+	setSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
@@ -367,7 +375,7 @@ func AacrJournalsSpider(doi string) (urls []string) {
 
 // TandfonlineSpider access https://www.tandfonline.com files via spider
 // not support now, need chromedp
-func TandfonlineSpider(doi string) (urls []string) {
+func TandfonlineSpider(doi, proxy string, timeout int) (urls []string) {
 	var host string
 	// Instantiate default collector
 	c := colly.NewCollector(
@@ -375,6 +383,7 @@ func TandfonlineSpider(doi string) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.tandfonline.com"),
 		colly.MaxDepth(1),
 	)
+	setSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("a.show-pdf[href]", func(e *colly.HTMLElement) {
@@ -397,7 +406,6 @@ func TandfonlineSpider(doi string) (urls []string) {
 		if host == "" && r.Request.URL.String() != "" {
 			u, _ := url.Parse(r.Request.URL.String())
 			host = u.Scheme + "://" + u.Host
-			fmt.Println(host)
 		}
 	})
 	// Before making a request print "Visiting ..."

@@ -31,7 +31,9 @@ func checkGitEngine(url string) string {
 
 func formatURLfileName(url string, remoteName bool) (fname string) {
 	if remoteName {
-		resp, err := http.Head(url)
+		client := newHTTPClient(bgetClis.timeout)
+		req, err := http.NewRequest("GET", url, nil)
+		resp, err := client.Do(req)
 		if err != nil {
 			log.Fatal(err)
 		}

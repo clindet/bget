@@ -15,6 +15,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 	"unicode/utf8"
 
@@ -29,19 +30,42 @@ var pg *mpb.Progress
 var gCurCookies []*http.Cookie
 var gCurCookieJar *cookiejar.Jar
 
+func setCmdProxyEnv(cmd *exec.Cmd, proxy, url string) {
+	if proxy == "" {
+		return
+	}
+	proxyFlag := ""
+	if strings.Contains(url, "https://") {
+		proxyFlag = "https_proxy=" + proxy
+	} else if strings.Contains(url, "ftp://") {
+		proxyFlag = "ftp_proxy=" + proxy
+	} else {
+		proxyFlag = "http_proxy=" + proxy
+	}
+	_, proxy = spider.RandProxy(proxy)
+	cmd.Env = append(cmd.Env, proxyFlag)
+	cmd.Env = append(cmd.Env, "use_proxy=on")
+}
+
 // Wget use wget to download files
 func Wget(url string, destFn string, extraArgs string, taskID string, quiet bool, saveLog bool, retries int, timeout int, retSleepTime int) (err error) {
 	if url == "" {
 		return errors.New("at least one of URL is required")
 	}
-	args := []string{"-c", url, "-O", destFn, "--timeout=" + strconv.Itoa(timeout)}
+	args := []string{"-c", url, "-O", destFn, "--timeout=" +
+		strconv.Itoa(timeout), "--show-progress"}
 	if extraArgs != "" {
 		extraArgsList := strings.Split(extraArgs, " ")
 		args = append(args, extraArgsList...)
 	}
 	cmd := exec.Command("wget", args...)
+	setCmdProxyEnv(cmd, bgetClis.proxy, url)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_wget.log", taskID, path.Base(destFn)))
-	butils.CreateFileParDir(logPath)
+	if saveLog {
+		log.Infof("Download Log of %s saved to => %s", url, logPath)
+		butils.CreateFileParDir(logPath)
+	}
+	time.Sleep(1 * time.Second)
 	err = retryURL(url, retries, retSleepTime, logPath, cmd, quiet, saveLog)
 	if err != nil {
 		return err
@@ -60,8 +84,13 @@ func Curl(url string, destFn string, extraArgs string, taskID string, quiet bool
 		args = append(args, extraArgsList...)
 	}
 	cmd := exec.Command("curl", args...)
+	setCmdProxyEnv(cmd, bgetClis.proxy, url)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_curl.log", taskID, path.Base(destFn)))
-	butils.CreateFileParDir(logPath)
+	if saveLog {
+		log.Infof("Download Log of %s saved to => %s", url, logPath)
+		butils.CreateFileParDir(logPath)
+	}
+	time.Sleep(1 * time.Second)
 	err = retryURL(url, retries, retSleepTime, logPath, cmd, quiet, saveLog)
 	if err != nil {
 		return err
@@ -81,8 +110,13 @@ func Axel(url string, destFn string, thread int, extraArgs string, taskID string
 		args = append(args, extraArgsList...)
 	}
 	cmd := exec.Command("axel", args...)
+	setCmdProxyEnv(cmd, bgetClis.proxy, url)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_axel.log", taskID, path.Base(destFn)))
-	butils.CreateFileParDir(logPath)
+	if saveLog {
+		log.Infof("Download Log of %s saved to => %s", url, logPath)
+		butils.CreateFileParDir(logPath)
+	}
+	time.Sleep(1 * time.Second)
 	err = retryURL(url, retries, retSleepTime, logPath, cmd, quiet, saveLog)
 	if err != nil {
 		return err
@@ -102,8 +136,13 @@ func Git(url string, destFn string, extraArgs string, taskID string, quiet bool,
 	}
 	args = append(args, url, destFn)
 	cmd := exec.Command("git", args...)
+	setCmdProxyEnv(cmd, bgetClis.proxy, url)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_git.log", taskID, path.Base(destFn)))
-	butils.CreateFileParDir(logPath)
+	if saveLog {
+		log.Infof("Download Log of %s saved to => %s", url, logPath)
+		butils.CreateFileParDir(logPath)
+	}
+	time.Sleep(1 * time.Second)
 	err = retryURL(url, retries, retSleepTime, logPath, cmd, quiet, saveLog)
 	if err != nil {
 		return err
@@ -122,8 +161,13 @@ func Rsync(url string, destFn string, extraArgs string, taskID string, quiet boo
 		args = append(args, extraArgsList...)
 	}
 	cmd := exec.Command("rsync", args...)
+	setCmdProxyEnv(cmd, bgetClis.proxy, url)
 	logPath := path.Join(logDir, fmt.Sprintf("%s_%s_rsync.log", taskID, path.Base(destFn)))
-	butils.CreateFileParDir(logPath)
+	if saveLog {
+		log.Infof("Download Log of %s saved to => %s", url, logPath)
+		butils.CreateFileParDir(logPath)
+	}
+	time.Sleep(1 * time.Second)
 	err = retryURL(url, retries, retSleepTime, logPath, cmd, quiet, saveLog)
 	if err != nil {
 		return err
@@ -150,14 +194,19 @@ func GdcClient(fileID string, manifest string, outDir string, token string, extr
 		args = append(args, "-t", token)
 	}
 	cmd := exec.Command("gdc-client", args...)
+	setCmdProxyEnv(cmd, bgetClis.proxy, "")
 	logPath := path.Join(logDir, fmt.Sprintf("%s_gdc-client.log", taskID))
-	butils.CreateFileParDir(logPath)
 	taskName := ""
 	if fileID != "" {
 		taskName = fileID
 	} else {
 		taskName = manifest
 	}
+	if saveLog {
+		log.Infof("Download Log of %s saved to => %s", taskName, logPath)
+		butils.CreateFileParDir(logPath)
+	}
+	time.Sleep(1 * time.Second)
 	err = retriesTask(taskName, retries, retSleepTime, logPath, cmd, quiet, saveLog)
 	if err != nil {
 		return err
@@ -182,14 +231,19 @@ func Prefetch(srr string, krt string, outDir string, extraArgs string, taskID st
 	}
 
 	cmd := exec.Command("prefetch", args...)
+	setCmdProxyEnv(cmd, bgetClis.proxy, "")
 	logPath := path.Join(logDir, fmt.Sprintf("%s_prefetch.log", taskID))
-	butils.CreateFileParDir(logPath)
 	taskName := ""
 	if srr != "" {
 		taskName = srr
 	} else {
 		taskName = krt
 	}
+	if saveLog {
+		log.Infof("Download Log of %s saved to => %s", taskName, logPath)
+		butils.CreateFileParDir(logPath)
+	}
+	time.Sleep(1 * time.Second)
 	err = retriesTask(taskName, retries, retSleepTime, logPath, cmd, quiet, saveLog)
 	if err != nil {
 		return err
@@ -202,7 +256,7 @@ func Geofetch(geo string, outDir string, engine string, concurrency int, axelThr
 	if geo == "" {
 		return errors.New("at least one of geo is required")
 	}
-	gseURLs, gplURLs, sraLink := spider.GeoSpider(geo)
+	gseURLs, gplURLs, sraLink := spider.GeoSpider(geo, bgetClis.proxy, timeout)
 	u, _ := neturl.Parse(sraLink)
 	uQ := u.Query()
 	accAll := fmt.Sprintf(`https://www.ncbi.nlm.nih.gov/Traces/study/backends/solr_proxy/solr_proxy.cgi?core=run_sel_index&action=acc_all&fl=acc_s&rs=(primary_search_ids:"%s")`, uQ["acc"][0])
@@ -247,20 +301,27 @@ func defaultCheckRedirect(req *http.Request, via []*http.Request) error {
 	return nil
 }
 
-// httpGetURL can use golang http.Get to query URL with progress bar
-func httpGetURL(url string, destFn string, pg *mpb.Progress, quiet bool, saveLog bool,
-	retries int, timeout int, retSleepTime int) error {
-
-	client := &http.Client{
+func newHTTPClient(timeout int) *http.Client {
+	transPort := &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout: time.Duration(timeout) * time.Second,
+		}).Dial,
+	}
+	if bgetClis.proxy != "" {
+		urlproxy, _ := spider.RandProxy(bgetClis.proxy)
+		transPort.Proxy = http.ProxyURL(urlproxy)
+	}
+	return &http.Client{
 		CheckRedirect: defaultCheckRedirect,
 		Jar:           gCurCookieJar,
-		Transport: &http.Transport{
-			Dial: (&net.Dialer{
-				Timeout: time.Duration(timeout) * time.Second,
-			}).Dial,
-		},
+		Transport:     transPort,
 	}
+}
 
+// httpGetURL can use golang http.Get to query URL with progress bar
+func httpGetURL(url string, destFn string, pg *mpb.Progress, quiet bool,
+	saveLog bool, retries int, timeout int, retSleepTime int) error {
+	client := newHTTPClient(timeout)
 	req, err := http.NewRequest("GET", url, nil)
 	req.Header.Set("Connection", "keep-alive")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36")
@@ -274,7 +335,7 @@ func httpGetURL(url string, destFn string, pg *mpb.Progress, quiet bool, saveLog
 	var t int
 	var success = false
 	for t = 0; t < retries; t++ {
-		err := downloadWorker(client, req, url, destFn, pg, quiet, saveLog, retries, timeout, retSleepTime)
+		err = downloadWorker(client, req, url, destFn, pg, quiet, saveLog, retries, timeout, retSleepTime)
 		if err == nil {
 			success = true
 			break
@@ -360,17 +421,28 @@ func AsyncURL3(url string, destFn string, engine string, extraArgs string, taskI
 // to query URL with progress bar
 func HTTPGetURLs(urls []string, destDir []string, engine string, extraArgs string, taskID string, mirror string, concurrency int, axelThread int, overwrite bool, ignore bool, quiet bool, saveLog bool, retries int, timeout int, retSleepTime int, remoteName bool) (destFns []string) {
 	sem := make(chan bool, concurrency)
-	for j := range urls {
-		url := urls[j]
-		destFn := path.Join(destDir[j], formatURLfileName(urls[j], remoteName))
-		log.Infof("Trying %s => %s", url, destFn)
-	}
 	if len(urls) > 1 && concurrency > 1 && engine != "go-http" {
 		quiet = true
 	}
+	wg := sync.WaitGroup{}
+	destMap := make(map[string]string)
+	wg.Add(len(urls))
+	for j := range urls {
+		url := urls[j]
+		dest := destDir[j]
+		go func(url, dest string) {
+			destMap[url] = path.Join(dest,
+				formatURLfileName(url, remoteName))
+			wg.Done()
+		}(url, dest)
+	}
+	wg.Wait()
+	for k, v := range destMap {
+		log.Infof("Trying %s => %s", k, v)
+	}
 	for j := range urls {
 		butils.CreateDir(destDir[j])
-		destFn := path.Join(destDir[j], formatURLfileName(urls[j], remoteName))
+		destFn := destMap[urls[j]]
 		if overwrite {
 			err := os.RemoveAll(destFn)
 			if err != nil {
@@ -448,7 +520,6 @@ func retriesTask(taskName string, retries int, retSleepTime int,
 func downloadWorker(client *http.Client, req *http.Request, url string, destFn string, pg *mpb.Progress, quiet bool, saveLog bool, retries int, timeout int, retSleepTime int) error {
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Warn(err)
 		return err
 	}
 	defer resp.Body.Close()
@@ -462,14 +533,15 @@ func downloadWorker(client *http.Client, req *http.Request, url string, destFn s
 	}
 	if checkHTTPGetURLRdirect(resp, url, destFn, pg, quiet, saveLog,
 		retries, timeout, retSleepTime) {
-		return errors.New("Redirect fail")
+		//return errors.New("Redirect fail")
+		return nil
 	}
 	size := resp.ContentLength
 
 	if hasParDir, _ := butils.PathExists(filepath.Dir(destFn)); !hasParDir {
-		err := butils.CreateFileParDir(destFn)
+		err = butils.CreateFileParDir(destFn)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
 	// create dest
@@ -479,6 +551,7 @@ func downloadWorker(client *http.Client, req *http.Request, url string, destFn s
 		log.Warnf("Can't create %s: %v\n", destName, err)
 		return err
 	}
+	defer dest.Close()
 	prefixStr := filepath.Base(destFn)
 	prefixStrLen := utf8.RuneCountInString(prefixStr)
 	if prefixStrLen > 35 {
@@ -502,21 +575,18 @@ func downloadWorker(client *http.Client, req *http.Request, url string, destFn s
 		// create proxy reader
 		reader := bar.ProxyReader(resp.Body)
 		// and copy from reader, ignoring errors
-		_, err := io.Copy(dest, reader)
+		_, err = io.Copy(dest, reader)
 		if err != nil {
-			bar.Abort(true)
 			reader.Close()
-			log.Warn(err)
+			bar.Abort(true)
 			return err
 		}
 	} else {
-		_, err := io.Copy(dest, io.Reader(resp.Body))
+		_, err = io.Copy(dest, io.Reader(resp.Body))
 		if err != nil {
-			log.Warn(err)
 			return err
 		}
 	}
-	defer dest.Close()
 	return nil
 }
 

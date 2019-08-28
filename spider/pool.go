@@ -6,7 +6,7 @@ type doiSpiderType struct {
 }
 
 // DoiSpidersPool map doi to golang function
-var DoiSpidersPool = map[string]func(doi string) []string{
+var DoiSpidersPool = map[string]func(doi, proxy string, timeout int) []string{
 	"10.1001":  JamaNetworkSpider,
 	"10.1002":  WileyComSpider,
 	"10.1016":  CellComSpider,

@@ -44,6 +44,7 @@ type bgetCliT struct {
 	timeout        int
 	retSleepTime   int
 	retries        int
+	proxy          string
 	remoteName     bool
 	helpFlags      bool
 }
@@ -69,6 +70,7 @@ var bgetClis = bgetCliT{
 	30,
 	5,
 	5,
+	"",
 	false,
 	true,
 }
@@ -129,6 +131,7 @@ func init() {
 	rootCmd.AddCommand(keyCmd)
 	rootCmd.AddCommand(seqCmd)
 
+	rootCmd.PersistentFlags().StringVarP(&(bgetClis.proxy), "proxy", "", "", "HTTP proxy to download.")
 	rootCmd.Flags().BoolVarP(&(bgetClis.clean), "clean", "", false, "Remove _download and _log in current dir.")
 	rootCmd.PersistentFlags().IntVarP(&(bgetClis.concurrency), "thread", "t", 1, "Concurrency download thread.")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.downloadDir), "outdir", "o", path.Join(wd, "_download"), "Set the download dir for get-urls.")
@@ -139,7 +142,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&taskID, "task-id", "", butils.GetRandomString(15), "Task ID (random).")
 	rootCmd.PersistentFlags().StringVarP(&logDir, "log-dir", "", path.Join(wd, "_download", "_log"), "Log dir.")
 	rootCmd.PersistentFlags().BoolVarP(&quiet, "quiet", "q", false, "No output.")
-	rootCmd.PersistentFlags().BoolVarP(&saveLog, "save-log", "", false, "Save download log to local file].")
+	rootCmd.PersistentFlags().BoolVarP(&saveLog, "save-log", "", true, "Save download log to local file].")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.retries, "retries", "r", 5, "Retry specifies the number of attempts to retrieve the data.")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.timeout, "timeout", "", 35, "Set the timeout of per request.")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.retSleepTime, "retries-sleep-time", "", 5, "Sleep time after one retry.")
