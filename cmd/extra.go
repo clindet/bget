@@ -96,6 +96,9 @@ func formatURLfileName(url string, remoteName bool) (fname string) {
 		strings.Contains(url, "rs=") {
 		fname = butils.StrReplaceAll(uQ["rs"][0], `[(]primary_search_ids:|[)]|"`, "") + "_SraAccList.txt"
 	}
+	if strings.Contains(fname, "needAccess=true") {
+		fname = butils.StrReplaceAll(fname, "[?]needAccess=true", "")
+	}
 	return fname
 }
 

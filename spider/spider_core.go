@@ -7,10 +7,10 @@ import (
 
 	//"github.com/Miachol/bget/chromedp"
 
-	butils "github.com/openbiox/butils"
-	"github.com/openbiox/butils/log"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
+	butils "github.com/openbiox/butils"
+	"github.com/openbiox/butils/log"
 )
 
 // NatureComSpider access Nature.com files via spider
@@ -368,6 +368,7 @@ func AacrJournalsSpider(doi string) (urls []string) {
 // TandfonlineSpider access https://www.tandfonline.com files via spider
 // not support now, need chromedp
 func TandfonlineSpider(doi string) (urls []string) {
+	var host string
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
@@ -378,14 +379,27 @@ func TandfonlineSpider(doi string) (urls []string) {
 
 	c.OnHTML("a.show-pdf[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
+		if !strings.Contains(link, "://") {
+			link = host + link
+		}
 		urls = append(urls, link)
 		c.Visit(butils.StrReplaceAll(link, "/doi/pdf/", "/doi/suppl/"))
 	})
 	c.OnHTML("a[title='Download all']", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
+		if !strings.Contains(link, "://") {
+			link = host + link
+		}
 		urls = append(urls, link)
 	})
 
+	c.OnResponse(func(r *colly.Response) {
+		if host == "" && r.Request.URL.String() != "" {
+			u, _ := url.Parse(r.Request.URL.String())
+			host = u.Scheme + "://" + u.Host
+			fmt.Println(host)
+		}
+	})
 	// Before making a request print "Visiting ..."
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
