@@ -5,8 +5,9 @@ import (
 	"path"
 	"strings"
 
-	butils "github.com/openbiox/butils"
+	"github.com/openbiox/butils/archive"
 	log "github.com/openbiox/butils/log"
+	stringo "github.com/openbiox/butils/stringo"
 )
 
 func PostKeyCmds(key string, dest []string, rawKey string) {
@@ -28,18 +29,18 @@ func gunzipDefuseReffa(dest []string) (errList []error) {
 			if err != nil {
 				log.Warn(err)
 			}
-			err = butils.UnarchiveLog(srcFn, destDir)
-		} else if butils.StrDetect(fn, ".fa.gz$") && butils.StrDetect(fn, ".dna.") {
-			srcFn = butils.StrReplaceAll(fn, "Homo_sapiens.*.dna.chromosome.", "defuse.dna.chromosomes.")
+			err = archive.UnarchiveLog(srcFn, destDir)
+		} else if stringo.StrDetect(fn, ".fa.gz$") && stringo.StrDetect(fn, ".dna.") {
+			srcFn = stringo.StrReplaceAll(fn, "Homo_sapiens.*.dna.chromosome.", "defuse.dna.chromosomes.")
 			log.Infof("Link %s => %s", fn, srcFn)
 			err = os.Symlink(fn, srcFn)
 			if err != nil {
 				log.Warn(err)
 			}
-			err = butils.UnarchiveLog(srcFn, destDir)
-		} else if butils.StrDetect(fn, ".gz$") {
+			err = archive.UnarchiveLog(srcFn, destDir)
+		} else if stringo.StrDetect(fn, ".gz$") {
 			srcFn = fn
-			err = butils.UnarchiveLog(srcFn, destDir)
+			err = archive.UnarchiveLog(srcFn, destDir)
 		}
 		if err != nil {
 			log.Warn(err)

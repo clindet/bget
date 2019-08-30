@@ -10,10 +10,10 @@ import (
 	"sync"
 
 	"github.com/Miachol/bget/urlpool"
-	butils "github.com/openbiox/butils"
-	log "github.com/openbiox/butils/log"
 	"github.com/google/go-github/v27/github"
 	"github.com/olekukonko/tablewriter"
+	log "github.com/openbiox/butils/log"
+	"github.com/openbiox/butils/stringo"
 	"golang.org/x/oauth2"
 )
 
@@ -176,10 +176,10 @@ func QueryKeysVersions(keys []string, osType string, printFormat string) map[str
 
 // ParseMeta parse @version %site #release format string
 func ParseMeta(key string) (keyNew string, version string, site string, release string) {
-	info := butils.StrSplit(key, "@|%|#", 4)
-	info1 := butils.StrSplit(key, "@", 2)
-	info2 := butils.StrSplit(key, "%", 2)
-	info3 := butils.StrSplit(key, "#", 2)
+	info := stringo.StrSplit(key, "@|%|#", 4)
+	info1 := stringo.StrSplit(key, "@", 2)
+	info2 := stringo.StrSplit(key, "%", 2)
+	info3 := stringo.StrSplit(key, "#", 2)
 	keyNew = strings.TrimSpace(info[0])
 
 	if len(info) == 2 {

@@ -9,8 +9,12 @@ import (
 
 	"github.com/Miachol/bget/urlpool"
 	vers "github.com/Miachol/bget/versions"
-	butils "github.com/openbiox/butils"
+	"github.com/openbiox/butils/archive"
+	bexec "github.com/openbiox/butils/exec"
+	cio "github.com/openbiox/butils/io"
 	log "github.com/openbiox/butils/log"
+	cnet "github.com/openbiox/butils/net"
+	"github.com/openbiox/butils/slice"
 	"github.com/spf13/cobra"
 )
 
@@ -31,7 +35,7 @@ func parseKeys() (keys []string) {
 	} else if bgetClis.keys != "" {
 		keys = []string{bgetClis.keys}
 	} else if bgetClis.listFile != "" {
-		keys = butils.ReadLines(bgetClis.listFile)
+		keys = cio.ReadLines(bgetClis.listFile)
 	}
 	return keys
 }
@@ -41,7 +45,8 @@ func downloadKey() {
 	urls, postShellCmd := vers.QueryKeysInfo(keys, osType)
 	done := make(map[string][]string)
 	var destDirArray []string
-	sem := make(chan bool, bgetClis.concurrency)
+	netOpt := setNetParams(&bgetClis)
+	sem := make(chan bool, bgetClis.thread)
 	for key, v := range urls {
 		for i := range v {
 			u, _ := url.Parse(v[i])
@@ -57,8 +62,7 @@ func downloadKey() {
 			defer func() {
 				<-sem
 			}()
-			done[key] = HTTPGetURLs(v, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID,
-				bgetClis.mirror, bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime, bgetClis.remoteName)
+			done[key] = cnet.HttpGetURLs(v, destDirArray, netOpt)
 		}(key, v, destDirArray)
 	}
 	for i := 0; i < cap(sem); i++ {
@@ -74,7 +78,7 @@ func downloadKey() {
 				args = postCmdRender(args, dest)
 			}
 			if bgetClis.uncompress {
-				if err := butils.UnarchiveLog(dest, path.Dir(dest)); err != nil {
+				if err := archive.UnarchiveLog(dest, path.Dir(dest)); err != nil {
 					log.Warn(err)
 				}
 			}
@@ -82,9 +86,12 @@ func downloadKey() {
 				continue
 			}
 			cmd := exec.Command("sh", "-c", args)
-			logFn := path.Join(logDir, taskID+"_postShellCmd_"+key+".log")
+			logPath := ""
+			if bgetClis.saveLog {
+				logPath = path.Join(bgetClis.logDir, bgetClis.taskID+"_postShellCmd_"+key+".log")
+			}
 			if args != "" {
-				butils.RunExecCmdConsole(logFn, cmd, quiet, saveLog)
+				bexec.Shell(cmd, logPath, bgetClis.quiet)
 			}
 		}
 		urlpool.PostKeyCmds(key, done[key], bgetClis.keys)
@@ -92,11 +99,11 @@ func downloadKey() {
 }
 
 func postCmdRender(oldCmd string, dest string) (newCmd string) {
-	if hasDest, _ := butils.PathExists(dest); !hasDest {
+	if hasDest, _ := cio.PathExists(dest); !hasDest {
 		return ""
 	}
-	if cmdExtraFromFlag != "" {
-		newCmd = oldCmd + " " + cmdExtraFromFlag
+	if bgetClis.cmdExtraFromFlag != "" {
+		newCmd = oldCmd + " " + bgetClis.cmdExtraFromFlag
 	}
 	// define your pattern replace
 	newCmd = strings.Replace(oldCmd, "{{downloadDir}}", bgetClis.downloadDir, 100)
@@ -112,7 +119,7 @@ func getAllKeys() (keys []string) {
 	for i := range urlpool.BgetFilesPool {
 		keys = append(keys, urlpool.BgetFilesPool[i].Name)
 	}
-	keys = butils.RemoveRepeatEle(keys)
+	keys = slice.DropSliceDup(keys)
 	fmt.Printf("%s\n", strings.Join(keys, "\n"))
 	return keys
 }

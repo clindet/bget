@@ -7,8 +7,10 @@ import (
 	"time"
 
 	"github.com/Miachol/bget/spider"
-	butils "github.com/openbiox/butils"
+	cio "github.com/openbiox/butils/io"
 	"github.com/openbiox/butils/log"
+	cnet "github.com/openbiox/butils/net"
+	"github.com/openbiox/butils/slice"
 	"github.com/spf13/cobra"
 )
 
@@ -22,7 +24,7 @@ var doiCmd = &cobra.Command{
 }
 
 func downloadDoi() {
-	sem := make(chan bool, bgetClis.concurrency)
+	sem := make(chan bool, bgetClis.thread)
 	doi := []string{}
 	urls := []string{}
 	var destDirArray []string
@@ -31,7 +33,7 @@ func downloadDoi() {
 	} else if bgetClis.doi != "" {
 		doi = []string{bgetClis.doi}
 	} else if bgetClis.listFile != "" {
-		doi = butils.ReadLines(bgetClis.listFile)
+		doi = cio.ReadLines(bgetClis.listFile)
 	}
 	for _, v := range doi {
 		sem <- true
@@ -40,7 +42,7 @@ func downloadDoi() {
 				<-sem
 			}()
 			urlsTmp := doiSpiders(v)
-			urlsTmp = butils.RemoveRepeatEle(urlsTmp)
+			urlsTmp = slice.DropSliceDup(urlsTmp)
 			for range urlsTmp {
 				destDirArray = append(destDirArray, path.Join(bgetClis.downloadDir, v))
 			}
@@ -50,8 +52,8 @@ func downloadDoi() {
 	for i := 0; i < cap(sem); i++ {
 		sem <- true
 	}
-	HTTPGetURLs(urls, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID, bgetClis.mirror,
-		bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime, bgetClis.remoteName)
+	netOpt := setNetParams(&bgetClis)
+	cnet.HttpGetURLs(urls, destDirArray, netOpt)
 }
 
 func doiSpiders(doi string) (urls []string) {
@@ -84,7 +86,6 @@ func doiSpiders(doi string) (urls []string) {
 }
 
 func doiCmdRunOptions(cmd *cobra.Command) {
-	checkQuiet()
 	checkDownloadDir(bgetClis.doi != "")
 	items := []string{}
 	if len(cmd.Flags().Args()) >= 1 {

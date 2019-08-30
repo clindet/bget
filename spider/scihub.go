@@ -5,8 +5,9 @@ import (
 
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
-	butils "github.com/openbiox/butils"
+	stringo "github.com/openbiox/butils/stringo"
 	"github.com/openbiox/butils/log"
+	bspider "github.com/openbiox/butils/spider"
 )
 
 // ScihubSpider access http://sci-hub.tw/ files via spider
@@ -17,14 +18,14 @@ func ScihubSpider(doi, proxy string, timeout int) (urls []string) {
 		colly.AllowedDomains("doi.org", "sci-hub.tw"),
 		colly.MaxDepth(1),
 	)
-	setSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("#buttons a[onclick]", func(e *colly.HTMLElement) {
 		link := e.Attr("onclick")
-		link = butils.StrExtract(link, "//.*", 1)[0]
+		link = stringo.StrExtract(link, "//.*", 1)[0]
 		link = "http:" + link
-		link = butils.StrReplaceAll(link, "'$", "")
+		link = stringo.StrReplaceAll(link, "'$", "")
 		urls = append(urls, link)
 	})
 

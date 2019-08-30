@@ -4,8 +4,10 @@ import (
 	"path"
 	"strings"
 
-	butils "github.com/openbiox/butils"
+	"github.com/openbiox/butils/archive"
+	cio "github.com/openbiox/butils/io"
 	log "github.com/openbiox/butils/log"
+	cnet "github.com/openbiox/butils/net"
 	"github.com/spf13/cobra"
 )
 
@@ -25,7 +27,7 @@ func downloadUrls() {
 	} else if bgetClis.urls != "" {
 		urls = []string{bgetClis.urls}
 	} else if bgetClis.listFile != "" {
-		urls = butils.ReadLines(bgetClis.listFile)
+		urls = cio.ReadLines(bgetClis.listFile)
 	}
 	var destDirArray []string
 	for i := range urls {
@@ -36,18 +38,17 @@ func downloadUrls() {
 		destDirArray = append(destDirArray, bgetClis.downloadDir)
 	}
 
-	done := HTTPGetURLs(urls, destDirArray, bgetClis.engine, cmdExtraFromFlag, taskID,
-		bgetClis.mirror, bgetClis.concurrency, bgetClis.axelThread, overwrite, ignore, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime, bgetClis.remoteName)
+	netOpt := setNetParams(&bgetClis)
+	done := cnet.HttpGetURLs(urls, destDirArray, netOpt)
 	for _, dest := range done {
 		if bgetClis.uncompress {
-			if err := butils.UnarchiveLog(dest, path.Dir(dest)); err != nil {
+			if err := archive.UnarchiveLog(dest, path.Dir(dest)); err != nil {
 				log.Warn(err)
 			}
 		}
 	}
 }
 func urlCmdRunOptions(cmd *cobra.Command) {
-	checkQuiet()
 	items := []string{}
 	if len(cmd.Flags().Args()) >= 1 {
 		items = append(items, cmd.Flags().Args()...)

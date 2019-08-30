@@ -3,7 +3,9 @@ package cmd
 import (
 	"strings"
 
-	butils "github.com/openbiox/butils"
+	cio "github.com/openbiox/butils/io"
+	cnet "github.com/openbiox/butils/net"
+	"github.com/openbiox/butils/stringo"
 	"github.com/spf13/cobra"
 )
 
@@ -24,18 +26,18 @@ func parseSeq() (seqs map[string][]string) {
 	} else if bgetClis.seqs != "" {
 		seqsTmp = []string{bgetClis.seqs}
 	} else if bgetClis.listFile != "" {
-		seqsTmp = butils.ReadLines(bgetClis.listFile)
+		seqsTmp = cio.ReadLines(bgetClis.listFile)
 	}
 	for i := range seqsTmp {
-		if butils.StrDetect(strings.ToUpper(seqsTmp[i]), "^GSE|^GPL|^GDS") {
+		if stringo.StrDetect(strings.ToUpper(seqsTmp[i]), "^GSE|^GPL|^GDS") {
 			seqs["geo"] = append(seqs["geo"], seqsTmp[i])
-		} else if butils.StrDetect(strings.ToUpper(seqsTmp[i]), "^SRR|^ERR") {
+		} else if stringo.StrDetect(strings.ToUpper(seqsTmp[i]), "^SRR|^ERR") {
 			seqs["sra"] = append(seqs["sra"], seqsTmp[i])
-		} else if butils.StrDetect(strings.ToLower(seqsTmp[i]), ".krt$") {
+		} else if stringo.StrDetect(strings.ToLower(seqsTmp[i]), ".krt$") {
 			seqs["sraKrt"] = append(seqs["sraKrt"], seqsTmp[i])
-		} else if butils.StrDetect(strings.ToUpper(seqsTmp[i]), "^EGA") {
+		} else if stringo.StrDetect(strings.ToUpper(seqsTmp[i]), "^EGA") {
 			seqs["ega"] = append(seqs["ega"], seqsTmp[i])
-		} else if butils.StrDetect(strings.ToLower(seqsTmp[i]), ".txt$") {
+		} else if stringo.StrDetect(strings.ToLower(seqsTmp[i]), ".txt$") {
 			seqs["tcgaManifest"] = append(seqs["tcgaManifest"], seqsTmp[i])
 		} else {
 			seqs["tcgaFileID"] = append(seqs["tcgaFileID"], seqsTmp[i])
@@ -47,7 +49,8 @@ func parseSeq() (seqs map[string][]string) {
 func downloadSeq() {
 	seqs := parseSeq()
 	done := make(map[string][]string)
-	sem := make(chan bool, bgetClis.concurrency)
+	sem := make(chan bool, bgetClis.thread)
+	netOpt := setNetParams(&bgetClis)
 	for k, v := range seqs {
 		for i := range v {
 			sem <- true
@@ -57,13 +60,13 @@ func downloadSeq() {
 					<-sem
 				}()
 				if k == "sra" {
-					Prefetch(seqs[k][i], "", bgetClis.downloadDir, cmdExtraFromFlag, taskID, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime)
+					cnet.Prefetch(seqs[k][i], "", bgetClis.downloadDir, netOpt)
 				} else if k == "sraKrt" {
-					Prefetch("", seqs[k][i], bgetClis.downloadDir, cmdExtraFromFlag, taskID, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime)
+					cnet.Prefetch("", seqs[k][i], bgetClis.downloadDir, netOpt)
 				} else if k == "tcgaManifest" {
-					GdcClient("", seqs[k][i], bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag, taskID, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime)
+					cnet.GdcClient("", seqs[k][i], bgetClis.downloadDir, netOpt)
 				} else if k == "tcgaFileID" {
-					GdcClient(seqs[k][i], "", bgetClis.downloadDir, bgetClis.gdcToken, cmdExtraFromFlag, taskID, quiet, saveLog, bgetClis.retries, bgetClis.timeout, bgetClis.retSleepTime)
+					cnet.GdcClient(seqs[k][i], "", bgetClis.downloadDir, netOpt)
 				}
 			}(k, i)
 		}
@@ -71,7 +74,7 @@ func downloadSeq() {
 	for i := 0; i < cap(sem); i++ {
 		sem <- true
 	}
-	sem = make(chan bool, bgetClis.concurrency)
+	sem = make(chan bool, bgetClis.thread)
 	for k, v := range seqs {
 		for i := range v {
 			sem <- true
@@ -81,9 +84,7 @@ func downloadSeq() {
 					<-sem
 				}()
 				if k == "geo" {
-					Geofetch(seqs[k][i], bgetClis.downloadDir, bgetClis.engine, bgetClis.concurrency, bgetClis.axelThread, cmdExtraFromFlag,
-						taskID, overwrite, ignore, quiet, saveLog, bgetClis.retries,
-						bgetClis.timeout, bgetClis.retSleepTime, bgetClis.remoteName)
+					Geofetch(seqs[k][i], bgetClis.downloadDir, netOpt)
 				}
 			}(k, i)
 		}
@@ -94,7 +95,6 @@ func downloadSeq() {
 }
 
 func seqCmdRunOptions(cmd *cobra.Command) {
-	checkQuiet()
 	items := []string{}
 	if len(cmd.Flags().Args()) >= 1 {
 		items = append(items, cmd.Flags().Args()...)

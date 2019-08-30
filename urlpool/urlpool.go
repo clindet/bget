@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	butils "github.com/openbiox/butils"
+	"github.com/openbiox/butils/stringo"
 )
 
 type bgetToolsURLType struct {
@@ -122,14 +122,14 @@ func QueryBgetFiles(name string, version string, release string, site string) (u
 				version = genomeVersionConvertor(tmp, version)
 				tmp = strings.Replace(tmp, "{{version}}", version, 100)
 				tmp = strings.Replace(tmp, "{{site}}", site, 100)
-				if butils.StrDetect(tmp, "{{chrom}}") {
+				if stringo.StrDetect(tmp, "{{chrom}}") {
 					raw := tmp
 					for k := range chrom {
 						tmp = strings.Replace(raw, "{{chrom}}", chrom[k], 100)
 						urls = append(urls, tmp)
 					}
 				}
-				if !butils.StrDetect(tmp, "{{chrom}}") {
+				if !stringo.StrDetect(tmp, "{{chrom}}") {
 					urls = append(urls, tmp)
 				}
 			}
@@ -145,7 +145,7 @@ func QueryBgetFiles(name string, version string, release string, site string) (u
 }
 
 func genomeVersionConvertor(url string, version string) string {
-	if butils.StrDetect(url, "http://hgdownload.cse.ucsc.edu/goldenPath") {
+	if stringo.StrDetect(url, "http://hgdownload.cse.ucsc.edu/goldenPath") {
 		if strings.ToLower(version) == "grch38" {
 			version = "hg38"
 		} else if strings.ToLower(version) == "grch37" {

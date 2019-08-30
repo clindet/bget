@@ -9,8 +9,9 @@ import (
 
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
-	butils "github.com/openbiox/butils"
 	"github.com/openbiox/butils/log"
+	bspider "github.com/openbiox/butils/spider"
+	"github.com/openbiox/butils/stringo"
 )
 
 // NatureComSpider access Nature.com files via spider
@@ -21,7 +22,7 @@ func NatureComSpider(doi, proxy string, timeout int) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.nature.com", "idp.nature.com"),
 		colly.MaxDepth(1),
 	)
-	setSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	// On every a element which has href attribute call callback
@@ -32,7 +33,7 @@ func NatureComSpider(doi, proxy string, timeout int) (urls []string) {
 		} else {
 			u, _ := url.Parse(link)
 			linkTmp := strings.Split(u.Path, "/")
-			linkTmp[2] = butils.StrReplaceAll(linkTmp[2], "art:", "art%3A")
+			linkTmp[2] = stringo.StrReplaceAll(linkTmp[2], "art:", "art%3A")
 			newLink := append(linkTmp[0:2], strings.Join(linkTmp[2:4], "%2F"))
 			newLink = append(newLink, linkTmp[4:len(linkTmp)]...)
 			link = strings.Join(newLink, "/")
@@ -67,7 +68,7 @@ func ScienseComSpider(doi, proxy string, timeout int) (urls []string) {
 			"id.elsevier.com", "science.sciencemag.org", "www.sciencemag.org"),
 		colly.MaxDepth(2),
 	)
-	setSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
 
@@ -112,7 +113,7 @@ func CellComSpider(doi, proxy string, timeout int) []string {
 			"pdf.sciencedirectassets.com", "www.thelancet.com", "www.gastrojournal.org"),
 		colly.MaxDepth(1),
 	)
-	setSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
 
@@ -182,15 +183,15 @@ func CellComSpider(doi, proxy string, timeout int) []string {
 
 	c.OnHTML("meta[HTTP-EQUIV=REFRESH]", func(e *colly.HTMLElement) {
 		link := e.Attr("content")
-		link = butils.StrReplaceAll(link, ".* url='", "")
-		link = butils.StrReplaceAll(link, "'$", "")
+		link = stringo.StrReplaceAll(link, ".* url='", "")
+		link = stringo.StrReplaceAll(link, "'$", "")
 		link = "https://linkinghub.elsevier.com" + link
 		c.Visit(link)
 	})
 	// Before making a request print "Visiting ..."
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
-		if butils.StrDetect(r.URL.String(), "^https://www.sciencedirect.com") {
+		if stringo.StrDetect(r.URL.String(), "^https://www.sciencedirect.com") {
 			//urls = append(urls, chromedp.Chrome2URLs(r.URL.String())...)
 		}
 	})
@@ -208,7 +209,7 @@ func BloodJournalSpider(doi, proxy string, timeout int) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.bloodjournal.org", "signin.hematology.org"),
 		colly.MaxDepth(1),
 	)
-	setSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("a[data-panel-name=jnl_bloodjournal_tab_pdf]", func(e *colly.HTMLElement) {
@@ -244,7 +245,7 @@ func NejmSpider(doi, proxy string, timeout int) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.nejm.org"),
 		colly.MaxDepth(1),
 	)
-	setSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("a[data-tooltip='Download PDF']", func(e *colly.HTMLElement) {
@@ -278,14 +279,14 @@ func AhajournalsSpider(doi, proxy string, timeout int) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.ahajournals.org"),
 		colly.MaxDepth(1),
 	)
-	setSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML(".citation__access__actions a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		link = "https://www.ahajournals.org" + link
 		urls = append(urls, link)
-		c.Visit(butils.StrReplaceAll(link, "/doi/pdf/", "/doi/suppl/"))
+		c.Visit(stringo.StrReplaceAll(link, "/doi/pdf/", "/doi/suppl/"))
 	})
 	c.OnHTML(".supplemental-material__item a.green-text-color[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
@@ -310,14 +311,14 @@ func JamaNetworkSpider(doi, proxy string, timeout int) (urls []string) {
 		colly.AllowedDomains("doi.org", "jamanetwork.com"),
 		colly.MaxDepth(1),
 	)
-	setSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML(".citation__access__actions a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		link = "https://www.ahajournals.org" + link
 		urls = append(urls, link)
-		c.Visit(butils.StrReplaceAll(link, "/doi/pdf/", "/doi/suppl/"))
+		c.Visit(stringo.StrReplaceAll(link, "/doi/pdf/", "/doi/suppl/"))
 	})
 	c.OnHTML(".supplemental-material__item a.green-text-color[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
@@ -344,7 +345,7 @@ func AacrJournalsSpider(doi, proxy string, timeout int) (urls []string) {
 			"clincancerres.aacrjournals.org"),
 		colly.MaxDepth(1),
 	)
-	setSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
@@ -354,8 +355,8 @@ func AacrJournalsSpider(doi, proxy string, timeout int) (urls []string) {
 	})
 	c.OnResponse(func(r *colly.Response) {
 		host = r.Request.URL.Hostname()
-		cd1 := !butils.StrDetect(r.Request.URL.String(), ".figures-only$")
-		cd2 := !butils.StrDetect(r.Request.URL.String(), ".full-text.pdf$")
+		cd1 := !stringo.StrDetect(r.Request.URL.String(), ".figures-only$")
+		cd2 := !stringo.StrDetect(r.Request.URL.String(), ".full-text.pdf$")
 		if strings.Contains(r.Request.URL.String(), "aacrjournals.org") && cd1 && cd2 {
 			c.Visit(r.Request.URL.String() + ".figures-only")
 		}
@@ -383,7 +384,7 @@ func TandfonlineSpider(doi, proxy string, timeout int) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.tandfonline.com"),
 		colly.MaxDepth(1),
 	)
-	setSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("a.show-pdf[href]", func(e *colly.HTMLElement) {
@@ -392,7 +393,7 @@ func TandfonlineSpider(doi, proxy string, timeout int) (urls []string) {
 			link = host + link
 		}
 		urls = append(urls, link)
-		c.Visit(butils.StrReplaceAll(link, "/doi/pdf/", "/doi/suppl/"))
+		c.Visit(stringo.StrReplaceAll(link, "/doi/pdf/", "/doi/suppl/"))
 	})
 	c.OnHTML("a[title='Download all']", func(e *colly.HTMLElement) {
 		link := e.Attr("href")

@@ -8,8 +8,9 @@ import (
 
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
-	butils "github.com/openbiox/butils"
 	"github.com/openbiox/butils/log"
+	bspider "github.com/openbiox/butils/spider"
+	"github.com/openbiox/butils/stringo"
 )
 
 // GeoSpider access https://www.ncbi.nlm.nih.gov/geo files via spider
@@ -20,7 +21,7 @@ func GeoSpider(query, proxy string, timeout int) (gseURLs []string, gplURLs []st
 		colly.AllowedDomains("www.ncbi.nlm.nih.gov"),
 		colly.MaxDepth(1),
 	)
-	setSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, proxy, timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("table td a[href]", func(e *colly.HTMLElement) {
@@ -35,8 +36,8 @@ func GeoSpider(query, proxy string, timeout int) (gseURLs []string, gplURLs []st
 	c.OnHTML("input[name=fulltable]", func(e *colly.HTMLElement) {
 		link := e.Attr("onclick")
 		if strings.Contains(link, "OpenLink") {
-			link = "https://www.ncbi.nlm.nih.gov" + butils.StrReplaceAll(link, "(OpenLink[(])|(')", "")
-			link = butils.StrReplaceAll(link, ",.*", "")
+			link = "https://www.ncbi.nlm.nih.gov" + stringo.StrReplaceAll(link, "(OpenLink[(])|(')", "")
+			link = stringo.StrReplaceAll(link, ",.*", "")
 			gplURLs = append(gplURLs, link)
 		}
 	})

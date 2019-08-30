@@ -6,74 +6,53 @@ import (
 	"path"
 	"runtime"
 	"strings"
+	"time"
 
-	butils "github.com/openbiox/butils"
 	"github.com/openbiox/butils/log"
+	cnet "github.com/openbiox/butils/net"
+	"github.com/openbiox/butils/stringo"
 	"github.com/spf13/cobra"
+	"github.com/vbauerster/mpb/v4"
 )
 
-var taskID string
-var overwrite bool
 var osType string
-var cmdExtraFromFlag string
-var quiet bool
-var saveLog bool
 var wd, _ = os.Getwd()
-var logDir string
 var version = "v0.1.0-4"
-var ignore bool
 
 type bgetCliT struct {
-	downloadDir    string
-	mirror         string
-	autoPath       bool
-	engine         string
-	doi            string
-	urls           string
-	listFile       string
-	separator      string
-	keys           string
-	seqs           string
-	gdcToken       string
-	uncompress     bool
-	keysAll        bool
-	clean          bool
-	getKeyVersions string
-	axelThread     int
-	concurrency    int
-	timeout        int
-	retSleepTime   int
-	retries        int
-	proxy          string
-	remoteName     bool
-	helpFlags      bool
+	downloadDir      string
+	mirror           string
+	autoPath         bool
+	engine           string
+	doi              string
+	urls             string
+	listFile         string
+	separator        string
+	keys             string
+	seqs             string
+	gdcToken         string
+	uncompress       bool
+	keysAll          bool
+	clean            bool
+	getKeyVersions   string
+	axelThread       int
+	thread           int
+	timeout          int
+	retSleepTime     int
+	retries          int
+	proxy            string
+	cmdExtraFromFlag string
+	remoteName       bool
+	ignore           bool
+	taskID           string
+	overwrite        bool
+	saveLog          bool
+	logDir           string
+	quiet            bool
+	helpFlags        bool
 }
 
-var bgetClis = bgetCliT{
-	"",
-	"",
-	false,
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	false,
-	false,
-	false,
-	"",
-	1,
-	1,
-	30,
-	5,
-	5,
-	"",
-	false,
-	true,
-}
+var bgetClis bgetCliT
 
 var rootCmd = &cobra.Command{
 	Use:   "bget",
@@ -109,6 +88,7 @@ func checkArgs(cmd *cobra.Command) {
 }
 
 func rootCmdRunOptions(cmd *cobra.Command) {
+	checkQuiet()
 	if bgetClis.clean {
 		if err := os.RemoveAll("_download"); err != nil {
 			log.Warn(err)
@@ -123,8 +103,35 @@ func rootCmdRunOptions(cmd *cobra.Command) {
 	}
 }
 
+func setNetParams(bgetClis *bgetCliT) (netOpt *cnet.BnetParams) {
+	pbar := mpb.New(
+		mpb.WithWidth(45),
+		mpb.WithRefreshRate(180*time.Millisecond),
+	)
+	return &cnet.BnetParams{
+		Proxy:        bgetClis.proxy,
+		Engine:       bgetClis.engine,
+		ExtraArgs:    bgetClis.cmdExtraFromFlag,
+		TaskID:       bgetClis.taskID,
+		Mirror:       bgetClis.mirror,
+		Thread:       bgetClis.thread,
+		AxelThread:   bgetClis.axelThread,
+		Overwrite:    bgetClis.overwrite,
+		Ignore:       bgetClis.ignore,
+		Quiet:        bgetClis.quiet,
+		Retries:      bgetClis.retries,
+		SaveLog:      bgetClis.saveLog,
+		Timeout:      bgetClis.timeout,
+		RetSleepTime: bgetClis.retSleepTime,
+		RemoteName:   bgetClis.remoteName,
+		LogDir:       bgetClis.logDir,
+		Pbar:         pbar,
+	}
+}
+
 func init() {
 	osType = runtime.GOOS
+	bgetClis.helpFlags = true
 	wd, _ := os.Getwd()
 	rootCmd.AddCommand(urlCmd)
 	rootCmd.AddCommand(doiCmd)
@@ -133,16 +140,16 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.proxy), "proxy", "", "", "HTTP proxy to download.")
 	rootCmd.Flags().BoolVarP(&(bgetClis.clean), "clean", "", false, "Remove _download and _log in current dir.")
-	rootCmd.PersistentFlags().IntVarP(&(bgetClis.concurrency), "thread", "t", 1, "Concurrency download thread.")
+	rootCmd.PersistentFlags().IntVarP(&(bgetClis.thread), "thread", "t", 1, "Concurrency download thread.")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.downloadDir), "outdir", "o", path.Join(wd, "_download"), "Set the download dir for get-urls.")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.separator), "separator", "s", ",", "Separator for --reffa,-k, and -u flag.")
-	rootCmd.PersistentFlags().BoolVar(&ignore, "ignore", false, "Contine to download and skip the check of existed files.")
-	rootCmd.PersistentFlags().StringVarP(&cmdExtraFromFlag, "extra-cmd", "e", "", "Extra flags and values pass to internal CMDs")
-	rootCmd.PersistentFlags().BoolVarP(&overwrite, "overwrite", "f", false, "Logical indicating that whether to overwrite existing files.")
-	rootCmd.PersistentFlags().StringVarP(&taskID, "task-id", "", butils.GetRandomString(15), "Task ID (random).")
-	rootCmd.PersistentFlags().StringVarP(&logDir, "log-dir", "", path.Join(wd, "_download", "_log"), "Log dir.")
-	rootCmd.PersistentFlags().BoolVarP(&quiet, "quiet", "q", false, "No output.")
-	rootCmd.PersistentFlags().BoolVarP(&saveLog, "save-log", "", true, "Save download log to local file].")
+	rootCmd.PersistentFlags().BoolVar(&(bgetClis.ignore), "ignore", false, "Contine to download and skip the check of existed files.")
+	rootCmd.PersistentFlags().StringVarP(&(bgetClis.cmdExtraFromFlag), "extra-cmd", "e", "", "Extra flags and values pass to internal CMDs")
+	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.overwrite), "overwrite", "f", false, "Logical indicating that whether to overwrite existing files.")
+	rootCmd.PersistentFlags().StringVarP(&(bgetClis.taskID), "task-id", "", stringo.GetRandomString(15), "Task ID (random).")
+	rootCmd.PersistentFlags().StringVarP(&(bgetClis.logDir), "log-dir", "", path.Join(wd, "_download", "_log"), "Log dir.")
+	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.quiet), "quiet", "q", false, "No output.")
+	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.saveLog), "save-log", "", true, "Save download log to local file].")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.retries, "retries", "r", 5, "Retry specifies the number of attempts to retrieve the data.")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.timeout, "timeout", "", 35, "Set the timeout of per request.")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.retSleepTime, "retries-sleep-time", "", 5, "Sleep time after one retry.")
