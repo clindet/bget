@@ -14,14 +14,14 @@ import (
 )
 
 // GeoSpider access https://www.ncbi.nlm.nih.gov/geo files via spider
-func GeoSpider(query, proxy string, timeout int) (gseURLs []string, gplURLs []string, sraLink string) {
+func GeoSpider(opt *QuerySpiderOpt) (gseURLs []string, gplURLs []string, sraLink string) {
 	// Instantiate default collector
 	c := colly.NewCollector(
 		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
 		colly.AllowedDomains("www.ncbi.nlm.nih.gov"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, proxy, timeout)
+	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("table td a[href]", func(e *colly.HTMLElement) {
@@ -63,6 +63,6 @@ func GeoSpider(query, proxy string, timeout int) (gseURLs []string, gplURLs []st
 	})
 
 	// Start scraping on https://hackerspaces.org
-	c.Visit(fmt.Sprintf("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s", query))
+	c.Visit(fmt.Sprintf("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s", opt.Query))
 	return gseURLs, gplURLs, sraLink
 }

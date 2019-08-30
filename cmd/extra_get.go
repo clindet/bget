@@ -17,7 +17,12 @@ func Geofetch(geo string, outDir string, opt *cnet.BnetParams) (err error) {
 	if geo == "" {
 		return errors.New("at least one of geo is required")
 	}
-	gseURLs, gplURLs, sraLink := spider.GeoSpider(geo, bgetClis.proxy, opt.Timeout)
+	var spiderOpt = spider.QuerySpiderOpt{
+		Query:   geo,
+		Proxy:   bgetClis.proxy,
+		Timeout: opt.Timeout,
+	}
+	gseURLs, gplURLs, sraLink := spider.GeoSpider(&spiderOpt)
 	u, _ := neturl.Parse(sraLink)
 	uQ := u.Query()
 	accAll := fmt.Sprintf(`https://www.ncbi.nlm.nih.gov/Traces/study/backends/solr_proxy/solr_proxy.cgi?core=run_sel_index&action=acc_all&fl=acc_s&rs=(primary_search_ids:"%s")`, uQ["acc"][0])

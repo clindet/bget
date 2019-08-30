@@ -5,8 +5,23 @@ type doiSpiderType struct {
 	spider map[string]interface{}
 }
 
+type DoiSpiderOpt struct {
+	Doi           string
+	Proxy         string
+	Timeout       int
+	FullText      bool
+	Supplementary bool
+	Citations     bool
+}
+
+type QuerySpiderOpt struct {
+	Query   string
+	Proxy   string
+	Timeout int
+}
+
 // DoiSpidersPool map doi to golang function
-var DoiSpidersPool = map[string]func(doi, proxy string, timeout int) []string{
+var DoiSpidersPool = map[string]func(opt *DoiSpiderOpt) []string{
 	"10.1001":  JamaNetworkSpider,
 	"10.1002":  WileyComSpider,
 	"10.1016":  CellComSpider,

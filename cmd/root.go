@@ -17,7 +17,7 @@ import (
 
 var osType string
 var wd, _ = os.Getwd()
-var version = "v0.1.0-4"
+var version = "v0.1.1"
 
 type bgetCliT struct {
 	downloadDir      string
