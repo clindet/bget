@@ -21,7 +21,7 @@ import (
 var keyVs map[string][]string
 
 var keyCmd = &cobra.Command{
-	Use:   "url-key [key1 key2 key3...]",
+	Use:   "key [key1 key2 key3...]",
 	Short: "Can be used to access URLs via a key string.",
 	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version %site #releaseVersion', : bwa, GRCh38 %defuse #97. More see here https://github.com/Miachol/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -161,6 +161,6 @@ func init() {
 	keyCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains keys for download.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.uncompress), "uncompress", "u", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files.")
-	keyCmd.Example = `  bget url-key bwa
-  bget url-key "reffa@GRCh38 %defuse #97" -t 10 -f`
+	keyCmd.Example = `  bget key bwa
+  bget key "reffa@GRCh38 %defuse #97" -t 10 -f`
 }
