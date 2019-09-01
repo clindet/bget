@@ -1,6 +1,6 @@
 package urlpool
 
-var githubReposPool = []bgetFilesURLType{
+var githubRepos = []bgetFilesURLType{
 	{
 		Name:         "github_demo",
 		Site:         "github",

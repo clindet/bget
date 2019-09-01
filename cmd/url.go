@@ -49,13 +49,8 @@ func downloadUrls() {
 	}
 }
 func urlCmdRunOptions(cmd *cobra.Command) {
-	items := []string{}
-	if len(cmd.Flags().Args()) >= 1 {
-		items = append(items, cmd.Flags().Args()...)
-		bgetClis.urls = strings.Join(items, bgetClis.separator)
-	}
+	checkArgs(cmd, "url")
 	checkDownloadDir(bgetClis.urls != "" || bgetClis.listFile != "")
-
 	if bgetClis.urls != "" || bgetClis.listFile != "" {
 		downloadUrls()
 		bgetClis.helpFlags = false

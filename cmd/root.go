@@ -15,9 +15,7 @@ import (
 	"github.com/vbauerster/mpb/v4"
 )
 
-var osType string
-var wd, _ = os.Getwd()
-var version = "v0.1.1"
+var version = "v0.1.2"
 
 type bgetCliT struct {
 	downloadDir      string
@@ -34,7 +32,7 @@ type bgetCliT struct {
 	uncompress       bool
 	keysAll          bool
 	clean            bool
-	getKeyVersions   string
+	printFormat      string
 	axelThread       int
 	thread           int
 	timeout          int
@@ -49,6 +47,7 @@ type bgetCliT struct {
 	saveLog          bool
 	logDir           string
 	quiet            bool
+	env              map[string]string
 	helpFlags        bool
 }
 
@@ -75,20 +74,35 @@ func Execute() {
 	}
 }
 
-func checkArgs(cmd *cobra.Command) {
+func checkArgs(cmd *cobra.Command, subcmd string) {
 	items := []string{}
-	if len(cmd.Flags().Args()) >= 1 && bgetClis.urls == "" && bgetClis.doi == "" {
-		if bgetClis.keys != "" {
-			items = []string{bgetClis.keys}
+	for _, v := range cmd.Flags().Args() {
+		if strings.Contains(v, "=") {
+			kvs := strings.Split(v, "=")
+			bgetClis.env[kvs[0]] = kvs[1]
+		} else {
+			items = append(items, v)
 		}
-		items = []string{bgetClis.keys}
-		items = append(items, cmd.Flags().Args()...)
+	}
+	if len(items) == 0 {
+		return
+	}
+	if subcmd == "url" {
+		bgetClis.urls = strings.Join(items, bgetClis.separator)
+	} else if subcmd == "key" {
 		bgetClis.keys = strings.Join(items, bgetClis.separator)
+	} else if subcmd == "doi" {
+		bgetClis.doi = strings.Join(items, bgetClis.separator)
+
+	} else if subcmd == "seq" {
+		bgetClis.seqs = strings.Join(items, bgetClis.separator)
 	}
 }
 
 func rootCmdRunOptions(cmd *cobra.Command) {
 	checkQuiet()
+	bgetClis.env["osType"] = runtime.GOOS
+	bgetClis.env["wd"], _ = os.Getwd()
 	if bgetClis.clean {
 		if err := os.RemoveAll("_download"); err != nil {
 			log.Warn(err)
@@ -130,7 +144,6 @@ func setNetParams(bgetClis *bgetCliT) (netOpt *cnet.BnetParams) {
 }
 
 func init() {
-	osType = runtime.GOOS
 	bgetClis.helpFlags = true
 	wd, _ := os.Getwd()
 	rootCmd.AddCommand(urlCmd)
@@ -153,7 +166,7 @@ func init() {
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.retries, "retries", "r", 5, "Retry specifies the number of attempts to retrieve the data.")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.timeout, "timeout", "", 35, "Set the timeout of per request.")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.retSleepTime, "retries-sleep-time", "", 5, "Sleep time after one retry.")
-	rootCmd.PersistentFlags().BoolVarP(&bgetClis.remoteName, "remote-name", "n", false, "Use remote defined filename.")
-
+	rootCmd.PersistentFlags().BoolVarP(&bgetClis.remoteName, "remote-name", "n", true, "Use remote defined filename.")
+	bgetClis.env = make(map[string]string)
 	rootCmd.Version = version
 }

@@ -1,6 +1,7 @@
 package urlpool
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -10,7 +11,7 @@ import (
 type bgetToolsURLType struct {
 	Name         string
 	Site         string
-	Version      string
+	Versions     []string
 	URL          map[string]string
 	PostShellCmd []string
 }
@@ -19,6 +20,7 @@ type bgetFilesURLType struct {
 	Name         string
 	Site         string
 	URL          []string
+	Versions     []string
 	PostShellCmd []string
 }
 
@@ -84,48 +86,69 @@ var BgetFilesPool = []bgetFilesURLType{
 	},
 }
 
-func QueryBgetTools(name string, version string, release string, osType string) (urls []string, postShellCmd []string) {
-	tmp := ""
+func QueryBgetTools(name string, env *map[string]string) (urls, postShellCmd, versions []string) {
 	for i := range BgetToolsPool {
 		if BgetToolsPool[i].Name == name {
-			if osType == "linux" {
-				tmp = strings.Replace(BgetToolsPool[i].URL["Linux"], "{{version}}", version, 100)
-				tmp = strings.Replace(tmp, "{{release}}", release, 100)
-			} else if osType == "windows" {
-				tmp = strings.Replace(BgetToolsPool[i].URL["Win"], "{{version}}", version, 100)
-				tmp = strings.Replace(tmp, "{{release}}", release, 100)
-			} else {
-				tmp = strings.Replace(BgetToolsPool[i].URL["Mac"], "{{version}}", version, 100)
-				tmp = strings.Replace(tmp, "{{release}}", release, 100)
+			tmp := ""
+			for k, v := range *env {
+				kstr := fmt.Sprintf("{{%s}}", k)
+				if tmp == "" && (*env)["osType"] == "linux" {
+					tmp = strings.Replace(BgetToolsPool[i].URL["Linux"], kstr, v, 10000)
+				} else if tmp == "" && (*env)["osType"] == "windows" {
+					tmp = strings.Replace(BgetToolsPool[i].URL["Win"], kstr, v, 10000)
+				} else if tmp == "" && (*env)["osType"] == "mac" {
+					tmp = strings.Replace(BgetToolsPool[i].URL["Mac"], kstr, v, 10000)
+				} else if tmp != "" {
+					tmp = strings.Replace(tmp, kstr, v, 10000)
+				}
 			}
 			urls = append(urls, tmp)
+			tmp = ""
 			for j := range BgetToolsPool[i].PostShellCmd {
-				tmp = strings.Replace(BgetToolsPool[i].PostShellCmd[j], "{{version}}", version, 100)
-				tmp = strings.Replace(tmp, "{{release}}", release, 100)
+				for k, v := range *env {
+					kstr := fmt.Sprintf("{{%s}}", k)
+					if tmp == "" {
+						tmp = strings.Replace(BgetToolsPool[i].PostShellCmd[j], kstr, v, 10000)
+					} else {
+						tmp = strings.Replace(tmp, kstr, v, 10000)
+					}
+				}
 				postShellCmd = append(postShellCmd, tmp)
 			}
+			versions = BgetToolsPool[i].Versions
 		}
 	}
-	return urls, postShellCmd
+	return urls, postShellCmd, versions
 }
 
-func QueryBgetFiles(name string, version string, release string, site string) (urls []string, postShellCmd []string) {
+func QueryBgetFiles(name string, env *map[string]string) (urls []string, postShellCmd []string, versions []string) {
 	chrom := []string{}
 	for i := 1; i < 23; i++ {
 		chrom = append(chrom, strconv.Itoa(i))
 	}
 	chrom = append(chrom, "X", "Y", "MT")
 	for i := range BgetFilesPool {
-		if BgetFilesPool[i].Name == name && (site == "" || BgetFilesPool[i].Site == site) {
+		if BgetFilesPool[i].Name == name && ((*env)["site"] == "" ||
+			BgetFilesPool[i].Site == (*env)["site"]) {
 			for j := range BgetFilesPool[i].URL {
-				tmp := strings.Replace(BgetFilesPool[i].URL[j], "{{release}}", release, 100)
-				version = genomeVersionConvertor(tmp, version)
-				tmp = strings.Replace(tmp, "{{version}}", version, 100)
-				tmp = strings.Replace(tmp, "{{site}}", site, 100)
+				tmp := ""
+				for k, v := range *env {
+					if k == "version" {
+						(*env)[k] = genomeVersionConvertor(tmp, (*env)[k])
+					}
+					kstr := fmt.Sprintf("{{%s}}", k)
+					if tmp == "" {
+						tmp = strings.Replace(BgetFilesPool[i].URL[j],
+							kstr, v, 10000)
+					} else {
+						tmp = strings.Replace(tmp,
+							kstr, v, 10000)
+					}
+				}
 				if stringo.StrDetect(tmp, "{{chrom}}") {
 					raw := tmp
 					for k := range chrom {
-						tmp = strings.Replace(raw, "{{chrom}}", chrom[k], 100)
+						tmp = strings.Replace(raw, "{{chrom}}", chrom[k], 10000)
 						urls = append(urls, tmp)
 					}
 				}
@@ -134,14 +157,23 @@ func QueryBgetFiles(name string, version string, release string, site string) (u
 				}
 			}
 			for j := range BgetFilesPool[i].PostShellCmd {
-				tmp := strings.Replace(BgetFilesPool[i].PostShellCmd[j], "{{version}}", version, 100)
-				tmp = strings.Replace(tmp, "{{release}}", release, 100)
-				tmp = strings.Replace(tmp, "{{site}}", site, 100)
+				tmp := ""
+				for k, v := range *env {
+					kstr := fmt.Sprintf("{{%s}}", k)
+					if tmp == "" {
+						tmp = strings.Replace(BgetFilesPool[i].PostShellCmd[j],
+							kstr, v, 10000)
+					} else {
+						tmp = strings.Replace(tmp,
+							kstr, v, 10000)
+					}
+				}
 				postShellCmd = append(postShellCmd, tmp)
 			}
+			versions = BgetFilesPool[i].Versions
 		}
 	}
-	return urls, postShellCmd
+	return urls, postShellCmd, versions
 }
 
 func genomeVersionConvertor(url string, version string) string {
@@ -160,5 +192,7 @@ func genomeVersionConvertor(url string, version string) string {
 }
 
 func init() {
-	BgetFilesPool = append(BgetFilesPool, githubReposPool...)
+	BgetFilesPool = append(BgetFilesPool, githubRepos...)
+	BgetFilesPool = append(BgetFilesPool, journalsMeta...)
+	BgetFilesPool = append(BgetFilesPool, annovarLinks...)
 }

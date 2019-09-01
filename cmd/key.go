@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 	"os/exec"
 	"path"
@@ -42,13 +43,14 @@ func parseKeys() (keys []string) {
 
 func downloadKey() {
 	keys := parseKeys()
-	urls, postShellCmd := vers.QueryKeysInfo(keys, osType)
+	urls, postShellCmd, _ := vers.QueryKeysInfo(keys, &bgetClis.env)
 	done := make(map[string][]string)
 	var destDirArray []string
 	netOpt := setNetParams(&bgetClis)
 	sem := make(chan bool, bgetClis.thread)
 	for key, v := range urls {
 		for i := range v {
+			v[i] = preURLFilter(v[i])
 			u, _ := url.Parse(v[i])
 			v[i] = strings.TrimSpace(u.String())
 			if bgetClis.autoPath {
@@ -98,6 +100,14 @@ func downloadKey() {
 	}
 }
 
+func preURLFilter(url string) string {
+	if strings.Contains(url, "doaj.org") {
+		req, _ := http.Head(url)
+		return req.Request.URL.String()
+	}
+	return url
+}
+
 func postCmdRender(oldCmd string, dest string) (newCmd string) {
 	if hasDest, _ := cio.PathExists(dest); !hasDest {
 		return ""
@@ -125,16 +135,12 @@ func getAllKeys() (keys []string) {
 }
 
 func keyCmdRunOptions(cmd *cobra.Command) {
-	checkQuiet()
-	items := []string{}
-	if len(cmd.Flags().Args()) >= 1 {
-		items = append(items, cmd.Flags().Args()...)
-		bgetClis.keys = strings.Join(items, bgetClis.separator)
-	}
-	if bgetClis.getKeyVersions != "" {
+	checkArgs(cmd, "key")
+	if bgetClis.printFormat != "" {
 		log.Infoln("Featching versions from local and remote website...")
 		keys := parseKeys()
-		keyVs = vers.QueryKeysVersions(keys, osType, bgetClis.getKeyVersions)
+		bgetClis.env["printFormat"] = bgetClis.printFormat
+		keyVs = vers.QueryKeysVersions(keys, &bgetClis.env)
 		return
 	}
 	if bgetClis.keysAll {
@@ -157,10 +163,15 @@ func init() {
 	keyCmd.Flags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")
 	keyCmd.Flags().IntVarP(&(bgetClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")
 	keyCmd.Flags().StringVarP(&(bgetClis.mirror), "mirror", "m", "", "Set the mirror of resources.")
-	keyCmd.Flags().StringVarP(&(bgetClis.getKeyVersions), "show-versions", "v", "", "Show all available versions of key. Optional (txt, json, table)")
+	keyCmd.Flags().StringVarP(&(bgetClis.printFormat), "show-versions", "v", "", "Show all available versions of key. Optional (txt, json, table)")
 	keyCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains keys for download.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.uncompress), "uncompress", "u", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files.")
 	keyCmd.Example = `  bget key bwa
-  bget key "reffa@GRCh38 %defuse #97" -t 10 -f`
+  bget key -a // get all available keys
+  bget key samtools -v table // view all samtools available versions in CMD table
+  bget key samtools -v json // view all samtools available versions in JSON format
+  bget key "reffa@GRCh38 %defuse #97" -t 10 -f
+  bget key reffa@GRCh38 site=defuse release=97 -t 10 -f
+  bget key db_annovar@clinvar_20170501 db_annovar@clinvar_20180603 builder=hg38`
 }

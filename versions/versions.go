@@ -18,24 +18,25 @@ import (
 )
 
 // DefaultVersions set default key string versions
-func DefaultVersions(key string, version string, release string, site string, osType string) (string, string, string) {
-	if version == "" && strings.Contains(key, "miniconda") {
-		version = "latest"
+func DefaultVersions(key string, env *map[string]string) {
+	if (*env)["version"] == "" && strings.Contains(key, "miniconda") {
+		(*env)["version"] = "latest"
 	}
-	if key == "reffa" && site == "" {
-		site = "genecode"
+	if key == "reffa" && (*env)["site"] == "" {
+		(*env)["site"] = "genecode"
 	}
-	if key == "reffa" && version == "" && (site == "genecode" || site == "ensemble" || site == "defuse") {
-		version = "GRCh38"
-	} else if key == "reffa" && version == "" {
-		version = "hg38"
+	if key == "reffa" && (*env)["version"] == "" &&
+		((*env)["site"] == "genecode" || (*env)["site"] == "ensemble" ||
+			(*env)["site"] == "defuse") {
+		(*env)["version"] = "GRCh38"
+	} else if key == "reffa" && (*env)["version"] == "" {
+		(*env)["version"] = "hg38"
 	}
-	if key == "reffa" && site == "genecode" && release == "" {
-		release = "31"
-	} else if key == "reffa" && site == "ensemble" && release == "" {
-		release = "97"
+	if key == "reffa" && (*env)["site"] == "genecode" && (*env)["release"] == "" {
+		(*env)["release"] = "31"
+	} else if key == "reffa" && (*env)["site"] == "ensemble" && (*env)["release"] == "" {
+		(*env)["release"] = "97"
 	}
-	return version, site, release
 }
 
 // GitHubVersionSpider get all tags and branch
@@ -89,85 +90,93 @@ func KeyFixedVersions(key string) []string {
 }
 
 // QueryKeysInfo get keys URL and post shell command
-func QueryKeysInfo(keys []string, osType string) (urls map[string][]string, postShellCmd map[string][]string) {
-	version := ""
-	site := ""
-	release := ""
-	key := ""
+func QueryKeysInfo(keys []string, env *map[string]string) (urls, postShellCmd, vers map[string][]string) {
 	urls = make(map[string][]string)
 	postShellCmd = make(map[string][]string)
+	vers = make(map[string][]string)
 	for k := range keys {
-		key, version, site, release = ParseMeta(keys[k])
-		version, site, release = DefaultVersions(key, version, release, site, osType)
-		if tmp, tmp2 := urlpool.QueryBgetTools(key, version, release, osType); len(tmp) > 0 {
-			if version == "" {
-				versions := GitHubVersionSpider(tmp[0])
-				if len(versions) > 1 {
-					version = versions[0]
-				}
-				tmp, tmp2 = urlpool.QueryBgetTools(key, version, release, osType)
-			}
-			urls[key] = append(urls[key], tmp...)
-			postShellCmd[key] = append(postShellCmd[key], tmp2...)
+		key, version, site, release := ParseMeta(keys[k])
+		if (*env)["version"] == "" {
+			(*env)["version"] = version
 		}
-
-		if tmp, tmp2 := urlpool.QueryBgetFiles(key, version, release, site); len(tmp) > 0 {
-			if version == "" {
+		if (*env)["site"] == "" {
+			(*env)["site"] = site
+		}
+		if (*env)["release"] == "" {
+			(*env)["release"] = release
+		}
+		DefaultVersions(key, env)
+		tmp, tmp2, tmp3 := urlpool.QueryBgetTools(key, env)
+		if len(tmp) > 0 {
+			if (*env)["version"] == "" {
 				versions := GitHubVersionSpider(tmp[0])
 				if len(versions) > 1 {
-					version = versions[0]
+					(*env)["version"] = versions[0]
 				}
-				tmp, tmp2 = urlpool.QueryBgetFiles(key, version, release, site)
 			}
 			urls[key] = append(urls[key], tmp...)
 			postShellCmd[key] = append(postShellCmd[key], tmp2...)
+			vers[key] = append(vers[key], tmp3...)
+		}
+		tmp, tmp2, tmp3 = urlpool.QueryBgetFiles(key, env)
+		if len(tmp) > 0 {
+			if (*env)["version"] == "" {
+				versions := GitHubVersionSpider(tmp[0])
+				if len(versions) > 1 {
+					(*env)["version"] = versions[0]
+				}
+			}
+			urls[key] = append(urls[key], tmp...)
+			postShellCmd[key] = append(postShellCmd[key], tmp2...)
+			vers[key] = append(vers[key], tmp3...)
 		}
 	}
-	return urls, postShellCmd
+	return urls, postShellCmd, vers
 }
 
 // QueryKeysVersions get keys versions
-func QueryKeysVersions(keys []string, osType string, printFormat string) map[string][]string {
+func QueryKeysVersions(keys []string, env *map[string]string) map[string][]string {
 	versions := make(map[string][]string)
-	wg := sync.WaitGroup{}
 	table := tablewriter.NewWriter(os.Stdout)
-	if printFormat == "table" {
+	if (*env)["printFormat"] == "table" {
 		table.SetHeader([]string{"Key", "Versions"})
 		table.SetRowLine(true)
 		table.SetRowSeparator("-")
 		table.SetAlignment(tablewriter.ALIGN_LEFT)
 	}
-
+	wg := sync.WaitGroup{}
 	for i := range keys {
-		urls, _ := QueryKeysInfo([]string{keys[i]}, osType)
-		for _, url := range urls {
-			for j := range url {
-				key, _, _, _ := ParseMeta(keys[i])
-				wg.Add(1)
-				go func(i int, j int, key string) {
-					if tmp := GitHubVersionSpider(url[j]); len(tmp) > 0 {
-						versions[key] = tmp
-					} else if tmp := KeyFixedVersions(key); len(tmp) > 0 {
-						versions[key] = tmp
-					}
-					wg.Done()
-				}(i, j, key)
-			}
+		wg.Add(1)
+		urls, _, vers := QueryKeysInfo([]string{keys[i]}, env)
+		key, _, _, _ := ParseMeta(keys[i])
+		if len(vers[key]) > 0 {
+			versions[key] = vers[key]
+			wg.Done()
+		} else {
+			url := urls[key][0]
+			go func(url string) {
+				if tmp := GitHubVersionSpider(url); len(tmp) > 0 {
+					versions[key] = tmp
+				} else if tmp := KeyFixedVersions(key); len(tmp) > 0 {
+					versions[key] = tmp
+				}
+				wg.Done()
+			}(url)
 		}
 	}
 	wg.Wait()
 	for k := range versions {
 		if len(versions[k]) > 0 {
-			if printFormat == "table" {
+			if (*env)["printFormat"] == "table" {
 				table.Append([]string{k, strings.Join(versions[k], ", ")})
-			} else if printFormat == "txt" {
+			} else if (*env)["printFormat"] == "txt" {
 				fmt.Println(fmt.Sprintf("key> %s\nversions> %s\n-----------", k, strings.Join(versions[k], ", ")))
 			}
 		}
 	}
-	if printFormat == "table" {
+	if (*env)["printFormat"] == "table" {
 		table.Render()
-	} else if printFormat == "json" {
+	} else if (*env)["printFormat"] == "json" {
 		mapVersions, _ := json.Marshal(versions)
 		fmt.Println(string(mapVersions))
 	}

@@ -4,7 +4,6 @@ type doiSpiderType struct {
 	doiOrg string
 	spider map[string]interface{}
 }
-
 type DoiSpiderOpt struct {
 	Doi           string
 	Proxy         string
@@ -13,7 +12,6 @@ type DoiSpiderOpt struct {
 	Supplementary bool
 	Citations     bool
 }
-
 type QuerySpiderOpt struct {
 	Query   string
 	Proxy   string
@@ -41,13 +39,17 @@ var DoiSpidersPool = map[string]func(opt *DoiSpiderOpt) []string{
 	"10.1186":  BiomedcentralSpider,
 	"10.1200":  AscopubsSpider,
 	"10.1371":  PlosSpider,
+	"10.2147":  DovepressSpider,
 	"10.3322":  WileyComSpider,
 	"10.3324":  HaematologicaSpider,
 	"10.3389":  FrontiersinSpider,
+	"10.4322":  AutopsyandcasereportsSpider,
 	"10.5281":  ZenodoSpider,
+	"10.5578":  KosuyoluheartjournalSpider,
 	"10.5665":  OupComSpider,
 	"10.7554":  ElifeSpider,
 	"10.7717":  PeerjSpider,
+	"10.12890": EjcrimSpider,
 	"10.15252": EmbopressSpider,
 	"10.18637": JstatsoftSpider,
 }

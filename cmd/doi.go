@@ -105,12 +105,8 @@ func doiSpiders(doi string) (urls []string) {
 }
 
 func doiCmdRunOptions(cmd *cobra.Command) {
+	checkArgs(cmd, "doi")
 	checkDownloadDir(bgetClis.doi != "")
-	items := []string{}
-	if len(cmd.Flags().Args()) >= 1 {
-		items = append(items, cmd.Flags().Args()...)
-		bgetClis.doi = strings.Join(items, bgetClis.separator)
-	}
 	if bgetClis.doi != "" || bgetClis.listFile != "" {
 		downloadDoi()
 		bgetClis.helpFlags = false
@@ -121,7 +117,7 @@ func doiCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
-	doiCmd.Flags().BoolVarP(&pmc, "pmc", "", true, "If returns empty, try PMC database.")
+	doiCmd.Flags().BoolVarP(&pmc, "pmc", "", false, "Try PMC database.")
 	doiCmd.Flags().BoolVarP(&fullText, "full-text", "", true, "Access full text.")
 	doiCmd.Flags().BoolVarP(&suppl, "suppl", "", false, "Access supplementary files.")
 	doiCmd.Flags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")

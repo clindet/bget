@@ -95,12 +95,7 @@ func downloadSeq() {
 }
 
 func seqCmdRunOptions(cmd *cobra.Command) {
-	items := []string{}
-	if len(cmd.Flags().Args()) >= 1 {
-		items = append(items, cmd.Flags().Args()...)
-		bgetClis.seqs = strings.Join(items, bgetClis.separator)
-	}
-
+	checkArgs(cmd, "seq")
 	checkDownloadDir(bgetClis.seqs != "")
 	if bgetClis.seqs != "" || bgetClis.listFile != "" {
 		downloadSeq()
