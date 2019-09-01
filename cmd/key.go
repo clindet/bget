@@ -136,6 +136,13 @@ func getAllKeys() (keys []string) {
 
 func keyCmdRunOptions(cmd *cobra.Command) {
 	checkArgs(cmd, "key")
+	if bgetClis.showVersions && bgetClis.outxt {
+		bgetClis.printFormat = "txt"
+	} else if bgetClis.showVersions && bgetClis.outjson {
+		bgetClis.printFormat = "json"
+	} else if bgetClis.showVersions {
+		bgetClis.printFormat = "table"
+	}
 	if bgetClis.printFormat != "" {
 		log.Infoln("Featching versions from local and remote website...")
 		keys := parseKeys()
@@ -163,7 +170,9 @@ func init() {
 	keyCmd.Flags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")
 	keyCmd.Flags().IntVarP(&(bgetClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")
 	keyCmd.Flags().StringVarP(&(bgetClis.mirror), "mirror", "m", "", "Set the mirror of resources.")
-	keyCmd.Flags().StringVarP(&(bgetClis.printFormat), "show-versions", "v", "", "Show all available versions of key. Optional (txt, json, table)")
+	keyCmd.Flags().BoolVarP(&(bgetClis.showVersions), "show-versions", "v", false, "Show all available versions of key.")
+	keyCmd.Flags().BoolVarP(&(bgetClis.outjson), "out-json", "", false, "Output information in JSON string")
+	keyCmd.Flags().BoolVarP(&(bgetClis.outxt), "out-text", "", false, "Output information in plain text")
 	keyCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains keys for download.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.uncompress), "uncompress", "u", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files.")
@@ -173,5 +182,8 @@ func init() {
   bget key samtools -v json // view all samtools available versions in JSON format
   bget key "reffa@GRCh38 %defuse #97" -t 10 -f
   bget key reffa@GRCh38 site=defuse release=97 -t 10 -f
-  bget key db_annovar@clinvar_20170501 db_annovar@clinvar_20180603 builder=hg38`
+  bget key db_annovar@clinvar_20170501 db_annovar@clinvar_20180603 builder=hg38
+
+  bget key db_annovar -v txt
+  bget key db_annovar version='clinvar_20131105, clinvar_20140211, clinvar_20140303, clinvar_20140702, clinvar_20140902, clinvar_20140929, clinvar_20150330, clinvar_20150629, clinvar_20151201, clinvar_20160302, clinvar_20161128, clinvar_20170130, clinvar_20170501, clinvar_20170905, clinvar_20180603, avsnp150, avsnp147, avsnp144, avsnp142, avsnp138, cadd, caddgt10, caddgt20, cadd13, cadd13gt10, cadd13gt20, cg69, cg46, cosmic70, cosmic68wgs, cosmic68, cosmic67wgs, cosmic67, cosmic65, cosmic64, dbnsfp35a, dbnsfp33a, dbnsfp31a_interpro, dbnsfp30a, dbscsnv11, eigen, esp6500siv2_ea, esp6500siv2_aa, esp6500siv2_all, exac03nontcga, exac03nonpsych, exac03, fathmm, gerp++gt2, gme, gnomad_exome, gnomad_genome, gwava, hrcr1, icgc21, intervar_20170202, kaviar_20150923, ljb26_all, mcap, mitimpact2, mitimpact24, nci60, popfreq_max_20150413, popfreq_all_20150413, revel, regsnpintron' builder=hg19 -t 10 -f`
 }

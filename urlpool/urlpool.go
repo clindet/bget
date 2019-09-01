@@ -5,14 +5,22 @@ import (
 	"strconv"
 	"strings"
 
+	"context"
+	neturl "net/url"
+
 	"github.com/openbiox/butils/stringo"
+
+	"github.com/google/go-github/v27/github"
+	log "github.com/openbiox/butils/log"
+	"golang.org/x/oauth2"
 )
 
 type bgetToolsURLType struct {
 	Name         string
 	Site         string
 	Versions     []string
-	URL          map[string]string
+	VersionsAPI  string
+	URL          map[string][]string
 	PostShellCmd []string
 }
 
@@ -26,22 +34,22 @@ type bgetFilesURLType struct {
 
 // BgetToolsPool an object bioinformatics tools URL
 var BgetToolsPool = []bgetToolsURLType{
-	{Name: "miniconda2", URL: map[string]string{
-		"Linux": "https://repo.anaconda.com/miniconda/Miniconda2-{{version}}-Linux-x86_64.sh",
-		"Mac":   "https://repo.anaconda.com/miniconda/Miniconda2-{{version}}-MacOSX-x86_64.sh",
-		"Win":   "https://repo.anaconda.com/miniconda/Miniconda2-{version}}-Windows-x86_64.exe"},
+	{Name: "miniconda2", URL: map[string][]string{
+		"Linux": []string{"https://repo.anaconda.com/miniconda/Miniconda2-{{version}}-Linux-x86_64.sh"},
+		"Mac":   []string{"https://repo.anaconda.com/miniconda/Miniconda2-{{version}}-MacOSX-x86_64.sh"},
+		"Win":   []string{"https://repo.anaconda.com/miniconda/Miniconda2-{version}}-Windows-x86_64.exe"}},
 		PostShellCmd: []string{"cd {{pdir}} && sh {{dest}} -b -p {{downloadDir}}/miniconda2"}},
-	{Name: "miniconda3", URL: map[string]string{
-		"Linux": "https://repo.anaconda.com/miniconda/Miniconda3-{{version}}-Linux-x86_64.sh",
-		"Mac":   "https://repo.anaconda.com/miniconda/Miniconda3-{{version}}-MacOSX-x86_64.sh",
-		"Win":   "https://repo.anaconda.com/miniconda/Miniconda3-{version}}-Windows-x86_64.exe"},
+	{Name: "miniconda3", URL: map[string][]string{
+		"Linux": []string{"https://repo.anaconda.com/miniconda/Miniconda3-{{version}}-Linux-x86_64.sh"},
+		"Mac":   []string{"https://repo.anaconda.com/miniconda/Miniconda3-{{version}}-MacOSX-x86_64.sh"},
+		"Win":   []string{"https://repo.anaconda.com/miniconda/Miniconda3-{version}}-Windows-x86_64.exe"}},
 		PostShellCmd: []string{"cd {{pdir}} && sh {{dest}} -b -p {{downloadDir}}/miniconda3"}},
 	{Name: "gdc-client",
 		Site: "github",
-		URL: map[string]string{
-			"Linux": "https://github.com/NCI-GDC/gdc-client/releases/download/{{version}}/gdc-client_v{{version}}_Ubuntu_x64.zip",
-			"Mac":   "https://github.com/NCI-GDC/gdc-client/releases/download/{{version}}/gdc-client_v{{version}}_OSX_x64_10.12.6.zip",
-			"Win":   "https://github.com/NCI-GDC/gdc-client/releases/download/{{version}}/gdc-client_v{{version}}_Windows_x64.zip",
+		URL: map[string][]string{
+			"Linux": []string{"https://github.com/NCI-GDC/gdc-client/releases/download/{{version}}/gdc-client_v{{version}}_Ubuntu_x64.zip"},
+			"Mac":   []string{"https://github.com/NCI-GDC/gdc-client/releases/download/{{version}}/gdc-client_v{{version}}_OSX_x64_10.12.6.zip,https://github.com/NCI-GDC/gdc-client/releases/download/v{{version}}/gdc-client_v{{version}}_OSX_x64.zip"},
+			"Win":   []string{"https://github.com/NCI-GDC/gdc-client/releases/download/{{version}}/gdc-client_v{{version}}_Windows_x64.zip"},
 		}},
 }
 
@@ -86,24 +94,30 @@ var BgetFilesPool = []bgetFilesURLType{
 	},
 }
 
+func setOsStr(env *map[string]string) (ostype string) {
+	if (*env)["osType"] == "linux" {
+		ostype = "Linux"
+	} else if (*env)["osType"] == "windows" {
+		ostype = "windows"
+	} else {
+		ostype = "Mac"
+	}
+	return ostype
+}
 func QueryBgetTools(name string, env *map[string]string) (urls, postShellCmd, versions []string) {
+	ostype := setOsStr(env)
 	for i := range BgetToolsPool {
 		if BgetToolsPool[i].Name == name {
-			tmp := ""
+			tmpUrls := []string{}
 			for k, v := range *env {
 				kstr := fmt.Sprintf("{{%s}}", k)
-				if tmp == "" && (*env)["osType"] == "linux" {
-					tmp = strings.Replace(BgetToolsPool[i].URL["Linux"], kstr, v, 10000)
-				} else if tmp == "" && (*env)["osType"] == "windows" {
-					tmp = strings.Replace(BgetToolsPool[i].URL["Win"], kstr, v, 10000)
-				} else if tmp == "" && (*env)["osType"] == "mac" {
-					tmp = strings.Replace(BgetToolsPool[i].URL["Mac"], kstr, v, 10000)
-				} else if tmp != "" {
-					tmp = strings.Replace(tmp, kstr, v, 10000)
+				for j, _ := range BgetToolsPool[i].URL[ostype] {
+					BgetToolsPool[i].URL[ostype][j] = strings.Replace(BgetToolsPool[i].URL[ostype][j], kstr, v, 10000)
 				}
+				tmpUrls = BgetToolsPool[i].URL[ostype]
 			}
-			urls = append(urls, tmp)
-			tmp = ""
+			urls = append(urls, tmpUrls...)
+			tmp := ""
 			for j := range BgetToolsPool[i].PostShellCmd {
 				for k, v := range *env {
 					kstr := fmt.Sprintf("{{%s}}", k)
@@ -115,53 +129,81 @@ func QueryBgetTools(name string, env *map[string]string) (urls, postShellCmd, ve
 				}
 				postShellCmd = append(postShellCmd, tmp)
 			}
-			versions = BgetToolsPool[i].Versions
+			if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "github.com") {
+				versions = GitHubVersionSpider(BgetToolsPool[i].VersionsAPI)
+			} else {
+				versions = BgetToolsPool[i].Versions
+			}
 		}
 	}
 	return urls, postShellCmd, versions
 }
 
-func QueryBgetFiles(name string, env *map[string]string) (urls []string, postShellCmd []string, versions []string) {
+func formatURL(tmp string, key string, rep string, url string) string {
+	kstr := fmt.Sprintf("{{%s}}", key)
+	if tmp == "" {
+		tmp = strings.Replace(url,
+			kstr, rep, 10000)
+	} else {
+		tmp = strings.Replace(tmp,
+			kstr, rep, 10000)
+	}
+	return tmp
+}
+
+func formatURLSlice(tmpSlice []string, env *map[string]string) (urls []string) {
 	chrom := []string{}
 	for i := 1; i < 23; i++ {
 		chrom = append(chrom, strconv.Itoa(i))
 	}
 	chrom = append(chrom, "X", "Y", "MT")
-	for i := range BgetFilesPool {
-		if BgetFilesPool[i].Name == name && ((*env)["site"] == "" ||
-			BgetFilesPool[i].Site == (*env)["site"]) {
-			for j := range BgetFilesPool[i].URL {
-				tmp := ""
-				for k, v := range *env {
-					if k == "version" {
-						(*env)[k] = genomeVersionConvertor(tmp, (*env)[k])
-					}
-					kstr := fmt.Sprintf("{{%s}}", k)
-					if tmp == "" {
-						tmp = strings.Replace(BgetFilesPool[i].URL[j],
-							kstr, v, 10000)
-					} else {
-						tmp = strings.Replace(tmp,
-							kstr, v, 10000)
-					}
-				}
-				if stringo.StrDetect(tmp, "{{chrom}}") {
-					raw := tmp
-					for k := range chrom {
-						tmp = strings.Replace(raw, "{{chrom}}", chrom[k], 10000)
-						urls = append(urls, tmp)
-					}
-				}
-				if !stringo.StrDetect(tmp, "{{chrom}}") {
-					urls = append(urls, tmp)
-				}
+	for _, v := range tmpSlice {
+		if stringo.StrDetect(v, "{{chrom}}") {
+			raw := v
+			for k := range chrom {
+				v = strings.Replace(raw, "{{chrom}}", chrom[k], 10000)
+				urls = append(urls, v)
 			}
-			for j := range BgetFilesPool[i].PostShellCmd {
+		}
+		if !stringo.StrDetect(v, "{{chrom}}") {
+			urls = append(urls, v)
+		}
+	}
+	return urls
+}
+
+func QueryBgetFiles(name string, env *map[string]string) (urls []string, postShellCmd []string, versions []string) {
+	for f := range BgetFilesPool {
+		if BgetFilesPool[f].Name == name && ((*env)["site"] == "" ||
+			BgetFilesPool[f].Site == (*env)["site"]) {
+			for _, url := range BgetFilesPool[f].URL {
+				tmp := ""
+				tmpSlice := []string{}
+				for k, v := range *env {
+					if strings.Contains(v, ",") {
+						v = stringo.StrReplaceAll(v, " ", "")
+						vSlice := strings.Split(v, ",")
+						for _, v2 := range vSlice {
+							tmpSlice = append(tmpSlice, formatURL(tmp, k, v2, url))
+						}
+					} else {
+						tmp = formatURL(tmp, k, v, url)
+					}
+					for k2, _ := range tmpSlice {
+						tmpSlice[k2] = formatURL(tmpSlice[k2], k, v, url)
+					}
+				}
+				if len(tmpSlice) == 0 {
+					tmpSlice = append(tmpSlice, tmp)
+				}
+				urls = append(urls, formatURLSlice(tmpSlice, env)...)
+			}
+			for j := range BgetFilesPool[f].PostShellCmd {
 				tmp := ""
 				for k, v := range *env {
 					kstr := fmt.Sprintf("{{%s}}", k)
 					if tmp == "" {
-						tmp = strings.Replace(BgetFilesPool[i].PostShellCmd[j],
+						tmp = strings.Replace(BgetFilesPool[f].PostShellCmd[j],
 							kstr, v, 10000)
 					} else {
 						tmp = strings.Replace(tmp,
@@ -170,7 +212,7 @@ func QueryBgetFiles(name string, env *map[string]string) (urls []string, postShe
 				}
 				postShellCmd = append(postShellCmd, tmp)
 			}
-			versions = BgetFilesPool[i].Versions
+			versions = BgetFilesPool[f].Versions
 		}
 	}
 	return urls, postShellCmd, versions
@@ -191,7 +233,45 @@ func genomeVersionConvertor(url string, version string) string {
 	return version
 }
 
+// GitHubVersionSpider get all tags and branch
+func GitHubVersionSpider(url string) (versions []string) {
+	accessToken := "4d00c84fa5da085df3f1bb6a6a7f6dd0972e869f"
+	u, err := neturl.Parse(url)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if u.Host != "github.com" {
+		return
+	}
+	pathStr := strings.Split(u.Path, "/")
+	user, repo := pathStr[1], pathStr[2]
+	ctx := context.Background()
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: accessToken},
+	)
+	tc := oauth2.NewClient(ctx, ts)
+	client := github.NewClient(tc)
+	opt := &github.ListOptions{}
+	//version, _, _ := client.Repositories.ListTags(ctx, user, repo, opt)
+	vers, _, err := client.Repositories.ListTags(ctx, user, repo, opt)
+	if err != nil {
+		log.Fatal(err)
+	}
+	brchs, _, err := client.Repositories.ListBranches(ctx, user, repo, opt)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for i := range vers {
+		versions = append(versions, vers[i].GetName())
+	}
+	for i := range brchs {
+		versions = append(versions, brchs[i].GetName())
+	}
+	return versions
+}
+
 func init() {
+	BgetToolsPool = append(BgetToolsPool, toolsLinks...)
 	BgetFilesPool = append(BgetFilesPool, githubRepos...)
 	BgetFilesPool = append(BgetFilesPool, journalsMeta...)
 	BgetFilesPool = append(BgetFilesPool, annovarLinks...)

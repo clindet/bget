@@ -48,6 +48,9 @@ type bgetCliT struct {
 	logDir           string
 	quiet            bool
 	env              map[string]string
+	showVersions     bool
+	outjson          bool
+	outxt            bool
 	helpFlags        bool
 }
 
@@ -79,7 +82,7 @@ func checkArgs(cmd *cobra.Command, subcmd string) {
 	for _, v := range cmd.Flags().Args() {
 		if strings.Contains(v, "=") {
 			kvs := strings.Split(v, "=")
-			bgetClis.env[kvs[0]] = kvs[1]
+			bgetClis.env[kvs[0]] = strings.TrimSpace(kvs[1])
 		} else {
 			items = append(items, v)
 		}
@@ -101,8 +104,6 @@ func checkArgs(cmd *cobra.Command, subcmd string) {
 
 func rootCmdRunOptions(cmd *cobra.Command) {
 	checkQuiet()
-	bgetClis.env["osType"] = runtime.GOOS
-	bgetClis.env["wd"], _ = os.Getwd()
 	if bgetClis.clean {
 		if err := os.RemoveAll("_download"); err != nil {
 			log.Warn(err)
@@ -166,7 +167,9 @@ func init() {
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.retries, "retries", "r", 5, "Retry specifies the number of attempts to retrieve the data.")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.timeout, "timeout", "", 35, "Set the timeout of per request.")
 	rootCmd.PersistentFlags().IntVarP(&bgetClis.retSleepTime, "retries-sleep-time", "", 5, "Sleep time after one retry.")
-	rootCmd.PersistentFlags().BoolVarP(&bgetClis.remoteName, "remote-name", "n", true, "Use remote defined filename.")
+	rootCmd.PersistentFlags().BoolVarP(&bgetClis.remoteName, "remote-name", "n", false, "Use remote defined filename.")
 	bgetClis.env = make(map[string]string)
+	bgetClis.env["osType"] = runtime.GOOS
+	bgetClis.env["wd"], _ = os.Getwd()
 	rootCmd.Version = version
 }

@@ -1,20 +1,15 @@
 package versions
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
-	neturl "net/url"
 	"os"
 	"strings"
 	"sync"
 
 	"github.com/Miachol/bget/urlpool"
-	"github.com/google/go-github/v27/github"
 	"github.com/olekukonko/tablewriter"
-	log "github.com/openbiox/butils/log"
 	"github.com/openbiox/butils/stringo"
-	"golang.org/x/oauth2"
 )
 
 // DefaultVersions set default key string versions
@@ -37,43 +32,6 @@ func DefaultVersions(key string, env *map[string]string) {
 	} else if key == "reffa" && (*env)["site"] == "ensemble" && (*env)["release"] == "" {
 		(*env)["release"] = "97"
 	}
-}
-
-// GitHubVersionSpider get all tags and branch
-func GitHubVersionSpider(url string) (versions []string) {
-	accessToken := "4d00c84fa5da085df3f1bb6a6a7f6dd0972e869f"
-	u, err := neturl.Parse(url)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if u.Host != "github.com" {
-		return
-	}
-	pathStr := strings.Split(u.Path, "/")
-	user, repo := pathStr[1], pathStr[2]
-	ctx := context.Background()
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: accessToken},
-	)
-	tc := oauth2.NewClient(ctx, ts)
-	client := github.NewClient(tc)
-	opt := &github.ListOptions{}
-	//version, _, _ := client.Repositories.ListTags(ctx, user, repo, opt)
-	vers, _, err := client.Repositories.ListReleases(ctx, user, repo, opt)
-	if err != nil {
-		log.Fatal(err)
-	}
-	brchs, _, err := client.Repositories.ListBranches(ctx, user, repo, opt)
-	if err != nil {
-		log.Fatal(err)
-	}
-	for i := range vers {
-		versions = append(versions, vers[i].GetTagName())
-	}
-	for i := range brchs {
-		versions = append(versions, brchs[i].GetName())
-	}
-	return versions
 }
 
 // KeyFixedVersions for fixed versions of key
@@ -109,7 +67,7 @@ func QueryKeysInfo(keys []string, env *map[string]string) (urls, postShellCmd, v
 		tmp, tmp2, tmp3 := urlpool.QueryBgetTools(key, env)
 		if len(tmp) > 0 {
 			if (*env)["version"] == "" {
-				versions := GitHubVersionSpider(tmp[0])
+				versions := urlpool.GitHubVersionSpider(tmp[0])
 				if len(versions) > 1 {
 					(*env)["version"] = versions[0]
 				}
@@ -121,7 +79,7 @@ func QueryKeysInfo(keys []string, env *map[string]string) (urls, postShellCmd, v
 		tmp, tmp2, tmp3 = urlpool.QueryBgetFiles(key, env)
 		if len(tmp) > 0 {
 			if (*env)["version"] == "" {
-				versions := GitHubVersionSpider(tmp[0])
+				versions := urlpool.GitHubVersionSpider(tmp[0])
 				if len(versions) > 1 {
 					(*env)["version"] = versions[0]
 				}
@@ -153,9 +111,13 @@ func QueryKeysVersions(keys []string, env *map[string]string) map[string][]strin
 			versions[key] = vers[key]
 			wg.Done()
 		} else {
+			if urls[key] == nil {
+				wg.Done()
+				continue
+			}
 			url := urls[key][0]
 			go func(url string) {
-				if tmp := GitHubVersionSpider(url); len(tmp) > 0 {
+				if tmp := urlpool.GitHubVersionSpider(url); len(tmp) > 0 {
 					versions[key] = tmp
 				} else if tmp := KeyFixedVersions(key); len(tmp) > 0 {
 					versions[key] = tmp
