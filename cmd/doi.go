@@ -17,6 +17,7 @@ import (
 
 var fullText bool
 var suppl bool
+var pmc bool
 
 var doiCmd = &cobra.Command{
 	Use:   "doi [doi1 doi2 doi3...]",
@@ -69,32 +70,36 @@ func doiSpiders(doi string) (urls []string) {
 	}
 	doiTmp := strings.Split(doi, "/")
 	doiOrg := doiTmp[0]
-	runFlag := false
 	var t int
+	opt := spider.DoiSpiderOpt{
+		Doi:           doi,
+		Proxy:         bgetClis.proxy,
+		Timeout:       bgetClis.timeout,
+		FullText:      fullText,
+		Supplementary: suppl,
+	}
+	if pmc {
+		urls = spider.PmcSpider(&opt)
+		if len(urls) > 0 && !suppl {
+			return urls
+		}
+	}
+	if len(urls) > 0 {
+		opt.FullText = false
+	}
 	for k := range spider.DoiSpidersPool {
 		if k == doiOrg {
 			for t = 0; t < bgetClis.retries; t++ {
-				opt := spider.DoiSpiderOpt{
-					Doi:           doi,
-					Proxy:         bgetClis.proxy,
-					Timeout:       bgetClis.timeout,
-					FullText:      fullText,
-					Supplementary: suppl,
-				}
-				urls = spider.DoiSpidersPool[doiOrg](&opt)
+				urls = append(urls, spider.DoiSpidersPool[doiOrg](&opt)...)
 				if len(urls) == 0 {
 					log.Warnf("%s returns empty, on attempt %d... retrying after %d seconds.", doi, t+1, bgetClis.retSleepTime)
 					time.Sleep(time.Duration(bgetClis.retSleepTime) * time.Second)
 					continue
 				} else {
-					runFlag = true
 					break
 				}
 			}
 		}
-	}
-	if !runFlag || len(urls) == 0 {
-		//urls = spider.ScihubSpider(doi)
 	}
 	return urls
 }
@@ -116,6 +121,7 @@ func doiCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
+	doiCmd.Flags().BoolVarP(&pmc, "pmc", "", true, "If returns empty, try PMC database.")
 	doiCmd.Flags().BoolVarP(&fullText, "full-text", "", true, "Access full text.")
 	doiCmd.Flags().BoolVarP(&suppl, "suppl", "", false, "Access supplementary files.")
 	doiCmd.Flags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")

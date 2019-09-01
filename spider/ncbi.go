@@ -6,6 +6,7 @@ import (
 
 	//"github.com/Miachol/bget/chromedp"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
 	"github.com/openbiox/butils/log"
@@ -65,4 +66,37 @@ func GeoSpider(opt *QuerySpiderOpt) (gseURLs []string, gplURLs []string, sraLink
 	// Start scraping on https://hackerspaces.org
 	c.Visit(fmt.Sprintf("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s", opt.Query))
 	return gseURLs, gplURLs, sraLink
+}
+
+func PmcSpider(opt *DoiSpiderOpt) (urls []string) {
+	// Instantiate default collector
+	c := colly.NewCollector(
+		// Visit only domains: hackerspaces.org, wiki.hackerspaces.org
+		colly.AllowedDomains("www.ncbi.nlm.nih.gov"),
+		colly.MaxDepth(1),
+	)
+	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+
+	if opt.FullText {
+		// On every a element which has href attribute call callback
+		c.OnHTML(fmt.Sprintf(".doi b:contains('%s')", opt.Doi), func(e *colly.HTMLElement) {
+			e.DOM.Parents().Filter(".rslt").Find(".aux .links a.view").Each(func(i int, s *goquery.Selection) {
+				link, _ := s.Attr("href")
+				if strings.Contains(link, "pdf") {
+					link = "https://www.ncbi.nlm.nih.gov" + link
+					urls = append(urls, link)
+				}
+			})
+		})
+	}
+
+	// Before making a request print "Visiting ..."
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+
+	// Start scraping on https://hackerspaces.org
+	c.Visit(fmt.Sprintf("https://www.ncbi.nlm.nih.gov/pmc/?term=%s", opt.Doi))
+	return urls
 }
