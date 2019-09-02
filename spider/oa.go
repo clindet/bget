@@ -40,38 +40,30 @@ func ZenodoSpider(opt *DoiSpiderOpt) (urls []string) {
 
 // CshlpSpider access CshlpSpider files via spider
 func CshlpSpider(opt *DoiSpiderOpt) (urls []string) {
-	host := ""
-	if strings.Contains(opt.Doi, "10.1101/gad") {
-		host = "http://genesdev.cshlp.org"
-	} else if strings.Contains(opt.Doi, "10.1101/gr") {
-		host = "https://genome.cshlp.org"
-	} else {
-		host = "https://biorxiv.org"
-	}
 	c := colly.NewCollector(
 		colly.AllowedDomains("doi.org", "biorxiv.org", "www.biorxiv.org",
 			"genome.cshlp.org", "genesdev.cshlp.org"),
 		colly.MaxDepth(1),
 	)
+	c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.FullText {
-		c.OnHTML("a[rel=view-full-text]", func(e *colly.HTMLElement) {
-			link := e.Attr("href")
-			link = host + link + ".pdf"
-			urls = append(urls, link)
+		c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+			link := e.Attr("content")
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML(".pane-highwire-variant-link a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			u, _ := url.Parse(link)
-			link = host + u.Host + u.Path
+			link = linkFilter(u.Host+u.Path, opt.URL)
 			urls = append(urls, link)
 		})
 		c.OnHTML(".pane-biorxiv-supplementary-fragment a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			c.Visit(host + link)
+			c.Visit(opt.URL.Host + link)
 		})
 		c.OnHTML(".supplementary-material-expansion a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -80,12 +72,12 @@ func CshlpSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 		c.OnHTML("div.auto-clean a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = host + link
+			link = linkFilter(link, opt.URL)
 			urls = append(urls, link)
 		})
 		c.OnHTML("a[rel=supplemental-data]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			c.Visit(host + link)
+			c.Visit(linkFilter(link, opt.URL))
 		})
 	}
 	c.OnRequest(func(r *colly.Request) {

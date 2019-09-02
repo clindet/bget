@@ -182,29 +182,29 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 // BloodJournalSpider access http://www.bloodjournal.org files via spider
 func BloodJournalSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := colly.NewCollector(
-		colly.AllowedDomains("doi.org", "www.bloodjournal.org", "signin.hematology.org"),
+		colly.AllowedDomains("doi.org", "signin.hematology.org", "www.bloodjournal.org"),
 		colly.MaxDepth(1),
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
-	extensions.RandomUserAgent(c)
+	c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
 	if opt.FullText {
-		c.OnHTML("a[data-panel-name=jnl_bloodjournal_tab_pdf]", func(e *colly.HTMLElement) {
-			link := e.Attr("href")
-			link = "http://www.bloodjournal.org" + link
-			urls = append(urls, link)
+		c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+			link := e.Attr("content")
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
-		c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
-			link := e.Attr("href")
-			link = "http://www.bloodjournal.org" + link
-			urls = append(urls, link)
-		})
 		c.OnHTML("a.[data-panel-name=jnl_bloodjournal_tab_data]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			c.Visit(link)
 		})
+		c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			link = linkFilter(link, opt.URL)
+			urls = append(urls, link)
+		})
 	}
+
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})

@@ -1,5 +1,7 @@
 package spider
 
+import neturl "net/url"
+
 type doiSpiderType struct {
 	doiOrg string
 	spider map[string]interface{}
@@ -11,6 +13,7 @@ type DoiSpiderOpt struct {
 	FullText      bool
 	Supplementary bool
 	Citations     bool
+	URL           *neturl.URL
 }
 type QuerySpiderOpt struct {
 	Query   string

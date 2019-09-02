@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"net/http"
+	neturl "net/url"
 	"path"
 	"strings"
 	"time"
@@ -18,6 +20,7 @@ import (
 var fullText bool
 var suppl bool
 var pmc bool
+var universeSpider bool
 
 var doiCmd = &cobra.Command{
 	Use:   "doi [doi1 doi2 doi3...]",
@@ -87,6 +90,16 @@ func doiSpiders(doi string) (urls []string) {
 	if len(urls) > 0 {
 		opt.FullText = false
 	}
+	client := cnet.NewHTTPClient(opt.Timeout, opt.Proxy)
+	req, _ := http.NewRequest("GET", "https://doi.org/"+opt.Doi, nil)
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Warn(err)
+		return
+	}
+	defer resp.Body.Close()
+	u, _ := neturl.Parse(resp.Request.URL.String())
+	opt.URL = u
 	for k := range spider.DoiSpidersPool {
 		if k == doiOrg {
 			for t = 0; t < bgetClis.retries; t++ {
@@ -100,6 +113,9 @@ func doiSpiders(doi string) (urls []string) {
 				}
 			}
 		}
+	}
+	if len(urls) == 0 && universeSpider {
+		urls = append(urls, spider.UniVersalDoiSpider(&opt)...)
 	}
 	return urls
 }
@@ -117,6 +133,7 @@ func doiCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
+	doiCmd.Flags().BoolVarP(&universeSpider, "universe", "", true, "Try universe spider.")
 	doiCmd.Flags().BoolVarP(&pmc, "pmc", "", false, "Try PMC database.")
 	doiCmd.Flags().BoolVarP(&fullText, "full-text", "", true, "Access full text.")
 	doiCmd.Flags().BoolVarP(&suppl, "suppl", "", false, "Access supplementary files.")
