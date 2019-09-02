@@ -3,6 +3,7 @@ package cmd
 import (
 	"strings"
 
+	"github.com/Miachol/bget/spider"
 	cio "github.com/openbiox/butils/io"
 	cnet "github.com/openbiox/butils/net"
 	"github.com/openbiox/butils/stringo"
@@ -35,8 +36,10 @@ func parseSeq() (seqs map[string][]string) {
 			seqs["sra"] = append(seqs["sra"], seqsTmp[i])
 		} else if stringo.StrDetect(strings.ToLower(seqsTmp[i]), ".krt$") {
 			seqs["sraKrt"] = append(seqs["sraKrt"], seqsTmp[i])
-		} else if stringo.StrDetect(strings.ToUpper(seqsTmp[i]), "^EGA") {
-			seqs["ega"] = append(seqs["ega"], seqsTmp[i])
+		} else if stringo.StrDetect(strings.ToUpper(seqsTmp[i]), "^EGAD") {
+			seqs["egad"] = append(seqs["egad"], seqsTmp[i])
+		} else if stringo.StrDetect(strings.ToUpper(seqsTmp[i]), "^EGAF") {
+			seqs["egaf"] = append(seqs["egaf"], seqsTmp[i])
 		} else if stringo.StrDetect(strings.ToLower(seqsTmp[i]), ".txt$") {
 			seqs["tcgaManifest"] = append(seqs["tcgaManifest"], seqsTmp[i])
 		} else {
@@ -67,6 +70,10 @@ func downloadSeq() {
 					cnet.GdcClient("", seqs[k][i], bgetClis.downloadDir, netOpt)
 				} else if k == "tcgaFileID" {
 					cnet.GdcClient(seqs[k][i], "", bgetClis.downloadDir, netOpt)
+				} else if k == "egad" {
+					cnet.Egafetch(seqs[k][i], "", bgetClis.downloadDir, netOpt)
+				} else if k == "egaf" {
+					cnet.Egafetch("", seqs[k][i], bgetClis.downloadDir, netOpt)
 				}
 			}(k, i)
 		}
@@ -84,7 +91,7 @@ func downloadSeq() {
 					<-sem
 				}()
 				if k == "geo" {
-					Geofetch(seqs[k][i], bgetClis.downloadDir, netOpt)
+					spider.Geofetch(seqs[k][i], bgetClis.downloadDir, bgetClis.uncompress, netOpt)
 				}
 			}(k, i)
 		}
@@ -109,12 +116,17 @@ func seqCmdRunOptions(cmd *cobra.Command) {
 func init() {
 	seqCmd.Flags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, and axel.")
 	seqCmd.Flags().BoolVarP(&(bgetClis.uncompress), "uncompress", "u", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files (now support GEO database).")
-	seqCmd.Flags().StringVarP(&(bgetClis.gdcToken), "gdc-token", "", "", "Token to access TCGA portal files.")
+	seqCmd.Flags().StringVarP(&(bgetClis.gdcToken), "token-gdc", "", "", "Token to access TCGA portal files.")
+	seqCmd.Flags().StringVarP(&(bgetClis.egaCredFile), "token-file-ega", "", "", `Credential file to access EGA archive files, {"username": "{your_user_name}", 
+  "password": "{your_password}","client_secret":"AMenuDLjVdVo4BSwi0QD54LL6NeVDEZRzEQUJ7h
+  JOM3g4imDZBHHX0hNfKHPeQIGkskhtCmqAJtt_jm7EKq-rWw"}.`)
 	seqCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains seq id (e.g. SRR) or manifest files for download.")
 	seqCmd.Example = `  bget seq ERR3324530 SRR544879 # download files from SRA databaes
   bget seq GSE23543 # download files from GEO databaes (auto download SRA acc list and run info)
-  bget dbgap.krt # download files from dbGap database using krt files
-  
+  bget seq dbgap.krt # download files from dbGap database using krt files
+  bget seq EGAD00001000951 # download dataset from EGA databaes
+  bget seq EGAF00000585895 # download file from EGA databaes
+	
   # download TCGA files using file id
   bget seq b7670817-9d6b-494e-9e22-8494e2fd430d
 
@@ -123,13 +135,11 @@ func init() {
   split -a 3 --additional-suffix=.txt -l 100 gdc_manifest.2019-08-23-TCGA.txt -d
   for i in x*.txt
   do
-    head -n 1 x000.txt > ${i}.tmp
-    cat ${i} >> ${i}.tmp
-    mv ${i}.tmp ${i}
+    head -n 1 x000.txt > ${i}.tmp && cat ${i} >> ${i}.tmp &&mv ${i}.tmp ${i}
   done
   sed -i '1d' x000.txt
   bget seq *.txt -t 5
 
   # support auto (if you do not have *.krt, TCGA manifest, please not include it for test)
-  bget seq SRR544879 GSE23543 b7670817-9d6b-494e-9e22-8494e2fd430d dbgap.krt *.txt -t 5`
+  bget seq SRR544879 GSE23543 EGAD00001000951 b7670817-9d6b-494e-9e22-8494e2fd430d dbgap.krt *.txt -t 5`
 }

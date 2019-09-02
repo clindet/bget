@@ -16,7 +16,9 @@ func UniVersalDoiSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.MaxDepth(1),
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
-	c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
 			link := e.Attr("content")

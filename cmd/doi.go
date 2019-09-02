@@ -95,11 +95,11 @@ func doiSpiders(doi string) (urls []string) {
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Warn(err)
-		return
+	} else {
+		defer resp.Body.Close()
+		u, _ := neturl.Parse(resp.Request.URL.String())
+		opt.URL = u
 	}
-	defer resp.Body.Close()
-	u, _ := neturl.Parse(resp.Request.URL.String())
-	opt.URL = u
 	for k := range spider.DoiSpidersPool {
 		if k == doiOrg {
 			for t = 0; t < bgetClis.retries; t++ {

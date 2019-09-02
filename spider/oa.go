@@ -45,7 +45,9 @@ func CshlpSpider(opt *DoiSpiderOpt) (urls []string) {
 			"genome.cshlp.org", "genesdev.cshlp.org"),
 		colly.MaxDepth(1),
 	)
-	c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.FullText {
