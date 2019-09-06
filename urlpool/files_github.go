@@ -541,4 +541,11 @@ var githubRepos = []bgetFilesURLType{
 		URL:          []string{"https://github.com/kundajelab/genomedisco"},
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
+	{
+		Name:         "wkfl-encode-chipseq2",
+		Site:         "github",
+		Tags:         []string{"pipeline", "chipseq"},
+		URL:          []string{"https://github.com/ENCODE-DCC/chip-seq-pipeline2"},
+		PostShellCmd: []string{"pip3 install caper || pip install caper"},
+	},
 }

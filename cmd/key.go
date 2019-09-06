@@ -1,15 +1,17 @@
 package cmd
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 	"os/exec"
 	"path"
+	"sort"
 	"strings"
 
 	"github.com/Miachol/bget/urlpool"
 	vers "github.com/Miachol/bget/versions"
+	"github.com/olekukonko/tablewriter"
 	"github.com/openbiox/butils/archive"
 	bexec "github.com/openbiox/butils/exec"
 	cio "github.com/openbiox/butils/io"
@@ -130,7 +132,23 @@ func getAllKeys() (keys []string) {
 		keys = append(keys, urlpool.BgetFilesPool[i].Name)
 	}
 	keys = slice.DropSliceDup(keys)
-	fmt.Printf("%s\n", strings.Join(keys, "\n"))
+	sort.Strings(keys)
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetRowLine(false)
+	table.SetRowSeparator("")
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+
+	tmp := []string{}
+	for i := range keys {
+		if i%5 == 0 && len(tmp) > 0 {
+			table.Append(tmp)
+			tmp = []string{}
+		} else if i%5 != 0 {
+			tmp = append(tmp, keys[i])
+		}
+	}
+	table.Render()
+	//fmt.Printf("%s\n", strings.Join(keys, "\n"))
 	return keys
 }
 
@@ -175,8 +193,8 @@ func init() {
   bget key -a // get all available keys
   bget key samtools -v table // view all samtools available versions in CMD table
   bget key samtools -v json // view all samtools available versions in JSON format
-  bget key "reffa@GRCh38 %defuse #97" -t 10 -f
-  bget key reffa@GRCh38 site=defuse release=97 -t 10 -f
+  bget key "reffa-defuse@GRCh38 #97" -t 10 -f
+  bget key reffa-defuse@GRCh38 release=97 -t 10 -f
   bget key db_annovar@clinvar_20170501 db_annovar@clinvar_20180603 builder=hg38
 
   bget key db_annovar -v txt

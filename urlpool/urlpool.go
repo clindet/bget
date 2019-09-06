@@ -20,6 +20,7 @@ type bgetToolsURLType struct {
 	Site         string
 	Versions     []string
 	VersionsAPI  string
+	Tags         []string
 	URL          map[string][]string
 	PostShellCmd []string
 }
@@ -29,6 +30,7 @@ type bgetFilesURLType struct {
 	Site         string
 	URL          []string
 	Versions     []string
+	Tags         []string
 	PostShellCmd []string
 }
 
@@ -54,45 +56,7 @@ var BgetToolsPool = []bgetToolsURLType{
 }
 
 // BgetFilesPool an object bioinformatics files URL
-var BgetFilesPool = []bgetFilesURLType{
-	{
-		Name: "reffa",
-		Site: "ucsc",
-		URL:  []string{"https://hgdownload.cse.ucsc.edu/goldenPath/{{version}}/bigZips/{{version}}.fa.gz"},
-	},
-	{
-		Name: "reffa",
-		Site: "genecode",
-		URL: []string{"http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_{{release}}/{{version}}.p12.genome.fa.gz",
-			"http://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_{{release}}/{{version}}_mapping/{{version}}.primary_assembly.genome.fa.gz"},
-	},
-	{
-		Name: "reffa",
-		Site: "ensemble",
-		URL: []string{"http://ftp.ensembl.org/pub/release-{{release}}/fasta/homo_sapiens/dna/Homo_sapiens.{{version}}.dna.primary_assembly.fa.gz",
-			"http://ftp.ensembl.org/pub/release-{{release}}/fasta/homo_sapiens/dna/Homo_sapiens.{{version}}.{{release}}.dna.primary_assembly.fa.gz"},
-	},
-	{
-		Name: "reffa",
-		Site: "fusioncatcher",
-		URL: []string{"https://svwh.dl.sourceforge.net/project/fusioncatcher/data//human_v{{release}}.tar.gz.aa",
-			"https://svwh.dl.sourceforge.net/project/fusioncatcher/data/human_v{{release}}.tar.gz.ab",
-			"https://svwh.dl.sourceforge.net/project/fusioncatcher/data/human_v{{release}}.tar.gz.ac",
-			"https://svwh.dl.sourceforge.net/project/fusioncatcher/data/human_v{{release}}.tar.gz.ad",
-			"https://svwh.dl.sourceforge.net/project/fusioncatcher/data/human_v{{release}}.tar.gz.ae"},
-	},
-	{
-		Name: "reffa",
-		Site: "defuse",
-		URL: []string{"http://ftp.ensembl.org/pub/release-{{release}}/fasta/homo_sapiens/dna/Homo_sapiens.{{version}}.dna.chromosome.{{chrom}}.fa.gz",
-			"http://ftp.ensembl.org/pub/release-{{release}}/gtf/homo_sapiens/Homo_sapiens.{{version}}.{{release}}.gtf.gz",
-			"http://hgdownload.cse.ucsc.edu/goldenPath/{{version}}/database/rmsk.txt.gz",
-			"http://hgdownload.cse.ucsc.edu/goldenPath/{{version}}/bigZips/est.fa.gz",
-			"http://hgdownload.cse.ucsc.edu/goldenPath/{{version}}/database/intronEst.txt.gz",
-			"http://ftp.ncbi.nlm.nih.gov/repository/UniGene/Homo_sapiens/Hs.seq.uniq.gz",
-			"http://hgdownload.cse.ucsc.edu/goldenPath/{{version}}/database/rmsk.txt.gz"},
-	},
-}
+var BgetFilesPool = []bgetFilesURLType{}
 
 func setOsStr(env *map[string]string) (ostype string) {
 	if (*env)["osType"] == "linux" {
@@ -272,6 +236,7 @@ func GitHubVersionSpider(url string) (versions []string) {
 
 func init() {
 	BgetToolsPool = append(BgetToolsPool, toolsLinks...)
+	BgetFilesPool = append(BgetFilesPool, reffaFiles...)
 	BgetFilesPool = append(BgetFilesPool, githubRepos...)
 	BgetFilesPool = append(BgetFilesPool, journalsMeta...)
 	BgetFilesPool = append(BgetFilesPool, annovarLinks...)
