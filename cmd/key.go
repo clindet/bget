@@ -26,7 +26,7 @@ var keyVs map[string][]string
 var keyCmd = &cobra.Command{
 	Use:   "key [key1 key2 key3...]",
 	Short: "Can be used to access URLs via a key string.",
-	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version %site #releaseVersion', : bwa, GRCh38 %defuse #97. More see here https://github.com/Miachol/bget.`,
+	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version #releaseVersion', : bwa, reffa-defuse@GRCh38 #97. More see here https://github.com/Miachol/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		keyCmdRunOptions(cmd)
 	},

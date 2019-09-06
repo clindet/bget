@@ -17,7 +17,7 @@ import (
 
 type bgetToolsURLType struct {
 	Name         string
-	Site         string
+	Description  string
 	Versions     []string
 	VersionsAPI  string
 	Tags         []string
@@ -27,7 +27,7 @@ type bgetToolsURLType struct {
 
 type bgetFilesURLType struct {
 	Name         string
-	Site         string
+	Description  string
 	URL          []string
 	Versions     []string
 	Tags         []string
@@ -35,25 +35,7 @@ type bgetFilesURLType struct {
 }
 
 // BgetToolsPool an object bioinformatics tools URL
-var BgetToolsPool = []bgetToolsURLType{
-	{Name: "miniconda2", URL: map[string][]string{
-		"Linux": []string{"https://repo.anaconda.com/miniconda/Miniconda2-{{version}}-Linux-x86_64.sh"},
-		"Mac":   []string{"https://repo.anaconda.com/miniconda/Miniconda2-{{version}}-MacOSX-x86_64.sh"},
-		"Win":   []string{"https://repo.anaconda.com/miniconda/Miniconda2-{version}}-Windows-x86_64.exe"}},
-		PostShellCmd: []string{"cd {{pdir}} && sh {{dest}} -b -p {{downloadDir}}/miniconda2"}},
-	{Name: "miniconda3", URL: map[string][]string{
-		"Linux": []string{"https://repo.anaconda.com/miniconda/Miniconda3-{{version}}-Linux-x86_64.sh"},
-		"Mac":   []string{"https://repo.anaconda.com/miniconda/Miniconda3-{{version}}-MacOSX-x86_64.sh"},
-		"Win":   []string{"https://repo.anaconda.com/miniconda/Miniconda3-{version}}-Windows-x86_64.exe"}},
-		PostShellCmd: []string{"cd {{pdir}} && sh {{dest}} -b -p {{downloadDir}}/miniconda3"}},
-	{Name: "gdc-client",
-		Site: "github",
-		URL: map[string][]string{
-			"Linux": []string{"https://github.com/NCI-GDC/gdc-client/releases/download/{{version}}/gdc-client_v{{version}}_Ubuntu_x64.zip"},
-			"Mac":   []string{"https://github.com/NCI-GDC/gdc-client/releases/download/{{version}}/gdc-client_v{{version}}_OSX_x64_10.12.6.zip,https://github.com/NCI-GDC/gdc-client/releases/download/v{{version}}/gdc-client_v{{version}}_OSX_x64.zip"},
-			"Win":   []string{"https://github.com/NCI-GDC/gdc-client/releases/download/{{version}}/gdc-client_v{{version}}_Windows_x64.zip"},
-		}},
-}
+var BgetToolsPool = []bgetToolsURLType{}
 
 // BgetFilesPool an object bioinformatics files URL
 var BgetFilesPool = []bgetFilesURLType{}
@@ -138,8 +120,7 @@ func formatURLSlice(tmpSlice []string, env *map[string]string) (urls []string) {
 
 func QueryBgetFiles(name string, env *map[string]string) (urls []string, postShellCmd []string, versions []string) {
 	for f := range BgetFilesPool {
-		if BgetFilesPool[f].Name == name && ((*env)["site"] == "" ||
-			BgetFilesPool[f].Site == (*env)["site"]) {
+		if BgetFilesPool[f].Name == name {
 			for _, url := range BgetFilesPool[f].URL {
 				tmp := ""
 				tmpSlice := []string{}

@@ -52,7 +52,7 @@ type bgetCliT struct {
 	egaCredFile      string
 	outjson          bool
 	outxt            bool
-	geoGPL 			 bool
+	geoGPL           bool
 	helpFlags        bool
 }
 
@@ -98,7 +98,6 @@ func checkArgs(cmd *cobra.Command, subcmd string) {
 		bgetClis.keys = strings.Join(items, bgetClis.separator)
 	} else if subcmd == "doi" {
 		bgetClis.doi = strings.Join(items, bgetClis.separator)
-
 	} else if subcmd == "seq" {
 		bgetClis.seqs = strings.Join(items, bgetClis.separator)
 	}
