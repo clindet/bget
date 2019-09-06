@@ -91,7 +91,8 @@ func downloadSeq() {
 					<-sem
 				}()
 				if k == "geo" {
-					spider.Geofetch(seqs[k][i], bgetClis.downloadDir, bgetClis.uncompress, netOpt)
+					spider.Geofetch(seqs[k][i], bgetClis.downloadDir, 
+						bgetClis.geoGPL, bgetClis.uncompress, netOpt)
 				}
 			}(k, i)
 		}
@@ -114,6 +115,7 @@ func seqCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
+	seqCmd.Flags().BoolVarP(&(bgetClis.geoGPL), "gpl-geo", "", false, "Wheather fetch GPL files from GEO database.")
 	seqCmd.Flags().StringVarP(&(bgetClis.gdcToken), "token-gdc", "", "", "Token to access TCGA portal files.")
 	seqCmd.Flags().StringVarP(&(bgetClis.egaCredFile), "token-file-ega", "", "", `Credential file to access EGA archive files, {"username": "{your_user_name}", 
   "password": "{your_password}","client_secret":"AMenuDLjVdVo4BSwi0QD54LL6NeVDEZRzEQUJ7h

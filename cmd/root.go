@@ -52,6 +52,7 @@ type bgetCliT struct {
 	egaCredFile      string
 	outjson          bool
 	outxt            bool
+	geoGPL 			 bool
 	helpFlags        bool
 }
 

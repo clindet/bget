@@ -103,6 +103,10 @@ github.com/openbiox/butils v0.0.0-20190906033704-e9a6acd46d7c h1:EAYy7ww7OrMd3GO
 github.com/openbiox/butils v0.0.0-20190906033704-e9a6acd46d7c/go.mod h1:coy6eZzEpBhDf1F3tZ4JKPH6XFka46Ga2iEqJ9JO7RY=
 github.com/openbiox/butils v0.0.0-20190906040539-1a0a324d4f63 h1:rnFCfHbCLHJBLSSbzwWCV9fnvH9mRsLMUh1UQZxhjEs=
 github.com/openbiox/butils v0.0.0-20190906040539-1a0a324d4f63/go.mod h1:coy6eZzEpBhDf1F3tZ4JKPH6XFka46Ga2iEqJ9JO7RY=
+github.com/openbiox/butils v0.0.0-20190906045807-09672517aba9 h1:S8VNEWeug0CezNTCRgTwgMuBWgeDQWK9WKT/0MFX/aQ=
+github.com/openbiox/butils v0.0.0-20190906045807-09672517aba9/go.mod h1:coy6eZzEpBhDf1F3tZ4JKPH6XFka46Ga2iEqJ9JO7RY=
+github.com/openbiox/butils v0.0.0-20190906050717-80205dfd7d72 h1:87Tn5H2nF/z8U14/WBpgHheqZ03PmFs3XGtChh5H15I=
+github.com/openbiox/butils v0.0.0-20190906050717-80205dfd7d72/go.mod h1:coy6eZzEpBhDf1F3tZ4JKPH6XFka46Ga2iEqJ9JO7RY=
 github.com/pelletier/go-toml v1.2.0/go.mod h1:5z9KED0ma1S8pY6P1sdut58dfprrGBbd/94hg7ilaic=
 github.com/pierrec/lz4 v2.2.7+incompatible h1:Eerk9aiqeZo2QzsbWOAsELUf9ddvAxEdMY9LYze/DEc=
 github.com/pierrec/lz4 v2.2.7+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=
