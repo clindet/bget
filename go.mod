@@ -10,7 +10,7 @@ require (
 	github.com/google/go-github/v27 v27.0.6
 	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/olekukonko/tablewriter v0.0.1
-	github.com/openbiox/butils v0.0.0-20190906033704-e9a6acd46d7c
+	github.com/openbiox/butils v0.0.0-20190906040539-1a0a324d4f63
 	github.com/spf13/cobra v0.0.5
 	github.com/vbauerster/mpb/v4 v4.9.3
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45

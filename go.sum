@@ -101,6 +101,8 @@ github.com/openbiox/butils v0.0.0-20190906033132-7a02d43b85ec h1:JEkWOZoByVaF6TM
 github.com/openbiox/butils v0.0.0-20190906033132-7a02d43b85ec/go.mod h1:coy6eZzEpBhDf1F3tZ4JKPH6XFka46Ga2iEqJ9JO7RY=
 github.com/openbiox/butils v0.0.0-20190906033704-e9a6acd46d7c h1:EAYy7ww7OrMd3GOssY3kZm7t3NLFSGY8XZc6Tl4UNHQ=
 github.com/openbiox/butils v0.0.0-20190906033704-e9a6acd46d7c/go.mod h1:coy6eZzEpBhDf1F3tZ4JKPH6XFka46Ga2iEqJ9JO7RY=
+github.com/openbiox/butils v0.0.0-20190906040539-1a0a324d4f63 h1:rnFCfHbCLHJBLSSbzwWCV9fnvH9mRsLMUh1UQZxhjEs=
+github.com/openbiox/butils v0.0.0-20190906040539-1a0a324d4f63/go.mod h1:coy6eZzEpBhDf1F3tZ4JKPH6XFka46Ga2iEqJ9JO7RY=
 github.com/pelletier/go-toml v1.2.0/go.mod h1:5z9KED0ma1S8pY6P1sdut58dfprrGBbd/94hg7ilaic=
 github.com/pierrec/lz4 v2.2.7+incompatible h1:Eerk9aiqeZo2QzsbWOAsELUf9ddvAxEdMY9LYze/DEc=
 github.com/pierrec/lz4 v2.2.7+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=

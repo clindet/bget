@@ -167,15 +167,10 @@ func keyCmdRunOptions(cmd *cobra.Command) {
 
 func init() {
 	keyCmd.Flags().BoolVar(&(bgetClis.autoPath), "autopath", false, "Logical indicating that whether to create subdir in download dir: e.g. reffa/{{key}}/")
-	keyCmd.Flags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")
-	keyCmd.Flags().IntVarP(&(bgetClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")
-	keyCmd.Flags().StringVarP(&(bgetClis.mirror), "mirror", "m", "", "Set the mirror of resources.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.showVersions), "show-versions", "v", false, "Show all available versions of key.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.outjson), "out-json", "", false, "Output information in JSON string")
 	keyCmd.Flags().BoolVarP(&(bgetClis.outxt), "out-text", "", false, "Output information in plain text")
-	keyCmd.Flags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains keys for download.")
 	keyCmd.Flags().BoolVarP(&(bgetClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
-	keyCmd.Flags().BoolVarP(&(bgetClis.uncompress), "uncompress", "u", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files.")
 	keyCmd.Example = `  bget key bwa
   bget key -a // get all available keys
   bget key samtools -v table // view all samtools available versions in CMD table
