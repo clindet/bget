@@ -82,7 +82,7 @@ func Execute() {
 func checkArgs(cmd *cobra.Command, subcmd string) {
 	items := []string{}
 	for _, v := range cmd.Flags().Args() {
-		if strings.Contains(v, "=") {
+		if strings.Contains(v, "=") && subcmd == "key" {
 			kvs := strings.Split(v, "=")
 			bgetClis.env[kvs[0]] = strings.TrimSpace(kvs[1])
 		} else {
