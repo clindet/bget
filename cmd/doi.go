@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Miachol/bget/spider"
+	"github.com/openbiox/bget/spider"
 	cio "github.com/openbiox/butils/io"
 	"github.com/openbiox/butils/log"
 	cnet "github.com/openbiox/butils/net"
@@ -25,7 +25,7 @@ var universeSpider bool
 var doiCmd = &cobra.Command{
 	Use:   "doi [doi1 doi2 doi3...]",
 	Short: "Can be used to access files via DOI.",
-	Long:  `Can be used to access files via DOI. More see here https://github.com/Miachol/bget.`,
+	Long:  `Can be used to access files via DOI. More see here https://github.com/openbiox/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		doiCmdRunOptions(cmd)
 	},

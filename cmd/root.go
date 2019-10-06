@@ -61,7 +61,7 @@ var bgetClis bgetCliT
 var rootCmd = &cobra.Command{
 	Use:   "bget",
 	Short: "Lightweight downloader for bioinformatics data, databases and files.",
-	Long:  `Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/Miachol/bget.`,
+	Long:  `Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/openbiox/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		rootCmdRunOptions(cmd)
 	},

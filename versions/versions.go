@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Miachol/bget/urlpool"
+	"github.com/openbiox/bget/urlpool"
 	"github.com/olekukonko/tablewriter"
 	"github.com/openbiox/butils/stringo"
 )

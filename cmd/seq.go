@@ -3,7 +3,7 @@ package cmd
 import (
 	"strings"
 
-	"github.com/Miachol/bget/spider"
+	"github.com/openbiox/bget/spider"
 	cio "github.com/openbiox/butils/io"
 	cnet "github.com/openbiox/butils/net"
 	"github.com/openbiox/butils/stringo"
@@ -13,7 +13,7 @@ import (
 var seqCmd = &cobra.Command{
 	Use:   "seq [id1 id2 id3... | manifest1 manifest2 manifest3...]",
 	Short: "Can be used to access sequence data via unique id (dbGAP and EGA) or manifest files (TCGA).",
-	Long:  `Can be used to access sequence data via unique id or manifest files. More see here https://github.com/Miachol/bget.`,
+	Long:  `Can be used to access sequence data via unique id or manifest files. More see here https://github.com/openbiox/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		seqCmdRunOptions(cmd)
 	},

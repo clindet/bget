@@ -1,4 +1,4 @@
-<img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Life cycle: experimental"> [![GoDoc](https://godoc.org/github.com/Miachol/bget?status.svg)](https://godoc.org/github.com/Miachol/bget)
+<img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Life cycle: experimental"> [![GoDoc](https://godoc.org/github.com/openbiox/bget?status.svg)](https://godoc.org/github.com/openbiox/bget)
 
 # bget
 
@@ -15,13 +15,13 @@ Possible URLs pool:
 ## Installation
 
 ```bash
-go get -u github.com/Miachol/bget
+go get -u github.com/openbiox/bget
 ```
 
 ## Usage
 
 ```bash
-Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/Miachol/bget.
+Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/openbiox/bget.
 
 Usage:
   bget [flags]
@@ -60,7 +60,7 @@ Use "bget [command] --help" for more information about a command.
 You can use DOI to download article and its supplementary Data. The supported website and journals will be continue increased.
 
 ```bash
-Can be used to access files via DOI. More see here https://github.com/Miachol/bget.
+Can be used to access files via DOI. More see here https://github.com/openbiox/bget.
 
 Usage:
   bget doi [doi1 doi2 doi3...] [flags]
@@ -106,7 +106,7 @@ Global Flags:
 `bget seq` can be used to access [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo), [Sequence Read Archive (SRA)](https://www.ncbi.nlm.nih.gov/sra/), and [GDC Data Portal](https://portal.gdc.cancer.gov/) are supported.
 
 ```bash
-Can be used to access sequence data via unique id or manifest files. More see here https://github.com/Miachol/bget.
+Can be used to access sequence data via unique id or manifest files. More see here https://github.com/openbiox/bget.
 
 Usage:
   bget seq [id1 id2 id3... | manifest1 manifest2 manifest3...] [flags]
@@ -161,7 +161,7 @@ Global Flags:
 
 `bget url` can be used to access files via input URLs. Golang http, wget, curl, axel and git, and rsync are support for download process. 
 ```bash
-Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync. More see here https://github.com/Miachol/bget.
+Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync. More see here https://github.com/openbiox/bget.
 
 Usage:
   bget url [url1 url2 url3...] [flags]

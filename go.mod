@@ -1,4 +1,4 @@
-module github.com/Miachol/bget
+module github.com/openbiox/bget
 
 go 1.12
 

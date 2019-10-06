@@ -14,7 +14,7 @@ import (
 var urlCmd = &cobra.Command{
 	Use:   "url [url1 url2 url3...]",
 	Short: "Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync.",
-	Long:  `Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync. More see here https://github.com/Miachol/bget.`,
+	Long:  `Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync. More see here https://github.com/openbiox/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		urlCmdRunOptions(cmd)
 	},
