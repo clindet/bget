@@ -22,15 +22,15 @@ var seqCmd = &cobra.Command{
 func parseSeq() (seqs map[string][]string) {
 	seqs = make(map[string][]string)
 	seqsTmp := []string{}
-	if bgetClis.seqs != "" && strings.Contains(bgetClis.seqs, bgetClis.separator) {
-		seqsTmp = strings.Split(bgetClis.seqs, bgetClis.separator)
+	if bgetClis.seqs != "" && strings.Contains(bgetClis.seqs, bgetClis.seperator) {
+		seqsTmp = strings.Split(bgetClis.seqs, bgetClis.seperator)
 	} else if bgetClis.seqs != "" {
 		seqsTmp = []string{bgetClis.seqs}
 	} else if bgetClis.listFile != "" {
 		seqsTmp = cio.ReadLines(bgetClis.listFile)
 	}
 	for i := range seqsTmp {
-		if stringo.StrDetect(strings.ToUpper(seqsTmp[i]), "^GSE|^GPL|^GDS") {
+		if stringo.StrDetect(strings.ToUpper(seqsTmp[i]), "^GSE|^GPL|^GDS|^GSM") {
 			seqs["geo"] = append(seqs["geo"], seqsTmp[i])
 		} else if stringo.StrDetect(strings.ToUpper(seqsTmp[i]), "^SRR|^ERR") {
 			seqs["sra"] = append(seqs["sra"], seqsTmp[i])
@@ -91,7 +91,7 @@ func downloadSeq() {
 					<-sem
 				}()
 				if k == "geo" {
-					spider.Geofetch(seqs[k][i], bgetClis.downloadDir, 
+					spider.Geofetch(seqs[k][i], bgetClis.downloadDir,
 						bgetClis.geoGPL, bgetClis.uncompress, netOpt)
 				}
 			}(k, i)
@@ -121,7 +121,7 @@ func init() {
   "password": "{your_password}","client_secret":"AMenuDLjVdVo4BSwi0QD54LL6NeVDEZRzEQUJ7h
   JOM3g4imDZBHHX0hNfKHPeQIGkskhtCmqAJtt_jm7EKq-rWw"}.`)
 	seqCmd.Example = `  bget seq ERR3324530 SRR544879 # download files from SRA databaes
-  bget seq GSE23543 # download files from GEO databaes (auto download SRA acc list and run info)
+  bget seq GSE23543 GSM1098572 -t 2 # download files from GEO databaes (auto download SRA acc list and run info)
   bget seq dbgap.krt # download files from dbGap database using krt files
   bget seq EGAD00001000951 # download dataset from EGA databaes
   bget seq EGAF00000585895 # download file from EGA databaes

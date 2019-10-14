@@ -15,7 +15,7 @@ import (
 	"github.com/vbauerster/mpb/v4"
 )
 
-var version = "v0.1.2"
+var version = "v0.1.2-1"
 
 type bgetCliT struct {
 	downloadDir      string
@@ -25,7 +25,7 @@ type bgetCliT struct {
 	doi              string
 	urls             string
 	listFile         string
-	separator        string
+	seperator        string
 	keys             string
 	seqs             string
 	gdcToken         string
@@ -93,13 +93,13 @@ func checkArgs(cmd *cobra.Command, subcmd string) {
 		return
 	}
 	if subcmd == "url" {
-		bgetClis.urls = strings.Join(items, bgetClis.separator)
+		bgetClis.urls = strings.Join(items, bgetClis.seperator)
 	} else if subcmd == "key" {
-		bgetClis.keys = strings.Join(items, bgetClis.separator)
+		bgetClis.keys = strings.Join(items, bgetClis.seperator)
 	} else if subcmd == "doi" {
-		bgetClis.doi = strings.Join(items, bgetClis.separator)
+		bgetClis.doi = strings.Join(items, bgetClis.seperator)
 	} else if subcmd == "seq" {
-		bgetClis.seqs = strings.Join(items, bgetClis.separator)
+		bgetClis.seqs = strings.Join(items, bgetClis.seperator)
 	}
 }
 
@@ -158,8 +158,8 @@ func init() {
 	rootCmd.Flags().BoolVarP(&(bgetClis.clean), "clean", "", false, "Remove _download and _log in current dir.")
 	rootCmd.PersistentFlags().IntVarP(&(bgetClis.thread), "thread", "t", 1, "Concurrency download thread.")
 	rootCmd.Flags().IntVarP(&(bgetClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.downloadDir), "outdir", "o", wd, "Set the download dir for get-urls.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.separator), "separator", "s", ",", "Separator for --reffa,-k, and -u flag.")
+	rootCmd.PersistentFlags().StringVarP(&(bgetClis.downloadDir), "outdir", "o", wd, "Set the download dir.")
+	rootCmd.PersistentFlags().StringVarP(&(bgetClis.seperator), "seperator", "s", ",", "Optional 'url1{seperator}url2' for multiple keys, urls, or seqs.")
 	rootCmd.PersistentFlags().BoolVar(&(bgetClis.ignore), "ignore", false, "Contine to download and skip the check of existed files.")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.cmdExtraFromFlag), "extra-cmd", "e", "", "Extra flags and values pass to internal CMDs")
 	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.overwrite), "overwrite", "f", false, "Logical indicating that whether to overwrite existing files.")

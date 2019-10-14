@@ -36,28 +36,35 @@ Available Commands:
 
 Flags:
       --clean                    Remove _download and _log in current dir.
+  -g, --engine string            Point the download engine: go-http, wget, curl, axel, git, and rsync. (default "go-http")
   -e, --extra-cmd string         Extra flags and values pass to internal CMDs
   -h, --help                     help for bget
       --ignore                   Contine to download and skip the check of existed files.
-      --log-dir string           Log dir. (default "/Users/apple/Documents/bget/_download/_log")
-  -o, --outdir string            Set the download dir for get-urls. (default "/Users/apple/Documents/bget/_download")
+  -l, --list-file string         A file contains dois for download.
+      --log-dir string           Log dir. (default "/home/ljf/repositories/github/openbiox/bget/_log")
+  -m, --mirror string            Set the mirror of resources.
+  -o, --outdir string            Set the download dir. (default "/home/ljf/repositories/github/openbiox/bget")
   -f, --overwrite                Logical indicating that whether to overwrite existing files.
       --proxy string             HTTP proxy to download.
   -q, --quiet                    No output.
-  -n, --remote-name              Use remote defined filename. (default true)
+  -n, --remote-name              Use remote defined filename.
   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
       --retries-sleep-time int   Sleep time after one retry. (default 5)
       --save-log                 Save download log to local file]. (default true)
-  -s, --separator string         Separator for --reffa,-k, and -u flag. (default ",")
-      --task-id string           Task ID (random). (default "lbd3ztxdusxvbx3")
+  -s, --seperator string         Optional 'url1{seperator}url2' for multiple keys, urls, or seqs. (default ",")
+      --task-id string           Task ID (random). (default "wpyk8931z450351")
   -t, --thread int               Concurrency download thread. (default 1)
+      --thread-axel int          Set the thread of axel. (default 5)
       --timeout int              Set the timeout of per request. (default 35)
+  -u, --uncompress               Uncompress download files for .zip, .tar.gz, and .gz suffix files.
       --version                  version for bget
 
 Use "bget [command] --help" for more information about a command.
 ```
 
 You can use DOI to download article and its supplementary Data. The supported website and journals will be continue increased.
+
+**Warn**: If you do not follow the policies of the relevant website (i.e. continuous download or limited copyright), you will lose the authorization to use this tool.
 
 ```bash
 Can be used to access files via DOI. More see here https://github.com/openbiox/bget.
@@ -84,23 +91,6 @@ Flags:
       --pmc                Try PMC database.
       --suppl              Access supplementary files.
       --thread-axel int    Set the thread of axel. (default 5)
-
-Global Flags:
-  -e, --extra-cmd string         Extra flags and values pass to internal CMDs
-      --ignore                   Contine to download and skip the check of existed files.
-      --log-dir string           Log dir. (default "/Users/apple/Documents/bget/_download/_log")
-  -o, --outdir string            Set the download dir for get-urls. (default "/Users/apple/Documents/bget/_download")
-  -f, --overwrite                Logical indicating that whether to overwrite existing files.
-      --proxy string             HTTP proxy to download.
-  -q, --quiet                    No output.
-  -n, --remote-name              Use remote defined filename. (default true)
-  -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
-      --retries-sleep-time int   Sleep time after one retry. (default 5)
-      --save-log                 Save download log to local file]. (default true)
-  -s, --separator string         Separator for --reffa,-k, and -u flag. (default ",")
-      --task-id string           Task ID (random). (default "96mr6rp2q37jaqt")
-  -t, --thread int               Concurrency download thread. (default 1)
-      --timeout int              Set the timeout of per request. (default 35)
 ```
 
 `bget seq` can be used to access [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo), [Sequence Read Archive (SRA)](https://www.ncbi.nlm.nih.gov/sra/), and [GDC Data Portal](https://portal.gdc.cancer.gov/) are supported.
@@ -140,23 +130,6 @@ Flags:
   -h, --help               help for seq
   -l, --list-file string   A file contains seq id (e.g. SRR) or manifest files for download.
   -u, --uncompress         Uncompress download files for .zip, .tar.gz, and .gz suffix files (now support GEO database).
-
-Global Flags:
-  -e, --extra-cmd string         Extra flags and values pass to internal CMDs
-      --ignore                   Contine to download and skip the check of existed files.
-      --log-dir string           Log dir. (default "/Users/apple/Documents/bget/_download/_log")
-  -o, --outdir string            Set the download dir for get-urls. (default "/Users/apple/Documents/bget/_download")
-  -f, --overwrite                Logical indicating that whether to overwrite existing files.
-      --proxy string             HTTP proxy to download.
-  -q, --quiet                    No output.
-  -n, --remote-name              Use remote defined filename. (default true)
-  -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
-      --retries-sleep-time int   Sleep time after one retry. (default 5)
-      --save-log                 Save download log to local file]. (default true)
-  -s, --separator string         Separator for --reffa,-k, and -u flag. (default ",")
-      --task-id string           Task ID (random). (default "cr0ipuhxek8qgj1")
-  -t, --thread int               Concurrency download thread. (default 1)
-      --timeout int              Set the timeout of per request. (default 35)
 ```
 
 `bget url` can be used to access files via input URLs. Golang http, wget, curl, axel and git, and rsync are support for download process. 
@@ -183,23 +156,6 @@ Flags:
   -m, --mirror string      Set the mirror of resources.
       --thread-axel int    Set the thread of axel. (default 5)
   -u, --uncompress         Uncompress download files for .zip, .tar.gz, and .gz suffix files.
-
-Global Flags:
-  -e, --extra-cmd string         Extra flags and values pass to internal CMDs
-      --ignore                   Contine to download and skip the check of existed files.
-      --log-dir string           Log dir. (default "/Users/apple/Documents/bget/_download/_log")
-  -o, --outdir string            Set the download dir for get-urls. (default "/Users/apple/Documents/bget/_download")
-  -f, --overwrite                Logical indicating that whether to overwrite existing files.
-      --proxy string             HTTP proxy to download.
-  -q, --quiet                    No output.
-  -n, --remote-name              Use remote defined filename. (default true)
-  -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
-      --retries-sleep-time int   Sleep time after one retry. (default 5)
-      --save-log                 Save download log to local file]. (default true)
-  -s, --separator string         Separator for --reffa,-k, and -u flag. (default ",")
-      --task-id string           Task ID (random). (default "08q4v70i02elamr")
-  -t, --thread int               Concurrency download thread. (default 1)
-      --timeout int              Set the timeout of per request. (default 35)
 ```
 
 ## Maintainer

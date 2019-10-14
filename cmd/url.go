@@ -22,8 +22,8 @@ var urlCmd = &cobra.Command{
 
 func downloadUrls() {
 	urls := []string{}
-	if bgetClis.urls != "" && strings.Contains(bgetClis.urls, bgetClis.separator) {
-		urls = strings.Split(bgetClis.urls, bgetClis.separator)
+	if bgetClis.urls != "" && strings.Contains(bgetClis.urls, bgetClis.seperator) {
+		urls = strings.Split(bgetClis.urls, bgetClis.seperator)
 	} else if bgetClis.urls != "" {
 		urls = []string{bgetClis.urls}
 	} else if bgetClis.listFile != "" {

@@ -36,8 +36,8 @@ func downloadDoi() {
 	doi := []string{}
 	urls := []string{}
 	var destDirArray []string
-	if bgetClis.doi != "" && strings.Contains(bgetClis.doi, bgetClis.separator) {
-		doi = strings.Split(bgetClis.doi, bgetClis.separator)
+	if bgetClis.doi != "" && strings.Contains(bgetClis.doi, bgetClis.seperator) {
+		doi = strings.Split(bgetClis.doi, bgetClis.seperator)
 	} else if bgetClis.doi != "" {
 		doi = []string{bgetClis.doi}
 	} else if bgetClis.listFile != "" {

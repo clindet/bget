@@ -9,9 +9,9 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/olekukonko/tablewriter"
 	"github.com/openbiox/bget/urlpool"
 	vers "github.com/openbiox/bget/versions"
-	"github.com/olekukonko/tablewriter"
 	"github.com/openbiox/butils/archive"
 	bexec "github.com/openbiox/butils/exec"
 	cio "github.com/openbiox/butils/io"
@@ -33,8 +33,8 @@ var keyCmd = &cobra.Command{
 }
 
 func parseKeys() (keys []string) {
-	if bgetClis.keys != "" && strings.Contains(bgetClis.keys, bgetClis.separator) {
-		keys = strings.Split(bgetClis.keys, bgetClis.separator)
+	if bgetClis.keys != "" && strings.Contains(bgetClis.keys, bgetClis.seperator) {
+		keys = strings.Split(bgetClis.keys, bgetClis.seperator)
 	} else if bgetClis.keys != "" {
 		keys = []string{bgetClis.keys}
 	} else if bgetClis.listFile != "" {

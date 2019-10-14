@@ -65,7 +65,7 @@ func GeoSpider(opt *QuerySpiderOpt, gpl bool) (gseURLs []string, gplURLs []strin
 	extensions.RandomUserAgent(c)
 	c.OnHTML("table td a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		if strings.Contains(link, "/geo/download/?acc=GSE") {
+		if strings.Contains(link, "/geo/download/?acc=GS") {
 			gseURLs = append(gseURLs, "https://www.ncbi.nlm.nih.gov"+link)
 		} else if gpl && strings.Contains(link, "/geo/download/?acc=GPL") {
 			gplURLs = append(gplURLs, "https://www.ncbi.nlm.nih.gov"+link)
