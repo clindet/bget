@@ -70,12 +70,14 @@ func ScienseComSpider(opt *DoiSpiderOpt) (urls []string) {
 			urls = append(urls, link)
 		})
 	}
-	if opt.Supplementary {
-		c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
-			link := e.Attr("content")
-			u, _ := url.Parse(link)
-			link = u.Scheme + "://" + u.Host + u.Path
+	c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+		link := e.Attr("content")
+		u, _ := url.Parse(link)
+		link = u.Scheme + "://" + u.Host + u.Path
+		if opt.FullText {
 			urls = append(urls, link)
+		}
+		if opt.Supplementary {
 			c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
 				link := e.Attr("href")
 				u2, _ := url.Parse(link)
@@ -83,8 +85,8 @@ func ScienseComSpider(opt *DoiSpiderOpt) (urls []string) {
 				urls = append(urls, link)
 			})
 			c.Visit(strings.Replace(link, ".full.pdf", "", 1) + "/tab-figures-data")
-		})
-	}
+		}
+	})
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})

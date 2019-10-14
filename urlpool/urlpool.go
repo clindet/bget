@@ -2,6 +2,7 @@ package urlpool
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -180,7 +181,10 @@ func genomeVersionConvertor(url string, version string) string {
 
 // GitHubVersionSpider get all tags and branch
 func GitHubVersionSpider(url string) (versions []string) {
-	accessToken := "4d00c84fa5da085df3f1bb6a6a7f6dd0972e869f"
+	accessToken := os.Getenv("GITHUB_TOKEN")
+	if accessToken == "" {
+		log.Fatal("Please set GITHUB_TOKEN environment variable.")
+	}
 	u, err := neturl.Parse(url)
 	if err != nil {
 		log.Fatal(err)
