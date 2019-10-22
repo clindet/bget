@@ -381,3 +381,62 @@ func TandfonlineSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
+
+// BmjComSpider access www.bmj.com files via spider
+func BmjComSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.bmj.com"),
+		colly.MaxDepth(1),
+	)
+	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	fulltextUrl := ""
+	c.OnHTML("a.pdf-link[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		fulltextUrl = "https://" + opt.URL.Hostname() + link
+		if opt.FullText {
+			urls = append(urls, fulltextUrl)
+		}
+		if opt.Supplementary {
+			c.Visit(stringo.StrReplaceAll(fulltextUrl, ".full.pdf", "/related"))
+		}
+	})
+	if opt.Supplementary {
+		c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			link = "https://" + opt.URL.Hostname() + link
+			urls = append(urls, link)
+		})
+	}
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+// AtsjournalsOrgSpider access www.atsjournals.org files via spider
+func AtsjournalsOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.atsjournals.org"),
+		colly.MaxDepth(2),
+	)
+	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	log.Infof("Visiting https://www.atsjournals.org/doi/full/%s", opt.Doi)
+	if opt.FullText {
+		urls = append(urls, "https://www.atsjournals.org/doi/pdf/"+opt.Doi)
+	}
+	if opt.Supplementary {
+		c.OnHTML(".suppl_list a[href]", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			link = "https://" + opt.URL.Hostname() + link
+			urls = append(urls, link)
+		})
+		c.Visit("https://www.atsjournals.org/doi/suppl/" + opt.Doi)
+	}
+	return urls
+}
