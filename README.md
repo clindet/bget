@@ -12,6 +12,8 @@ Possible URLs pool:
 - Papers material
 - ......
 
+![doi demo](https://github.com/openbiox/bget/raw/master/doc/static/doi.gif)
+
 ## Installation
 
 ```bash
@@ -19,6 +21,8 @@ go get -u github.com/openbiox/bget
 ```
 
 ## Usage
+
+Demo Video: <https://www.notion.so/sjtu/Demo-of-bget-doi-key-seq-url-78c2c334bf894668aa17fd128bd3255c>
 
 ```bash
 Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/openbiox/bget.
