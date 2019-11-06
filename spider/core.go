@@ -310,7 +310,7 @@ func AacrJournalsSpider(opt *DoiSpiderOpt) (urls []string) {
 	host := ""
 	c := colly.NewCollector(
 		colly.AllowedDomains("doi.org", "aacrjournals.org", "cancerdiscovery.aacrjournals.org",
-			"clincancerres.aacrjournals.org"),
+			"clincancerres.aacrjournals.org", "cancerimmunolres.aacrjournals.org"),
 		colly.MaxDepth(1),
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
@@ -385,28 +385,41 @@ func TandfonlineSpider(opt *DoiSpiderOpt) (urls []string) {
 // BmjComSpider access www.bmj.com files via spider
 func BmjComSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := colly.NewCollector(
-		colly.AllowedDomains("doi.org", "www.bmj.com"),
+		colly.AllowedDomains("doi.org", "www.bmj.com", "gut.bmj.com"),
 		colly.MaxDepth(1),
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	fulltextUrl := ""
-	c.OnHTML("a.pdf-link[href]", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		fulltextUrl = "https://" + opt.URL.Hostname() + link
+	if opt.URL.Hostname() == "gut.bmj.com" {
 		if opt.FullText {
-			urls = append(urls, fulltextUrl)
+			c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+				urls = append(urls, e.Attr("content"))
+			})
 		}
 		if opt.Supplementary {
-			c.Visit(stringo.StrReplaceAll(fulltextUrl, ".full.pdf", "/related"))
+			c.OnHTML(".supplementary-material a[href]", func(e *colly.HTMLElement) {
+				urls = append(urls, e.Attr("href"))
+			})
 		}
-	})
-	if opt.Supplementary {
-		c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
+	} else {
+		c.OnHTML("a.pdf-link[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://" + opt.URL.Hostname() + link
-			urls = append(urls, link)
+			fulltextUrl = "https://" + opt.URL.Hostname() + link
+			if opt.FullText {
+				urls = append(urls, fulltextUrl)
+			}
+			if opt.Supplementary {
+				c.Visit(stringo.StrReplaceAll(fulltextUrl, ".full.pdf", "/related"))
+			}
 		})
+		if opt.Supplementary {
+			c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
+				link := e.Attr("href")
+				link = "https://" + opt.URL.Hostname() + link
+				urls = append(urls, link)
+			})
+		}
 	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
