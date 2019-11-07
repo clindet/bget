@@ -401,11 +401,10 @@ func WileyComSpider(opt *DoiSpiderOpt) (urls []string) {
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.FullText {
-		c.OnHTML(".coolBar__second a.pdf-download[href]", func(e *colly.HTMLElement) {
-			link := e.Attr("href")
-			if !strings.Contains(link, "/epdf/") {
-				urls = append(urls, linkFilter(link, opt.URL))
-			}
+		c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+			link := e.Attr("content")
+			link = stringo.StrReplaceAll(link, "/doi/pdf/", "/doi/pdfdirect/")
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {

@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"strings"
 	"time"
 
+	bio "github.com/openbiox/butils/io"
 	"github.com/openbiox/butils/log"
 
 	cdp "github.com/chromedp/chromedp"
@@ -108,6 +108,23 @@ func visibleSraRunSelect(url string, attbs *[]map[string]string, ctx context.Con
 	}
 }
 
+func visibleWiley(url string, ctx context.Context) cdp.Tasks {
+	fn, _ := bio.ConnectFile("test.pdf")
+	tsk := cdp.Tasks{
+		cdp.Navigate(url),
+		cdp.ActionFunc(func(context.Context) error {
+			log.Infof("Visiting %s", url)
+			return nil
+		}),
+		cdp.WaitReady("body"),
+	}
+	cdp.CombinedOutput(fn)
+	return tsk
+}
 func main() {
-	fmt.Println(Chrome2URLs("https://www.ncbi.nlm.nih.gov/Traces/study/?acc=PRJNA133369"))
+	url := "https://bpspubs.onlinelibrary.wiley.com/doi/pdf/10.1111/bph.14580"
+	//fmt.Println(Chrome2URLs("https://bpspubs.onlinelibrary.wiley.com/doi/pdf/10.1111/bph.14580"))
+	ctx, cancel := cdp.NewContext(context.Background())
+	defer cancel()
+	cdp.Run(ctx, visibleWiley(url, ctx))
 }
