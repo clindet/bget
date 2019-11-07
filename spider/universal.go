@@ -29,6 +29,12 @@ func UniVersalDoiSpider(opt *DoiSpiderOpt) (urls []string) {
 			link := e.Attr("content")
 			urls = append(urls, linkFilter(link, opt.URL))
 		})
+		// https://www.microbiologyresearch.org/ specific
+		c.OnHTML("form.ft-download-content__form--pdf[action]", func(e *colly.HTMLElement) {
+			link := e.Attr("action")
+			link = stringo.StrReplaceAll(link, "pdf[?].*", "pdf")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
 		staticUrl := static2pdf(opt)
 		if staticUrl != "" {
 			urls = append(urls, linkFilter(staticUrl, opt.URL))
@@ -40,6 +46,13 @@ func UniVersalDoiSpider(opt *DoiSpiderOpt) (urls []string) {
 			link := e.Attr("href")
 			urls = append(urls, linkFilter(link, opt.URL))
 		})
+		// https://www.microbiologyresearch.org/ specific
+		c.OnHTML("#supplementary_data form.js-ft-download-form[action]", func(e *colly.HTMLElement) {
+			link := e.Attr("action")
+			link = stringo.StrReplaceAll(link, "[?].*", "")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+
 		c.Visit(supplPage)
 	}
 	c.OnRequest(func(r *colly.Request) {
@@ -57,9 +70,10 @@ func linkFilter(link string, u *neturl.URL) string {
 }
 
 func suppl2page(opt *DoiSpiderOpt) (link string) {
-	if stringo.StrDetect(opt.Doi, "10.2337/") {
-		link = opt.URL.Scheme + "://" + opt.URL.Host +
-			opt.URL.EscapedPath() + ".supplemental"
+	baseLink := opt.URL.Scheme + "://" + opt.URL.Host +
+		opt.URL.EscapedPath()
+	if stringo.StrDetect(opt.Doi, "10.2337/|10.1242/") {
+		link = baseLink + ".supplemental"
 	}
 	return link
 }

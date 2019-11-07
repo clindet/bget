@@ -20,6 +20,9 @@ func NatureComSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("a.c-pdf-download__link[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -64,6 +67,9 @@ func ScienseComSpider(opt *DoiSpiderOpt) (urls []string) {
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("div.panels-ajax-tab-wrap-jnl_sci_tab_pdf a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -106,6 +112,9 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("a.pdfLink[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -224,6 +233,9 @@ func NejmSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("a[data-tooltip='Download PDF']", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -255,6 +267,9 @@ func AhajournalsSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML(".citation__access__actions a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -315,6 +330,9 @@ func AacrJournalsSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.Supplementary {
 		c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -385,6 +403,9 @@ func BmjComSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	fulltextUrl := ""
 	if opt.URL.Hostname() == "gut.bmj.com" {
 		if opt.FullText {
@@ -431,6 +452,9 @@ func AtsjournalsOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})

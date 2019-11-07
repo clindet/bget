@@ -1,8 +1,9 @@
 2019-11-07 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* update annovar pool
-		* support DIABETES via UniversalSpider
+		* support DIABETES, DEVELOPMENT, and Microbial Genomics via UniversalSpider
 		* support OncoImmunology (update TandfonlineSpider)
+		* support Stem Cells via WileyComSpider
 
 2019-11-06 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 

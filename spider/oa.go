@@ -97,6 +97,9 @@ func BiomedcentralSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML(".c-pdf-download a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -127,6 +130,9 @@ func PnasSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("a[data-trigger=tab-pdf]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -165,6 +171,9 @@ func PlosSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("#downloadPdf", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -195,6 +204,9 @@ func FrontiersinSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("a.download-files-pdf", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -229,6 +241,9 @@ func PeerjSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("a[data-format=PDF]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -269,6 +284,9 @@ func OupComSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("a.article-pdfLink", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -297,6 +315,9 @@ func EmbopressSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("div.article-action a[aria-label=PDF]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -326,6 +347,9 @@ func AscopubsSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML(".pdfTools a[download]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -363,6 +387,9 @@ func HaematologicaSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML(".pdfTools a[download]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -395,11 +422,14 @@ func HaematologicaSpider(opt *DoiSpiderOpt) (urls []string) {
 func WileyComSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := colly.NewCollector(
 		colly.AllowedDomains("doi.org", "onlinelibrary.wiley.com", "doi.wiley.com", "aasldpubs.onlinelibrary.wiley.com", "currentprotocols.onlinelibrary.wiley.com",
-			"bpspubs.onlinelibrary.wiley.com"),
+			"bpspubs.onlinelibrary.wiley.com", "stemcellsjournals.onlinelibrary.wiley.com"),
 		colly.MaxDepth(1),
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
 		c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
 			link := e.Attr("content")
