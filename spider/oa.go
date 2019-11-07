@@ -111,8 +111,10 @@ func BiomedcentralSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.Supplementary {
 		c.OnHTML(".c-article-supplementary__item a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = stringo.StrReplaceAll(link, "[?]download=true$", "")
-			urls = append(urls, link)
+			if !stringo.StrDetect(link, "^/articles/") {
+				link = stringo.StrReplaceAll(link, "[?]download=true$", "")
+				urls = append(urls, link)
+			}
 		})
 	}
 	c.OnRequest(func(r *colly.Request) {
