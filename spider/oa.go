@@ -393,12 +393,9 @@ func HaematologicaSpider(opt *DoiSpiderOpt) (urls []string) {
 
 // WileyComSpider access https://onlinelibrary.wiley.com files via spider
 func WileyComSpider(opt *DoiSpiderOpt) (urls []string) {
-	host := "https://onlinelibrary.wiley.com"
-	if strings.Contains(opt.Doi, "10.1002/hep.") {
-		host = "https://aasldpubs.onlinelibrary.wiley.com"
-	}
 	c := colly.NewCollector(
-		colly.AllowedDomains("doi.org", "onlinelibrary.wiley.com", "doi.wiley.com", "aasldpubs.onlinelibrary.wiley.com", "currentprotocols.onlinelibrary.wiley.com"),
+		colly.AllowedDomains("doi.org", "onlinelibrary.wiley.com", "doi.wiley.com", "aasldpubs.onlinelibrary.wiley.com", "currentprotocols.onlinelibrary.wiley.com",
+			"bpspubs.onlinelibrary.wiley.com"),
 		colly.MaxDepth(1),
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
@@ -407,21 +404,18 @@ func WileyComSpider(opt *DoiSpiderOpt) (urls []string) {
 		c.OnHTML(".coolBar__second a.pdf-download[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			if !strings.Contains(link, "/epdf/") {
-				link = host + link
-				urls = append(urls, link)
+				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML(".support-info__table td a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = host + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 		c.OnHTML("a[title='Download full book']", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = host + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	c.OnRequest(func(r *colly.Request) {

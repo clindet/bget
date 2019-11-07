@@ -343,7 +343,6 @@ func AacrJournalsSpider(opt *DoiSpiderOpt) (urls []string) {
 // TandfonlineSpider access https://www.tandfonline.com files via spider
 // not support now, need chromedp
 func TandfonlineSpider(opt *DoiSpiderOpt) (urls []string) {
-	var host string
 	c := colly.NewCollector(
 		colly.AllowedDomains("doi.org", "www.tandfonline.com"),
 		colly.MaxDepth(1),
@@ -353,28 +352,24 @@ func TandfonlineSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("a[title='Download all']", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			if !strings.Contains(link, "://") {
-				link = host + link
-			}
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+		c.OnHTML("li.pdf-tab", func(e *colly.HTMLElement) {
+			link := fmt.Sprintf("https://www.tandfonline.com/doi/pdf/%s?needAccess=true", opt.Doi)
 			urls = append(urls, link)
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML("a.show-pdf[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			if !strings.Contains(link, "://") {
-				link = host + link
-			}
-			urls = append(urls, link)
-			c.Visit(stringo.StrReplaceAll(link, "/doi/pdf/", "/doi/suppl/"))
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
+		c.OnHTML("#supplementaryPanel a", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+		c.Visit(fmt.Sprintf("https://www.tandfonline.com/doi/suppl/%s", opt.Doi))
 	}
-	c.OnResponse(func(r *colly.Response) {
-		if host == "" && r.Request.URL.String() != "" {
-			u, _ := url.Parse(r.Request.URL.String())
-			host = u.Scheme + "://" + u.Host
-		}
-	})
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
