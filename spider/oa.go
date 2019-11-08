@@ -624,3 +624,24 @@ func AutopsyandcasereportsSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
+
+// FigshareSpider access https://figshare.com/ files via spider
+func FigshareSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "figshare.com"),
+		colly.MaxDepth(1),
+	)
+	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	if opt.FullText {
+		c.OnHTML("a.download-button[href]", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, link)
+		})
+	}
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
