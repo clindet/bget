@@ -645,3 +645,22 @@ func FigshareSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
+
+// PubsacsSpider access https://pubs.acs.org/ files via spider
+func PubsacsSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "pubs.acs.org"),
+		colly.MaxDepth(1),
+	)
+	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	if opt.FullText {
+		link := fmt.Sprintf("/doi/pdf/%s", opt.Doi)
+		urls = append(urls, linkFilter(link, opt.URL))
+	}
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}

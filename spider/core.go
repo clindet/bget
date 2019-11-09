@@ -123,22 +123,19 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 		c.OnHTML("a.article-tools__item__displayStandardPdf[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			if link != "#" {
-				link = "https://www.cell.com" + link
-				urls = append(urls, link)
+				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
 		c.OnHTML("a.article-tools__item__displayExtendedPdf[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			if link != "#" {
-				link = "https://www.cell.com" + link
-				urls = append(urls, link)
+				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
 		c.OnHTML(".article-tools__pdf a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			if link != "#" {
-				link = "https://www.cell.com" + link
-				urls = append(urls, link)
+				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
 		c.OnHTML("div.PdfDownloadButton a[href]", func(e *colly.HTMLElement) {
@@ -169,8 +166,7 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 		c.OnHTML("a.supplemental-information__download[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			if link != "#" {
-				link = "https://www.cell.com" + link
-				urls = append(urls, link)
+				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
 	}
@@ -185,6 +181,9 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 		log.Infof("Visiting %s", r.URL.String())
 		if stringo.StrDetect(r.URL.String(), "^https://www.sciencedirect.com") {
 		}
+	})
+	c.OnResponse(func(r *colly.Response) {
+		fmt.Println(string(r.Body))
 	})
 	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
@@ -299,16 +298,17 @@ func JamaNetworkSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
 	if opt.FullText {
-		c.OnHTML(".citation__access__actions a[href]", func(e *colly.HTMLElement) {
-			link := e.Attr("href")
-			link = "https://www.ahajournals.org" + link
-			urls = append(urls, link)
-			c.Visit(stringo.StrReplaceAll(link, "/doi/pdf/", "/doi/suppl/"))
+		c.OnHTML("#contents-tab a.toolbar-pdf[data-article-url]", func(e *colly.HTMLElement) {
+			link := e.Attr("data-article-url")
+			urls = append(urls, "https://jamanetwork.com"+link)
 		})
 	}
 	if opt.Supplementary {
-		c.OnHTML(".supplemental-material__item a.green-text-color[href]", func(e *colly.HTMLElement) {
+		c.OnHTML(".supplement a.supplement-download[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			urls = append(urls, link)
 		})

@@ -19,8 +19,8 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/vbauerster/mpb/v4 v4.11.0
-	golang.org/x/crypto v0.0.0-20191107222254-f4817d981bb6 // indirect
-	golang.org/x/net v0.0.0-20191105084925-a882066a44e0 // indirect
+	golang.org/x/crypto v0.0.0-20191108234033-bd318be0434a // indirect
+	golang.org/x/net v0.0.0-20191109021931-daa7c04131f5 // indirect
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
 	golang.org/x/sys v0.0.0-20191105231009-c1f44814a5cd // indirect
 	google.golang.org/appengine v1.6.5 // indirect

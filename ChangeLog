@@ -1,3 +1,8 @@
+2019-11-09 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
+		* support pubs.acs.org (test: 10.1021/acs.chemrev.9b00372)
+		* support jamanetwork.com (test: 10.1001/jama.2019.17379)
+
 2019-11-08 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* support figshare.com (test: 10.6084/m9.figshare.6634136)
