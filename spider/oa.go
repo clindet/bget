@@ -664,3 +664,22 @@ func PubsacsSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
+
+// PubsRscSpider access https://pubs.rsc.org/ files via spider
+func PubsRscSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "pubs.rsc.org", "xlink.rsc.org"),
+		colly.MaxDepth(1),
+	)
+	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+		link := e.Attr("content")
+		urls = append(urls, linkFilter(link, opt.URL))
+	})
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}

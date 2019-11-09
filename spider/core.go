@@ -182,9 +182,6 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 		if stringo.StrDetect(r.URL.String(), "^https://www.sciencedirect.com") {
 		}
 	})
-	c.OnResponse(func(r *colly.Response) {
-		fmt.Println(string(r.Body))
-	})
 	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
@@ -470,5 +467,26 @@ func AtsjournalsOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 		c.Visit("https://www.atsjournals.org/doi/suppl/" + opt.Doi)
 	}
+	return urls
+}
+
+// JournalsApsSpider access https://journals.aps.org/ files via spider
+func JournalsApsSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "journals.aps.org", "link.aps.org"),
+		colly.MaxDepth(1),
+	)
+	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnHTML(".article-nav-actions a", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		if strings.Contains(link, "/pdf/") {
+			urls = append(urls, linkFilter(link, opt.URL))
+		}
+	})
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
