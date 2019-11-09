@@ -172,107 +172,107 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">19</td>
 <td style="text-align: left;">LANCET ONCOLOGY</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1016/S1470-2045(19)30569-8</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">no</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">20</td>
 <td style="text-align: left;">NATURE REVIEWS MICROBIOLOGY</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1038/s41579-019-0270-x</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">21</td>
 <td style="text-align: left;">Nature Reviews Clinical Oncology</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1038/s41571-019-0227-z</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">22</td>
 <td style="text-align: left;">World Psychiatry</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1002/wps.20671</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">24</td>
 <td style="text-align: left;">Nature Nanotechnology</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1038/s41565-019-0564-1</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">25</td>
 <td style="text-align: left;">Energy &amp; Environmental Science</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1039/c9ee02619c</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">no</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">26</td>
 <td style="text-align: left;">NATURE REVIEWS NEUROSCIENCE</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1038/s41583-019-0223-4</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">27</td>
 <td style="text-align: left;">Annual Review of Astronomy and Astrophysics</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1146/annurev-astro-091918-104446</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">28</td>
 <td style="text-align: left;">Nature Reviews Disease Primers</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1038/s41572-019-0111-2</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">29</td>
 <td style="text-align: left;">NATURE BIOTECHNOLOGY</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1038/s41587-019-0267-z</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">30</td>
 <td style="text-align: left;">Nature Photonics</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1038/s41566-019-0536-x</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">31</td>
 <td style="text-align: left;">NATURE MEDICINE</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1038/s41591-019-0627-8</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">32</td>
 <td style="text-align: left;">Nature Reviews Chemistry</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1038/s41570-019-0128-9</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">33</td>
 <td style="text-align: left;">LANCET NEUROLOGY</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1016/S1474-4422(19)30320-5</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">34</td>
 <td style="text-align: left;">NATURE METHODS</td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;">10.1038/s41592-019-0625-2</td>
+<td style="text-align: left;">done</td>
+<td style="text-align: left;">yes</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">35</td>

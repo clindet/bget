@@ -17,21 +17,21 @@ Rank	Journal Name	TestDOI	Status	Supplemental
 16	NATURE MATERIALS	10.1038/s41563-019-0504-3	done	yes
 17	REVIEWS OF MODERN PHYSICS	10.1103/RevModPhys.91.045001	done	yes
 18	CELL	10.1016/j.cell.2019.10.015	done	yes
-19	LANCET ONCOLOGY			
-20	NATURE REVIEWS MICROBIOLOGY			
-21	Nature Reviews Clinical Oncology			
-22	World Psychiatry			
-24	Nature Nanotechnology			
-25	Energy & Environmental Science			
-26	NATURE REVIEWS NEUROSCIENCE			
-27	Annual Review of Astronomy and Astrophysics			
-28	Nature Reviews Disease Primers			
-29	NATURE BIOTECHNOLOGY			
-30	Nature Photonics			
-31	NATURE MEDICINE			
-32	Nature Reviews Chemistry			
-33	LANCET NEUROLOGY			
-34	NATURE METHODS			
+19	LANCET ONCOLOGY	10.1016/S1470-2045(19)30569-8	done	no
+20	NATURE REVIEWS MICROBIOLOGY	10.1038/s41579-019-0270-x	done	yes
+21	Nature Reviews Clinical Oncology	10.1038/s41571-019-0227-z	done	yes
+22	World Psychiatry	10.1002/wps.20671	done	
+24	Nature Nanotechnology	10.1038/s41565-019-0564-1	done	yes
+25	Energy & Environmental Science	10.1039/c9ee02619c	done	no
+26	NATURE REVIEWS NEUROSCIENCE	10.1038/s41583-019-0223-4	done	yes
+27	Annual Review of Astronomy and Astrophysics	10.1146/annurev-astro-091918-104446	done	
+28	Nature Reviews Disease Primers	10.1038/s41572-019-0111-2	done	yes
+29	NATURE BIOTECHNOLOGY	10.1038/s41587-019-0267-z	done	yes
+30	Nature Photonics	10.1038/s41566-019-0536-x	done	yes
+31	NATURE MEDICINE	10.1038/s41591-019-0627-8	done	yes
+32	Nature Reviews Chemistry	10.1038/s41570-019-0128-9	done	yes
+33	LANCET NEUROLOGY	10.1016/S1474-4422(19)30320-5	done	yes
+34	NATURE METHODS	10.1038/s41592-019-0625-2	done	yes
 35	PHYSICS REPORTS-REVIEW SECTION OF PHYSICS LETTERS			
 36	JOURNAL OF CLINICAL ONCOLOGY			
 37	Living Reviews in Relativity			

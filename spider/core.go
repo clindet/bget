@@ -116,32 +116,40 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
 	}
 	if opt.FullText {
+		c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+			link := e.Attr("content")
+			urls = append(urls, link)
+		})
 		c.OnHTML("a.pdfLink[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, link)
+			if len(urls) == 0 {
+				urls = append(urls, link)
+			}
 		})
 		c.OnHTML("a.article-tools__item__displayStandardPdf[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			if link != "#" {
+			if link != "#" && len(urls) == 0 {
 				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
 		c.OnHTML("a.article-tools__item__displayExtendedPdf[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			if link != "#" {
+			if link != "#" && len(urls) == 0 {
 				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
 		c.OnHTML(".article-tools__pdf a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			if link != "#" {
+			if link != "#" && len(urls) == 0 {
 				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
 		c.OnHTML("div.PdfDownloadButton a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			link = "https://www.sciencedirect.com" + link
-			urls = append(urls, link)
+			if len(urls) == 0 {
+				urls = append(urls, link)
+			}
 		})
 	}
 	c.OnHTML("#redirectURL", func(e *colly.HTMLElement) {
