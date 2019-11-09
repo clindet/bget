@@ -1,0 +1,4 @@
+Rank	Name	Homepage	Status	TestDOI
+1	Zenodo	www.zenodo.org	done	10.5281/zenodo.3363060
+2	FigureShare	figshare.com	done	10.6084/m9.figshare.6634136
+

@@ -14,7 +14,7 @@ require (
 	github.com/google/go-github/v27 v27.0.6
 	github.com/mattn/go-runewidth v0.0.6 // indirect
 	github.com/olekukonko/tablewriter v0.0.2
-	github.com/openbiox/butils v0.0.0-20191108032045-af2424414b3b
+	github.com/openbiox/butils v0.0.0-20191109071326-0a3e37c394b2
 	github.com/pierrec/lz4 v2.3.0+incompatible // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5 // indirect

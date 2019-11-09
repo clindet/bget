@@ -12,6 +12,8 @@ Possible URLs pool:
 - Papers material
 - ......
 
+**Note**: Now, we are supporting and testing more doi, see [here](./doc/doi.md). 
+
 ![doi demo](https://github.com/openbiox/bget/raw/master/doc/static/doi.gif)
 
 ## Installation

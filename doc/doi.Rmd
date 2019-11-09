@@ -1,0 +1,24 @@
+---
+title: "Supported DOI by bget"
+author: "Jianfeng"
+date: "11/9/2019"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Supported DOI by bget (Data Hub)
+
+```{r echo=FALSE, warning=FALSE}
+doi.list <- read.table("./doi.list.datahub.txt", sep = "\t", header = TRUE)
+knitr::kable(doi.list)
+```
+
+## Supported DOI by bget (Journal)
+
+```{r echo=FALSE, warning=FALSE}
+doi.list <- read.table("./doi.list.journal.txt", sep = "\t", header = TRUE)
+knitr::kable(doi.list)
+```

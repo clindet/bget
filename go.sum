@@ -105,8 +105,8 @@ github.com/olekukonko/tablewriter v0.0.1 h1:b3iUnf1v+ppJiOfNX4yxxqfWKMQPZR5yoh8u
 github.com/olekukonko/tablewriter v0.0.1/go.mod h1:vsDQFd/mU46D+Z4whnwzcISnGGzXWMclvtLoiIKAKIo=
 github.com/olekukonko/tablewriter v0.0.2 h1:sq53g+DWf0J6/ceFUHpQ0nAEb6WgM++fq16MZ91cS6o=
 github.com/olekukonko/tablewriter v0.0.2/go.mod h1:rSAaSIOAGT9odnlyGlUfAJaoc5w2fSBUmeGDbRWPxyQ=
-github.com/openbiox/butils v0.0.0-20191108032045-af2424414b3b h1:DO26s3SX+eoYHBsd2Ux3NuLU/n7UcuSngFy0YBwk7rY=
-github.com/openbiox/butils v0.0.0-20191108032045-af2424414b3b/go.mod h1:coy6eZzEpBhDf1F3tZ4JKPH6XFka46Ga2iEqJ9JO7RY=
+github.com/openbiox/butils v0.0.0-20191109071326-0a3e37c394b2 h1:cyXm6xD9ztpBOhh9IY0sYf7WOHtSQqmd7XdRAQleiwM=
+github.com/openbiox/butils v0.0.0-20191109071326-0a3e37c394b2/go.mod h1:coy6eZzEpBhDf1F3tZ4JKPH6XFka46Ga2iEqJ9JO7RY=
 github.com/pelletier/go-toml v1.2.0/go.mod h1:5z9KED0ma1S8pY6P1sdut58dfprrGBbd/94hg7ilaic=
 github.com/pierrec/lz4 v2.2.7+incompatible h1:Eerk9aiqeZo2QzsbWOAsELUf9ddvAxEdMY9LYze/DEc=
 github.com/pierrec/lz4 v2.2.7+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=
