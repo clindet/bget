@@ -589,8 +589,8 @@ Supported DOI by bget (Journal)
 <td style="text-align: right;">62</td>
 <td style="text-align: left;">Cell Metabolism</td>
 <td style="text-align: left;">done</td>
-<td style="text-align: left;">no</td>
-<td style="text-align: left;">10.1016/j.cmet.2019.10.002</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">10.1016/j.cmet.2019.10.007</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">NA</td>
 </tr>
@@ -634,7 +634,7 @@ Supported DOI by bget (Journal)
 <td style="text-align: right;">68</td>
 <td style="text-align: left;">IMMUNITY</td>
 <td style="text-align: left;">done</td>
-<td style="text-align: left;">no</td>
+<td style="text-align: left;">yes</td>
 <td style="text-align: left;">10.1016/j.immuni.2019.10.001</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">NA</td>
@@ -643,7 +643,7 @@ Supported DOI by bget (Journal)
 <td style="text-align: right;">69</td>
 <td style="text-align: left;">Cell Stem Cell</td>
 <td style="text-align: left;">done</td>
-<td style="text-align: left;">no</td>
+<td style="text-align: left;">yes</td>
 <td style="text-align: left;">10.1016/j.stem.2019.09.008</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">NA</td>

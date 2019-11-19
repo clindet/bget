@@ -1,4 +1,4 @@
-package main
+package chrome
 
 import (
 	"context"
@@ -7,14 +7,16 @@ import (
 
 	bio "github.com/openbiox/butils/io"
 	"github.com/openbiox/butils/log"
+	stringo "github.com/openbiox/butils/stringo"
 
 	cdp "github.com/chromedp/chromedp"
 )
 
-func Chrome2URLs(url string) []string {
+func DoiSupplURLs(url string, timeout time.Duration) []string {
 	// create context
-	ctx, cancel := cdp.NewContext(context.Background())
-	defer cancel()
+	ctx, _ := cdp.NewContext(context.Background())
+	ctx, _ = context.WithTimeout(ctx, timeout)
+	//defer cancel()
 	var err error
 	var attbs []map[string]string
 	urls := []string{}
@@ -22,7 +24,7 @@ func Chrome2URLs(url string) []string {
 	//err := cdp.Run(ctx, visibleNejm("https://www.nejm.org/doi/full/10.1056/NEJMoa1902226", &attbs))
 	if strings.Contains(url, "www.nejm.org") {
 		err = cdp.Run(ctx, visibleNejm(url, &attbs))
-	} else if strings.Contains(url, "sciencedirect.com") {
+	} else if stringo.StrDetect(url, "sciencedirect.com|/10.1016/") {
 		err = cdp.Run(ctx, visibleScienceDirect(url, &attbs))
 	} else if strings.Contains(url, "www.ncbi.nlm.nih.gov/Traces/study") {
 		err = cdp.Run(ctx, visibleSraRunSelect(url, &attbs, ctx))
@@ -46,9 +48,9 @@ func visibleScienceDirect(host string, attbs *[]map[string]string) cdp.Tasks {
 		cdp.Navigate(host),
 		cdp.WaitVisible(`.show-toc-button`, cdp.ByQuery),
 		cdp.Click(`.show-toc-button`, cdp.ByQuery),
-		cdp.WaitVisible(`a[href="#app2"]`, cdp.ByQuery),
-		cdp.Click(`a[href="#app2"]`, cdp.ByQuery),
-		cdp.WaitVisible(`#app2`, cdp.ByQuery),
+        //cdp.WaitVisible(`a[href="#app2"]`, cdp.ByQuery),
+		//cdp.Click(`a[href="#app2"]`, cdp.ByQuery),
+		//cdp.WaitVisible(`#app2`, cdp.ByQuery),
 		cdp.AttributesAll(".Appendices a.icon-link[href]", attbs, cdp.ByQueryAll),
 	}
 }
@@ -77,7 +79,6 @@ func visibleSraRunSelect(url string, attbs *[]map[string]string, ctx context.Con
 	return cdp.Tasks{
 		cdp.Navigate(url),
 		cdp.ActionFunc(func(context.Context) error {
-			log.Infof("Visiting %s", url)
 			return nil
 		}),
 		cdp.WaitVisible(`#t-rit-all`, cdp.ByQuery),
@@ -113,7 +114,6 @@ func visibleWiley(url string, ctx context.Context) cdp.Tasks {
 	tsk := cdp.Tasks{
 		cdp.Navigate(url),
 		cdp.ActionFunc(func(context.Context) error {
-			log.Infof("Visiting %s", url)
 			return nil
 		}),
 		cdp.WaitReady("body"),
@@ -121,10 +121,10 @@ func visibleWiley(url string, ctx context.Context) cdp.Tasks {
 	cdp.CombinedOutput(fn)
 	return tsk
 }
-func main() {
-	url := "https://bpspubs.onlinelibrary.wiley.com/doi/pdf/10.1111/bph.14580"
+
+/*func main() {
+    // url := "https://bpspubs.onlinelibrary.wiley.com/doi/pdf/10.1111/bph.14580"
 	//fmt.Println(Chrome2URLs("https://bpspubs.onlinelibrary.wiley.com/doi/pdf/10.1111/bph.14580"))
-	ctx, cancel := cdp.NewContext(context.Background())
-	defer cancel()
-	cdp.Run(ctx, visibleWiley(url, ctx))
-}
+    url := "https://www.sciencedirect.com/science/article/pii/S1934590919303078?via=ihub"
+    fmt.Println(Chrome2URLs(url))
+}*/

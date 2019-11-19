@@ -59,13 +59,13 @@ Rank	Journal.Name	Fulltext-1pass-check	Supplemental-1pass-check	DOI-1pass	Fullte
 59	Lancet Respiratory Medicine	todo		10.1016/S2213-2600(19)30410-2		
 60	IEEE Communications Surveys and Tutorials			NA		
 61	JAMA Oncology	todo		10.1001/jamaoncol.2019.4741		
-62	Cell Metabolism	done	no	10.1016/j.cmet.2019.10.002		
+62	Cell Metabolism	done	yes	10.1016/j.cmet.2019.10.007		
 63	Psychological Science in the Public Interest	todo		10.1177/1529100619862034		
 63	MATERIALS SCIENCE & ENGINEERING R-REPORTS			NA		
 65	Nature Climate Change	done	yes	10.1038/s41558-019-0564-z		
 67	ACCOUNTS OF CHEMICAL RESEARCH	done		10.1021/acs.accounts.9b00404		
-68	IMMUNITY	done	no	10.1016/j.immuni.2019.10.001		
-69	Cell Stem Cell	done	no	10.1016/j.stem.2019.09.008		
+68	IMMUNITY	done	yes	10.1016/j.immuni.2019.10.001		
+69	Cell Stem Cell	done	yes	10.1016/j.stem.2019.09.008		
 70	Annual Review of Immunology	done		10.1146/annurev-immunol-072319-033325		
 71	Nature Reviews Neurology	done	yes	10.1038/s41582-019-0288-8		
 72	NATURE NEUROSCIENCE	done	yes	10.1038/s41593-019-0517-x		

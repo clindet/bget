@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
+	"github.com/openbiox/bget/chrome"
 	"github.com/openbiox/butils/log"
 	bspider "github.com/openbiox/butils/spider"
 	"github.com/openbiox/butils/stringo"
@@ -158,7 +160,22 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 		link, _ = url.QueryUnescape(u.Path)
 		c.Visit(link)
 	})
+	c.OnHTML("meta[HTTP-EQUIV=REFRESH]", func(e *colly.HTMLElement) {
+		link := e.Attr("content")
+		link = stringo.StrReplaceAll(link, ".* url='", "")
+		link = stringo.StrReplaceAll(link, "'$", "")
+		link = "https://linkinghub.elsevier.com" + link
+		c.Visit(link)
+	})
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+		if stringo.StrDetect(r.URL.String(), "^https://www.sciencedirect.com") {
+		}
+	})
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	if opt.Supplementary {
+		urls = append(urls, chrome.DoiSupplURLs(fmt.Sprintf("https://doi.org/%s", opt.Doi),
+			time.Duration(opt.Timeout)*time.Second)...)
 		c.OnHTML("#appsec1 a[target=new]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			urls = append(urls, link)
@@ -178,19 +195,6 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 			}
 		})
 	}
-	c.OnHTML("meta[HTTP-EQUIV=REFRESH]", func(e *colly.HTMLElement) {
-		link := e.Attr("content")
-		link = stringo.StrReplaceAll(link, ".* url='", "")
-		link = stringo.StrReplaceAll(link, "'$", "")
-		link = "https://linkinghub.elsevier.com" + link
-		c.Visit(link)
-	})
-	c.OnRequest(func(r *colly.Request) {
-		log.Infof("Visiting %s", r.URL.String())
-		if stringo.StrDetect(r.URL.String(), "^https://www.sciencedirect.com") {
-		}
-	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -418,11 +422,7 @@ func BmjComSpider(opt *DoiSpiderOpt) (urls []string) {
 				urls = append(urls, e.Attr("content"))
 			})
 		}
-		if opt.Supplementary {
-			c.OnHTML(".supplementary-material a[href]", func(e *colly.HTMLElement) {
-				urls = append(urls, e.Attr("href"))
-			})
-		}
+
 	} else {
 		c.OnHTML("a.pdf-link[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -434,13 +434,16 @@ func BmjComSpider(opt *DoiSpiderOpt) (urls []string) {
 				c.Visit(stringo.StrReplaceAll(fulltextUrl, ".full.pdf", "/related"))
 			}
 		})
-		if opt.Supplementary {
-			c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
-				link := e.Attr("href")
-				link = "https://" + opt.URL.Hostname() + link
-				urls = append(urls, link)
-			})
-		}
+	}
+	if opt.Supplementary {
+		c.OnHTML(".supplementary-material a[href]", func(e *colly.HTMLElement) {
+			urls = append(urls, e.Attr("href"))
+		})
+		c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			link = "https://" + opt.URL.Hostname() + link
+			urls = append(urls, link)
+		})
 	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
