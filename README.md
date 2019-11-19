@@ -12,13 +12,45 @@ Possible URLs pool:
 - Papers material
 - ......
 
-**Note**: Now, we are supporting and testing more doi, see [here](./doc/doi.md). 
+Why we want to create this tool? 
+
+We can query PDF of the manuscript via using Endnote or sci-hub. However, you can not easily get the supplementary files of scientific papers based on the two ways.
 
 ![doi demo](https://github.com/openbiox/bget/raw/master/doc/static/doi.gif)
+
+Here, we are developing and sharing an open-source tool bget with `doi` subcommand to query supplementary files of scientific papers. The journals with high impact factors or those integrative publishers are a higher priority in our development plan: https://github.com/openbiox/bget/blob/master/doc/doi.md
+
+It is noted that we do not want to distribute any pirated resources or cause unnecessary network congestion.
+We hope this tool can provide an optional method to more easily query related files of scientific papers. Please use it in a non-invasive way (i.e. high concurrency, long continuous request).
+
+## Prerequisities
+
+- Headless Chrome is required for some of website with JavaScript driven render pages.
+
+Install Chrome on Linux:
+
+- [How to Install Google Chrome Web Browser on Ubuntu](https://linuxize.com/post/how-to-install-google-chrome-web-browser-on-ubuntu-18-04/)
+- [How to Install Google Chrome Web Browser on CentOS](https://linuxize.com/post/how-to-install-google-chrome-web-browser-on-centos-7/)
+
+For windows users, you may need to create an alias of Chrome to make [chromedp](https://github.com/chromedp/chromedp) work.
 
 ## Installation
 
 ```bash
+# download bget on MAC OSX
+wget -c https://github.com/openbiox/bget/releases/download/v0.1.3/bget_osx
+mv bget_osx bget
+chmod a+x bget
+#
+# download bget on Linux
+wget -c https://github.com/openbiox/bget/releases/download/v0.1.3/bget_linux64
+mv bget_linux64 bget
+chmod a+x bget
+#
+# download bget on Windows
+wget -c https://github.com/openbiox/bget/releases/download/v0.1.3/bget.exe
+#
+# get latest version
 go get -u github.com/openbiox/bget
 ```
 
@@ -68,7 +100,7 @@ Flags:
 Use "bget [command] --help" for more information about a command.
 ```
 
-You can use DOI to download article and its supplementary Data. The supported website and journals will be continue increased.
+The `bget doi` supported website and journals are continuely increasing.
 
 **Warn**: If you do not follow the policies of the relevant website (i.e. continuous download or limited copyright), you will lose the authorization to use this tool.
 
