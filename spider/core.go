@@ -28,26 +28,28 @@ func NatureComSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("a.c-pdf-download__link[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, "https://nature.com"+link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML("a.print-link[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			if !strings.HasPrefix(link, "http") {
-				urls = append(urls, "https://nature.com"+link)
-			} else {
-				u, _ := url.Parse(link)
-				linkTmp := strings.Split(u.Path, "/")
-				if len(linkTmp) < 4 {
-					return
+			if !strings.Contains(link, "/figures/") {
+				if !strings.HasPrefix(link, "http") {
+					urls = append(urls, linkFilter(link, opt.URL))
+				} else {
+					u, _ := url.Parse(link)
+					linkTmp := strings.Split(u.Path, "/")
+					if len(linkTmp) < 4 {
+						return
+					}
+					linkTmp[2] = stringo.StrReplaceAll(linkTmp[2], "art:", "art%3A")
+					newLink := append(linkTmp[0:2], strings.Join(linkTmp[2:4], "%2F"))
+					newLink = append(newLink, linkTmp[4:len(linkTmp)]...)
+					link = strings.Join(newLink, "/")
+					link = u.Scheme + "://" + u.Host + link
+					urls = append(urls, link)
 				}
-				linkTmp[2] = stringo.StrReplaceAll(linkTmp[2], "art:", "art%3A")
-				newLink := append(linkTmp[0:2], strings.Join(linkTmp[2:4], "%2F"))
-				newLink = append(newLink, linkTmp[4:len(linkTmp)]...)
-				link = strings.Join(newLink, "/")
-				link = u.Scheme + "://" + u.Host + link
-				urls = append(urls, link)
 			}
 		})
 	}
@@ -108,7 +110,8 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 	c := colly.NewCollector(
 		colly.AllowedDomains("doi.org", "www.cell.com", "cell.com", "linkinghub.elsevier.com", "secure.jbs.elsevierhealth.com",
 			"id.elsevier.com", "www.cancercell.org", "www.sciencedirect.com",
-			"pdf.sciencedirectassets.com", "www.thelancet.com", "www.gastrojournal.org"),
+			"pdf.sciencedirectassets.com", "www.thelancet.com", "www.gastrojournal.org",
+            "www.clinicalkey.com"),
 		colly.MaxDepth(1),
 	)
 	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
@@ -175,7 +178,7 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	if opt.Supplementary {
 		urls = append(urls, chrome.DoiSupplURLs(fmt.Sprintf("https://doi.org/%s", opt.Doi),
-			time.Duration(opt.Timeout)*time.Second)...)
+			time.Duration(opt.Timeout)*time.Second, opt.Proxy)...)
 		c.OnHTML("#appsec1 a[target=new]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			urls = append(urls, link)

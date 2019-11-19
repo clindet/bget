@@ -760,7 +760,7 @@ Supported DOI by bget (Journal)
 <td style="text-align: right;">83</td>
 <td style="text-align: left;">JOURNAL OF HEPATOLOGY</td>
 <td style="text-align: left;">done</td>
-<td style="text-align: left;">no</td>
+<td style="text-align: left;">yes</td>
 <td style="text-align: left;">10.1016/j.jhep.2019.10.023</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">NA</td>
@@ -787,8 +787,8 @@ Supported DOI by bget (Journal)
 <td style="text-align: right;">86</td>
 <td style="text-align: left;">JOURNAL OF THE AMERICAN COLLEGE OF CARDIOLOGY</td>
 <td style="text-align: left;">done</td>
-<td style="text-align: left;">no</td>
-<td style="text-align: left;">10.1016/j.jacc.2019.09.001</td>
+<td style="text-align: left;">yes</td>
+<td style="text-align: left;">10.1016/j.jacc.2019.09.067</td>
 <td style="text-align: left;">NA</td>
 <td style="text-align: left;">NA</td>
 </tr>

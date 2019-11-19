@@ -9,14 +9,20 @@ import (
 	"github.com/openbiox/butils/log"
 	stringo "github.com/openbiox/butils/stringo"
 
+	"github.com/chromedp/chromedp"
 	cdp "github.com/chromedp/chromedp"
 )
 
-func DoiSupplURLs(url string, timeout time.Duration) []string {
+func DoiSupplURLs(url string, timeout time.Duration, proxy string) []string {
 	// create context
-	ctx, _ := cdp.NewContext(context.Background())
-	ctx, _ = context.WithTimeout(ctx, timeout)
-	//defer cancel()
+	o := append(cdp.DefaultExecAllocatorOptions[:],
+		//... any options here
+		chromedp.ProxyServer(proxy),
+	)
+	cx, cancel := chromedp.NewExecAllocator(context.Background(), o...)
+	ctx, cancel := cdp.NewContext(cx)
+	ctx, cancel = context.WithTimeout(ctx, timeout)
+	defer cancel()
 	var err error
 	var attbs []map[string]string
 	urls := []string{}
@@ -48,7 +54,7 @@ func visibleScienceDirect(host string, attbs *[]map[string]string) cdp.Tasks {
 		cdp.Navigate(host),
 		cdp.WaitVisible(`.show-toc-button`, cdp.ByQuery),
 		cdp.Click(`.show-toc-button`, cdp.ByQuery),
-        //cdp.WaitVisible(`a[href="#app2"]`, cdp.ByQuery),
+		//cdp.WaitVisible(`a[href="#app2"]`, cdp.ByQuery),
 		//cdp.Click(`a[href="#app2"]`, cdp.ByQuery),
 		//cdp.WaitVisible(`#app2`, cdp.ByQuery),
 		cdp.AttributesAll(".Appendices a.icon-link[href]", attbs, cdp.ByQueryAll),

@@ -35,6 +35,10 @@ func UniVersalDoiSpider(opt *DoiSpiderOpt) (urls []string) {
 			link = stringo.StrReplaceAll(link, "pdf[?].*", "pdf")
 			urls = append(urls, linkFilter(link, opt.URL))
 		})
+		c.OnHTML("a.article-pdfLink[data-article-url]", func(e *colly.HTMLElement) {
+			link := e.Attr("data-article-url")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
 		staticUrl := static2pdf(opt)
 		if staticUrl != "" {
 			urls = append(urls, linkFilter(staticUrl, opt.URL))
