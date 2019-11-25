@@ -202,4 +202,5 @@ Flags:
 
 ## License
 
-Apache 2.0
+Academic Free License version 3.0
+
