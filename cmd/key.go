@@ -140,10 +140,10 @@ func getAllKeys() (keys []string) {
 
 	tmp := []string{}
 	for i := range keys {
-		if i%5 == 0 && len(tmp) > 0 {
+		if i%4 == 0 && len(tmp) > 0 {
 			table.Append(tmp)
 			tmp = []string{}
-		} else if i%5 != 0 {
+		} else if i%4 != 0 {
 			tmp = append(tmp, keys[i])
 		}
 	}

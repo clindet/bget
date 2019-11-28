@@ -225,5 +225,6 @@ func init() {
 	BgetFilesPool = append(BgetFilesPool, githubRepos...)
 	BgetFilesPool = append(BgetFilesPool, journalsMeta...)
 	BgetFilesPool = append(BgetFilesPool, annovarLinks...)
+	BgetFilesPool = append(BgetFilesPool, wkflFiles...)
 	BgetFilesPool = append(BgetFilesPool, otherFiles...)
 }
