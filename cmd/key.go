@@ -193,8 +193,8 @@ func init() {
   bget key -a // get all available keys
   bget key samtools -v table // view all samtools available versions in CMD table
   bget key samtools -v json // view all samtools available versions in JSON format
-  bget key "reffa-defuse@GRCh38 #97" -t 10 -f
-  bget key reffa-defuse@GRCh38 release=97 -t 10 -f
+  bget key "reffa/defuse@GRCh38 #97" -t 10 -f
+  bget key reffa/defuse@GRCh38 release=97 -t 10 -f
   bget key db_annovar@clinvar_20170501 db_annovar@clinvar_20180603 builder=hg38
 
   bget key db_annovar -v txt

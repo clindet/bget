@@ -90,7 +90,7 @@ var wdlWkflFiles = []bgetFilesURLType{
 		URL:  []string{"https://github.com/edawson/firecloud-tools"},
 	},
 	{
-		Name: "wkfl/gatk/broad-prod-wgs-germline-snps-indels",
+		Name: "wkfl/gatk/wgs-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/broad-prod-wgs-germline-snps-indels"},
 	},
 	{
@@ -98,31 +98,31 @@ var wdlWkflFiles = []bgetFilesURLType{
 		URL:  []string{"https://github.com/gatk-workflows/five-dollar-genome-analysis-pipeline"},
 	},
 	{
-		Name: "wkfl/gatk/gatk3-4-rnaseq-germline-snps-indels",
+		Name: "wkfl/gatk/3-4-rnaseq-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/gatk3-4-rnaseq-germline-snps-indels"},
 	},
 	{
-		Name: "wkfl/gatk/gatk3-data-processing",
+		Name: "wkfl/gatk/3-data-processing",
 		URL:  []string{"https://github.com/gatk-workflows/gatk3-data-processing"},
 	},
 	{
-		Name: "wkfl/gatk/gatk4-data-processing",
+		Name: "wkfl/gatk/4-data-processing",
 		URL:  []string{"https://github.com/gatk-workflows/gatk4-data-processing"},
 	},
 	{
-		Name: "wkfl/gatk/gatk4-germline-snps-indels",
+		Name: "wkfl/gatk/4-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/gatk4-germline-snps-indels"},
 	},
 	{
-		Name: "wkfl/gatk/gatk4-somatic-cnvs",
+		Name: "wkfl/gatk/4-somatic-cnvs",
 		URL:  []string{"https://github.com/gatk-workflows/gatk4-somatic-cnvs"},
 	},
 	{
-		Name: "wkfl/gatk/gatk4-somatic-snvs-indels",
+		Name: "wkfl/gatk/4-somatic-snvs-indels",
 		URL:  []string{"https://github.com/gatk-workflows/gatk4-somatic-snvs-indels"},
 	},
 	{
-		Name: "wkfl/gatk/gatk4-somatic-with-preprocessing",
+		Name: "wkfl/gatk/4-somatic-with-preprocessing",
 		URL:  []string{"https://github.com/gatk-workflows/gatk4-somatic-with-preprocessing"},
 	},
 	{
@@ -130,19 +130,19 @@ var wdlWkflFiles = []bgetFilesURLType{
 		URL:  []string{"https://github.com/gatk-workflows/intel-faster-alternative-samples"},
 	},
 	{
-		Name: "wkfl/gatk/intel-gatk3-4-germline-snps-indels",
+		Name: "wkfl/gatk/intel-3-4-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/intel-gatk3-4-germline-snps-indels"},
 	},
 	{
-		Name: "wkfl/gatk/intel-gatk3-germline-snps-indels",
+		Name: "wkfl/gatk/intel-3-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/intel-gatk3-germline-snps-indels"},
 	},
 	{
-		Name: "wkfl/gatk/intel-gatk4-germline-snps-indels",
+		Name: "wkfl/gatk/intel-4-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/intel-gatk4-germline-snps-indels"},
 	},
 	{
-		Name: "wkfl/gatk/intel-gatk4-somatic-with-preprocessing",
+		Name: "wkfl/gatk/intel-4-somatic-with-preprocessing",
 		URL:  []string{"https://github.com/gatk-workflows/intel-gatk4-somatic-with-preprocessing"},
 	},
 	{
