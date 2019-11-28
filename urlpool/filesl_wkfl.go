@@ -4,6 +4,12 @@ var wkflFiles = []bgetFilesURLType{}
 
 var wdlWkflFiles = []bgetFilesURLType{
 	{
+		Name:         "wkfl/encode-chipseq2",
+		Tags:         []string{"pipeline", "chipseq"},
+		URL:          []string{"https://github.com/ENCODE-DCC/chip-seq-pipeline2"},
+		PostShellCmd: []string{"pip3 install caper || pip install caper"},
+	},
+	{
 		Name: "wkfl/antonkulaga/antonkulaga",
 		URL:  []string{"https://github.com/antonkulaga/antonkulaga"},
 	},
