@@ -98,4 +98,9 @@ var reffaFiles = []bgetFilesURLType{
 		Name: "reffa/encode-mm9-ataqc",
 		URL:  []string{"https://storage.googleapis.com/encode-pipeline-genome-data/mm9/ataqc/mm9_gencode_tss_unique.bed.gz", "https://storage.googleapis.com/encode-pipeline-genome-data/mm9/ataqc/mm9_univ_dhs_ucsc.from_mm10.bed.gz", "https://storage.googleapis.com/encode-pipeline-genome-data/mm9/ataqc/tss_mm9_master.from_mm10.bed.gz", "https://storage.googleapis.com/encode-pipeline-genome-data/mm9/ataqc/mm9_enh_dhs_ucsc.from_mm10.bed.gz", "https://storage.googleapis.com/encode-pipeline-genome-data/mm9/ataqc/mm9_dhs_universal_ucsc_v1.bed.gz", "https://storage.googleapis.com/encode-pipeline-genome-data/mm9/ataqc/dnase_avgs_merged_named.fseq.vals.gz", "https://storage.googleapis.com/encode-pipeline-genome-data/mm9/ataqc/accession_to_name.txt"},
 	},
+	{
+		Name:     "reffa/rmats",
+		URL:      []string{"http://rmaps.cecsresearch.org/{{version}}/{{version}}index.tgz"},
+		Versions: []string{"STAR"},
+	},
 }

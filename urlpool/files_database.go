@@ -2,7 +2,7 @@ package urlpool
 
 var annovarLinks = []bgetFilesURLType{
 	{
-		Name: "db_annovar",
+		Name: "db/annovar",
 		URL: []string{"http://www.openbioinformatics.org/annovar/download/{{builder}}_{{version}}.txt.gz",
 			"http://www.openbioinformatics.org/annovar/download/{{builder}}_{{version}}.txt.idx.gz"},
 		Versions: []string{"clinvar_20131105", "clinvar_20140211", "clinvar_20140303",
@@ -21,56 +21,56 @@ var annovarLinks = []bgetFilesURLType{
 			"gene4denovo201907"},
 	},
 	{
-		Name:     "db_annovar_1000g",
+		Name:     "db/annovar-1000g",
 		URL:      []string{"http://www.openbioinformatics.org/annovar/download/{{builder}}_{{version}}.zip"},
 		Versions: []string{"1000g2015aug", "1000g2014oct", "1000g2014sep", "1000g2014aug", "1000g2012apr", "1000g2012feb", "1000g2011may", "1000g2010nov", "1000g2012apr", "1000g2010jul", "1000g2010", "1000g"},
 	},
 	{
-		Name: "db_annovar_noidx",
+		Name: "db/annovar-noidx",
 		URL: []string{"http://www.openbioinformatics.org/annovar/download/{{version}}.txt.gz",
 			"http://www.openbioinformatics.org/annovar/download/{{builder}}_{{version}}.txt.gz"},
 		Versions: []string{"GDI_full_10282015", "RVIS_ExAC_4KW", "LoFtool_scores", "tmcsnpdb"},
 	},
 	{
-		Name: "db_annovar_knowngene",
+		Name: "db/annovar-knowngene",
 		URL: []string{"http://www.openbioinformatics.org/annovar/download/{{builder}}_knownGene.txt.gz",
 			"http://www.openbioinformatics.org/annovar/download/{{builder}}_knownGeneMrna.fa.gz",
 			"http://www.openbioinformatics.org/annovar/download/{{builder}}_kgXref.txt.gz"},
 	},
 	{
-		Name: "db_annovar_ensgene",
+		Name: "db/annovar-ensgene",
 		URL: []string{"http://www.openbioinformatics.org/annovar/download/{{builder}}_ensGene.txt.gz",
 			"http://www.openbioinformatics.org/annovar/download/{{builder}}_ensGeneMrna.fa.gz"},
 	},
 	{
-		Name: "db_annovar_refgene",
+		Name: "db/annovar-refgene",
 		URL: []string{"http://www.openbioinformatics.org/annovar/download/{{builder}}_refGene.txt.gz",
 			"http://www.openbioinformatics.org/annovar/download/{{builder}}_refGeneMrna.fa.gz",
 			"http://www.openbioinformatics.org/annovar/download/{{builder}}_refGeneVersion.txt.gz"},
 	},
 	{
-		Name: "db_ucsc_cytoband",
+		Name: "db/ucsc-cytoband",
 		URL:  []string{"http://hgdownload.cse.ucsc.edu/goldenPath/{{builder}}/database/cytoBand.txt.gz"},
 	},
 	{
-		Name: "db_ucsc_dnase_clustered",
+		Name: "db/ucsc-dnase-clustered",
 		URL:  []string{"http://hgdownload.cse.ucsc.edu/goldenPath/{{builder}}/encodeDCC/wgEncodeRegDnaseClustered/wgEncodeRegDnaseClustered{{version}}.bed.gz"},
 	},
 	{
-		Name: "db_ucsc_ensgene",
+		Name: "db/ucsc-ensgene",
 		URL:  []string{"http://hgdownload.cse.ucsc.edu/goldenPath/{{builder}}/database/ensGene.txt.gz"},
 	},
 	{
-		Name: "db_ucsc_knowngene",
+		Name: "db/ucsc-knowngene",
 		URL: []string{"http://hgdownload.cse.ucsc.edu/goldenPath/{{builder}}/database/knownGene.txt.gz",
 			"http://hgdownload.cse.ucsc.edu/goldenPath/{{builder}}/database/kgXref.txt.gz"},
 	},
 	{
-		Name: "db_ucsc_refgene",
+		Name: "db/ucsc-refgene",
 		URL:  []string{"http://hgdownload.cse.ucsc.edu/goldenPath/{{builder}}/database/refGene.txt.gz"},
 	},
 	{
-		Name: "db_ucsc_tfbs_clustered",
+		Name: "db/ucsc-tfbs-clustered",
 		URL:  []string{"http://hgdownload.cse.ucsc.edu/goldenPath/{{builder}}/encodeDCC/wgEncodeRegTfbsClustered/wgEncodeRegTfbsClustered{{version}}.bed.gz"},
 	},
 }

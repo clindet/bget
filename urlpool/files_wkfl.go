@@ -2,227 +2,241 @@ package urlpool
 
 var wkflFiles = []bgetFilesURLType{}
 
+var snakemakeWkflFiles = []bgetFilesURLType{
+	{
+		Name:         "snakemake/dna-seq-gatk-variant-calling",
+		URL:          []string{"https://github.com/snakemake-workflows/dna-seq-gatk-variant-calling"},
+		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
+	},
+	{
+		Name:         "snakemake/sequana",
+		URL:          []string{"https://github.com/sequana/sequana"},
+		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
+	},
+}
+
 var wdlWkflFiles = []bgetFilesURLType{
 	{
-		Name:         "wkfl/encode-chipseq2",
+		Name:         "wdl/encode-chipseq2",
 		Tags:         []string{"pipeline", "chipseq"},
 		URL:          []string{"https://github.com/ENCODE-DCC/chip-seq-pipeline2"},
 		PostShellCmd: []string{"pip3 install caper || pip install caper"},
 	},
 	{
-		Name: "wkfl/antonkulaga/antonkulaga",
+		Name: "wdl/antonkulaga",
 		URL:  []string{"https://github.com/antonkulaga/antonkulaga"},
 	},
 	{
-		Name: "wkfl/bgm-cwg/Whole-Exome-Sequencing-Workflow",
+		Name: "wdl/bgm-cwg-whole-exome-sequencing",
 		URL:  []string{"https://github.com/bgm-cwg/Whole-Exome-Sequencing-Workflow"},
 	},
 	{
-		Name: "wkfl/bgm-cwg/Whole-Genome-Sequencing-Workflow",
+		Name: "wdl/bgm-cwg-whole-genome-sequencing",
 		URL:  []string{"https://github.com/bgm-cwg/Whole-Genome-Sequencing-Workflow"},
 	},
 	{
-		Name: "wkfl/biowdl/aligning",
+		Name: "wdl/biowdl-aligning",
 		URL:  []string{"https://github.com/biowdl/aligning"},
 	},
 	{
-		Name: "wkfl/biowdl/bam-to-gvcf",
+		Name: "wdl/biowdl-bam-to-gvcf",
 		URL:  []string{"https://github.com/biowdl/bam-to-gvcf"},
 	},
 	{
-		Name: "wkfl/biowdl/ChIP-seq",
+		Name: "wdl/biowdl-chip-seq",
 		URL:  []string{"https://github.com/biowdl/ChIP-seq"},
 	},
 	{
-		Name: "wkfl/biowdl/gams",
+		Name: "wdl/biowdl-gams",
 		URL:  []string{"https://github.com/biowdl/gams"},
 	},
 	{
-		Name: "wkfl/biowdl/germline-DNA",
+		Name: "wdl/biowdl-germline-dna",
 		URL:  []string{"https://github.com/biowdl/germline-DNA"},
 	},
 	{
-		Name: "wkfl/biowdl/jointgenotyping",
+		Name: "wdl/biowdl-jointgenotyping",
 		URL:  []string{"https://github.com/biowdl/jointgenotyping"},
 	},
 	{
-		Name: "wkfl/biowdl/pipeline-template",
+		Name: "wdl/biowdl-pipeline-template",
 		URL:  []string{"https://github.com/biowdl/pipeline-template"},
 	},
 	{
-		Name: "wkfl/biowdl/QC",
+		Name: "wdl/biowdl-qc",
 		URL:  []string{"https://github.com/biowdl/QC"},
 	},
 	{
-		Name: "wkfl/biowdl/RNA-seq",
+		Name: "wdl/biowdl-rna-seq",
 		URL:  []string{"https://github.com/biowdl/RNA-seq"},
 	},
 	{
-		Name: "wkfl/biowdl/somatic-variantcalling",
+		Name: "wdl/biowdl-somatic-variantcalling",
 		URL:  []string{"https://github.com/biowdl/somatic-variantcalling"},
 	},
 	{
-		Name: "wkfl/biowdl/tasks",
+		Name: "wdl/biowdl-tasks",
 		URL:  []string{"https://github.com/biowdl/tasks"},
 	},
 	{
-		Name: "wkfl/biowdl/virus-assembly",
+		Name: "wdl/biowdl-virus-assembly",
 		URL:  []string{"https://github.com/biowdl/virus-assembly"},
 	},
 	{
-		Name: "wkfl/broadinstitute/TSCA_firecloud_WDLS",
+		Name: "wdl/tsca-firecloud",
 		URL:  []string{"https://github.com/broadinstitute/TSCA_firecloud_WDLS"},
 	},
 	{
-		Name: "wkfl/camccowan/PacBio-WDL-Tools",
+		Name: "wdl/pacbio-tools",
 		URL:  []string{"https://github.com/camccowan/PacBio-WDL-Tools"},
 	},
 	{
-		Name: "wkfl/cancerit/BRASS-wdl",
+		Name: "wdl/brass",
 		URL:  []string{"https://github.com/cancerit/BRASS-wdl"},
 	},
 	{
-		Name: "wkfl/dnanexus-rnd/DeepVariant-GLnexus-WDL",
+		Name: "wdl/deepvariant-glnexus",
 		URL:  []string{"https://github.com/dnanexus-rnd/DeepVariant-GLnexus-WDL"},
 	},
 	{
-		Name: "wkfl/edawson/firecloud-tools",
+		Name: "wdl/firecloud-tools",
 		URL:  []string{"https://github.com/edawson/firecloud-tools"},
 	},
 	{
-		Name: "wkfl/gatk/wgs-germline-snps-indels",
+		Name: "wdl/gatk-wgs-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/broad-prod-wgs-germline-snps-indels"},
 	},
 	{
-		Name: "wkfl/gatk/five-dollar-genome-analysis-pipeline",
+		Name: "wdl/gatk-five-dollar-genome-analysis",
 		URL:  []string{"https://github.com/gatk-workflows/five-dollar-genome-analysis-pipeline"},
 	},
 	{
-		Name: "wkfl/gatk/3-4-rnaseq-germline-snps-indels",
+		Name: "wdl/gatk-3-4-rnaseq-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/gatk3-4-rnaseq-germline-snps-indels"},
 	},
 	{
-		Name: "wkfl/gatk/3-data-processing",
+		Name: "wdl/gatk-3-data-processing",
 		URL:  []string{"https://github.com/gatk-workflows/gatk3-data-processing"},
 	},
 	{
-		Name: "wkfl/gatk/4-data-processing",
+		Name: "wdl/gatk-4-data-processing",
 		URL:  []string{"https://github.com/gatk-workflows/gatk4-data-processing"},
 	},
 	{
-		Name: "wkfl/gatk/4-germline-snps-indels",
+		Name: "wdl/gatk-4-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/gatk4-germline-snps-indels"},
 	},
 	{
-		Name: "wkfl/gatk/4-somatic-cnvs",
+		Name: "wdl/gatk-4-somatic-cnvs",
 		URL:  []string{"https://github.com/gatk-workflows/gatk4-somatic-cnvs"},
 	},
 	{
-		Name: "wkfl/gatk/4-somatic-snvs-indels",
+		Name: "wdl/gatk-4-somatic-snvs-indels",
 		URL:  []string{"https://github.com/gatk-workflows/gatk4-somatic-snvs-indels"},
 	},
 	{
-		Name: "wkfl/gatk/4-somatic-with-preprocessing",
+		Name: "wdl/gatk-4-somatic-with-preprocessing",
 		URL:  []string{"https://github.com/gatk-workflows/gatk4-somatic-with-preprocessing"},
 	},
 	{
-		Name: "wkfl/gatk/intel-faster-alternative-samples",
+		Name: "wdl/gatk-intel-faster-alternative-samples",
 		URL:  []string{"https://github.com/gatk-workflows/intel-faster-alternative-samples"},
 	},
 	{
-		Name: "wkfl/gatk/intel-3-4-germline-snps-indels",
+		Name: "wdl/gatk-3-4-intel-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/intel-gatk3-4-germline-snps-indels"},
 	},
 	{
-		Name: "wkfl/gatk/intel-3-germline-snps-indels",
+		Name: "wdl/gatk-3-intel-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/intel-gatk3-germline-snps-indels"},
 	},
 	{
-		Name: "wkfl/gatk/intel-4-germline-snps-indels",
+		Name: "wdl/gatk-4-intel-germline-snps-indels",
 		URL:  []string{"https://github.com/gatk-workflows/intel-gatk4-germline-snps-indels"},
 	},
 	{
-		Name: "wkfl/gatk/intel-4-somatic-with-preprocessing",
+		Name: "wdl/gatk-4-intel-somatic-with-preprocessing",
 		URL:  []string{"https://github.com/gatk-workflows/intel-gatk4-somatic-with-preprocessing"},
 	},
 	{
-		Name: "wkfl/gatk/seq-format-conversion",
+		Name: "wdl/gatk-seq-format-conversion",
 		URL:  []string{"https://github.com/gatk-workflows/seq-format-conversion"},
 	},
 	{
-		Name: "wkfl/gatk/seq-format-validation",
+		Name: "wdl/gatk-seq-format-validation",
 		URL:  []string{"https://github.com/gatk-workflows/seq-format-validation"},
 	},
 	{
-		Name: "wkfl/gatk/genomicsITER-developers/wdl",
+		Name: "wdl/genomics-iter-developers-wgs-wes-germline",
 		URL:  []string{"https://github.com/genomicsITER-developers/wdl"},
 	},
 	{
-		Name: "wkfl/hongiiv/gatk-workflows",
+		Name: "wdl/hongiiv-gatk-workflows",
 		URL:  []string{"https://github.com/hongiiv/gatk-workflows"},
 	},
 	{
-		Name: "wkfl/jimmybgammyknee/uofaBioWDL",
+		Name: "wdl/uofabio",
 		URL:  []string{"https://github.com/jimmybgammyknee/uofaBioWDL"},
 	},
 	{
-		Name: "wkfl/jimmybgammyknee/workflows",
+		Name: "wdl/jimmybgammyknee-workflows",
 		URL:  []string{"https://github.com/jimmybgammyknee/workflows"},
 	},
 	{
-		Name: "wkfl/johnmous/ChIPseq",
+		Name: "wdl/johnmous-chip-seq",
 		URL:  []string{"https://github.com/johnmous/ChIPseq"},
 	},
 	{
-		Name: "wkfl/karlrl/mgs_sop",
+		Name: "wdl/mgs-sop",
 		URL:  []string{"https://github.com/karlrl/mgs_sop"},
 	},
 	{
-		Name: "wkfl/Kurt-Hetrick/WDL",
+		Name: "wdl/kurt-hetrick-variants",
 		URL:  []string{"https://github.com/Kurt-Hetrick/WDL"},
 	},
 	{
-		Name: "wkfl/manning-lab/saigeWdl",
+		Name: "wdl/saige",
 		URL:  []string{"https://github.com/manning-lab/saigeWdl"},
 	},
 	{
-		Name: "wkfl/manning-lab/wgsaParsrWdl",
+		Name: "wdl/wgsa-parsr",
 		URL:  []string{"https://github.com/manning-lab/wgsaParsrWdl"},
 	},
 	{
-		Name: "wkfl/mkim55/deepvar-wdl",
+		Name: "wdl/deepvar",
 		URL:  []string{"https://github.com/mkim55/deepvar-wdl"},
 	},
 	{
-		Name: "wkfl/ncsa/MayomicsVC",
+		Name: "wdl/mayomics-vc",
 		URL:  []string{"https://github.com/ncsa/MayomicsVC"},
 	},
 	{
-		Name: "wkfl/omixer/metagenophile",
+		Name: "wdl/metagenophile",
 		URL:  []string{"https://github.com/omixer/metagenophile"},
 	},
 	{
-		Name: "wkfl/oskarvid/wdl_germline_pipeline",
+		Name: "wdl/oskarvid-germline-pipeline",
 		URL:  []string{"https://github.com/oskarvid/wdl_germline_pipeline"},
 	},
 	{
-		Name: "wkfl/ottojolanki/kallisto-wdl",
+		Name: "wdl/ottojolanki-kallisto",
 		URL:  []string{"https://github.com/ottojolanki/kallisto-wdl"},
 	},
 	{
-		Name: "wkfl/raisok/RNAseq_WDL",
+		Name: "wdl/raisok-rnaseq",
 		URL:  []string{"https://github.com/raisok/RNAseq_WDL"},
 	},
 	{
-		Name: "wkfl/SanderEST/cromwell_wdl",
+		Name: "wdl/sanderest-cromwell",
 		URL:  []string{"https://github.com/SanderEST/cromwell_wdl"},
 	},
 	{
-		Name: "wkfl/Seonwhee-Genome/GATK_WDL",
+		Name: "wdl/seonwhee-genome-gatk",
 		URL:  []string{"https://github.com/Seonwhee-Genome/GATK_WDL"},
 	},
 }
 
 func init() {
 	wkflFiles = append(wkflFiles, wdlWkflFiles...)
+	wkflFiles = append(wkflFiles, snakemakeWkflFiles...)
 }
