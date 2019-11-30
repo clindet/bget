@@ -2,7 +2,7 @@ package urlpool
 
 var githubRepos = []bgetFilesURLType{
 	{
-		Name:         "test/github_demo",
+		Name:         "test/github-demo",
 		URL:          []string{"https://github.com/Miachol/github_demo"},
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
@@ -142,7 +142,7 @@ var githubRepos = []bgetFilesURLType{
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
 	{
-		Name:         "qc/fastx_toolkit",
+		Name:         "qc/fastx-toolkit",
 		URL:          []string{"https://github.com/agordon/fastx_toolkit"},
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
@@ -517,7 +517,7 @@ var githubRepos = []bgetFilesURLType{
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
 	{
-		Name:         "mut/cn_learn",
+		Name:         "mut/cn-learn",
 		URL:          []string{"https://github.com/girirajanlab/CN_Learn"},
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
@@ -732,7 +732,7 @@ var githubRepos = []bgetFilesURLType{
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
 	{
-		Name:         "exp/simlr_py",
+		Name:         "exp/simlr-py",
 		URL:          []string{"https://github.com/bowang87/SIMLR_PY"},
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
@@ -897,7 +897,7 @@ var githubRepos = []bgetFilesURLType{
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
 	{
-		Name:         "qc/3dchromatin_replicateqc",
+		Name:         "qc/3dchromatin-replicateqc",
 		URL:          []string{"https://github.com/kundajelab/3DChromatin_ReplicateQC"},
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
@@ -997,7 +997,7 @@ var githubRepos = []bgetFilesURLType{
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
 	{
-		Name:         "image/mask_rcnn",
+		Name:         "image/mask-rcnn",
 		URL:          []string{"https://github.com/matterport/Mask_RCNN"},
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
@@ -1012,7 +1012,7 @@ var githubRepos = []bgetFilesURLType{
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
 	{
-		Name:         "doc/trackviewer.documentation",
+		Name:         "doc/trackviewer",
 		URL:          []string{"https://github.com/jianhong/trackViewer.documentation"},
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
@@ -1144,6 +1144,11 @@ var githubRepos = []bgetFilesURLType{
 	{
 		Name:         "seq/biopython",
 		URL:          []string{"https://github.com/biopython/biopython"},
+		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
+	},
+	{
+		Name:         "doc/awosome-bioinformatics",
+		URL:          []string{"https://github.com/openbiox/awosome-bioinformatics"},
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
 }

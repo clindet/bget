@@ -80,7 +80,7 @@ var otherFiles = []bgetFilesURLType{
 		URL:  []string{"https://github.com/broadinstitute/gatk/releases/download/{{version}}/gatk-{{version}}.zip", "https://github.com/broadinstitute/gatk/archive/{{version}}.zip"},
 	},
 	{
-		Name:     "mut/gatk_bundle",
+		Name:     "mut/gatk-bundle",
 		URL:      []string{"ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/{{version}}/"},
 		Versions: []string{"hg38", "hg19", "hg18", "b37", "b36"},
 	},
@@ -138,7 +138,7 @@ var otherFiles = []bgetFilesURLType{
 		URL:  []string{"https://github.com/nextflow-io/nextflow/releases/download/{{version}}/nextflow-@>@str_replace('{{version}}', 'v', '')@<@-all"},
 	},
 	{
-		Name:     "qc/ngs_qc_toolkit",
+		Name:     "qc/ngs-qc-toolkit",
 		URL:      []string{"http://14.139.61.3:8080/ngsqctoolkit/NGSQCToolkit_{{version}}.zip"},
 		Versions: []string{"v2.3.3", "v2.3.2", "v2.3.1"},
 	},
@@ -264,5 +264,10 @@ var otherFiles = []bgetFilesURLType{
 		Name:     "base/xz",
 		URL:      []string{"http://tukaani.org/xz/xz-{{version}}.tar.gz"},
 		Versions: []string{"5.2.3", "5.2.2"},
+	},
+	{
+		Name:     "anno/annovar",
+		URL:      []string{"http://www.openbioinformatics.org/annovar/download/0wgxR2rIVP/annovar.{{version}}.tar.gz"},
+		Versions: []string{"latest"},
 	},
 }
