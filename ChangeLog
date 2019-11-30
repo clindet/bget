@@ -1,5 +1,10 @@
 2019-11-29 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
+		* add more db items in key subcmd
+		* set default version var
+
+2019-11-29 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
 		* classify items in key subcmd
 
 2019-11-28 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>

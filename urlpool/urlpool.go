@@ -31,6 +31,7 @@ type bgetFilesURLType struct {
 	Description  string
 	URL          []string
 	Versions     []string
+	VersionsAPI  string
 	Tags         []string
 	PostShellCmd []string
 }
@@ -55,6 +56,15 @@ func QueryBgetTools(name string, env *map[string]string) (urls, postShellCmd, ve
 	ostype := setOsStr(env)
 	for i := range BgetToolsPool {
 		if BgetToolsPool[i].Name == name {
+			if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "github.com") {
+				versions = GitHubVersionSpider(BgetToolsPool[i].VersionsAPI)
+				(*env)["version"] = versions[0]
+			} else {
+				versions = BgetToolsPool[i].Versions
+			}
+			if (*env)["version"] == "" && len(versions) > 0 {
+				(*env)["version"] = versions[0]
+			}
 			tmpUrls := []string{}
 			for k, v := range *env {
 				kstr := fmt.Sprintf("{{%s}}", k)
@@ -75,11 +85,6 @@ func QueryBgetTools(name string, env *map[string]string) (urls, postShellCmd, ve
 					}
 				}
 				postShellCmd = append(postShellCmd, tmp)
-			}
-			if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "github.com") {
-				versions = GitHubVersionSpider(BgetToolsPool[i].VersionsAPI)
-			} else {
-				versions = BgetToolsPool[i].Versions
 			}
 		}
 	}
@@ -122,6 +127,14 @@ func formatURLSlice(tmpSlice []string, env *map[string]string) (urls []string) {
 func QueryBgetFiles(name string, env *map[string]string) (urls []string, postShellCmd []string, versions []string) {
 	for f := range BgetFilesPool {
 		if BgetFilesPool[f].Name == name {
+			if BgetFilesPool[f].VersionsAPI != "" && strings.Contains(BgetFilesPool[f].VersionsAPI, "github.com") {
+				versions = GitHubVersionSpider(BgetToolsPool[f].VersionsAPI)
+			} else {
+				versions = BgetFilesPool[f].Versions
+			}
+			if (*env)["version"] == "" && len(versions) > 0 {
+				(*env)["version"] = versions[0]
+			}
 			for _, url := range BgetFilesPool[f].URL {
 				tmp := ""
 				tmpSlice := []string{}
@@ -158,7 +171,6 @@ func QueryBgetFiles(name string, env *map[string]string) (urls []string, postShe
 				}
 				postShellCmd = append(postShellCmd, tmp)
 			}
-			versions = BgetFilesPool[f].Versions
 		}
 	}
 	return urls, postShellCmd, versions

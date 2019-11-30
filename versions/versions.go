@@ -64,29 +64,25 @@ func QueryKeysInfo(keys []string, env *map[string]string) (urls, postShellCmd, v
 			(*env)["release"] = release
 		}
 		DefaultVersions(key, env)
-		tmp, tmp2, tmp3 := urlpool.QueryBgetTools(key, env)
-		if len(tmp) > 0 {
-			if (*env)["version"] == "" {
-				versions := urlpool.GitHubVersionSpider(tmp[0])
-				if len(versions) > 1 {
-					(*env)["version"] = versions[0]
-				}
-			}
-			urls[key] = append(urls[key], tmp...)
-			postShellCmd[key] = append(postShellCmd[key], tmp2...)
-			vers[key] = append(vers[key], tmp3...)
+		_, _, defaultVers := urlpool.QueryBgetTools(key, env)
+		if (*env)["version"] == "" && len(defaultVers) > 0 {
+			(*env)["version"] = defaultVers[0]
 		}
-		tmp, tmp2, tmp3 = urlpool.QueryBgetFiles(key, env)
+		tmp, tmp2, _ := urlpool.QueryBgetTools(key, env)
 		if len(tmp) > 0 {
-			if (*env)["version"] == "" {
-				versions := urlpool.GitHubVersionSpider(tmp[0])
-				if len(versions) > 1 {
-					(*env)["version"] = versions[0]
-				}
-			}
 			urls[key] = append(urls[key], tmp...)
 			postShellCmd[key] = append(postShellCmd[key], tmp2...)
-			vers[key] = append(vers[key], tmp3...)
+			vers[key] = append(vers[key], defaultVers...)
+		}
+		_, _, defaultVers = urlpool.QueryBgetFiles(key, env)
+		if (*env)["version"] == "" && len(defaultVers) > 0 {
+			(*env)["version"] = defaultVers[0]
+		}
+		tmp, tmp2, _ = urlpool.QueryBgetFiles(key, env)
+		if len(tmp) > 0 {
+			urls[key] = append(urls[key], tmp...)
+			postShellCmd[key] = append(postShellCmd[key], tmp2...)
+			vers[key] = append(vers[key], defaultVers...)
 		}
 	}
 	return urls, postShellCmd, vers
