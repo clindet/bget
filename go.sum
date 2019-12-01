@@ -95,8 +95,8 @@ github.com/nwaples/rardecode v1.0.0 h1:r7vGuS5akxOnR4JQSkko62RJ1ReCMXxQRPtxsiFMB
 github.com/nwaples/rardecode v1.0.0/go.mod h1:5DzqNKiOdpKKBH87u8VlvAnPZMXcGRhxWkRpHbbfGS0=
 github.com/olekukonko/tablewriter v0.0.3 h1:i0LBnzgiChAWHJYTQAZJDOgf8MNxAVYZJ2m63SIDimI=
 github.com/olekukonko/tablewriter v0.0.3/go.mod h1:YZeBtGzYYEsCHp2LST/u/0NDwGkRoBtmn1cIWCJiS6M=
-github.com/openbiox/butils v0.0.0-20191201131814-a1fe7211a234 h1:lRtIFUfPkibj80oMIoc4ed3clODK09VXk9035HHo1+8=
-github.com/openbiox/butils v0.0.0-20191201131814-a1fe7211a234/go.mod h1:EaYD98dwfMIslKLD0Hcix/nA6FtOPEqpbfL0g8xLoAE=
+github.com/openbiox/butils v0.0.0-20191201143701-78a00d651f17 h1:cxbfftinMBh0FkawkGl5/8jvQz5ewmx59h5sGDOK+tw=
+github.com/openbiox/butils v0.0.0-20191201143701-78a00d651f17/go.mod h1:iX7Qkt3anqDra0b1seGngnST2YcuRaJZ4SzjomUE9Fk=
 github.com/pelletier/go-toml v1.2.0/go.mod h1:5z9KED0ma1S8pY6P1sdut58dfprrGBbd/94hg7ilaic=
 github.com/pierrec/lz4 v2.3.0+incompatible h1:CZzRn4Ut9GbUkHlQ7jqBXeZQV41ZSKWFc302ZU6lUTk=
 github.com/pierrec/lz4 v2.3.0+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=
