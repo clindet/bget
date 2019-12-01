@@ -19007,7 +19007,7 @@ var githubRepos = []bgetFilesURLType{
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
 	{
-		Name:         "github/red",
+		Name:         "github/redetector/red",
 		URL:          []string{"https://github.com/redetector/red"},
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
@@ -21282,7 +21282,7 @@ var githubRepos = []bgetFilesURLType{
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},
 	{
-		Name:         "github/red",
+		Name:         "github/biolab/red",
 		URL:          []string{"https://github.com/biolab/red"},
 		PostShellCmd: []string{"cd {{dest}} && git checkout {{version}}"},
 	},

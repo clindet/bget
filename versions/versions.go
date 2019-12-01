@@ -7,8 +7,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/openbiox/bget/urlpool"
 	"github.com/olekukonko/tablewriter"
+	"github.com/openbiox/bget/urlpool"
 	"github.com/openbiox/butils/stringo"
 )
 
@@ -32,19 +32,6 @@ func DefaultVersions(key string, env *map[string]string) {
 	} else if key == "reffa" && (*env)["site"] == "ensemble" && (*env)["release"] == "" {
 		(*env)["release"] = "97"
 	}
-}
-
-// KeyFixedVersions for fixed versions of key
-func KeyFixedVersions(key string) []string {
-	vers := make(map[string][]string)
-	vers = map[string][]string{"reffa": []string{"GRCh38 %genecode #31", "GRCh37 %genecode #31", "hg38 %ucsc", "hg19 %ucsc", "GRCh38 %ensemble #97", "GRCh38 %defuse #97",
-		"%fusioncatcher #95"}}
-	for k := range vers {
-		if k == key {
-			return vers[key]
-		}
-	}
-	return []string{}
 }
 
 // QueryKeysInfo get keys URL and post shell command
@@ -115,7 +102,7 @@ func QueryKeysVersions(keys []string, env *map[string]string) map[string][]strin
 			go func(url string) {
 				if tmp := urlpool.GitHubVersionSpider(url); len(tmp) > 0 {
 					versions[key] = tmp
-				} else if tmp := KeyFixedVersions(key); len(tmp) > 0 {
+				} else if tmp := urlpool.BitbucketVersionSpider(url); len(tmp) > 0 {
 					versions[key] = tmp
 				}
 				wg.Done()
@@ -210,5 +197,7 @@ func ParseMeta(key string) (keyNew string, version string, site string, release 
 	site = strings.TrimSpace(site)
 	version = strings.TrimSpace(version)
 	release = strings.TrimSpace(release)
+	keyNew = strings.ToLower(keyNew)
+	keyNew = strings.ReplaceAll(keyNew, "_", "-")
 	return keyNew, version, site, release
 }

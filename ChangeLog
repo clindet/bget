@@ -1,6 +1,8 @@
 2019-12-01 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* add pubmed github links in key subcmd
+		* parse key subcmd with case-insensitive and "_" => "-"
+		* add bitbucket version API
 
 2019-11-29 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 

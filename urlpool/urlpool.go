@@ -1,12 +1,16 @@
 package urlpool
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 
 	"context"
+	"net/http"
 	neturl "net/url"
 
 	"github.com/openbiox/butils/stringo"
@@ -52,13 +56,15 @@ func setOsStr(env *map[string]string) (ostype string) {
 	}
 	return ostype
 }
+
 func QueryBgetTools(name string, env *map[string]string) (urls, postShellCmd, versions []string) {
 	ostype := setOsStr(env)
 	for i := range BgetToolsPool {
-		if BgetToolsPool[i].Name == name {
+		if strings.ReplaceAll(strings.ToLower(BgetToolsPool[i].Name), "_", "-") == name {
 			if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "github.com") {
 				versions = GitHubVersionSpider(BgetToolsPool[i].VersionsAPI)
-				(*env)["version"] = versions[0]
+			} else if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "bitbucket.org") {
+				versions = BitbucketVersionSpider(BgetToolsPool[i].VersionsAPI)
 			} else {
 				versions = BgetToolsPool[i].Versions
 			}
@@ -68,7 +74,7 @@ func QueryBgetTools(name string, env *map[string]string) (urls, postShellCmd, ve
 			tmpUrls := []string{}
 			for k, v := range *env {
 				kstr := fmt.Sprintf("{{%s}}", k)
-				for j, _ := range BgetToolsPool[i].URL[ostype] {
+				for j := range BgetToolsPool[i].URL[ostype] {
 					BgetToolsPool[i].URL[ostype][j] = strings.Replace(BgetToolsPool[i].URL[ostype][j], kstr, v, 10000)
 				}
 				tmpUrls = BgetToolsPool[i].URL[ostype]
@@ -126,9 +132,15 @@ func formatURLSlice(tmpSlice []string, env *map[string]string) (urls []string) {
 
 func QueryBgetFiles(name string, env *map[string]string) (urls []string, postShellCmd []string, versions []string) {
 	for f := range BgetFilesPool {
-		if BgetFilesPool[f].Name == name {
+		if strings.ReplaceAll(strings.ToLower(BgetFilesPool[f].Name), "_", "-") == name {
 			if BgetFilesPool[f].VersionsAPI != "" && strings.Contains(BgetFilesPool[f].VersionsAPI, "github.com") {
 				versions = GitHubVersionSpider(BgetToolsPool[f].VersionsAPI)
+			} else if BgetFilesPool[f].VersionsAPI != "" && strings.Contains(BgetFilesPool[f].VersionsAPI, "bitbucket.org") {
+				versions = BitbucketVersionSpider(BgetFilesPool[f].VersionsAPI)
+			} else if strings.Contains(BgetFilesPool[f].URL[0], "github.com") {
+				versions = GitHubVersionSpider(BgetFilesPool[f].URL[0])
+			} else if strings.Contains(BgetFilesPool[f].URL[0], "bitbucket.org") {
+				versions = BitbucketVersionSpider(BgetFilesPool[f].URL[0])
 			} else {
 				versions = BgetFilesPool[f].Versions
 			}
@@ -148,7 +160,7 @@ func QueryBgetFiles(name string, env *map[string]string) (urls []string, postShe
 					} else {
 						tmp = formatURL(tmp, k, v, url)
 					}
-					for k2, _ := range tmpSlice {
+					for k2 := range tmpSlice {
 						tmpSlice[k2] = formatURL(tmpSlice[k2], k, v, url)
 					}
 				}
@@ -231,10 +243,76 @@ func GitHubVersionSpider(url string) (versions []string) {
 	return versions
 }
 
+// BitbucketVersionSpider query Bitbucket versions
+func BitbucketVersionSpider(url string) (versions []string) {
+	u, err := neturl.Parse(url)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if u.Host != "bitbucket.org" {
+		return
+	}
+	pathStr := strings.Split(u.Path, "/")
+	user, repo := pathStr[1], pathStr[2]
+	tagsBody := bitbucketRepoAPI(user, repo, "tags")
+	var s BitbucketObj
+	json.Unmarshal(tagsBody, &s)
+	for i := range s.Values {
+		versions = append(versions, s.Values[i].Name)
+	}
+	sort.Sort(sort.Reverse(sort.StringSlice(versions)))
+	brcsBody := bitbucketRepoAPI(user, repo, "branches")
+	json.Unmarshal(brcsBody, &s)
+	for i := range s.Values {
+		versions = append(versions, s.Values[i].Name)
+	}
+	return versions
+}
+
+func bitbucketRepoAPI(user, repo, entry string) []byte {
+	url := fmt.Sprintf("https://api.bitbucket.org/2.0/repositories/%s/%s/refs/%s", user, repo, entry)
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Warn(err)
+		return nil
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Warn(err)
+		return nil
+	}
+	return []byte(string(body))
+}
+
+func bitbucketBranches(user, repo string) []byte {
+	url := fmt.Sprintf("https://api.bitbucket.org/2.0/repositories/%s/%s/refs/tags", user, repo)
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Warn(err)
+		return nil
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Warn(err)
+		return nil
+	}
+	defer resp.Body.Close()
+	body, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Warn(err)
+		return nil
+	}
+	return body
+}
+
 func init() {
 	BgetToolsPool = append(BgetToolsPool, toolsLinks...)
 	BgetFilesPool = append(BgetFilesPool, reffaFiles...)
 	BgetFilesPool = append(BgetFilesPool, githubRepos...)
+	BgetFilesPool = append(BgetFilesPool, otherGitRepos...)
 	BgetFilesPool = append(BgetFilesPool, journalsMeta...)
 	BgetFilesPool = append(BgetFilesPool, annovarLinks...)
 	BgetFilesPool = append(BgetFilesPool, wkflFiles...)

@@ -81,6 +81,7 @@ func downloadKey() {
 				args = postShellCmd[key][i]
 				args = postCmdRender(args, dest)
 			}
+
 			if bgetClis.uncompress {
 				if err := archive.UnarchiveLog(dest, path.Dir(dest)); err != nil {
 					log.Warn(err)
@@ -92,10 +93,13 @@ func downloadKey() {
 			cmd := exec.Command("sh", "-c", args)
 			logPath := ""
 			if bgetClis.saveLog {
-				logPath = path.Join(bgetClis.logDir, bgetClis.taskID+"_postShellCmd_"+key+".log")
+				logPath = path.Join(bgetClis.logDir, bgetClis.taskID+"_postShellCmd_"+strings.ReplaceAll(key, "/", "_")+".log")
 			}
 			if args != "" {
-				bexec.Shell(cmd, logPath, bgetClis.quiet)
+				err := bexec.Shell(cmd, logPath, bgetClis.quiet)
+				if err != nil {
+					log.Warn(err)
+				}
 			}
 		}
 		urlpool.PostKeyCmds(key, done[key], bgetClis.keys)
@@ -144,6 +148,8 @@ func getAllKeys() (keys []string) {
 			table.Append(tmp)
 			tmp = []string{}
 		}
+		keys[i] = strings.ToLower(keys[i])
+		keys[i] = strings.ReplaceAll(keys[i], "_", "-")
 		tmp = append(tmp, keys[i])
 	}
 	if len(tmp) != 0 {
