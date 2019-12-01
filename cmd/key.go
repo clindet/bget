@@ -140,7 +140,7 @@ func getAllKeys() (keys []string) {
 
 	tmp := []string{}
 	for i := range keys {
-		if i%3 == 0 {
+		if i%2 == 0 {
 			table.Append(tmp)
 			tmp = []string{}
 		}

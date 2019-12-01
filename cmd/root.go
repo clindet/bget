@@ -15,7 +15,7 @@ import (
 	"github.com/vbauerster/mpb/v4"
 )
 
-var version = "v0.1.3-3"
+var version = "v0.1.3-4"
 
 type bgetCliT struct {
 	downloadDir      string
