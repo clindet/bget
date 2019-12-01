@@ -107,7 +107,7 @@ func QueryKeysVersions(keys []string, env *map[string]string) map[string][]strin
 			}
 			url := urls[key][0]
 			go func(url string) {
-				if tmp := urlpool.GitHubVersionSpider(url); len(tmp) > 0 {
+				if tmp := urlpool.GitHubVersionSpider(url, true); len(tmp) > 0 {
 					versions[key] = tmp
 				} else if tmp := urlpool.BitbucketVersionSpider(url); len(tmp) > 0 {
 					versions[key] = tmp

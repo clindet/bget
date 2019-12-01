@@ -62,7 +62,7 @@ func QueryBgetTools(name string, env *map[string]string) (urls, postShellCmd, ve
 	for i := range BgetToolsPool {
 		if strings.ReplaceAll(strings.ToLower(BgetToolsPool[i].Name), "_", "-") == name {
 			if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "github.com") {
-				versions = GitHubVersionSpider(BgetToolsPool[i].VersionsAPI)
+				versions = GitHubVersionSpider(BgetToolsPool[i].VersionsAPI, true)
 			} else if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "bitbucket.org") {
 				versions = BitbucketVersionSpider(BgetToolsPool[i].VersionsAPI)
 			} else {
@@ -134,11 +134,11 @@ func QueryBgetFiles(name string, env *map[string]string) (urls []string, postShe
 	for f := range BgetFilesPool {
 		if strings.ReplaceAll(strings.ToLower(BgetFilesPool[f].Name), "_", "-") == name {
 			if BgetFilesPool[f].VersionsAPI != "" && strings.Contains(BgetFilesPool[f].VersionsAPI, "github.com") {
-				versions = GitHubVersionSpider(BgetToolsPool[f].VersionsAPI)
+				versions = GitHubVersionSpider(BgetToolsPool[f].VersionsAPI, true)
 			} else if BgetFilesPool[f].VersionsAPI != "" && strings.Contains(BgetFilesPool[f].VersionsAPI, "bitbucket.org") {
 				versions = BitbucketVersionSpider(BgetFilesPool[f].VersionsAPI)
 			} else if strings.Contains(BgetFilesPool[f].URL[0], "github.com") {
-				versions = GitHubVersionSpider(BgetFilesPool[f].URL[0])
+				versions = GitHubVersionSpider(BgetFilesPool[f].URL[0], true)
 			} else if strings.Contains(BgetFilesPool[f].URL[0], "bitbucket.org") {
 				versions = BitbucketVersionSpider(BgetFilesPool[f].URL[0])
 			} else {
@@ -228,7 +228,7 @@ func setGitHubCtx(url string) (user, repo string, ctx context.Context, client *g
 }
 
 // GitHubVersionSpider get all tags and branch
-func GitHubVersionSpider(url string) (versions []string) {
+func GitHubVersionSpider(url string, includeBranches bool) (versions []string) {
 	user, repo, ctx, client, opt := setGitHubCtx(url)
 	vers, _, err := client.Repositories.ListTags(ctx, user, repo, opt)
 	if err != nil {
@@ -241,8 +241,10 @@ func GitHubVersionSpider(url string) (versions []string) {
 	for i := range vers {
 		versions = append(versions, vers[i].GetName())
 	}
-	for i := range brchs {
-		versions = append(versions, brchs[i].GetName())
+	if includeBranches {
+		for i := range brchs {
+			versions = append(versions, brchs[i].GetName())
+		}
 	}
 	return versions
 }

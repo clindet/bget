@@ -12,49 +12,51 @@ import (
 	cnet "github.com/openbiox/butils/net"
 	"github.com/openbiox/butils/stringo"
 	"github.com/spf13/cobra"
-	"github.com/vbauerster/mpb/v4"
+	mpb "github.com/vbauerster/mpb/v4"
 )
 
-var version = "v0.1.3-5"
+var version = "v0.1.3-6"
 
 type bgetCliT struct {
-	downloadDir      string
-	mirror           string
-	autoPath         bool
-	engine           string
-	doi              string
-	urls             string
-	listFile         string
-	seperator        string
-	keys             string
-	seqs             string
-	gdcToken         string
-	uncompress       bool
-	keysAll          bool
-	clean            bool
-	printFormat      string
-	axelThread       int
-	thread           int
-	timeout          int
-	retSleepTime     int
-	retries          int
-	proxy            string
-	cmdExtraFromFlag string
-	remoteName       bool
-	ignore           bool
-	taskID           string
-	overwrite        bool
-	saveLog          bool
-	logDir           string
-	quiet            bool
-	env              map[string]string
-	showVersions     bool
-	egaCredFile      string
-	outjson          bool
-	outxt            bool
-	geoGPL           bool
-	withAssets       bool
-	helpFlags        bool
+	downloadDir        string
+	mirror             string
+	autoPath           bool
+	engine             string
+	doi                string
+	urls               string
+	listFile           string
+	seperator          string
+	keys               string
+	seqs               string
+	gdcToken           string
+	uncompress         bool
+	keysAll            bool
+	clean              bool
+	printFormat        string
+	axelThread         int
+	thread             int
+	timeout            int
+	retSleepTime       int
+	retries            int
+	proxy              string
+	cmdExtraFromFlag   string
+	remoteName         bool
+	ignore             bool
+	taskID             string
+	overwrite          bool
+	saveLog            bool
+	logDir             string
+	quiet              bool
+	env                map[string]string
+	showVersions       bool
+	egaCredFile        string
+	outjson            bool
+	outxt              bool
+	geoGPL             bool
+	github             string
+	withAssets         bool
+	withAssetsVersions string
+	helpFlags          bool
 }
 
 var bgetClis bgetCliT
@@ -104,6 +106,8 @@ func checkArgs(cmd *cobra.Command, subcmd string) {
 		bgetClis.doi = strings.Join(items, bgetClis.seperator)
 	} else if subcmd == "seq" {
 		bgetClis.seqs = strings.Join(items, bgetClis.seperator)
+	} else if subcmd == "github" {
+		bgetClis.github = strings.Join(items, bgetClis.seperator)
 	}
 }
 
@@ -157,6 +161,7 @@ func init() {
 	rootCmd.AddCommand(doiCmd)
 	rootCmd.AddCommand(keyCmd)
 	rootCmd.AddCommand(seqCmd)
+	rootCmd.AddCommand(gitHubCmd)
 
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.proxy), "proxy", "", "", "HTTP proxy to download.")
 	rootCmd.Flags().BoolVarP(&(bgetClis.clean), "clean", "", false, "Remove _download and _log in current dir.")
