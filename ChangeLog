@@ -3,6 +3,7 @@
 		* add pubmed github links in key subcmd
 		* parse key subcmd with case-insensitive and "_" => "-"
 		* add bitbucket version API
+		* support github assets
 
 2019-11-29 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 

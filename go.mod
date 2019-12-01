@@ -24,7 +24,7 @@ require (
 	github.com/mholt/archiver v3.1.1+incompatible // indirect
 	github.com/nwaples/rardecode v1.0.0 // indirect
 	github.com/olekukonko/tablewriter v0.0.3
-	github.com/openbiox/butils v0.0.0-20191130024520-f24e4dba31f9
+	github.com/openbiox/butils v0.0.0-20191201131814-a1fe7211a234
 	github.com/pierrec/lz4 v2.3.0+incompatible // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/sirupsen/logrus v1.4.2 // indirect

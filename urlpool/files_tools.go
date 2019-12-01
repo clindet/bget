@@ -7,11 +7,6 @@ var otherFiles = []bgetFilesURLType{
 		Versions: []string{"latest"},
 	},
 	{
-		Name:     "stats/armadillo",
-		URL:      []string{"@>@ if('{{version}}' != '4.600.1') {'https://sourceforge.net/projects/arma/files/armadillo-{{version}}.tar.xz'} else {'http://updates.iontorrent.com/updates/software/external/armadillo-{{version}}.tar.gz'}@<@"},
-		Versions: []string{"7.900.1", "7.800.2", "7.800.1", "4.600.1"},
-	},
-	{
 		Name:     "mut/atlas2",
 		URL:      []string{"https://sourceforge.net/projects/atlas2/files/Atlas2_v{{version}}.zip"},
 		Versions: []string{"1.4.3", "1.4.1"},
@@ -91,7 +86,7 @@ var otherFiles = []bgetFilesURLType{
 	},
 	{
 		Name: "mut/gridss",
-		URL:  []string{"https://github.com/PapenfussLab/gridss/releases/download/{{version}}/gridss-@>@str_replace('{{version}}', 'v', '')@<@-jar-with-dependencies.jar", "https://github.com/PapenfussLab/gridss/releases/download/{{version}}/gridss-@>@str_replace('{{version}}', 'v', '')@<@-gridss-jar-with-dependencies.jar"},
+		URL:  []string{"https://github.com/PapenfussLab/gridss"},
 	},
 	{
 		Name: "base/htslib",
@@ -135,7 +130,7 @@ var otherFiles = []bgetFilesURLType{
 	},
 	{
 		Name: "base/nextflow",
-		URL:  []string{"https://github.com/nextflow-io/nextflow/releases/download/{{version}}/nextflow-@>@str_replace('{{version}}', 'v', '')@<@-all"},
+		URL:  []string{"https://github.com/nextflow-io/nextflow"},
 	},
 	{
 		Name:     "qc/ngs-qc-toolkit",

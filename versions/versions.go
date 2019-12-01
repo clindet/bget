@@ -71,6 +71,13 @@ func QueryKeysInfo(keys []string, env *map[string]string) (urls, postShellCmd, v
 			postShellCmd[key] = append(postShellCmd[key], tmp2...)
 			vers[key] = append(vers[key], defaultVers...)
 		}
+
+		if strings.Contains(urls[key][0], "github.com") && (*env)["withAssets"] == "yes" {
+			assetsUrls := urlpool.GitHubAssetsSpider(urls[key][0], vers[key][0])
+			if len(assetsUrls) > 0 {
+				urls[key] = append(urls[key], assetsUrls...)
+			}
+		}
 	}
 	return urls, postShellCmd, vers
 }

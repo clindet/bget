@@ -203,8 +203,7 @@ func genomeVersionConvertor(url string, version string) string {
 	return version
 }
 
-// GitHubVersionSpider get all tags and branch
-func GitHubVersionSpider(url string) (versions []string) {
+func setGitHubCtx(url string) (user, repo string, ctx context.Context, client *github.Client, opt *github.ListOptions) {
 	accessToken := os.Getenv("GITHUB_TOKEN")
 	if accessToken == "" {
 		log.Fatal("Please set GITHUB_TOKEN environment variable.")
@@ -217,15 +216,20 @@ func GitHubVersionSpider(url string) (versions []string) {
 		return
 	}
 	pathStr := strings.Split(u.Path, "/")
-	user, repo := pathStr[1], pathStr[2]
-	ctx := context.Background()
+	user, repo = pathStr[1], pathStr[2]
+	ctx = context.Background()
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: accessToken},
 	)
 	tc := oauth2.NewClient(ctx, ts)
-	client := github.NewClient(tc)
-	opt := &github.ListOptions{}
-	//version, _, _ := client.Repositories.ListTags(ctx, user, repo, opt)
+	client = github.NewClient(tc)
+	opt = &github.ListOptions{}
+	return user, repo, ctx, client, opt
+}
+
+// GitHubVersionSpider get all tags and branch
+func GitHubVersionSpider(url string) (versions []string) {
+	user, repo, ctx, client, opt := setGitHubCtx(url)
 	vers, _, err := client.Repositories.ListTags(ctx, user, repo, opt)
 	if err != nil {
 		log.Fatal(err)
@@ -241,6 +245,27 @@ func GitHubVersionSpider(url string) (versions []string) {
 		versions = append(versions, brchs[i].GetName())
 	}
 	return versions
+}
+
+func GitHubAssetsSpider(url, version string) (urls []string) {
+	user, repo, ctx, client, opt := setGitHubCtx(url)
+	rels, _, err := client.Repositories.ListReleases(ctx, user, repo, opt)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for i := range rels {
+		if rels[i].GetTagName() == version {
+			assets, _, err := client.Repositories.ListReleaseAssets(ctx, user, repo, rels[i].GetID(), opt)
+			if err != nil {
+				log.Fatal(err)
+			}
+			for j := range assets {
+				urls = append(urls, assets[j].GetBrowserDownloadURL())
+			}
+			return urls
+		}
+	}
+	return urls
 }
 
 // BitbucketVersionSpider query Bitbucket versions

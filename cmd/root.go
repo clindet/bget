@@ -15,7 +15,7 @@ import (
 	"github.com/vbauerster/mpb/v4"
 )
 
-var version = "v0.1.3-4"
+var version = "v0.1.3-5"
 
 type bgetCliT struct {
 	downloadDir      string
@@ -53,6 +53,7 @@ type bgetCliT struct {
 	outjson          bool
 	outxt            bool
 	geoGPL           bool
+	withAssets       bool
 	helpFlags        bool
 }
 
@@ -88,6 +89,9 @@ func checkArgs(cmd *cobra.Command, subcmd string) {
 		} else {
 			items = append(items, v)
 		}
+	}
+	if bgetClis.withAssets {
+		bgetClis.env["withAssets"] = "yes"
 	}
 	if len(items) == 0 {
 		return

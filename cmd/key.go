@@ -55,10 +55,14 @@ func downloadKey() {
 			v[i] = preURLFilter(v[i])
 			u, _ := url.Parse(v[i])
 			v[i] = strings.TrimSpace(u.String())
+			assetsDir := ""
+			if strings.Contains(v[i], "github.com") && strings.Contains(v[i], "/releases/download/") {
+				assetsDir = "github-assets"
+			}
 			if bgetClis.autoPath {
-				destDirArray = append(destDirArray, path.Join(bgetClis.downloadDir, key))
+				destDirArray = append(destDirArray, path.Join(bgetClis.downloadDir, key, assetsDir))
 			} else {
-				destDirArray = append(destDirArray, bgetClis.downloadDir)
+				destDirArray = append(destDirArray, path.Join(bgetClis.downloadDir, assetsDir))
 			}
 		}
 		sem <- true
@@ -197,6 +201,7 @@ func init() {
 	keyCmd.Flags().BoolVarP(&(bgetClis.outjson), "out-json", "", false, "Output information in JSON string")
 	keyCmd.Flags().BoolVarP(&(bgetClis.outxt), "out-text", "", false, "Output information in plain text")
 	keyCmd.Flags().BoolVarP(&(bgetClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
+	keyCmd.Flags().BoolVarP(&(bgetClis.withAssets), "with-assets", "", false, "Logical indicating that whether to download associated assets files.")
 	keyCmd.Example = `  bget key aligner/bwa
   bget key -a // get all available keys
   bget key seq/samtools -v // view all samtools available versions in CMD table
