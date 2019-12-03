@@ -23,12 +23,12 @@ import (
 
 var keyVs map[string][]string
 
-var keyCmd = &cobra.Command{
+var KeyCmd = &cobra.Command{
 	Use:   "key [key1 key2 key3...]",
 	Short: "Can be used to access URLs via a key string.",
 	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version #releaseVersion', : bwa, reffa-defuse@GRCh38 #97. More see here https://github.com/openbiox/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		keyCmdRunOptions(cmd)
+		KeyCmdRunOptions(cmd)
 	},
 }
 
@@ -164,18 +164,14 @@ func getAllKeys() (keys []string) {
 	return keys
 }
 
-func keyCmdRunOptions(cmd *cobra.Command) {
+func KeyCmdRunOptions(cmd *cobra.Command) {
 	checkArgs(cmd, "key")
-	if bgetClis.showVersions && bgetClis.outxt {
-		bgetClis.printFormat = "txt"
-	} else if bgetClis.showVersions && bgetClis.outjson {
-		bgetClis.printFormat = "json"
-	} else if bgetClis.showVersions {
-		bgetClis.printFormat = "table"
-	}
-	if bgetClis.printFormat != "" {
+	if bgetClis.showVersions {
 		log.Infoln("Featching versions from local and remote website...")
 		keys := parseKeys()
+		if bgetClis.printFormat == "" {
+			bgetClis.printFormat = "table"
+		}
 		bgetClis.env["printFormat"] = bgetClis.printFormat
 		keyVs = vers.QueryKeysVersions(keys, &bgetClis.env)
 		return
@@ -196,16 +192,18 @@ func keyCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
-	keyCmd.Flags().BoolVar(&(bgetClis.autoPath), "autopath", false, "Logical indicating that whether to create subdir in download dir: e.g. reffa/{{key}}/")
-	keyCmd.Flags().BoolVarP(&(bgetClis.showVersions), "show-versions", "v", false, "Show all available versions of key.")
-	keyCmd.Flags().BoolVarP(&(bgetClis.outjson), "out-json", "", false, "Output information in JSON string")
-	keyCmd.Flags().BoolVarP(&(bgetClis.outxt), "out-text", "", false, "Output information in plain text")
-	keyCmd.Flags().BoolVarP(&(bgetClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
-	keyCmd.Flags().BoolVarP(&(bgetClis.withAssets), "with-assets", "", false, "Logical indicating that whether to download associated assets files.")
-	keyCmd.Example = `  bget key aligner/bwa
+	KeyCmd.Flags().BoolVar(&(bgetClis.autoPath), "autopath", false, "Logical indicating that whether to create subdir in download dir: e.g. reffa/{{key}}/")
+	KeyCmd.Flags().BoolVarP(&(bgetClis.showVersions), "show-versions", "v", false, "Show all available versions of key.")
+	KeyCmd.Flags().StringVarP(&(bgetClis.printFormat), "format", "", "", "Output format (text, json, table)")
+	KeyCmd.Flags().BoolVarP(&(bgetClis.keysAll), "keys-all", "a", false, "Show all available string key can be download.")
+	KeyCmd.Flags().BoolVarP(&(bgetClis.withAssets), "with-assets", "", false, "Logical indicating that whether to download associated assets files.")
+	setGlobalFlag(KeyCmd, &bgetClis)
+	setUncompressFlag(KeyCmd, &bgetClis)
+	setKeyListFlag(KeyCmd, &bgetClis, "keys")
+	KeyCmd.Example = `  bget key aligner/bwa
   bget key -a // get all available keys
-  bget key seq/samtools -v // view all samtools available versions in CMD table
-  bget key seq/samtools -v --out-json // view all samtools available versions in JSON format
+  bget key samtools -v // view all samtools available versions in table
+  bget key samtools -v --formt json // view all samtools available versions in JSON
   bget key "reffa/defuse@GRCh38 #97" -t 10 -f
   bget key reffa/defuse@GRCh38 release=97 -t 10 -f
   bget key db/annovar@clinvar_20170501 db/annovar@clinvar_20180603 builder=hg38

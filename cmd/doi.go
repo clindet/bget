@@ -22,12 +22,12 @@ var suppl bool
 var pmc bool
 var universeSpider bool
 
-var doiCmd = &cobra.Command{
+var DoiCmd = &cobra.Command{
 	Use:   "doi [doi1 doi2 doi3...]",
 	Short: "Can be used to access files via DOI.",
 	Long:  `Can be used to access files via DOI. More see here https://github.com/openbiox/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		doiCmdRunOptions(cmd)
+		DoiCmdRunOptions(cmd)
 	},
 }
 
@@ -120,7 +120,7 @@ func doiSpiders(doi string) (urls []string) {
 	return urls
 }
 
-func doiCmdRunOptions(cmd *cobra.Command) {
+func DoiCmdRunOptions(cmd *cobra.Command) {
 	checkArgs(cmd, "doi")
 	checkDownloadDir(bgetClis.doi != "")
 	if bgetClis.doi != "" || bgetClis.listFile != "" {
@@ -133,12 +133,14 @@ func doiCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
-	doiCmd.Flags().BoolVarP(&universeSpider, "universe", "", true, "Try universe spider.")
-	doiCmd.Flags().BoolVarP(&pmc, "pmc", "", false, "Try PMC database.")
-	doiCmd.Flags().BoolVarP(&fullText, "full-text", "", true, "Access full text.")
-	doiCmd.Flags().BoolVarP(&suppl, "suppl", "", false, "Access supplementary files.")
+	DoiCmd.Flags().BoolVarP(&universeSpider, "universe", "", true, "Try universe spider.")
+	DoiCmd.Flags().BoolVarP(&pmc, "pmc", "", false, "Try PMC database.")
+	DoiCmd.Flags().BoolVarP(&fullText, "full-text", "", true, "Access full text.")
+	DoiCmd.Flags().BoolVarP(&suppl, "suppl", "", false, "Access supplementary files.")
+	setGlobalFlag(DoiCmd, &bgetClis)
+	setKeyListFlag(DoiCmd, &bgetClis, "dois")
 	exampleXML2Json := "`bapi ncbi --xml2json pubmed titleSearch.XML |grep Doi| tr -d ' ,(Doi:)\"'`"
-	doiCmd.Example = fmt.Sprintf(`  bget doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
+	DoiCmd.Example = fmt.Sprintf(`  bget doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
   bget doi 10.1016/j.devcel.2017.03.001 10.1016/j.stem.2019.07.009 10.1016/j.celrep.2018.03.072 -t 2
 
   bapi ncbi -q '((The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability[Title]) OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR[Title])' -o titleSearch.XML

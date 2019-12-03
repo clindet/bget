@@ -72,7 +72,7 @@ func QueryKeysInfo(keys []string, env *map[string]string) (urls, postShellCmd, v
 			vers[key] = append(vers[key], defaultVers...)
 		}
 
-		if strings.Contains(urls[key][0], "github.com") && (*env)["withAssets"] == "yes" {
+		if len(urls[key]) > 0 && strings.Contains(urls[key][0], "github.com") && (*env)["withAssets"] == "yes" {
 			assetsUrls := urlpool.GitHubAssetsSpider(urls[key][0], vers[key][0])
 			if len(assetsUrls) > 0 {
 				urls[key] = append(urls[key], assetsUrls...)
@@ -121,7 +121,7 @@ func QueryKeysVersions(keys []string, env *map[string]string) map[string][]strin
 		if len(versions[k]) > 0 {
 			if (*env)["printFormat"] == "table" {
 				table.Append([]string{k, strings.Join(versions[k], ", ")})
-			} else if (*env)["printFormat"] == "txt" {
+			} else if (*env)["printFormat"] == "text" {
 				fmt.Println(fmt.Sprintf("key> %s\nversions> %s\n-----------", k, strings.Join(versions[k], ", ")))
 			}
 		}

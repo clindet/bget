@@ -3,14 +3,13 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"path"
 	"runtime"
 	"strings"
 	"time"
 
+	api "github.com/openbiox/bget/bapi/cmd"
 	"github.com/openbiox/butils/log"
 	cnet "github.com/openbiox/butils/net"
-	"github.com/openbiox/butils/stringo"
 	"github.com/spf13/cobra"
 	mpb "github.com/vbauerster/mpb/v4"
 )
@@ -50,10 +49,9 @@ type bgetCliT struct {
 	env                map[string]string
 	showVersions       bool
 	egaCredFile        string
-	outjson            bool
-	outxt              bool
 	geoGPL             bool
 	github             string
+	githubMode         bool
 	onlyAssets         bool
 	withAssets         bool
 	withAssetsVersions string
@@ -107,8 +105,6 @@ func checkArgs(cmd *cobra.Command, subcmd string) {
 		bgetClis.doi = strings.Join(items, bgetClis.seperator)
 	} else if subcmd == "seq" {
 		bgetClis.seqs = strings.Join(items, bgetClis.seperator)
-	} else if subcmd == "github" {
-		bgetClis.github = strings.Join(items, bgetClis.seperator)
 	}
 }
 
@@ -157,34 +153,13 @@ func setNetParams(bgetClis *bgetCliT) (netOpt *cnet.BnetParams) {
 
 func init() {
 	bgetClis.helpFlags = true
-	wd, _ := os.Getwd()
-	rootCmd.AddCommand(urlCmd)
-	rootCmd.AddCommand(doiCmd)
-	rootCmd.AddCommand(keyCmd)
-	rootCmd.AddCommand(seqCmd)
-	rootCmd.AddCommand(gitHubCmd)
-
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.proxy), "proxy", "", "", "HTTP proxy to download.")
-	rootCmd.Flags().BoolVarP(&(bgetClis.clean), "clean", "", false, "Remove _download and _log in current dir.")
-	rootCmd.PersistentFlags().IntVarP(&(bgetClis.thread), "thread", "t", 1, "Concurrency download thread.")
-	rootCmd.Flags().IntVarP(&(bgetClis.axelThread), "thread-axel", "", 5, "Set the thread of axel.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.downloadDir), "outdir", "o", wd, "Set the download dir.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.seperator), "seperator", "s", ",", "Optional 'url1{seperator}url2' for multiple keys, urls, or seqs.")
-	rootCmd.PersistentFlags().BoolVar(&(bgetClis.ignore), "ignore", false, "Contine to download and skip the check of existed files.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.cmdExtraFromFlag), "extra-cmd", "e", "", "Extra flags and values pass to internal CMDs")
-	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.overwrite), "overwrite", "f", false, "Logical indicating that whether to overwrite existing files.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.taskID), "task-id", "", stringo.GetRandomString(15), "Task ID (random).")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.logDir), "log-dir", "", path.Join(wd, "_log"), "Log dir.")
-	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.quiet), "quiet", "q", false, "No output.")
-	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.saveLog), "save-log", "", true, "Save download log to local file].")
-	rootCmd.PersistentFlags().IntVarP(&bgetClis.retries, "retries", "r", 5, "Retry specifies the number of attempts to retrieve the data.")
-	rootCmd.PersistentFlags().IntVarP(&bgetClis.timeout, "timeout", "", 35, "Set the timeout of per request.")
-	rootCmd.PersistentFlags().IntVarP(&bgetClis.retSleepTime, "retries-sleep-time", "", 5, "Sleep time after one retry.")
-	rootCmd.PersistentFlags().BoolVarP(&bgetClis.remoteName, "remote-name", "n", false, "Use remote defined filename.")
-	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.uncompress), "uncompress", "u", false, "Uncompress download files for .zip, .tar.gz, and .gz suffix files.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.mirror), "mirror", "m", "", "Set the mirror of resources.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.listFile), "list-file", "l", "", "A file contains dois for download.")
+	rootCmd.AddCommand(URLCmd)
+	rootCmd.AddCommand(DoiCmd)
+	rootCmd.AddCommand(KeyCmd)
+	rootCmd.AddCommand(SeqCmd)
+	rootCmd.AddCommand(FmtCmd)
+	rootCmd.AddCommand(api.BapiCmd)
+	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.clean), "clean", "", false, "Remove _download and _log in current dir.")
 	bgetClis.env = make(map[string]string)
 	bgetClis.env["osType"] = runtime.GOOS
 	bgetClis.env["wd"], _ = os.Getwd()

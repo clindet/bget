@@ -1,0 +1,126 @@
+---
+title: "Introduction to bget"
+author: "Jianfeng Li"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE, screenshot.force = FALSE)
+```
+
+<img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Life cycle: experimental"> <a href="https://godoc.org/github.com/openbiox/bget"><img src="https://godoc.org/github.com/openbiox/bget?status.svg" alt="GoDoc"></a>
+
+# bget
+
+Lightweight downloader for bioinformatics data, databases and files. Golang `http` library, `wget`, `curl`, `axel`, `git`, and `rsync` were supported as the download engine.
+
+Possible URLs pool:
+
+- Reference genomes
+- Source code of bioinformatics tools
+- Bioinformatics databases and files
+- Papers material
+- ......
+
+Why we want to create this tool? 
+
+We can query PDF of the manuscript via using Endnote or sci-hub. However, you can not easily get the supplementary files of scientific papers based on the two ways.
+
+![doi demo](https://github.com/openbiox/bget/raw/master/doc/static/doi.gif)
+
+Here, we are developing and sharing an open-source tool bget with `doi` subcommand to query supplementary files of scientific papers. The journals with high impact factors or those integrative publishers are a higher priority in our development plan: https://github.com/openbiox/bget/blob/master/doc/doi.md
+
+It is noted that we do not want to distribute any pirated resources or cause unnecessary network congestion.
+We hope this tool can provide an optional method to more easily query related files of scientific papers. Please use it in a non-invasive way (i.e. high concurrency, long continuous request).
+
+## Prerequisities
+
+- Headless Chrome is required for some of website with JavaScript driven render pages.
+
+Install Chrome on Linux:
+
+- [How to Install Google Chrome Web Browser on Ubuntu](https://linuxize.com/post/how-to-install-google-chrome-web-browser-on-ubuntu-18-04/)
+- [How to Install Google Chrome Web Browser on CentOS](https://linuxize.com/post/how-to-install-google-chrome-web-browser-on-centos-7/)
+
+For windows users, you may need to create an alias of Chrome to make [chromedp](https://github.com/chromedp/chromedp) work.
+
+## Installation
+
+```bash
+# download bget on MAC OSX
+wget -c https://github.com/openbiox/bget/releases/download/v0.1.3/bget_osx
+mv bget_osx bget
+chmod a+x bget
+#
+# download bget on Linux
+wget -c https://github.com/openbiox/bget/releases/download/v0.1.3/bget_linux64
+mv bget_linux64 bget
+chmod a+x bget
+#
+# download bget on Windows
+wget -c https://github.com/openbiox/bget/releases/download/v0.1.3/bget.exe
+#
+# get latest version
+go get -u github.com/openbiox/bget
+```
+
+## Usage
+
+Demo Video: <https://www.notion.so/sjtu/Demo-of-bget-doi-key-seq-url-78c2c334bf894668aa17fd128bd3255c>
+
+```{bash}
+bget -h
+
+```
+
+### bget doi
+
+The `bget doi` supported website and journals are continuely increasing.
+
+**Warn**: If you do not follow the policies of the relevant website (i.e. continuous download or limited copyright), you will lose the authorization to use this tool.
+
+```{bash}
+bget doi -h
+
+```
+
+### bget key
+
+`bget key` can be used to download a set of files via a alias name key.
+
+```{bash}
+bget key -h
+
+```
+
+```{bash}
+## show all supported items
+bget key -a
+```
+
+### bget seq
+
+`bget seq` can be used to access [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo), [Sequence Read Archive (SRA)](https://www.ncbi.nlm.nih.gov/sra/), and [GDC Data Portal](https://portal.gdc.cancer.gov/) are supported.
+
+```{bash}
+bget seq -h
+
+```
+
+### bget url
+
+`bget url` can be used to access files via input URLs. Golang http, wget, curl, axel and git, and rsync are support for download process. 
+
+```{bash}
+bget url -h
+```
+
+## Maintainer
+
+- [@Jianfeng](https://github.com/Miachol)
+
+## License
+
+Academic Free License version 3.0
+

@@ -10,12 +10,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var seqCmd = &cobra.Command{
+var SeqCmd = &cobra.Command{
 	Use:   "seq [id1 id2 id3... | manifest1 manifest2 manifest3...]",
 	Short: "Can be used to access sequence data via unique id (dbGAP and EGA) or manifest files (TCGA).",
 	Long:  `Can be used to access sequence data via unique id or manifest files. More see here https://github.com/openbiox/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		seqCmdRunOptions(cmd)
+		SeqCmdRunOptions(cmd)
 	},
 }
 
@@ -102,7 +102,7 @@ func downloadSeq() {
 	}
 }
 
-func seqCmdRunOptions(cmd *cobra.Command) {
+func SeqCmdRunOptions(cmd *cobra.Command) {
 	checkArgs(cmd, "seq")
 	checkDownloadDir(bgetClis.seqs != "")
 	if bgetClis.seqs != "" || bgetClis.listFile != "" {
@@ -115,12 +115,14 @@ func seqCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
-	seqCmd.Flags().BoolVarP(&(bgetClis.geoGPL), "gpl-geo", "", false, "Wheather fetch GPL files from GEO database.")
-	seqCmd.Flags().StringVarP(&(bgetClis.gdcToken), "token-gdc", "", "", "Token to access TCGA portal files.")
-	seqCmd.Flags().StringVarP(&(bgetClis.egaCredFile), "token-file-ega", "", "", `Credential file to access EGA archive files, {"username": "{your_user_name}", 
+	SeqCmd.Flags().BoolVarP(&(bgetClis.geoGPL), "query-gpl", "", false, "Wheather fetch GPL files from GEO database.")
+	SeqCmd.Flags().StringVarP(&(bgetClis.gdcToken), "token-gdc", "", "", "Token to access TCGA portal files.")
+	SeqCmd.Flags().StringVarP(&(bgetClis.egaCredFile), "token-file-ega", "", "", `Credential file to access EGA archive files, {"username": "{your_user_name}", 
   "password": "{your_password}","client_secret":"AMenuDLjVdVo4BSwi0QD54LL6NeVDEZRzEQUJ7h
-  JOM3g4imDZBHHX0hNfKHPeQIGkskhtCmqAJtt_jm7EKq-rWw"}.`)
-	seqCmd.Example = `  bget seq ERR3324530 SRR544879 # download files from SRA databaes
+	JOM3g4imDZBHHX0hNfKHPeQIGkskhtCmqAJtt_jm7EKq-rWw"}.`)
+	setGlobalFlag(SeqCmd, &bgetClis)
+	setKeyListFlag(SeqCmd, &bgetClis, "accession ids")
+	SeqCmd.Example = `  bget seq ERR3324530 SRR544879 # download files from SRA databaes
   bget seq GSE23543 GSM1098572 -t 2 # download files from GEO databaes (auto download SRA acc list and run info)
   bget seq dbgap.krt # download files from dbGap database using krt files
   bget seq EGAD00001000951 # download dataset from EGA databaes
