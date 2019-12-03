@@ -15,7 +15,7 @@ import (
 	mpb "github.com/vbauerster/mpb/v4"
 )
 
-var version = "v0.1.3-6"
+var version = "v0.1.3-7"
 
 type bgetCliT struct {
 	downloadDir        string
@@ -54,6 +54,7 @@ type bgetCliT struct {
 	outxt              bool
 	geoGPL             bool
 	github             string
+	onlyAssets         bool
 	withAssets         bool
 	withAssetsVersions string
 	helpFlags          bool

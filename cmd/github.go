@@ -37,7 +37,7 @@ func downloadGitHubRepos() {
 		urls[i] = strings.TrimSpace(urls[i])
 		key := urls[i]
 		urls[i] = "https://github.com/" + urls[i]
-		if bgetClis.withAssets {
+		if bgetClis.withAssets || bgetClis.onlyAssets {
 			vers := urlpool.GitHubVersionSpider(urls[i], false)
 			if len(vers) != 0 {
 				log.Infof("Availabe tags of github.com/%s: %s", key, strings.Join(vers, ", "))
@@ -53,7 +53,9 @@ func downloadGitHubRepos() {
 		destDirArray = append(destDirArray, bgetClis.downloadDir)
 	}
 	netOpt := setNetParams(&bgetClis)
-	cnet.HttpGetURLs(urls, destDirArray, netOpt)
+	if !bgetClis.onlyAssets {
+		cnet.HttpGetURLs(urls, destDirArray, netOpt)
+	}
 	urls2 := []string{}
 	destDirArray2 := []string{}
 	for k, v := range assetsUrls {
@@ -84,9 +86,11 @@ func gitHubCmdRunOptions(cmd *cobra.Command) {
 	}
 }
 func init() {
+	gitHubCmd.Flags().BoolVarP(&(bgetClis.onlyAssets), "only-assets", "", false, "Logical indicating that whether to only download repo assets files.")
 	gitHubCmd.Flags().BoolVarP(&(bgetClis.withAssets), "with-assets", "", false, "Logical indicating that whether to download associated assets files.")
 	gitHubCmd.Flags().StringVarP(&(bgetClis.withAssetsVersions), "with-assets-versions", "", "", "Required to get specific tagname of github assets (e.g. v2.7.1,v1.0.0).")
 	gitHubCmd.Example = `  bget github Miachol/github_demo
   bget github PapenfussLab/gridss openbiox/bget --with-assets -t 5
+  bget github PapenfussLab/gridss openbiox/bget --only-assets -t 5
   bget github PapenfussLab/gridss openbiox/bget --with-assets --with-assets-versions v2.7.2,v0.1.3 -t 5 `
 }

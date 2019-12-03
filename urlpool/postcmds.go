@@ -3,7 +3,6 @@ package urlpool
 import (
 	"os"
 	"path"
-	"strings"
 
 	"github.com/openbiox/butils/archive"
 	log "github.com/openbiox/butils/log"
@@ -11,7 +10,7 @@ import (
 )
 
 func PostKeyCmds(key string, dest []string, rawKey string) {
-	if key == "reffa" && strings.Contains(rawKey, "defuse") {
+	if key == "reffa/defuse" {
 		gunzipDefuseReffa(dest)
 	}
 }

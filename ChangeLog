@@ -1,3 +1,7 @@
+2019-12-03 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
+		* add "--only-assets" in github subcmd
+
 2019-12-01 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* add pubmed github links in key subcmd
