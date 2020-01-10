@@ -11,7 +11,7 @@ var endp types.GdcEndpoints
 var gdcCmd = &cobra.Command{
 	Use:   "gdc",
 	Short: "Query GDC portal website APIs.",
-	Long:  `Query GDC portal APIs. More see here https://github.com/openbiox/bget/bapi.`,
+	Long:  `Query GDC portal website APIs.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		gdcCmdRunOptions(cmd)
 	},

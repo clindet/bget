@@ -17,7 +17,7 @@ var BapiClis = types.BapiClisT{}
 var BapiCmd = &cobra.Command{
 	Use:   "api",
 	Short: "Query bioinformatics website APIs.",
-	Long:  `Query bioinformatics website APIs. More see here https://github.com/openbiox/bget/bapi.`,
+	Long:  `Query bioinformatics website APIs.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		BapiCmdRunOptions(cmd)
 	},

@@ -1,0 +1,72 @@
+---
+title: "Command line help of bget"
+author: "Jianfeng Li"
+date: "`r Sys.Date()`"
+output: md_document
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE, screenshot.force = FALSE)
+```
+
+## Main interface
+```{bash}
+bget -h
+
+```
+
+## bget api
+
+```{bash}
+bget api -h
+```
+
+```{bash}
+bget api ncbi -h
+```
+
+```{bash}
+bget api gdc -h
+```
+
+```{bash}
+bget api dta -h
+```
+
+## bget doi
+
+```{bash}
+bget doi -h
+```
+
+### bget seq
+
+```{bash}
+bget seq -h
+```
+
+### bget url
+
+```{bash}
+bget url -h
+```
+
+### bget key
+
+```{bash}
+bget key -h
+```
+
+```{bash}
+## show all supported items
+bget key -a
+```
+
+## Maintainer
+
+- [@Jianfeng](https://github.com/Miachol)
+
+## License
+
+Academic Free License version 3.0
+

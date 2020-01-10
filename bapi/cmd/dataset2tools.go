@@ -10,7 +10,7 @@ var dendp types.Datasets2toolsEndpoints
 var dataset2toolsCmd = &cobra.Command{
 	Use:   "dta",
 	Short: "Query dataset2tools website APIs: datasets (d), tools (t), and canned analysis (a).",
-	Long:  `Query dataset2tools APIs. More see here https://github.com/openbiox/bget/bapi.`,
+	Long:  `Query dataset2tools website APIs: datasets (d), tools (t), and canned analysis (a).`,
 	Run: func(cmd *cobra.Command, args []string) {
 		dataset2toolsCmdRunOptions(cmd)
 	},

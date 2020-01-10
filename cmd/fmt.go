@@ -17,8 +17,8 @@ var FmtClis = bfmt.FmtClisT{}
 
 var FmtCmd = &cobra.Command{
 	Use:   "fmt [input1 input2]",
-	Short: "A set of file format (fmt) command.",
-	Long:  `A set of file format (fmt) command. More see here https://github.com/openbiox/bget/api.`,
+	Short: "A set of format (fmt) command.",
+	Long:  `A set of format (fmt) command.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		FmtCmdRunOptions(cmd)
 	},

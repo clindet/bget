@@ -19,7 +19,7 @@ var ncbiClis types.NcbiClisT
 var ncbiCmd = &cobra.Command{
 	Use:   "ncbi",
 	Short: "Query ncbi website APIs.",
-	Long:  `Query ncbi website APIs. More see here https://github.com/openbiox/bget/bapi.`,
+	Long:  `Query ncbi website APIs.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ncbiCmdRunOptions(cmd)
 	},
@@ -75,5 +75,5 @@ func init() {
 
   # query larger items
   k="algorithm, tool, model, pipleline, method, database, workflow, dataset, bioinformatics, sequencing, http, github.com, gitlab.com, bitbucket.org, RNA-Seq, DNA, profile, landscape"
-  bget api ncbi -q "RNA-seq and bioinformatics[journal]" -e "your_email@domain.com" -m 100 | awk '/<[?]xml version="1.0" [?]>/{close(f); f="abstract.http.XML.tmp" ++c;next} {print>f;}' && bget api ncbi --xml2json pubmed abstract.http.XML.tmp* -k "${k}" --call-cor | sed 's;}{;,;g' > final.json`
+  bget api ncbi -q "dataset and RNA-seq and bioinformatics[journal]" -e "your_email@domain.com" -m 20 | awk '/<[?]xml version="1.0" [?]>/{close(f); f="abstract.http.XML.tmp" ++c;next} {print>f;}' && bget api ncbi --xml2json pubmed abstract.http.XML.tmp* -k "${k}" --call-cor -t 11 | sed 's;}{;,;g' > final.json`
 }

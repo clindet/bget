@@ -1,7 +1,8 @@
-2019-12-03 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+2020-01-10 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* hide global flags in the rootCmd
 		* integrate github subcmd in url subcmd
+		* integrate api subcmd
 
 2019-12-03 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 

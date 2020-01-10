@@ -200,7 +200,7 @@ func init() {
 	setGlobalFlag(KeyCmd, &bgetClis)
 	setUncompressFlag(KeyCmd, &bgetClis)
 	setKeyListFlag(KeyCmd, &bgetClis, "keys")
-	KeyCmd.Example = `  bget key aligner/bwa
+	KeyCmd.Example = `  bget key bwa
   bget key -a // get all available keys
   bget key samtools -v // view all samtools available versions in table
   bget key samtools -v --formt json // view all samtools available versions in JSON

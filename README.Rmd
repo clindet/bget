@@ -57,9 +57,19 @@ go get -u github.com/openbiox/bget
 
 ## Usage
 
+Command line outputs see [here]([here](https://github.com/openbiox/bget/blob/master/doc/cli.md))
+
 ### Query webiste API
 
 We integrates and implements serveral website APIs in `bget api`, such as PubMed, Datasetdataset2tools, and GDC portal website.
+
+In addition, you can use the `bget api` to conduct the simple text-mining of PubMed abstract at the sentence level.
+
+- support calculate correlations between any keywords at the sentence level (PubMed)
+- support extract URLs from Pubmed abstract
+- support convert PubMed abstract from XML => JSON
+- support to prettify JSON stream
+- support convert key-value JSON to slice JSON
 
 ```bash
 # NCBI eutils
@@ -122,7 +132,7 @@ We can query PDF of the manuscript via using Endnote or sci-hub. However, you ca
 
 ![doi demo](https://github.com/openbiox/bget/raw/master/doc/static/doi.gif)
 
-Here, we are developing and sharing an open-source tool bget with `doi` subcommand to query supplementary files of scientific papers. The journals with high impact factors or those integrative publishers are a higher priority in our development plan: https://github.com/openbiox/bget/blob/master/doc/doi.md
+Here, we are developing and sharing an open-source tool bget with `doi` subcommand to query supplementary files of scientific papers. The journals with high impact factors or those integrative publishers are a higher priority in our development plan, see [here](https://github.com/openbiox/bget/blob/master/doc/doi.md)
 
 **Warn**: It is noted that we do not want to distribute any pirated resources or cause unnecessary network congestion. We hope this tool can provide an optional method to more easily query related files of scientific papers. Please use it in a non-invasive way (i.e. high concurrency, long continuous request). If you do not follow the policies of the relevant website (i.e. continuous download or limited copyright), you will lose the authorization to use this tool.
 
