@@ -13,7 +13,7 @@ knitr::opts_chunk$set(comment = "#>", collapse = TRUE, screenshot.force = FALSE)
 
 # bget
 
-bget is an portable tool several sub-commands to query bioinformatics data, databases and files. The Golang `http` library, `wget`, `curl`, `axel`, `git`, and `rsync` were supported as the query engine.
+bget is an portable tool with several sub-commands to query bioinformatics data, databases and files. The Golang `http` library, `wget`, `curl`, `axel`, `git`, and `rsync` were supported as the query engine.
 
 Supported types:
 
@@ -57,11 +57,11 @@ go get -u github.com/openbiox/bget
 
 ## Usage
 
-Command line outputs see [here]([here](https://github.com/openbiox/bget/blob/master/doc/cli.md))
+Command line outputs see [here](https://github.com/openbiox/bget/blob/master/doc/cli.md)
 
 ### Query webiste API
 
-We integrates and implements serveral website APIs in `bget api`, such as PubMed, Datasetdataset2tools, and GDC portal website.
+`bget api` can be used to query serveral website APIs, such as PubMed, Datasetdataset2tools, and GDC portal website.
 
 In addition, you can use the `bget api` to conduct the simple text-mining of PubMed abstract at the sentence level.
 
@@ -115,7 +115,7 @@ bget api gdc -d -q "5b2974ad-f932-499b-90a3-93577a9f0573" -n
 
 ### Query DOI resources
 
-The `bget doi` supported website and journals are continuely increasing.
+`bget doi` can be used to query DOI resources from website and journals that the supported items are continuely increasing.
 
 ```bash
 ## query zendo website with 3 thread
@@ -138,7 +138,7 @@ Here, we are developing and sharing an open-source tool bget with `doi` subcomma
 
 ### Query files via alias key
 
-`bget key` can be used to download a set of files via a alias name key.
+`bget key` can be used to query a set of files via the alias key, such as bwa, samtools, reffa/defuse, and db/annovar.
 
 ```bash
 # get all available alias keys
@@ -164,9 +164,9 @@ bget key db/annovar@clinvar_20170501 db/annovar@clinvar_20180603 builder=hg38
 bget key db/annovar -v --out-text
 ```
 
-### bget seq
+### Query FASTQ/CEL files from GEO/SRA/EGA/dbGAP/GDC
 
-`bget seq` can be used to access [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo), [Sequence Read Archive (SRA)](https://www.ncbi.nlm.nih.gov/sra/), and [GDC Data Portal](https://portal.gdc.cancer.gov/) are supported.
+`bget seq` can be used to query files from [Gene Expression Omnibus (GEO)](https://www.ncbi.nlm.nih.gov/geo), [Sequence Read Archive (SRA)](https://www.ncbi.nlm.nih.gov/sra/), and [GDC Data Portal](https://portal.gdc.cancer.gov/).
 
 ```bash
 # download files from SRA databaes using prefetch
@@ -201,9 +201,9 @@ bget seq *.txt -t 5
 bget seq SRR544879 GSE23543 EGAD00001000951 b7670817-9d6b-494e-9e22-8494e2fd430d dbgap.krt *.txt -t 5
 ```
 
-### bget url
+### Query URLs
 
-`bget url` can be used to access files via input URLs. Golang http, wget, curl, axel and git, and rsync are support for download process. 
+`bget url` can be used to query files using URLs.
 
 ```bash
 urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | tr "," "\n"> /tmp/urls.list
@@ -229,3 +229,4 @@ bget url PapenfussLab/gridss openbiox/bget --with-github-assets --with-assets-ve
 ## License
 
 Academic Free License version 3.0
+
