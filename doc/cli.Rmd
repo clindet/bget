@@ -33,6 +33,10 @@ bget api gdc -h
 bget api dta -h
 ```
 
+```{bash}
+bget api cligov -h
+```
+
 ## bget doi
 
 ```{bash}

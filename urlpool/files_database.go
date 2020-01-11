@@ -437,4 +437,8 @@ var annovarLinks = []bgetFilesURLType{
 		Name: "db/varcards",
 		URL:  []string{"http://159.226.67.237/sun/varcards/resource/download/variant/chr{{chrom}}.variant.annotation.xls.gz"},
 	},
+	{
+		Name: "db/clingov",
+		URL:  []string{"https://ClinicalTrials.gov/AllAPIJSON.zip"},
+	},
 }

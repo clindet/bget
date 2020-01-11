@@ -29,14 +29,7 @@ var pg *mpb.Progress
 
 // Gdc accesss https://api.gdc.cancer.gov data
 func Gdc(endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) {
-	var netopt = &cnet.BnetParams{
-		Pbar: pg,
-	}
-	netopt.Quiet = bapiClis.Quiet
-	netopt.Retries = bapiClis.Retries
-	netopt.Timeout = bapiClis.Timeout
-	netopt.RetSleepTime = bapiClis.RetSleepTime
-	netopt.Proxy = bapiClis.Proxy
+	netopt := setNetOpt(bapiClis)
 	client := cnet.NewHTTPClient(netopt.Timeout, netopt.Proxy)
 	host := GdcAPIHost
 	if endpoint.Legacy {

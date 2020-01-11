@@ -31,6 +31,7 @@ func dataset2toolsCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
+	setGlobalFlag(dataset2toolsCmd, &BapiClis)
 	dataset2toolsCmd.Flags().StringVarP(&dendp.ObjectType, "type", "", "", "Object type [tool, dataset, canned_analysis].")
 	dataset2toolsCmd.Flags().StringVarP(&dendp.ToolName, "tool", "t", "", "Tool name, e.g. bwa.")
 	dataset2toolsCmd.Flags().StringVarP(&dendp.DiseaseName, "disease", "d", "", "Disease name, e.g. prostate cancer")

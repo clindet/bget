@@ -36,6 +36,7 @@ func gdcCmdRunOptions(cmd *cobra.Command) {
 }
 
 func init() {
+	setGlobalFlag(gdcCmd, &BapiClis)
 	gdcCmd.Flags().BoolVarP(&endp.ExtraParams.RemoteName, "remote-name", "n", false, "Use remote defined filename.")
 	gdcCmd.Flags().BoolVarP(&endp.Status, "status", "s", false, "Check GDC portal status (https://portal.gdc.cancer.gov/).")
 	gdcCmd.Flags().BoolVarP(&endp.Cases, "cases", "c", false, "Retrive cases info from GDC portal.")

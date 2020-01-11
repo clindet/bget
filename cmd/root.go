@@ -14,7 +14,7 @@ import (
 	mpb "github.com/vbauerster/mpb/v4"
 )
 
-var version = "v0.1.3-7"
+var version = "v0.2.1"
 
 type bgetCliT struct {
 	downloadDir        string
@@ -159,7 +159,7 @@ func init() {
 	rootCmd.AddCommand(SeqCmd)
 	rootCmd.AddCommand(FmtCmd)
 	rootCmd.AddCommand(api.BapiCmd)
-	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.clean), "clean", "", false, "Remove _download and _log in current dir.")
+	rootCmd.Flags().BoolVarP(&(bgetClis.clean), "clean", "", false, "Remove _download and _log in current dir.")
 	bgetClis.env = make(map[string]string)
 	bgetClis.env["osType"] = runtime.GOOS
 	bgetClis.env["wd"], _ = os.Getwd()
