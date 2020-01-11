@@ -11,6 +11,9 @@ const CligovHost = "https://clinicaltrials.gov/api/"
 
 // Cligov access https://clinicaltrials.gov API
 func Cligov(endpoints *types.CligovEndpoints, bapiClis *types.BapiClisT) bool {
+	if bapiClis.Format == "" {
+		bapiClis.Format = "json"
+	}
 	netopt := setNetOpt(bapiClis)
 	url := CligovHost + setCligovQuerySuffix(endpoints, bapiClis)
 	if url == CligovHost {
@@ -63,6 +66,9 @@ func setCligovQuerySuffix(endpoints *types.CligovEndpoints, bapiClis *types.Bapi
 		suffixList = append(suffixList, "max_rnk="+strconv.Itoa(bapiClis.From+bapiClis.Size))
 	} else if bapiClis.Size != -1 {
 		suffixList = append(suffixList, "max_rnk="+strconv.Itoa(1+bapiClis.Size))
+	}
+	if bapiClis.Extra != "" {
+		suffixList = append(suffixList, bapiClis.Extra)
 	}
 	if len(suffixList) > 0 {
 		suffix = suffix + "?" + strings.Join(suffixList, "&")

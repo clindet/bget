@@ -36,6 +36,7 @@ bget api
     #>   bget api [command]
     #> 
     #> Available Commands:
+    #>   biots       Query https://bio.tools/ website APIs.
     #>   cligov      Query https://clinicaltrials.gov/ website APIs.
     #>   dta         Query dataset2tools website APIs: datasets (d), tools (t), and canned analysis (a).
     #>   gdc         Query GDC portal website APIs.
@@ -67,6 +68,7 @@ bget api
     #>       --call-cor                 Wheather to calculate the corelated keywords, and return the sentence contains >=2 keywords.
     #>   -d, --db string                Db specifies the database to search (default "pubmed")
     #>   -e, --email string             Email specifies the email address to be sent to the server (NCBI website is required). (default "your_email@domain.com")
+    #>       --extra string             Extra query parameters.
     #>       --format string            Rettype specifies the format of the returned data (CSV, TSV, JSON for gdc; XML/TEXT for ncbi).
     #>       --from int                 Parameters of API control the start item of retrived data. (default -1)
     #>   -h, --help                     help for ncbi
@@ -118,6 +120,7 @@ bget api
     #>   -a, --annotations              Retrive annotations info from GDC portal.
     #>   -c, --cases                    Retrive cases info from GDC portal.
     #>   -d, --data                     Retrive /data from GDC portal.
+    #>       --extra string             Extra query parameters.
     #>       --fields string            Fields parameters.
     #>   -f, --files                    Retrive files info from GDC portal.
     #>       --filter string            Retrive data with GDC filter.
@@ -163,6 +166,7 @@ bget api
     #>   -a, --analysis-acc string      Canned analysis accession   , e.g. DCA00000060.
     #>   -s, --dataset-acc string       Dataset accession number, e.g. GSE31106.
     #>   -d, --disease string           Disease name, e.g. prostate cancer
+    #>       --extra string             Extra query parameters.
     #>       --format string            Rettype specifies the format of the returned data (CSV, TSV, JSON for gdc; XML/TEXT for ncbi).
     #>       --from int                 Parameters of API control the start item of retrived data. (default -1)
     #>   -g, --geneset string           With dataset accession, e.g. upregulated.
@@ -208,6 +212,7 @@ bget api
     #>   bget api cligov -q heart+attack --field Condition --field-values
     #> 
     #> Flags:
+    #>       --extra string             Extra query parameters.
     #>       --field string             Specifies which field to collect values for in a Field Values query.
     #>       --field-values             Returns all values found in a single API field for a set of study records.
     #>       --fields string            Specifies which fields to return results for in a Study Fields query.
@@ -233,6 +238,46 @@ bget api
     #>       --sort-keys                Control wheather to sort JSON key.
     #>       --study-fields             Returns values from selected API fields for a large set of study records.
     #>       --timeout int              Set the timeout of per request. (default 35)
+
+    bget api biots -h
+    #> Query https://bio.tools/ website APIs. Detail see https://biotools.readthedocs.io/en/latest/api_reference.html
+    #> 
+    #> Usage:
+    #>   bget api biots [flags]
+    #> 
+    #> Examples:
+    #>   # query item detail
+    #>  bget api biots --tool signalp
+    #>   # search item
+    #>   bget api biots --name signalp
+    #>   bget api biots --topic Proteomics
+    #>   bget api biots --dtype 'Protein sequence'
+    #>   bget api biots --dfmt FASTA
+    #>   bget api biots --ofmt 'ClustalW format'
+    #> 
+    #> Flags:
+    #>       --dfmt string              Fuzzy search over input and output for EDAM Format (term)
+    #>       --dtype string             Fuzzy search over input and output for EDAM Data (term)
+    #>       --extra string             Extra query parameters.
+    #>       --format string            Rettype specifies the format of the returned data (CSV, TSV, JSON for gdc; XML/TEXT for ncbi).
+    #>       --from int                 Parameters of API control the start item of retrived data. (default -1)
+    #>   -h, --help                     help for biots
+    #>       --id string                Search for bio.tools tool ID e.g signalp)
+    #>       --indent int               Control the indent of output json files. (default 4)
+    #>       --json-pretty              Pretty json files.
+    #>       --name string              Search for bio.tools tool name e.g signalp)
+    #>       --ofmt string              Fuzzy search over output for EDAM Format (term)
+    #>   -o, --outfn string             Out specifies destination of the returned data (default to stdout).
+    #>       --publication string       Fuzzy search over publication (DOI, PMID, PMCID, publication type and tool version)
+    #>   -q, --query string             Query specifies the search query for record retrieval (required).
+    #>       --quiet                    No log output.
+    #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
+    #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
+    #>       --size int                 Parameters of API control the lenth of retrived data. Default is auto determined. (default -1)
+    #>       --sort-keys                Control wheather to sort JSON key.
+    #>       --timeout int              Set the timeout of per request. (default 35)
+    #>       --tool string              Obtain information about a single tool (https://bio.tools/api/tool/:id/).
+    #>       --topic string             Search for EDAM Topic (term)
 
 bget doi
 --------
@@ -273,7 +318,7 @@ bget doi
     #>       --save-log                 Save download log to local file]. (default true)
     #>   -s, --seperator string         Optional 'url1{seperator}url2' for multiple keys, urls, or seqs. (default ",")
     #>       --suppl                    Access supplementary files.
-    #>       --task-id string           Task ID (random). (default "1bhnr929dt1ft9b")
+    #>       --task-id string           Task ID (random). (default "xv1biahxqdompbw")
     #>   -t, --thread int               Concurrency download thread. (default 1)
     #>       --thread-axel int          Set the thread of axel. (default 5)
     #>       --timeout int              Set the timeout of per request. (default 35)
@@ -328,7 +373,7 @@ bget doi
     #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
     #>       --save-log                 Save download log to local file]. (default true)
     #>   -s, --seperator string         Optional 'url1{seperator}url2' for multiple keys, urls, or seqs. (default ",")
-    #>       --task-id string           Task ID (random). (default "71tk5wngroit4ff")
+    #>       --task-id string           Task ID (random). (default "3xgc7v5z32jrt94")
     #>   -t, --thread int               Concurrency download thread. (default 1)
     #>       --thread-axel int          Set the thread of axel. (default 5)
     #>       --timeout int              Set the timeout of per request. (default 35)
@@ -380,7 +425,7 @@ bget doi
     #>       --retries-sleep-time int          Sleep time after one retry. (default 5)
     #>       --save-log                        Save download log to local file]. (default true)
     #>   -s, --seperator string                Optional 'url1{seperator}url2' for multiple keys, urls, or seqs. (default ",")
-    #>       --task-id string                  Task ID (random). (default "tcu1vg5nzz66y5g")
+    #>       --task-id string                  Task ID (random). (default "k93hdcl0zkcc7of")
     #>   -t, --thread int                      Concurrency download thread. (default 1)
     #>       --thread-axel int                 Set the thread of axel. (default 5)
     #>       --timeout int                     Set the timeout of per request. (default 35)
@@ -428,7 +473,7 @@ bget doi
     #>       --save-log                 Save download log to local file]. (default true)
     #>   -s, --seperator string         Optional 'url1{seperator}url2' for multiple keys, urls, or seqs. (default ",")
     #>   -v, --show-versions            Show all available versions of key.
-    #>       --task-id string           Task ID (random). (default "k6xwkltltdgvnib")
+    #>       --task-id string           Task ID (random). (default "0u9ulcu06xkkox9")
     #>   -t, --thread int               Concurrency download thread. (default 1)
     #>       --thread-axel int          Set the thread of axel. (default 5)
     #>       --timeout int              Set the timeout of per request. (default 35)

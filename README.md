@@ -2,7 +2,7 @@
 
 # bget
 
-bget is an portable tool with several sub-commands to query bioinformatics data, databases and files. The Golang `http` library, `wget`, `curl`, `axel`, `git`, and `rsync` were supported as the query engine.
+bget is an portable tool with several sub-commands to query bioinformatics APIs, data, databases and files. The Golang `http` library, `wget`, `curl`, `axel`, `git`, and `rsync` were supported as the query engine.
 
 Supported types:
 
@@ -121,6 +121,17 @@ bget api cligov --info-search-area
 bget api cligov -q heart+attack --full-studies --format json
 bget api cligov -q heart+attack --fields NCTId,Condition,BriefTitle --study-fields
 bget api cligov -q heart+attack --field Condition --field-values
+
+# bio.tools API
+# query item detail
+bget api biots --tool signalp
+
+# search item
+bget api biots --name signalp
+bget api biots --topic Proteomics
+bget api biots --dtype 'Protein sequence'
+bget api biots --dfmt FASTA
+bget api biots --ofmt 'ClustalW format'
 ```
 
 ### Query DOI resources

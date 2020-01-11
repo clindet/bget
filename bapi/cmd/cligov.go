@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var clingovEndp types.CligovEndpoints
+var cligovEndp types.CligovEndpoints
 var cligovCmd = &cobra.Command{
 	Use:   "cligov",
 	Short: "Query https://clinicaltrials.gov/ website APIs.",
@@ -17,7 +17,7 @@ var cligovCmd = &cobra.Command{
 }
 
 func cligovCmdRunOptions(cmd *cobra.Command) {
-	if fetch.Cligov(&clingovEndp, &BapiClis) {
+	if fetch.Cligov(&cligovEndp, &BapiClis) {
 		BapiClis.HelpFlags = false
 	}
 	if BapiClis.HelpFlags {
@@ -27,20 +27,20 @@ func cligovCmdRunOptions(cmd *cobra.Command) {
 
 func init() {
 	setGlobalFlag(cligovCmd, &BapiClis)
-	cligovCmd.Flags().BoolVarP(&clingovEndp.InfoDataVrs, "info-dat-vers", "", false, `Returns the date when the ClinicalTrials.gov dataset was posted.`)
-	cligovCmd.Flags().BoolVarP(&clingovEndp.InfoAPIVrs, "info-api-vers", "", false, `Returns the current version number of the ClinicalTrials.gov API.`)
-	cligovCmd.Flags().BoolVarP(&clingovEndp.InfoAPIDefs, "info-api-defs", "", false, `Returns detailed definitions.`)
-	cligovCmd.Flags().BoolVarP(&clingovEndp.InfoStuStru, "info-study-struct", "", false, `Returns all available data elements for a single study record.`)
-	cligovCmd.Flags().BoolVarP(&clingovEndp.InfoStuFieldsList, "info-study-fields", "", false, `Returns all study data elements.`)
-	cligovCmd.Flags().BoolVarP(&clingovEndp.InfoStuStat, "info-study-stat", "", false, `Returns an annotated version of the Study Structure info URL.`)
-	cligovCmd.Flags().BoolVarP(&clingovEndp.InfoSearchArea, "info-search-area", "", false, `Returns groups of weighted study fields, or "search areas".`)
+	cligovCmd.Flags().BoolVarP(&cligovEndp.InfoDataVrs, "info-dat-vers", "", false, `Returns the date when the ClinicalTrials.gov dataset was posted.`)
+	cligovCmd.Flags().BoolVarP(&cligovEndp.InfoAPIVrs, "info-api-vers", "", false, `Returns the current version number of the ClinicalTrials.gov API.`)
+	cligovCmd.Flags().BoolVarP(&cligovEndp.InfoAPIDefs, "info-api-defs", "", false, `Returns detailed definitions.`)
+	cligovCmd.Flags().BoolVarP(&cligovEndp.InfoStuStru, "info-study-struct", "", false, `Returns all available data elements for a single study record.`)
+	cligovCmd.Flags().BoolVarP(&cligovEndp.InfoStuFieldsList, "info-study-fields", "", false, `Returns all study data elements.`)
+	cligovCmd.Flags().BoolVarP(&cligovEndp.InfoStuStat, "info-study-stat", "", false, `Returns an annotated version of the Study Structure info URL.`)
+	cligovCmd.Flags().BoolVarP(&cligovEndp.InfoSearchArea, "info-search-area", "", false, `Returns groups of weighted study fields, or "search areas".`)
 
-	cligovCmd.Flags().BoolVarP(&clingovEndp.FullStudies, "full-studies", "", false, `Returns all content for a small set of study records.`)
-	cligovCmd.Flags().BoolVarP(&clingovEndp.FieldValues, "field-values", "", false, `Returns all values found in a single API field for a set of study records.`)
-	cligovCmd.Flags().BoolVarP(&clingovEndp.StuFields, "study-fields", "", false, `Returns values from selected API fields for a large set of study records.`)
+	cligovCmd.Flags().BoolVarP(&cligovEndp.FullStudies, "full-studies", "", false, `Returns all content for a small set of study records.`)
+	cligovCmd.Flags().BoolVarP(&cligovEndp.FieldValues, "field-values", "", false, `Returns all values found in a single API field for a set of study records.`)
+	cligovCmd.Flags().BoolVarP(&cligovEndp.StuFields, "study-fields", "", false, `Returns values from selected API fields for a large set of study records.`)
 
-	cligovCmd.Flags().StringVarP(&clingovEndp.Fields, "fields", "", "", `Specifies which fields to return results for in a Study Fields query.`)
-	cligovCmd.Flags().StringVarP(&clingovEndp.Field, "field", "", "", `Specifies which field to collect values for in a Field Values query.`)
+	cligovCmd.Flags().StringVarP(&cligovEndp.Fields, "fields", "", "", `Specifies which fields to return results for in a Study Fields query.`)
+	cligovCmd.Flags().StringVarP(&cligovEndp.Field, "field", "", "", `Specifies which field to collect values for in a Field Values query.`)
 
 	cligovCmd.Flags().StringVarP(&BapiClis.Outfn, "outfn", "o", "", `Out specifies destination of the returned data (default to stdout).`)
 

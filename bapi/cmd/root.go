@@ -38,6 +38,7 @@ func Execute() {
 func init() {
 	BapiClis.Quiet = false
 	BapiClis.HelpFlags = true
+	BapiCmd.AddCommand(bioToolsCmd)
 	BapiCmd.AddCommand(ncbiCmd)
 	BapiCmd.AddCommand(gdcCmd)
 	BapiCmd.AddCommand(dataset2toolsCmd)

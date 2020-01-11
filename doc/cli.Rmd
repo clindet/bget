@@ -37,6 +37,10 @@ bget api dta -h
 bget api cligov -h
 ```
 
+```{bash}
+bget api biots -h
+```
+
 ## bget doi
 
 ```{bash}

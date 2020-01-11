@@ -1,7 +1,9 @@
 2020-01-11 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
-		* add https://clinicaltrials.gov/ API
-		* add db/clingov for https://ClinicalTrials.gov/AllAPIJSON.zip
+		* support clinicaltrials.gov API
+		* support bio.tools API
+		* add --extra flag in api
+		* add db/clingov: ClinicalTrials.gov/AllAPIJSON.zip
 
 2020-01-10 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 

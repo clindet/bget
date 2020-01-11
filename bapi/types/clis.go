@@ -20,4 +20,13 @@ type BapiClisT struct {
 	PrettyJSON   bool
 	Indent       int
 	SortKeys     bool
+	Extra        string
+}
+
+type NcbiClisT struct {
+	NcbiDB        string
+	NcbiRetmax    int
+	NcbiXMLToJSON string
+	NcbiXMLPaths  []string
+	NcbiKeywords  string
 }

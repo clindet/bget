@@ -46,9 +46,9 @@ func Gdc(endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) {
 		queryFlag = ""
 		f := v.Field(i)
 		if f.Kind() == reflect.String && f.String() != "" {
-			req, queryFlag = setGdcReq(host, i, endpoint)
+			req, queryFlag = setGdcReq(host, i, endpoint, bapiClis)
 		} else if f.Kind() == reflect.Bool && f.Bool() {
-			req, queryFlag = setGdcReq(host, i, endpoint)
+			req, queryFlag = setGdcReq(host, i, endpoint, bapiClis)
 		}
 		if queryFlag == "" {
 			continue
@@ -87,9 +87,9 @@ func Gdc(endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) {
 	}
 }
 
-func setGdcReq(host string, i int, endpoint *types.GdcEndpoints) (*http.Request, string) {
+func setGdcReq(host string, i int, endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) (*http.Request, string) {
 	queryFlag := gdcapis[i]
-	suffix := setGdcQuerySuffix(queryFlag, endpoint)
+	suffix := setGdcQuerySuffix(queryFlag, endpoint, bapiClis)
 	method := "GET"
 	req, err := http.NewRequest(method, host+"/"+gdcapis[i]+suffix, nil)
 	cnet.SetDefaultReqHeader(req)
@@ -99,7 +99,7 @@ func setGdcReq(host string, i int, endpoint *types.GdcEndpoints) (*http.Request,
 	return req, queryFlag
 }
 
-func setGdcQuerySuffix(queryFlag string, endpoint *types.GdcEndpoints) (suffix string) {
+func setGdcQuerySuffix(queryFlag string, endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) (suffix string) {
 	queryStr := ""
 	suffixList := []string{}
 	if endpoint.ExtraParams.Query != "" {
@@ -145,6 +145,9 @@ func setGdcQuerySuffix(queryFlag string, endpoint *types.GdcEndpoints) (suffix s
 	}
 	if endpoint.ExtraParams.Pretty {
 		suffixList = append(suffixList, "pretty=true")
+	}
+	if bapiClis.Extra != "" {
+		suffixList = append(suffixList, bapiClis.Extra)
 	}
 	if len(suffixList) > 0 && queryStr != "" {
 		if !strings.Contains(queryStr, "?") {
