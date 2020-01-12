@@ -1,6 +1,7 @@
 package versions
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -9,7 +10,7 @@ import (
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/openbiox/bget/urlpool"
-	"github.com/openbiox/butils/stringo"
+	"github.com/openbiox/ligo/stringo"
 )
 
 // DefaultVersions set default key string versions
@@ -86,7 +87,7 @@ func QueryKeysInfo(keys []string, env *map[string]string) (urls, postShellCmd, v
 func QueryKeysVersions(keys []string, env *map[string]string) map[string][]string {
 	versions := make(map[string][]string)
 	table := tablewriter.NewWriter(os.Stdout)
-	if (*env)["printFormat"] == "table" {
+	if (*env)["PrintFormat"] == "table" {
 		table.SetHeader([]string{"Key", "Versions"})
 		table.SetRowLine(true)
 		table.SetRowSeparator("-")
@@ -119,18 +120,20 @@ func QueryKeysVersions(keys []string, env *map[string]string) map[string][]strin
 	wg.Wait()
 	for k := range versions {
 		if len(versions[k]) > 0 {
-			if (*env)["printFormat"] == "table" {
+			if (*env)["PrintFormat"] == "table" {
 				table.Append([]string{k, strings.Join(versions[k], ", ")})
-			} else if (*env)["printFormat"] == "text" {
+			} else if (*env)["PrintFormat"] == "text" {
 				fmt.Println(fmt.Sprintf("key> %s\nversions> %s\n-----------", k, strings.Join(versions[k], ", ")))
 			}
 		}
 	}
-	if (*env)["printFormat"] == "table" {
+	if (*env)["PrintFormat"] == "table" {
 		table.Render()
-	} else if (*env)["printFormat"] == "json" {
+	} else if (*env)["PrintFormat"] == "json" {
+		var str bytes.Buffer
 		mapVersions, _ := json.Marshal(versions)
-		fmt.Println(string(mapVersions))
+		json.Indent(&str, mapVersions, "", "  ")
+		fmt.Println(str.String())
 	}
 	return versions
 }

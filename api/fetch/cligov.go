@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/openbiox/bget/bapi/types"
+	"github.com/openbiox/bget/api/types"
 )
 
 const CligovHost = "https://clinicaltrials.gov/api/"
@@ -16,7 +16,7 @@ func Cligov(endpoints *types.CligovEndpoints, bapiClis *types.BapiClisT) bool {
 	}
 	netopt := setNetOpt(bapiClis)
 	url := CligovHost + setCligovQuerySuffix(endpoints, bapiClis)
-	if url == CligovHost {
+	if url == CligovHost || url == CligovHost+"?fmt=json" {
 		return false
 	}
 	queryAPI("clinicaltrials.gov", url, bapiClis, netopt)

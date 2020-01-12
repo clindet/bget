@@ -9,15 +9,14 @@ import (
 	"time"
 
 	"github.com/openbiox/bget/spider"
-	cio "github.com/openbiox/butils/io"
-	"github.com/openbiox/butils/log"
-	cnet "github.com/openbiox/butils/net"
-	"github.com/openbiox/butils/slice"
-	stringo "github.com/openbiox/butils/stringo"
+	cio "github.com/openbiox/ligo/io"
+	cnet "github.com/openbiox/ligo/net"
+	"github.com/openbiox/ligo/slice"
+	stringo "github.com/openbiox/ligo/stringo"
 	"github.com/spf13/cobra"
 )
 
-var fullText bool
+var fullText string
 var suppl bool
 var pmc bool
 var universeSpider bool
@@ -27,21 +26,34 @@ var DoiCmd = &cobra.Command{
 	Short: "Can be used to access files via DOI.",
 	Long:  `Can be used to access files via DOI. More see here https://github.com/openbiox/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		DoiCmdRunOptions(cmd)
+		doiCmdRunOptions(cmd, args)
 	},
 }
 
+func doiCmdRunOptions(cmd *cobra.Command, args []string) {
+	initCmd(cmd, args)
+	checkArgs(cmd, "doi")
+	checkDownloadDir(bgetClis.Doi != "")
+	if bgetClis.Doi != "" || bgetClis.ListFile != "" {
+		downloadDoi()
+		bgetClis.HelpFlags = false
+	}
+	if bgetClis.HelpFlags {
+		cmd.Help()
+	}
+}
+
 func downloadDoi() {
-	sem := make(chan bool, bgetClis.thread)
+	sem := make(chan bool, bgetClis.Thread)
 	doi := []string{}
 	urls := []string{}
 	var destDirArray []string
-	if bgetClis.doi != "" && strings.Contains(bgetClis.doi, bgetClis.seperator) {
-		doi = strings.Split(bgetClis.doi, bgetClis.seperator)
-	} else if bgetClis.doi != "" {
-		doi = []string{bgetClis.doi}
-	} else if bgetClis.listFile != "" {
-		doi = cio.ReadLines(bgetClis.listFile)
+	if bgetClis.Doi != "" && strings.Contains(bgetClis.Doi, bgetClis.Seperator) {
+		doi = strings.Split(bgetClis.Doi, bgetClis.Seperator)
+	} else if bgetClis.Doi != "" {
+		doi = []string{bgetClis.Doi}
+	} else if bgetClis.ListFile != "" {
+		doi = cio.ReadLines(bgetClis.ListFile)
 	}
 	for _, v := range doi {
 		sem <- true
@@ -52,7 +64,7 @@ func downloadDoi() {
 			urlsTmp := doiSpiders(v)
 			urlsTmp = slice.DropSliceDup(urlsTmp)
 			for range urlsTmp {
-				destDirArray = append(destDirArray, path.Join(bgetClis.downloadDir, v))
+				destDirArray = append(destDirArray, path.Join(bgetClis.DownloadDir, v))
 			}
 			urls = append(urls, urlsTmp...)
 		}(v)
@@ -61,7 +73,7 @@ func downloadDoi() {
 		sem <- true
 	}
 	netOpt := setNetParams(&bgetClis)
-	cnet.HttpGetURLs(urls, destDirArray, netOpt)
+	cnet.HTTPGetURLs(urls, destDirArray, netOpt)
 }
 
 func doiSpiders(doi string) (urls []string) {
@@ -76,9 +88,9 @@ func doiSpiders(doi string) (urls []string) {
 	var t int
 	opt := spider.DoiSpiderOpt{
 		Doi:           doi,
-		Proxy:         bgetClis.proxy,
-		Timeout:       bgetClis.timeout,
-		FullText:      fullText,
+		Proxy:         bgetClis.Proxy,
+		Timeout:       bgetClis.Timeout,
+		FullText:      fullText == "true",
 		Supplementary: suppl,
 	}
 	if pmc {
@@ -102,11 +114,11 @@ func doiSpiders(doi string) (urls []string) {
 	}
 	for k := range spider.DoiSpidersPool {
 		if k == doiOrg {
-			for t = 0; t < bgetClis.retries; t++ {
+			for t = 0; t < bgetClis.Retries; t++ {
 				urls = append(urls, spider.DoiSpidersPool[doiOrg](&opt)...)
 				if len(urls) == 0 {
-					log.Warnf("%s returns empty, on attempt %d... retrying after %d seconds.", doi, t+1, bgetClis.retSleepTime)
-					time.Sleep(time.Duration(bgetClis.retSleepTime) * time.Second)
+					log.Warnf("%s returns empty, on attempt %d... retrying after %d seconds.", doi, t+1, bgetClis.RetSleepTime)
+					time.Sleep(time.Duration(bgetClis.RetSleepTime) * time.Second)
 					continue
 				} else {
 					break
@@ -120,30 +132,18 @@ func doiSpiders(doi string) (urls []string) {
 	return urls
 }
 
-func DoiCmdRunOptions(cmd *cobra.Command) {
-	checkArgs(cmd, "doi")
-	checkDownloadDir(bgetClis.doi != "")
-	if bgetClis.doi != "" || bgetClis.listFile != "" {
-		downloadDoi()
-		bgetClis.helpFlags = false
-	}
-	if bgetClis.helpFlags {
-		cmd.Help()
-	}
-}
-
 func init() {
-	DoiCmd.Flags().BoolVarP(&universeSpider, "universe", "", true, "Try universe spider.")
-	DoiCmd.Flags().BoolVarP(&pmc, "pmc", "", false, "Try PMC database.")
-	DoiCmd.Flags().BoolVarP(&fullText, "full-text", "", true, "Access full text.")
-	DoiCmd.Flags().BoolVarP(&suppl, "suppl", "", false, "Access supplementary files.")
+	DoiCmd.Flags().BoolVarP(&universeSpider, "universe", "", true, "try universe spider.")
+	DoiCmd.Flags().BoolVarP(&pmc, "pmc", "", false, "try PMC database.")
+	DoiCmd.Flags().StringVarP(&fullText, "full-text", "", "true", "access full text.")
+	DoiCmd.Flags().BoolVarP(&suppl, "suppl", "", false, "access supplementary files.")
 	setGlobalFlag(DoiCmd, &bgetClis)
 	setKeyListFlag(DoiCmd, &bgetClis, "dois")
-	exampleXML2Json := "`bapi ncbi --xml2json pubmed titleSearch.XML |grep Doi| tr -d ' ,(Doi:)\"'`"
+	exampleXML2Json := "`bget api ncbi --xml2json pubmed titleSearch.XML |grep Doi| tr -d ' ,(Doi:)\"'`"
 	DoiCmd.Example = fmt.Sprintf(`  bget doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
   bget doi 10.1016/j.devcel.2017.03.001 10.1016/j.stem.2019.07.009 10.1016/j.celrep.2018.03.072 -t 2
 
-  bapi ncbi -q '((The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability[Title]) OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR[Title])' -o titleSearch.XML
+  bget api ncbi -q '((The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability[Title]) OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR[Title])' -o titleSearch.XML
   dois=%s
   echo ${dois}
   bget doi ${dois}

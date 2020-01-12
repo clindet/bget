@@ -5,18 +5,17 @@ import (
 
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
-	"github.com/openbiox/butils/log"
-	bspider "github.com/openbiox/butils/spider"
-	stringo "github.com/openbiox/butils/stringo"
+	cnet "github.com/openbiox/ligo/net"
+	stringo "github.com/openbiox/ligo/stringo"
 )
 
-// ScihubSpider access http://sci-hub.tw/ files via spider
-func ScihubSpider(opt *DoiSpiderOpt) (urls []string) {
+// Scihucnet access http://sci-hub.tw/ files via spider
+func Scihucnet(opt *DoiSpiderOpt) (urls []string) {
 	c := colly.NewCollector(
 		colly.AllowedDomains("doi.org", "sci-hub.tw"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.FullText {
 		c.OnHTML("#buttons a[onclick]", func(e *colly.HTMLElement) {

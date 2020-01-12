@@ -1,7 +1,10 @@
 package types
 
 type BapiClisT struct {
-	Quiet        bool
+	TaskID       string
+	Quiet        string
+	SaveLog      string
+	LogDir       string
 	HelpFlags    bool
 	Version      string
 	Proxy        string

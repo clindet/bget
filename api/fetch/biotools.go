@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/openbiox/bget/bapi/types"
+	"github.com/openbiox/bget/api/types"
 )
 
 const BioToolsHost = "https://bio.tools/api/tool/"
@@ -16,10 +16,10 @@ func BioTools(endpoints *types.BioToolsEndpoints, bapiClis *types.BapiClisT) boo
 	}
 	netopt := setNetOpt(bapiClis)
 	url := BioToolsHost + setBioToolsQuerySuffix(endpoints, bapiClis)
-	if url == BioToolsHost {
+	if url == BioToolsHost || url == BioToolsHost+"?format=json" {
 		return false
 	}
-	queryAPI("clinicaltrials.gov", url, bapiClis, netopt)
+	queryAPI("bio.tools", url, bapiClis, netopt)
 
 	return true
 }

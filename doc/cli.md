@@ -12,16 +12,19 @@ Main interface
     #> Available Commands:
     #>   api         Query bioinformatics website APIs.
     #>   doi         Can be used to access files via DOI.
-    #>   fmt         A set of format (fmt) command.
     #>   help        Help about any command
     #>   key         Can be used to access URLs via a key string.
     #>   seq         Can be used to access sequence data via unique id (dbGAP and EGA) or manifest files (TCGA).
     #>   url         Can be used to access URLs via Golang http, wget, curl, axel and git, and rsync.
     #> 
     #> Flags:
-    #>       --clean     Remove _download and _log in current dir.
-    #>   -h, --help      help for bget
-    #>       --version   version for bget
+    #>       --clean            remove _download and _log in current dir.
+    #>   -h, --help             help for bget
+    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --save-log         Save log to file.
+    #>       --task-id string   task ID (default is random). (default "d2f5zd0wwtkrde3")
+    #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
+    #>       --version          version for bget
     #> 
     #> Use "bget [command] --help" for more information about a command.
 
@@ -43,7 +46,15 @@ bget api
     #>   ncbi        Query ncbi website APIs.
     #> 
     #> Flags:
-    #>   -h, --help   help for api
+    #>   -h, --help           help for api
+    #>       --quiet string   No log output. (default "false")
+    #> 
+    #> Global Flags:
+    #>       --clean            remove _download and _log in current dir.
+    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --save-log         Save log to file.
+    #>       --task-id string   task ID (default is random). (default "qpd0stvs09b7sca")
+    #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
     #> 
     #> Use "bget api [command] --help" for more information about a command.
 
@@ -58,7 +69,7 @@ bget api
     #>   bget api ncbi -d pubmed -q B-ALL --format XML -e your_email@domain.com
     #> 
     #>   # query pubmed and convert it to json format that also extract all URLs and calculate the words connections
-    #>   bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bget api ncbi --xml2json pubmed -k "MAPK, MTOR, autophagy" --call-cor - | sed 's;}{;,;g' | bget fmt --json-to-slice - > final.json
+    #>   bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bget api ncbi --xml2json pubmed -k "MAPK, MTOR, autophagy" --call-cor - | sed 's;}{;,;g' | bioctl fmt --json-to-slice - > final.json
     #> 
     #>   # query larger items
     #>   k="algorithm, tool, model, pipleline, method, database, workflow, dataset, bioinformatics, sequencing, http, github.com, gitlab.com, bitbucket.org, RNA-Seq, DNA, profile, landscape"
@@ -78,7 +89,6 @@ bget api
     #>   -o, --outfn string             Out specifies destination of the returned data (default to stdout).
     #>   -m, --per-size int             Retmax specifies the number of records to be retrieved per request. (default 100)
     #>   -q, --query string             Query specifies the search query for record retrieval (required).
-    #>       --quiet                    No log output.
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
     #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
     #>       --size int                 Parameters of API control the lenth of retrived data. Default is auto determined. (default -1)
@@ -86,6 +96,14 @@ bget api
     #>   -t, --thread int               Thread to process. (default 2)
     #>       --timeout int              Set the timeout of per request. (default 35)
     #>       --xml2json string          Convert XML files to json [e.g. pubmed].
+    #> 
+    #> Global Flags:
+    #>       --clean             remove _download and _log in current dir.
+    #>       --log-dir string    Log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --quiet string      No log output. (default "false")
+    #>       --save-log string   Save download log to local file. (default "true")
+    #>       --task-id string    Task ID (random). (default "gfw8ps9ooxsgdxw")
+    #>       --verbose int       verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
     bget api gdc -h
     #> Query GDC portal website APIs.
@@ -100,7 +118,7 @@ bget api
     #>   bget api gdc -p -q TARGET-NBL --json-pretty
     #>   bget api gdc -p --format tsv > tcga_projects.tsv
     #>   bget api gdc -p --format csv > tcga_projects.csv
-    #>   bget api gdc -p --from 1 --szie 2
+    #>   bget api gdc -p --from 1 --size 2
     #>   # check GDC portal status (https://portal.gdc.cancer.gov/)
     #>   bget api gdc -s
     #>   # retrive cases info from GDC portal
@@ -134,7 +152,6 @@ bget api
     #>   -o, --outfn string             Out specifies destination of the returned data (default to stdout).
     #>   -p, --projects                 Retrive projects meta info from GDC portal.
     #>   -q, --query string             Query specifies the search query for record retrieval (required).
-    #>       --quiet                    No log output.
     #>   -n, --remote-name              Use remote defined filename.
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
     #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
@@ -145,6 +162,14 @@ bget api
     #>   -s, --status                   Check GDC portal status (https://portal.gdc.cancer.gov/).
     #>       --timeout int              Set the timeout of per request. (default 35)
     #>       --token string             Token to access GDC.
+    #> 
+    #> Global Flags:
+    #>       --clean             remove _download and _log in current dir.
+    #>       --log-dir string    Log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --quiet string      No log output. (default "false")
+    #>       --save-log string   Save download log to local file. (default "true")
+    #>       --task-id string    Task ID (random). (default "1588c52afmgukkz")
+    #>       --verbose int       verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
     bget api dta -h
     #> Query dataset2tools website APIs: datasets (d), tools (t), and canned analysis (a).
@@ -156,9 +181,9 @@ bget api
     #>   # query canned analysis accession  , e.g. DCA00000060.
     #>   bget api dta -a DCA00000060
     #>   # query dataset accession number, e.g. GSE31106 
-    #>   bget api dta -s GSE31106 | bget fmt --json-pretty -
+    #>   bget api dta -s GSE31106 | bioctl fmt --json-pretty -
     #>   # query via object type
-    #>   bget api dta --type dataset | bget fmt --json-pretty --indent 2 -
+    #>   bget api dta --type dataset | bioctl fmt --json-pretty --indent 2 -
     #>   # props of dataset accession, e.g. upregulated.
     #>   bget api dta -g upregulated | json2csv -o out.csv
     #> 
@@ -175,7 +200,6 @@ bget api
     #>       --json-pretty              Pretty json files.
     #>   -o, --outfn string             Out specifies destination of the returned data (default to stdout).
     #>   -q, --query string             Query specifies the search query for record retrieval (required).
-    #>       --quiet                    No log output.
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
     #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
     #>       --size int                 Parameters of API control the lenth of retrived data. Default is auto determined. (default -1)
@@ -183,6 +207,14 @@ bget api
     #>       --timeout int              Set the timeout of per request. (default 35)
     #>   -t, --tool string              Tool name, e.g. bwa.
     #>       --type string              Object type [tool, dataset, canned_analysis].
+    #> 
+    #> Global Flags:
+    #>       --clean             remove _download and _log in current dir.
+    #>       --log-dir string    Log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --quiet string      No log output. (default "false")
+    #>       --save-log string   Save download log to local file. (default "true")
+    #>       --task-id string    Task ID (random). (default "h39wy98l5zgnd5q")
+    #>       --verbose int       verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
     bget api cligov -h
     #> Query https://clinicaltrials.gov/ website APIs. Detail see https://clinicaltrials.gov/api/gui/ref/api_urls
@@ -231,13 +263,20 @@ bget api
     #>       --json-pretty              Pretty json files.
     #>   -o, --outfn string             Out specifies destination of the returned data (default to stdout).
     #>   -q, --query string             Query specifies the search query for record retrieval (required).
-    #>       --quiet                    No log output.
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
     #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
     #>       --size int                 Parameters of API control the lenth of retrived data. Default is auto determined. (default -1)
     #>       --sort-keys                Control wheather to sort JSON key.
     #>       --study-fields             Returns values from selected API fields for a large set of study records.
     #>       --timeout int              Set the timeout of per request. (default 35)
+    #> 
+    #> Global Flags:
+    #>       --clean             remove _download and _log in current dir.
+    #>       --log-dir string    Log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --quiet string      No log output. (default "false")
+    #>       --save-log string   Save download log to local file. (default "true")
+    #>       --task-id string    Task ID (random). (default "j4gyfel9c9uiqxw")
+    #>       --verbose int       verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
     bget api biots -h
     #> Query https://bio.tools/ website APIs. Detail see https://biotools.readthedocs.io/en/latest/api_reference.html
@@ -247,7 +286,7 @@ bget api
     #> 
     #> Examples:
     #>   # query item detail
-    #>  bget api biots --tool signalp
+    #>   bget api biots --tool signalp
     #>   # search item
     #>   bget api biots --name signalp
     #>   bget api biots --topic Proteomics
@@ -270,7 +309,6 @@ bget api
     #>   -o, --outfn string             Out specifies destination of the returned data (default to stdout).
     #>       --publication string       Fuzzy search over publication (DOI, PMID, PMCID, publication type and tool version)
     #>   -q, --query string             Query specifies the search query for record retrieval (required).
-    #>       --quiet                    No log output.
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
     #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
     #>       --size int                 Parameters of API control the lenth of retrived data. Default is auto determined. (default -1)
@@ -278,6 +316,14 @@ bget api
     #>       --timeout int              Set the timeout of per request. (default 35)
     #>       --tool string              Obtain information about a single tool (https://bio.tools/api/tool/:id/).
     #>       --topic string             Search for EDAM Topic (term)
+    #> 
+    #> Global Flags:
+    #>       --clean             remove _download and _log in current dir.
+    #>       --log-dir string    Log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --quiet string      No log output. (default "false")
+    #>       --save-log string   Save download log to local file. (default "true")
+    #>       --task-id string    Task ID (random). (default "gnljjndv4gv829a")
+    #>       --verbose int       verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
 bget doi
 --------
@@ -292,8 +338,8 @@ bget doi
     #>   bget doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
     #>   bget doi 10.1016/j.devcel.2017.03.001 10.1016/j.stem.2019.07.009 10.1016/j.celrep.2018.03.072 -t 2
     #> 
-    #>   bapi ncbi -q '((The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability[Title]) OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR[Title])' -o titleSearch.XML
-    #>   dois=`bapi ncbi --xml2json pubmed titleSearch.XML |grep Doi| tr -d ' ,(Doi:)"'`
+    #>   bget api ncbi -q '((The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability[Title]) OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR[Title])' -o titleSearch.XML
+    #>   dois=`bget api ncbi --xml2json pubmed titleSearch.XML |grep Doi| tr -d ' ,(Doi:)"'`
     #>   echo ${dois}
     #>   bget doi ${dois}
     #>   bget doi 10.1080/15548627.2018.1505155 --proxy http://username:password@hostname:port
@@ -301,28 +347,31 @@ bget doi
     #> Flags:
     #>   -g, --engine string            Point the download engine: go-http, wget, curl, axel, git, and rsync. (default "go-http")
     #>   -e, --extra-cmd string         Extra flags and values pass to internal CMDs
-    #>       --full-text                Access full text. (default true)
+    #>       --full-text string         access full text. (default "true")
     #>   -h, --help                     help for doi
     #>       --ignore                   Contine to download and skip the check of existed files.
     #>   -l, --list-file string         A file contains dois for download.
-    #>       --log-dir string           Log dir. (default "_log")
     #>   -m, --mirror string            Set the mirror of resources.
-    #>   -o, --outdir string            Set the download dir.
+    #>   -o, --outdir string            Set the download dir. (default "_download")
     #>   -f, --overwrite                Logical indicating that whether to overwrite existing files.
-    #>       --pmc                      Try PMC database.
+    #>       --pmc                      try PMC database.
     #>       --proxy string             HTTP proxy to download.
-    #>   -q, --quiet                    No output.
     #>   -n, --remote-name              Use remote defined filename.
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
     #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
-    #>       --save-log                 Save download log to local file]. (default true)
     #>   -s, --seperator string         Optional 'url1{seperator}url2' for multiple keys, urls, or seqs. (default ",")
-    #>       --suppl                    Access supplementary files.
-    #>       --task-id string           Task ID (random). (default "xv1biahxqdompbw")
+    #>       --suppl                    access supplementary files.
     #>   -t, --thread int               Concurrency download thread. (default 1)
     #>       --thread-axel int          Set the thread of axel. (default 5)
     #>       --timeout int              Set the timeout of per request. (default 35)
-    #>       --universe                 Try universe spider. (default true)
+    #>       --universe                 try universe spider. (default true)
+    #> 
+    #> Global Flags:
+    #>       --clean            remove _download and _log in current dir.
+    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --save-log         Save log to file.
+    #>       --task-id string   task ID (default is random). (default "mh5noe6dp7czkk8")
+    #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
 ### bget seq
 
@@ -361,19 +410,15 @@ bget doi
     #>   -h, --help                     help for seq
     #>       --ignore                   Contine to download and skip the check of existed files.
     #>   -l, --list-file string         A file contains accession ids for download.
-    #>       --log-dir string           Log dir. (default "_log")
     #>   -m, --mirror string            Set the mirror of resources.
-    #>   -o, --outdir string            Set the download dir.
+    #>   -o, --outdir string            Set the download dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_download")
     #>   -f, --overwrite                Logical indicating that whether to overwrite existing files.
     #>       --proxy string             HTTP proxy to download.
     #>       --query-gpl                Wheather fetch GPL files from GEO database.
-    #>   -q, --quiet                    No output.
     #>   -n, --remote-name              Use remote defined filename.
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
     #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
-    #>       --save-log                 Save download log to local file]. (default true)
     #>   -s, --seperator string         Optional 'url1{seperator}url2' for multiple keys, urls, or seqs. (default ",")
-    #>       --task-id string           Task ID (random). (default "3xgc7v5z32jrt94")
     #>   -t, --thread int               Concurrency download thread. (default 1)
     #>       --thread-axel int          Set the thread of axel. (default 5)
     #>       --timeout int              Set the timeout of per request. (default 35)
@@ -381,6 +426,13 @@ bget doi
     #>                                    "password": "{your_password}","client_secret":"AMenuDLjVdVo4BSwi0QD54LL6NeVDEZRzEQUJ7h
     #>                                      JOM3g4imDZBHHX0hNfKHPeQIGkskhtCmqAJtt_jm7EKq-rWw"}.
     #>       --token-gdc string         Token to access TCGA portal files.
+    #> 
+    #> Global Flags:
+    #>       --clean            remove _download and _log in current dir.
+    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --save-log         Save log to file.
+    #>       --task-id string   task ID (default is random). (default "qb1fh59pbaocb3r")
+    #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
 ### bget url
 
@@ -394,9 +446,10 @@ bget doi
     #>   urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | tr "," "\n"> /tmp/urls.list
     #> 
     #>   bget url ${urls}
-    #>   bget url https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe
-    #>   bget url ${urls} -t 2 -o /tmp/download
-    #>   bget url ${urls} -t 3 -o /tmp/download -f -g wget
+    #>   bget url https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe --save-log
+    #>   bget url ${urls} -t 3 -o /tmp/download -f -g wget --save-log --verbose 2
+    #>   bget url ${urls} -t 2 -o /tmp/download --save-log --verbose 2
+    #>  
     #>   bget url ${urls} -t 3 -o /tmp/download -g wget --ignore
     #>   bget url -l /tmp/urls.list -o /tmp/download -f -t 3
     #> 
@@ -413,24 +466,27 @@ bget doi
     #>   -h, --help                            help for url
     #>       --ignore                          Contine to download and skip the check of existed files.
     #>   -l, --list-file string                A file contains urls for download.
-    #>       --log-dir string                  Log dir. (default "_log")
     #>   -m, --mirror string                   Set the mirror of resources.
     #>       --only-github-assets              Logical indicating that whether to only download github repo assets files.
-    #>   -o, --outdir string                   Set the download dir.
+    #>   -o, --outdir string                   Set the download dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_download")
     #>   -f, --overwrite                       Logical indicating that whether to overwrite existing files.
     #>       --proxy string                    HTTP proxy to download.
-    #>   -q, --quiet                           No output.
     #>   -n, --remote-name                     Use remote defined filename.
     #>   -r, --retries int                     Retry specifies the number of attempts to retrieve the data. (default 5)
     #>       --retries-sleep-time int          Sleep time after one retry. (default 5)
-    #>       --save-log                        Save download log to local file]. (default true)
     #>   -s, --seperator string                Optional 'url1{seperator}url2' for multiple keys, urls, or seqs. (default ",")
-    #>       --task-id string                  Task ID (random). (default "k93hdcl0zkcc7of")
     #>   -t, --thread int                      Concurrency download thread. (default 1)
     #>       --thread-axel int                 Set the thread of axel. (default 5)
     #>       --timeout int                     Set the timeout of per request. (default 35)
     #>   -u, --uncompress                      Uncompress download files for .zip, .tar.gz, and .gz suffix files.
     #>       --with-github-assets              Logical indicating that whether to download associated assets files of github repo.
+    #> 
+    #> Global Flags:
+    #>       --clean            remove _download and _log in current dir.
+    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --save-log         Save log to file.
+    #>       --task-id string   task ID (default is random). (default "a521eqvm5q8w94r")
+    #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
 ### bget key
 
@@ -461,24 +517,27 @@ bget doi
     #>       --ignore                   Contine to download and skip the check of existed files.
     #>   -a, --keys-all                 Show all available string key can be download.
     #>   -l, --list-file string         A file contains keys for download.
-    #>       --log-dir string           Log dir. (default "_log")
     #>   -m, --mirror string            Set the mirror of resources.
-    #>   -o, --outdir string            Set the download dir.
+    #>   -o, --outdir string            Set the download dir. (default "_download")
     #>   -f, --overwrite                Logical indicating that whether to overwrite existing files.
     #>       --proxy string             HTTP proxy to download.
-    #>   -q, --quiet                    No output.
     #>   -n, --remote-name              Use remote defined filename.
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
     #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
-    #>       --save-log                 Save download log to local file]. (default true)
     #>   -s, --seperator string         Optional 'url1{seperator}url2' for multiple keys, urls, or seqs. (default ",")
     #>   -v, --show-versions            Show all available versions of key.
-    #>       --task-id string           Task ID (random). (default "0u9ulcu06xkkox9")
     #>   -t, --thread int               Concurrency download thread. (default 1)
     #>       --thread-axel int          Set the thread of axel. (default 5)
     #>       --timeout int              Set the timeout of per request. (default 35)
     #>   -u, --uncompress               Uncompress download files for .zip, .tar.gz, and .gz suffix files.
     #>       --with-assets              Logical indicating that whether to download associated assets files.
+    #> 
+    #> Global Flags:
+    #>       --clean            remove _download and _log in current dir.
+    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --save-log         Save log to file.
+    #>       --task-id string   task ID (default is random). (default "hv9vl4i0o6ez4mj")
+    #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
     ## show all supported items
     bget key -a
@@ -486,21 +545,20 @@ bget doi
     #> | 3dchromatin-replicateqc                                         | abyss                                                                   |
     #> | advntr                                                          | agfusion                                                                |
     #> | aligner/blast                                                   | aligner/blat                                                            |
-    #> | anchor                                                          | anno/vcfanno                                                            |
-    #> | annovar                                                         | annovarr                                                                |
-    #> | app/babun                                                       | app/cmder                                                               |
-    #> | app/iontorrent-suite                                            | app/orange3                                                             |
-    #> | arnapipe                                                        | asap                                                                    |
-    #> | assemble/edena                                                  | assemble/velvet                                                         |
+    #> | anchor                                                          | annovar                                                                 |
+    #> | annovarr                                                        | app/babun                                                               |
+    #> | app/cmder                                                       | app/iontorrent-suite                                                    |
+    #> | app/orange3                                                     | arnapipe                                                                |
+    #> | asap                                                            | assemble/edena                                                          |
     #> | atlas2                                                          | autochrom3d                                                             |
     #> | backspin                                                        | ballgown                                                                |
     #> | bamtools                                                        | bamutil                                                                 |
-    #> | bapi                                                            | bazam                                                                   |
-    #> | bcbio-nextgen                                                   | bcftools                                                                |
-    #> | beagle                                                          | bearscc                                                                 |
-    #> | bedops                                                          | bedtools2                                                               |
-    #> | bget                                                            | bigstitcher                                                             |
-    #> | bin3c                                                           | biobloom                                                                |
+    #> | bazam                                                           | bcbio-nextgen                                                           |
+    #> | bcftools                                                        | beagle                                                                  |
+    #> | bearscc                                                         | bedops                                                                  |
+    #> | bedtools2                                                       | bget                                                                    |
+    #> | bigstitcher                                                     | bin3c                                                                   |
+    #> | biobloom                                                        | bioctl                                                                  |
     #> | bioinstaller                                                    | biopython                                                               |
     #> | bitbucket/3depiloop                                             | bitbucket/aa-stat                                                       |
     #> | bitbucket/acdc                                                  | bitbucket/agalma                                                        |
@@ -2809,7 +2867,7 @@ bget doi
     #> | hisat2                                                          | htseq                                                                   |
     #> | htslib                                                          | i-boost                                                                 |
     #> | igraph                                                          | iguide                                                                  |
-    #> | igv                                                             | image/imagej                                                            |
+    #> | igv                                                             | imagej                                                                  |
     #> | in-silico-labeling                                              | interproscan                                                            |
     #> | irfinder                                                        | iseq                                                                    |
     #> | isop                                                            | ivtnmr                                                                  |
@@ -2898,7 +2956,8 @@ bget doi
     #> | unet-segmentation                                               | unifrac                                                                 |
     #> | useq                                                            | vadir                                                                   |
     #> | varscan                                                         | vcf2maf                                                                 |
-    #> | vcflib                                                          | vcftools                                                                |
+    #> | vcfanno                                                         | vcflib                                                                  |
+    #> | vcftools                                                        | velvet                                                                  |
     #> | vep                                                             | vg                                                                      |
     #> | vifi                                                            | viper                                                                   |
     #> | viral-ngs                                                       | wdl/antonkulaga                                                         |

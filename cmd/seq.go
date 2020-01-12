@@ -4,9 +4,9 @@ import (
 	"strings"
 
 	"github.com/openbiox/bget/spider"
-	cio "github.com/openbiox/butils/io"
-	cnet "github.com/openbiox/butils/net"
-	"github.com/openbiox/butils/stringo"
+	cio "github.com/openbiox/ligo/io"
+	cnet "github.com/openbiox/ligo/net"
+	"github.com/openbiox/ligo/stringo"
 	"github.com/spf13/cobra"
 )
 
@@ -15,19 +15,32 @@ var SeqCmd = &cobra.Command{
 	Short: "Can be used to access sequence data via unique id (dbGAP and EGA) or manifest files (TCGA).",
 	Long:  `Can be used to access sequence data via unique id or manifest files. More see here https://github.com/openbiox/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		SeqCmdRunOptions(cmd)
+		seqCmdRunOptions(cmd, args)
 	},
+}
+
+func seqCmdRunOptions(cmd *cobra.Command, args []string) {
+	initCmd(cmd, args)
+	checkArgs(cmd, "seq")
+	checkDownloadDir(bgetClis.Seqs != "")
+	if bgetClis.Seqs != "" || bgetClis.ListFile != "" {
+		downloadSeq()
+		bgetClis.HelpFlags = false
+	}
+	if bgetClis.HelpFlags {
+		cmd.Help()
+	}
 }
 
 func parseSeq() (seqs map[string][]string) {
 	seqs = make(map[string][]string)
 	seqsTmp := []string{}
-	if bgetClis.seqs != "" && strings.Contains(bgetClis.seqs, bgetClis.seperator) {
-		seqsTmp = strings.Split(bgetClis.seqs, bgetClis.seperator)
-	} else if bgetClis.seqs != "" {
-		seqsTmp = []string{bgetClis.seqs}
-	} else if bgetClis.listFile != "" {
-		seqsTmp = cio.ReadLines(bgetClis.listFile)
+	if bgetClis.Seqs != "" && strings.Contains(bgetClis.Seqs, bgetClis.Seperator) {
+		seqsTmp = strings.Split(bgetClis.Seqs, bgetClis.Seperator)
+	} else if bgetClis.Seqs != "" {
+		seqsTmp = []string{bgetClis.Seqs}
+	} else if bgetClis.ListFile != "" {
+		seqsTmp = cio.ReadLines(bgetClis.ListFile)
 	}
 	for i := range seqsTmp {
 		if stringo.StrDetect(strings.ToUpper(seqsTmp[i]), "^GSE|^GPL|^GDS|^GSM") {
@@ -52,7 +65,7 @@ func parseSeq() (seqs map[string][]string) {
 func downloadSeq() {
 	seqs := parseSeq()
 	done := make(map[string][]string)
-	sem := make(chan bool, bgetClis.thread)
+	sem := make(chan bool, bgetClis.Thread)
 	netOpt := setNetParams(&bgetClis)
 	for k, v := range seqs {
 		for i := range v {
@@ -63,17 +76,17 @@ func downloadSeq() {
 					<-sem
 				}()
 				if k == "sra" {
-					cnet.Prefetch(seqs[k][i], "", bgetClis.downloadDir, netOpt)
+					cnet.Prefetch(seqs[k][i], "", bgetClis.DownloadDir, netOpt)
 				} else if k == "sraKrt" {
-					cnet.Prefetch("", seqs[k][i], bgetClis.downloadDir, netOpt)
+					cnet.Prefetch("", seqs[k][i], bgetClis.DownloadDir, netOpt)
 				} else if k == "tcgaManifest" {
-					cnet.GdcClient("", seqs[k][i], bgetClis.downloadDir, netOpt)
+					cnet.GdcClient("", seqs[k][i], bgetClis.DownloadDir, netOpt)
 				} else if k == "tcgaFileID" {
-					cnet.GdcClient(seqs[k][i], "", bgetClis.downloadDir, netOpt)
+					cnet.GdcClient(seqs[k][i], "", bgetClis.DownloadDir, netOpt)
 				} else if k == "egad" {
-					cnet.Egafetch(seqs[k][i], "", bgetClis.downloadDir, netOpt)
+					cnet.Egafetch(seqs[k][i], "", bgetClis.DownloadDir, netOpt)
 				} else if k == "egaf" {
-					cnet.Egafetch("", seqs[k][i], bgetClis.downloadDir, netOpt)
+					cnet.Egafetch("", seqs[k][i], bgetClis.DownloadDir, netOpt)
 				}
 			}(k, i)
 		}
@@ -81,7 +94,7 @@ func downloadSeq() {
 	for i := 0; i < cap(sem); i++ {
 		sem <- true
 	}
-	sem = make(chan bool, bgetClis.thread)
+	sem = make(chan bool, bgetClis.Thread)
 	for k, v := range seqs {
 		for i := range v {
 			sem <- true
@@ -91,8 +104,8 @@ func downloadSeq() {
 					<-sem
 				}()
 				if k == "geo" {
-					spider.Geofetch(seqs[k][i], bgetClis.downloadDir,
-						bgetClis.geoGPL, bgetClis.uncompress, netOpt)
+					spider.Geofetch(seqs[k][i], bgetClis.DownloadDir,
+						bgetClis.GeoGPL, bgetClis.Uncompress, netOpt)
 				}
 			}(k, i)
 		}
@@ -102,22 +115,10 @@ func downloadSeq() {
 	}
 }
 
-func SeqCmdRunOptions(cmd *cobra.Command) {
-	checkArgs(cmd, "seq")
-	checkDownloadDir(bgetClis.seqs != "")
-	if bgetClis.seqs != "" || bgetClis.listFile != "" {
-		downloadSeq()
-		bgetClis.helpFlags = false
-	}
-	if bgetClis.helpFlags {
-		cmd.Help()
-	}
-}
-
 func init() {
-	SeqCmd.Flags().BoolVarP(&(bgetClis.geoGPL), "query-gpl", "", false, "Wheather fetch GPL files from GEO database.")
-	SeqCmd.Flags().StringVarP(&(bgetClis.gdcToken), "token-gdc", "", "", "Token to access TCGA portal files.")
-	SeqCmd.Flags().StringVarP(&(bgetClis.egaCredFile), "token-file-ega", "", "", `Credential file to access EGA archive files, {"username": "{your_user_name}", 
+	SeqCmd.Flags().BoolVarP(&(bgetClis.GeoGPL), "query-gpl", "", false, "Wheather fetch GPL files from GEO database.")
+	SeqCmd.Flags().StringVarP(&(bgetClis.GdcToken), "token-gdc", "", "", "Token to access TCGA portal files.")
+	SeqCmd.Flags().StringVarP(&(bgetClis.EgaCredFile), "token-file-ega", "", "", `Credential file to access EGA archive files, {"username": "{your_user_name}", 
   "password": "{your_password}","client_secret":"AMenuDLjVdVo4BSwi0QD54LL6NeVDEZRzEQUJ7h
 	JOM3g4imDZBHHX0hNfKHPeQIGkskhtCmqAJtt_jm7EKq-rWw"}.`)
 	setGlobalFlag(SeqCmd, &bgetClis)

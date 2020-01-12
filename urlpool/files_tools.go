@@ -140,7 +140,7 @@ var otherFiles = []bgetFilesURLType{
 	},
 	{
 		Name:     "other/paradigm",
-		URL:      []string{"http://paradigm.five3genomics.com/five3_paradigm_webapi.py"},
+		URL:      []string{"http://paradigm.five3genomics.com/five3_paradigm_weapi.py"},
 		Versions: []string{"latest"},
 	},
 	{
@@ -243,7 +243,7 @@ var otherFiles = []bgetFilesURLType{
 		Versions: []string{"latest"},
 	},
 	{
-		Name:     "assemble/velvet",
+		Name:     "velvet",
 		URL:      []string{"http://www.ebi.ac.uk/~zerbino/velvet/velvet_{{version}}.tgz"},
 		Versions: []string{"1.2.10", "0.7.01", "0.6.01", "0.5.01", "0.4", "0.3"},
 	},
@@ -251,10 +251,5 @@ var otherFiles = []bgetFilesURLType{
 		Name:     "xz",
 		URL:      []string{"http://tukaani.org/xz/xz-{{version}}.tar.gz"},
 		Versions: []string{"5.2.3", "5.2.2"},
-	},
-	{
-		Name:     "annovar",
-		URL:      []string{"http://www.openbioinformatics.org/annovar/download/0wgxR2rIVP/annovar.{{version}}.tar.gz"},
-		Versions: []string{"latest"},
 	},
 }

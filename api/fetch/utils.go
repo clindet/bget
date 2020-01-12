@@ -2,30 +2,31 @@ package fetch
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 
-	"github.com/openbiox/bget/bapi/types"
-	cio "github.com/openbiox/butils/io"
-	"github.com/openbiox/butils/log"
-	cnet "github.com/openbiox/butils/net"
+	"github.com/openbiox/bget/api/types"
+	cio "github.com/openbiox/ligo/io"
+	cnet "github.com/openbiox/ligo/net"
 	"github.com/tidwall/pretty"
 )
 
-func setNetOpt(bapiClis *types.BapiClisT) *cnet.BnetParams {
-	var netopt = &cnet.BnetParams{
+func setNetOpt(bapiClis *types.BapiClisT) *cnet.Params {
+	var netopt = &cnet.Params{
 		Pbar: pg,
 	}
-	netopt.Quiet = bapiClis.Quiet
+	netopt.Quiet = bapiClis.Quiet == "true"
 	netopt.Retries = bapiClis.Retries
 	netopt.Timeout = bapiClis.Timeout
 	netopt.RetSleepTime = bapiClis.RetSleepTime
 	netopt.Proxy = bapiClis.Proxy
+	SetLogStream(bapiClis.Quiet == "true", bapiClis.SaveLog == "true", fmt.Sprintf("%s/%s.log", bapiClis.LogDir, bapiClis.TaskID))
 	return netopt
 }
 
-func queryAPI(siteName, url string, bapiClis *types.BapiClisT, netopt *cnet.BnetParams) {
+func queryAPI(siteName, url string, bapiClis *types.BapiClisT, netopt *cnet.Params) {
 	method := "GET"
 	client := cnet.NewHTTPClient(bapiClis.Timeout, bapiClis.Proxy)
 	req, err := http.NewRequest(method, url, nil)

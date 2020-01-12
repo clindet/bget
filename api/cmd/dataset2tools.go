@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/openbiox/bget/bapi/fetch"
-	"github.com/openbiox/bget/bapi/types"
+	"github.com/openbiox/bget/api/fetch"
+	"github.com/openbiox/bget/api/types"
 	"github.com/spf13/cobra"
 )
 
@@ -43,9 +43,9 @@ func init() {
 	dataset2toolsCmd.Example = `  # query canned analysis accession	, e.g. DCA00000060.
   bget api dta -a DCA00000060
   # query dataset accession number, e.g. GSE31106 
-  bget api dta -s GSE31106 | bget fmt --json-pretty -
+  bget api dta -s GSE31106 | bioctl fmt --json-pretty -
   # query via object type
-  bget api dta --type dataset | bget fmt --json-pretty --indent 2 -
+  bget api dta --type dataset | bioctl fmt --json-pretty --indent 2 -
   # props of dataset accession, e.g. upregulated.
   bget api dta -g upregulated | json2csv -o out.csv`
 }

@@ -5,14 +5,17 @@ import (
 	"strings"
 	"time"
 
-	bio "github.com/openbiox/butils/io"
-	"github.com/openbiox/butils/log"
-	stringo "github.com/openbiox/butils/stringo"
+	cio "github.com/openbiox/ligo/io"
+	glog "github.com/openbiox/ligo/log"
+	stringo "github.com/openbiox/ligo/stringo"
 
 	"github.com/chromedp/chromedp"
 	cdp "github.com/chromedp/chromedp"
 )
 
+var log = glog.Logger
+
+// DoiSupplURLs query supplementary files from url
 func DoiSupplURLs(url string, timeout time.Duration, proxy string) []string {
 	// create context
 	o := append(cdp.DefaultExecAllocatorOptions[:],
@@ -116,7 +119,7 @@ func visibleSraRunSelect(url string, attbs *[]map[string]string, ctx context.Con
 }
 
 func visibleWiley(url string, ctx context.Context) cdp.Tasks {
-	fn, _ := bio.ConnectFile("test.pdf")
+	fn, _ := cio.Open("test.pdf")
 	tsk := cdp.Tasks{
 		cdp.Navigate(url),
 		cdp.ActionFunc(func(context.Context) error {

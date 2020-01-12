@@ -2,20 +2,21 @@ package fetch
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 	"time"
 
 	"github.com/biogo/ncbi"
 	"github.com/biogo/ncbi/entrez"
-	"github.com/openbiox/bget/bapi/types"
-	cio "github.com/openbiox/butils/io"
-	"github.com/openbiox/butils/log"
-	cnet "github.com/openbiox/butils/net"
+	"github.com/openbiox/bget/api/types"
+	cio "github.com/openbiox/ligo/io"
+	cnet "github.com/openbiox/ligo/net"
 )
 
 // Ncbi modified from https://github.com/biogo/ncbi BSD license
 func Ncbi(bapiClis *types.BapiClisT, ncbiClis *types.NcbiClisT) {
+	SetLogStream(bapiClis.Quiet == "true", bapiClis.SaveLog == "true", fmt.Sprintf("%s/%s.log", bapiClis.LogDir, bapiClis.TaskID))
 	ncbi.SetTimeout(time.Duration(bapiClis.Timeout) * time.Second)
 	tool := "entrez.example"
 	h := entrez.History{}

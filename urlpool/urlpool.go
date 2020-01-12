@@ -13,12 +13,14 @@ import (
 	"net/http"
 	neturl "net/url"
 
-	"github.com/openbiox/butils/stringo"
+	"github.com/openbiox/ligo/stringo"
 
 	"github.com/google/go-github/v27/github"
-	log "github.com/openbiox/butils/log"
+	glog "github.com/openbiox/ligo/log"
 	"golang.org/x/oauth2"
 )
+
+var log = glog.Logger
 
 type bgetToolsURLType struct {
 	Name         string
@@ -61,9 +63,9 @@ func QueryBgetTools(name string, env *map[string]string) (urls, postShellCmd, ve
 	ostype := setOsStr(env)
 	for i := range BgetToolsPool {
 		if strings.ReplaceAll(strings.ToLower(BgetToolsPool[i].Name), "_", "-") == name {
-			if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "github.com") {
+			if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "://github.com") {
 				versions = GitHubVersionSpider(BgetToolsPool[i].VersionsAPI, true)
-			} else if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "bitbucket.org") {
+			} else if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "://bitbucket.org") {
 				versions = BitbucketVersionSpider(BgetToolsPool[i].VersionsAPI)
 			} else {
 				versions = BgetToolsPool[i].Versions
@@ -92,6 +94,9 @@ func QueryBgetTools(name string, env *map[string]string) (urls, postShellCmd, ve
 				}
 				postShellCmd = append(postShellCmd, tmp)
 			}
+		}
+		if len(urls) > 0 {
+			break
 		}
 	}
 	return urls, postShellCmd, versions
@@ -183,6 +188,9 @@ func QueryBgetFiles(name string, env *map[string]string) (urls []string, postShe
 				}
 				postShellCmd = append(postShellCmd, tmp)
 			}
+		}
+		if len(urls) > 0 {
+			break
 		}
 	}
 	return urls, postShellCmd, versions

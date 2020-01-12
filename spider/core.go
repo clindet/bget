@@ -9,10 +9,12 @@ import (
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
 	"github.com/openbiox/bget/chrome"
-	"github.com/openbiox/butils/log"
-	bspider "github.com/openbiox/butils/spider"
-	"github.com/openbiox/butils/stringo"
+	glog "github.com/openbiox/ligo/log"
+	cnet "github.com/openbiox/ligo/net"
+	"github.com/openbiox/ligo/stringo"
 )
+
+var log = glog.Logger
 
 // NatureComSpider access Nature.com files via spider
 func NatureComSpider(opt *DoiSpiderOpt) (urls []string) {
@@ -20,7 +22,7 @@ func NatureComSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.nature.com", "idp.nature.com"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.URL != nil {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
@@ -68,7 +70,7 @@ func ScienseComSpider(opt *DoiSpiderOpt) (urls []string) {
 			"id.elsevier.com", "science.sciencemag.org", "www.sciencemag.org"),
 		colly.MaxDepth(2),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
 	if opt.URL != nil {
@@ -111,10 +113,10 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 		colly.AllowedDomains("doi.org", "www.cell.com", "cell.com", "linkinghub.elsevier.com", "secure.jbs.elsevierhealth.com",
 			"id.elsevier.com", "www.cancercell.org", "www.sciencedirect.com",
 			"pdf.sciencedirectassets.com", "www.thelancet.com", "www.gastrojournal.org",
-            "www.clinicalkey.com"),
+			"www.clinicalkey.com"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
 	if opt.URL != nil {
@@ -207,7 +209,7 @@ func BloodJournalSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.AllowedDomains("doi.org", "signin.hematology.org", "www.bloodjournal.org"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	if opt.URL != nil {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
 	}
@@ -242,7 +244,7 @@ func NejmSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.nejm.org"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.URL != nil {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
@@ -276,7 +278,7 @@ func AhajournalsSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.ahajournals.org"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.URL != nil {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
@@ -308,7 +310,7 @@ func JamaNetworkSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.AllowedDomains("doi.org", "jamanetwork.com"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.URL != nil {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
@@ -340,7 +342,7 @@ func AacrJournalsSpider(opt *DoiSpiderOpt) (urls []string) {
 			"clincancerres.aacrjournals.org", "cancerimmunolres.aacrjournals.org"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.URL != nil {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
@@ -377,7 +379,7 @@ func TandfonlineSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.tandfonline.com"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.FullText {
 		c.OnHTML("a[title='Download all']", func(e *colly.HTMLElement) {
@@ -413,7 +415,7 @@ func BmjComSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.bmj.com", "gut.bmj.com"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.URL != nil {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
@@ -461,7 +463,7 @@ func AtsjournalsOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.AllowedDomains("doi.org", "www.atsjournals.org"),
 		colly.MaxDepth(2),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.URL != nil {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
@@ -490,7 +492,7 @@ func JournalsApsSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.AllowedDomains("doi.org", "journals.aps.org", "link.aps.org"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	c.OnHTML(".article-nav-actions a", func(e *colly.HTMLElement) {
 		link := e.Attr("href")

@@ -3,59 +3,56 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path"
 	"runtime"
-	"strings"
-	"time"
 
-	api "github.com/openbiox/bget/bapi/cmd"
-	"github.com/openbiox/butils/log"
-	cnet "github.com/openbiox/butils/net"
+	api "github.com/openbiox/bget/api/cmd"
+	stringo "github.com/openbiox/ligo/stringo"
 	"github.com/spf13/cobra"
-	mpb "github.com/vbauerster/mpb/v4"
 )
 
-var version = "v0.2.2"
+var version = "v0.2.3-1"
 
 type bgetCliT struct {
-	downloadDir        string
-	mirror             string
-	autoPath           bool
-	engine             string
-	doi                string
-	urls               string
-	listFile           string
-	seperator          string
-	keys               string
-	seqs               string
-	gdcToken           string
-	uncompress         bool
-	keysAll            bool
-	clean              bool
-	printFormat        string
-	axelThread         int
-	thread             int
-	timeout            int
-	retSleepTime       int
-	retries            int
-	proxy              string
-	cmdExtraFromFlag   string
-	remoteName         bool
-	ignore             bool
-	taskID             string
-	overwrite          bool
-	saveLog            bool
-	logDir             string
-	quiet              bool
-	env                map[string]string
-	showVersions       bool
-	egaCredFile        string
-	geoGPL             bool
-	github             string
-	githubMode         bool
-	onlyAssets         bool
-	withAssets         bool
-	withAssetsVersions string
-	helpFlags          bool
+	DownloadDir        string
+	Mirror             string
+	AutoPath           bool
+	Engine             string
+	Doi                string
+	URLs               string
+	ListFile           string
+	Seperator          string
+	Keys               string
+	Seqs               string
+	GdcToken           string
+	Uncompress         bool
+	KeysAll            bool
+	Clean              bool
+	PrintFormat        string
+	AxelThread         int
+	Thread             int
+	Timeout            int
+	RetSleepTime       int
+	Retries            int
+	Proxy              string
+	CmdExtraFromFlag   string
+	RemoteName         bool
+	Ignore             bool
+	TaskID             string
+	Overwrite          bool
+	SaveLog            bool
+	LogDir             string
+	Verbose            int
+	Env                map[string]string
+	ShowVersions       bool
+	EgaCredFile        string
+	GeoGPL             bool
+	GitHub             string
+	GitHubMode         bool
+	OnlyAssets         bool
+	WithAssets         bool
+	WithAssetsVersions string
+	HelpFlags          bool
 }
 
 var bgetClis bgetCliT
@@ -65,7 +62,7 @@ var rootCmd = &cobra.Command{
 	Short: "Lightweight downloader for bioinformatics data, databases and files.",
 	Long:  `Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/openbiox/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		rootCmdRunOptions(cmd)
+		rootCmdRunOptions(cmd, args)
 	},
 }
 
@@ -81,87 +78,28 @@ func Execute() {
 	}
 }
 
-func checkArgs(cmd *cobra.Command, subcmd string) {
-	items := []string{}
-	for _, v := range cmd.Flags().Args() {
-		if strings.Contains(v, "=") && subcmd == "key" {
-			kvs := strings.Split(v, "=")
-			bgetClis.env[kvs[0]] = strings.TrimSpace(kvs[1])
-		} else {
-			items = append(items, v)
-		}
-	}
-	if bgetClis.withAssets {
-		bgetClis.env["withAssets"] = "yes"
-	}
-	if len(items) == 0 {
-		return
-	}
-	if subcmd == "url" {
-		bgetClis.urls = strings.Join(items, bgetClis.seperator)
-	} else if subcmd == "key" {
-		bgetClis.keys = strings.Join(items, bgetClis.seperator)
-	} else if subcmd == "doi" {
-		bgetClis.doi = strings.Join(items, bgetClis.seperator)
-	} else if subcmd == "seq" {
-		bgetClis.seqs = strings.Join(items, bgetClis.seperator)
-	}
-}
-
-func rootCmdRunOptions(cmd *cobra.Command) {
-	checkQuiet()
-	if bgetClis.clean {
-		if err := os.RemoveAll("_download"); err != nil {
-			log.Warn(err)
-		}
-		if err := os.RemoveAll("_log"); err != nil {
-			log.Warn(err)
-		}
-		bgetClis.helpFlags = false
-	}
-	if bgetClis.helpFlags {
+func rootCmdRunOptions(cmd *cobra.Command, args []string) {
+	initCmd(cmd, args)
+	if bgetClis.HelpFlags {
 		cmd.Help()
 	}
 }
 
-func setNetParams(bgetClis *bgetCliT) (netOpt *cnet.BnetParams) {
-	pbar := mpb.New(
-		mpb.WithWidth(45),
-		mpb.WithRefreshRate(180*time.Millisecond),
-	)
-	return &cnet.BnetParams{
-		Proxy:          bgetClis.proxy,
-		Engine:         bgetClis.engine,
-		ExtraArgs:      bgetClis.cmdExtraFromFlag,
-		TaskID:         bgetClis.taskID,
-		Mirror:         bgetClis.mirror,
-		Thread:         bgetClis.thread,
-		AxelThread:     bgetClis.axelThread,
-		Overwrite:      bgetClis.overwrite,
-		Ignore:         bgetClis.ignore,
-		Quiet:          bgetClis.quiet,
-		Retries:        bgetClis.retries,
-		SaveLog:        bgetClis.saveLog,
-		Timeout:        bgetClis.timeout,
-		RetSleepTime:   bgetClis.retSleepTime,
-		RemoteName:     bgetClis.remoteName,
-		LogDir:         bgetClis.logDir,
-		EgaCredentials: bgetClis.egaCredFile,
-		Pbar:           pbar,
-	}
-}
-
 func init() {
-	bgetClis.helpFlags = true
+	wd, _ = os.Getwd()
+	bgetClis.HelpFlags = true
 	rootCmd.AddCommand(URLCmd)
 	rootCmd.AddCommand(DoiCmd)
 	rootCmd.AddCommand(KeyCmd)
 	rootCmd.AddCommand(SeqCmd)
-	rootCmd.AddCommand(FmtCmd)
 	rootCmd.AddCommand(api.BapiCmd)
-	rootCmd.Flags().BoolVarP(&(bgetClis.clean), "clean", "", false, "Remove _download and _log in current dir.")
-	bgetClis.env = make(map[string]string)
-	bgetClis.env["osType"] = runtime.GOOS
-	bgetClis.env["wd"], _ = os.Getwd()
+	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.Clean), "clean", "", false, "remove _download and _log in current dir.")
+	rootCmd.PersistentFlags().StringVarP(&(bgetClis.TaskID), "task-id", "", stringo.RandString(15), "task ID (default is random).")
+	rootCmd.PersistentFlags().StringVarP(&(bgetClis.LogDir), "log-dir", "", path.Join(wd, "_log"), "log dir.")
+	rootCmd.PersistentFlags().IntVarP(&(bgetClis.Verbose), "verbose", "", 1, "verbose level (0:no output, 1: basic level, 2: with env info)")
+	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.SaveLog), "save-log", "", false, "Save log to file.")
+	bgetClis.Env = make(map[string]string)
+	bgetClis.Env["osType"] = runtime.GOOS
+	bgetClis.Env["wd"] = wd
 	rootCmd.Version = version
 }

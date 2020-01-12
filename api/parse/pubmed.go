@@ -9,16 +9,19 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/openbiox/butils/log"
-	"github.com/openbiox/butils/slice"
-	"github.com/openbiox/butils/stringo"
+	clog "github.com/openbiox/ligo/log"
+	"github.com/openbiox/ligo/slice"
+	"github.com/openbiox/ligo/stringo"
 	prose "gopkg.in/jdkato/prose.v2"
 	xurls "mvdan.cc/xurls/v2"
 )
 
+var log = clog.Logger
+
+// PubmedFields defines extracted Pubmed fields
 type PubmedFields struct {
 	Pmid, Doi, Title, Abs, Journal, Issue, Volume, Date, Issn *string
-	Corelations                                               *map[string]string
+	Correlation                                               *map[string]string
 	URLs                                                      *[]string
 	Keywords                                                  *[]string
 }
@@ -125,7 +128,7 @@ func getPubmedFields(keywords *[]string, s *goquery.Selection, callCor bool) (js
 		Date:        &date,
 		Issue:       &issue,
 		Volume:      &volume,
-		Corelations: &corela,
+		Correlation: &corela,
 		URLs:        &urls,
 		Keywords:    &key,
 	}

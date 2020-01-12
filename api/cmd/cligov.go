@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/openbiox/bget/bapi/fetch"
-	"github.com/openbiox/bget/bapi/types"
+	"github.com/openbiox/bget/api/fetch"
+	"github.com/openbiox/bget/api/types"
 	"github.com/spf13/cobra"
 )
 

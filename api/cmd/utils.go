@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"github.com/openbiox/bget/bapi/types"
+	"github.com/openbiox/bget/api/types"
 	"github.com/spf13/cobra"
 )
 
 func setGlobalFlag(cmd *cobra.Command, bapiClis *types.BapiClisT) {
 	cmd.PersistentFlags().StringVarP(&BapiClis.Format, "format", "", "", "Rettype specifies the format of the returned data (CSV, TSV, JSON for gdc; XML/TEXT for ncbi).")
-	cmd.PersistentFlags().BoolVarP(&BapiClis.Quiet, "quiet", "", false, "No log output.")
+	cmd.PersistentFlags().StringVarP(&BapiClis.Quiet, "quiet", "", "false", "No log output.")
 	cmd.PersistentFlags().BoolVarP(&BapiClis.PrettyJSON, "json-pretty", "", false, "Pretty json files.")
 	cmd.PersistentFlags().IntVarP(&BapiClis.Indent, "indent", "", 4, "Control the indent of output json files.")
 	cmd.PersistentFlags().BoolVarP(&BapiClis.SortKeys, "sort-keys", "", false, "Control wheather to sort JSON key.")

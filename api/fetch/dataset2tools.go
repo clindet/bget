@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/openbiox/bget/bapi/types"
+	"github.com/openbiox/bget/api/types"
 )
 
 const Dataset2toolsHost = "http://amp.pharm.mssm.edu/datasets2tools/api/search?"

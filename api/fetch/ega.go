@@ -14,9 +14,7 @@ import (
 	"net/url"
 	neturl "net/url"
 
-	"github.com/openbiox/butils/log"
-
-	cnet "github.com/openbiox/butils/net"
+	cnet "github.com/openbiox/ligo/net"
 )
 
 type requestInfo struct {
@@ -47,7 +45,7 @@ var authURL = "https://ega.ebi.ac.uk:8443/ega-openid-connect-server/token"
 var entry = "https://ega.ebi.ac.uk:8051/elixir/data"
 
 // Egafetch get EGA files
-func Egafetch(ega, fileID, outDir string, opt *cnet.BnetParams) (err error) {
+func Egafetch(ega, fileID, outDir string, opt *cnet.Params) (err error) {
 	client := cnet.NewHTTPClient(opt.Timeout, opt.Proxy)
 	//	token, _ := getEgaToken(opt)
 	token := `eyJraWQiOiJyc2ExIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJodWFuZ2p5QHNqdHUuZWR1LmNuIiwiYXpwIjoiZjIwY2QyZDMtNjgyYS00NTY4LWE1M2UtNDI2MmVmNTRjOGY0IiwiaXNzIjoiaHR0cHM6XC9cL2VnYS5lYmkuYWMudWs6ODQ0M1wvZWdhLW9wZW5pZC1jb25uZWN0LXNlcnZlclwvIiwiZXhwIjoxNTY3NjE1NDczLCJpYXQiOjE1Njc2MTE4NzcsImp0aSI6IjkyZjE2MDA0LTlmNjctNDVjZS05NjMxLWNlOTQyY2RjYjljOCJ9.BvIcsmdHQ49KJgBieFk5WySBkHx2GXmZs8JHVoQOuuyThilXOrdqkXQ190bny0r5UIyLDc-C7MPBeckwFs7tZRra6T3M32AtVFhUtcfFA70QTOtnViCNDpHOg5wbs-BUqP7byFIu7w6Et8wT-rl0bj0FtuWqA62lqtzu9_uH4JI`
@@ -59,7 +57,7 @@ func Egafetch(ega, fileID, outDir string, opt *cnet.BnetParams) (err error) {
 	req.Header.Add("Authorization", "Bearer "+token)
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Warn(err)
+		log.Warnln(err)
 		return err
 	}
 	io.Copy(os.Stdout, resp.Body)
@@ -73,7 +71,7 @@ func setEgaStdHeader(req *http.Request) {
 }
 
 // Egafetch get EGA files
-func getEgaToken(opt *cnet.BnetParams) (token string, err error) {
+func getEgaToken(opt *cnet.Params) (token string, err error) {
 	client := cnet.NewHTTPClient(opt.Timeout, opt.Proxy)
 	egaJSON := egaPostFields{
 		ClientID:     "f20cd2d3-682a-4568-a53e-4262ef54c8f4",
@@ -91,12 +89,12 @@ func getEgaToken(opt *cnet.BnetParams) (token string, err error) {
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	setEgaStdHeader(req)
 	if err != nil {
-		log.Warn(err)
+		log.Warnln(err)
 		return "", err
 	}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Warn(err)
+		log.Warnln(err)
 		return "", err
 	}
 	ret, _ := ioutil.ReadAll(resp.Body)
@@ -105,7 +103,7 @@ func getEgaToken(opt *cnet.BnetParams) (token string, err error) {
 	if egaRet.Error == "" {
 		log.Infof("AccessToken: %s; Expired after 1 hour.", egaRet.AccessToken)
 	} else {
-		log.Warn(egaRet.Error)
+		log.Warnln(egaRet.Error)
 	}
 	io.Copy(os.Stdout, resp.Body)
 	defer resp.Body.Close()

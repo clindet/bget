@@ -10,16 +10,14 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
 	"github.com/gocolly/colly/extensions"
-	"github.com/openbiox/butils/archive"
-	"github.com/openbiox/butils/log"
-	cnet "github.com/openbiox/butils/net"
-	bspider "github.com/openbiox/butils/spider"
-	"github.com/openbiox/butils/stringo"
+	"github.com/openbiox/ligo/archive"
+	cnet "github.com/openbiox/ligo/net"
+	"github.com/openbiox/ligo/stringo"
 )
 
 // Geofetch get GEO files
 func Geofetch(geo string, outDir string, gpl bool,
-	uncompress bool, opt *cnet.BnetParams) (err error) {
+	uncompress bool, opt *cnet.Params) (err error) {
 	if geo == "" {
 		return errors.New("at least one of geo is required")
 	}
@@ -44,7 +42,7 @@ func Geofetch(geo string, outDir string, gpl bool,
 	for range urls {
 		destDirArray = append(destDirArray, outDir)
 	}
-	done := cnet.HttpGetURLs(urls, destDirArray, opt)
+	done := cnet.HTTPGetURLs(urls, destDirArray, opt)
 	for _, dest := range done {
 		if uncompress {
 			if err := archive.UnarchiveLog(dest, path.Dir(dest)); err != nil {
@@ -61,7 +59,7 @@ func GeoSpider(opt *QuerySpiderOpt, gpl bool) (gseURLs []string, gplURLs []strin
 		colly.AllowedDomains("www.ncbi.nlm.nih.gov"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	c.OnHTML("table td a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
@@ -105,7 +103,7 @@ func PmcSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.AllowedDomains("www.ncbi.nlm.nih.gov"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.FullText {
 		c.OnHTML(fmt.Sprintf(".doi b:contains('%s')", opt.Doi), func(e *colly.HTMLElement) {

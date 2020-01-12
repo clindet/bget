@@ -1,12 +1,12 @@
 package fetch
 
 import (
-	cnet "github.com/openbiox/butils/net"
+	cnet "github.com/openbiox/ligo/net"
 	"testing"
 )
 
 func TestEgafetch(t *testing.T) {
-	opt := &cnet.BnetParams{
+	opt := &cnet.Params{
 		Timeout: 35,
 		Proxy:   "",
 	}

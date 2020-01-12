@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/openbiox/bget/bapi/fetch"
-	"github.com/openbiox/bget/bapi/types"
+	"github.com/openbiox/bget/api/fetch"
+	"github.com/openbiox/bget/api/types"
 	"github.com/spf13/cobra"
 )
 
@@ -39,7 +39,7 @@ func init() {
 	bioToolsCmd.Flags().StringVarP(&BapiClis.Outfn, "outfn", "o", "", `Out specifies destination of the returned data (default to stdout).`)
 
 	bioToolsCmd.Example = `  # query item detail
-	bget api biots --tool signalp
+  bget api biots --tool signalp
   # search item
   bget api biots --name signalp
   bget api biots --topic Proteomics

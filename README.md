@@ -27,19 +27,19 @@ For raw sequencing data query (optional):
 ## Installation
 
 ```bash
-# download bget on MAC OSX
-wget -c https://github.com/openbiox/bget/releases/download/v0.2.0/bget_osx
+# windows
+wget https://github.com/openbiox/bget/releases/download/v0.2.3/bget.exe
+
+# osx
+wget https://github.com/openbiox/bget/releases/download/v0.2.3/bget_osx
 mv bget_osx bget
 chmod a+x bget
-#
-# download bget on Linux
-wget -c https://github.com/openbiox/bget/releases/download/v0.2.0/bget_linux64
+
+# linux
+wget https://github.com/openbiox/bget/releases/download/v0.2.3/bget_linux64
 mv bget_linux64 bget
 chmod a+x bget
-#
-# download bget on Windows
-wget -c https://github.com/openbiox/bget/releases/download/v0.2.0/bget.exe
-#
+
 # get latest version
 go get -u github.com/openbiox/bget
 ```
@@ -66,15 +66,15 @@ In addition, you can use the `bget api` to conduct the simple text-mining of Pub
 bget api ncbi -d pubmed -q B-ALL --format XML -e your_email@domain.com
 
 # query pubmed and convert it to json format that also extract all URLs and calculate the words connections
-bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bget api ncbi --xml2json pubmed -k "MAPK, MTOR, autophagy" --call-cor - | sed 's;}{;,;g' | bget fmt --json-to-slice - > final.json
+bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bget api ncbi --xml2json pubmed -k "MAPK, MTOR, autophagy" --call-cor - | sed 's;}{;,;g' | bioctl fmt --json-to-slice - > final.json
 
 # datasetdataset2tools API
 # query canned analysis accession	, e.g. DCA00000060.
 bget api dta -a DCA00000060
 # query dataset accession number, e.g. GSE31106 
-bget api dta -s GSE31106 | bget fmt --json-pretty -
+bget api dta -s GSE31106 | bioctl fmt --json-pretty -
 # query via object type
-bget api dta --type dataset | bget fmt --json-pretty --indent 2 -
+bget api dta --type dataset | bioctl fmt --json-pretty --indent 2 -
 # props of dataset accession, e.g. upregulated.
 bget api dta -g upregulated | json2csv -o out.csv
 
@@ -163,27 +163,25 @@ Here, we are developing and sharing an open-source tool bget with `doi` subcomma
 `bget key` can be used to query a set of files via the alias key, such as bwa, samtools, reffa/defuse, and db/annovar.
 
 ```bash
-# get all available alias keys
+# download bwa source (with task env info)
+bget key bwa --verbose 2
+# get all available keys
 bget key -a
+# in JSON format
+bget key -a --format json
+# view all bwa and samtools available tags in table
+bget key bwa samtools -v
+# view all bwa and samtools available tags in json
+bget key bwa samtools -v --format json
 
-# clone bwa repo
-bget key bwa
-
-# view all samtools available versions (table format)
-bget key samtools -v
-# view all samtools available versions (json format)
-bget key samtools -v --format json
-
-# query defuse reference files
+# force download defuse reference (with task env info and save log to file)
 bget key "reffa/defuse@GRCh38 #97" -t 10 -f
-# equivalent to above
 bget key reffa/defuse@GRCh38 release=97 -t 10 -f
-
-# query ANNOVAR database
+# download annovar reference
 bget key db/annovar@clinvar_20170501 db/annovar@clinvar_20180603 builder=hg38
 
-# 
-bget key db/annovar -v --out-text
+bget key db/annovar -v --formt text
+bget key db/annovar version='clinvar_20131105, clinvar_20140211, clinvar_20140303, clinvar_20140702, clinvar_20140902, clinvar_20140929, clinvar_20150330, clinvar_20150629, clinvar_20151201, clinvar_20160302, clinvar_20161128, clinvar_20170130, clinvar_20170501, clinvar_20170905, clinvar_20180603, avsnp150, avsnp147, avsnp144, avsnp142, avsnp138, cadd, caddgt10, caddgt20, cadd13, cadd13gt10, cadd13gt20, cg69, cg46, cosmic70, cosmic68wgs, cosmic68, cosmic67wgs, cosmic67, cosmic65, cosmic64, dbnsfp35a, dbnsfp33a, dbnsfp31a_interpro, dbnsfp30a, dbscsnv11, eigen, esp6500siv2_ea, esp6500siv2_aa, esp6500siv2_all, exac03nontcga, exac03nonpsych, exac03, fathmm, gerp++gt2, gme, gnomad_exome, gnomad_genome, gwava, hrcr1, icgc21, intervar_20170202, kaviar_20150923, ljb26_all, mcap, mitimpact2, mitimpact24, nci60, popfreq_max_20150413, popfreq_all_20150413, revel, regsnpintron' builder=hg19 -t 10 -f
 ```
 
 ### Query FASTQ/CEL files from GEO/SRA/EGA/dbGAP/GDC
@@ -231,9 +229,9 @@ bget seq SRR544879 GSE23543 EGAD00001000951 b7670817-9d6b-494e-9e22-8494e2fd430d
 urls="https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe,http://download.oray.com/pgy/windows/PgyVPN_4.1.0.21693.exe,https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe" && echo $urls | tr "," "\n"> /tmp/urls.list
 
 bget url ${urls}
-bget url https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe
-bget url ${urls} -t 2 -o /tmp/download
-bget url ${urls} -t 3 -o /tmp/download -f -g wget
+bget url https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe --save-log
+bget url ${urls} -t 3 -o /tmp/download -f -g wget --save-log --verbose 2
+bget url ${urls} -t 2 -o /tmp/download --save-log --verbose 2
 bget url ${urls} -t 3 -o /tmp/download -g wget --ignore
 bget url -l /tmp/urls.list -o /tmp/download -f -t 3
 

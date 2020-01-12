@@ -5,12 +5,11 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/openbiox/bget/bapi/fetch"
-	"github.com/openbiox/bget/bapi/parse"
-	"github.com/openbiox/bget/bapi/types"
-	bflag "github.com/openbiox/bget/flag"
-	"github.com/openbiox/butils/log"
-	"github.com/openbiox/butils/stringo"
+	"github.com/openbiox/bget/api/fetch"
+	"github.com/openbiox/bget/api/parse"
+	"github.com/openbiox/bget/api/types"
+	"github.com/openbiox/ligo/flag"
+	"github.com/openbiox/ligo/stringo"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +29,7 @@ func ncbiCmdRunOptions(cmd *cobra.Command) {
 	var stdin []byte
 	var err error
 	hasStdin := false
-	if cleanArgs, hasStdin = bflag.CheckStdInFlag(cmd); hasStdin {
+	if cleanArgs, hasStdin = flag.CheckStdInFlag(cmd); hasStdin {
 		reader := bufio.NewReader(os.Stdin)
 		stdin, err = ioutil.ReadAll(reader)
 		if err != nil {
@@ -64,7 +63,6 @@ func init() {
 	ncbiCmd.Flags().StringVarP(&ncbiClis.NcbiXMLToJSON, "xml2json", "", "", "Convert XML files to json [e.g. pubmed].")
 	ncbiCmd.Flags().StringVarP(&ncbiClis.NcbiKeywords, "keywords", "k", "algorithm, tool, model, pipleline, method, database, workflow, dataset, bioinformatics, sequencing, http, github.com, gitlab.com, bitbucket.org", "Keywords to extracted from abstract.")
 	ncbiCmd.Flags().IntVarP(&BapiClis.Thread, "thread", "t", 2, "Thread to process.")
-	ncbiCmd.Flags().BoolVarP(&BapiClis.Quiet, "quiet", "", false, "No log output.")
 	ncbiCmd.Flags().BoolVarP(&BapiClis.CallCor, "call-cor", "", false, "Wheather to calculate the corelated keywords, and return the sentence contains >=2 keywords.")
 	ncbiCmd.Flags().StringVarP(&BapiClis.Outfn, "outfn", "o", "", "Out specifies destination of the returned data (default to stdout).")
 	ncbiCmd.Flags().StringVarP(&BapiClis.Email, "email", "e", "your_email@domain.com", "Email specifies the email address to be sent to the server (NCBI website is required).")
@@ -73,7 +71,7 @@ func init() {
   bget api ncbi -d pubmed -q B-ALL --format XML -e your_email@domain.com
 
   # query pubmed and convert it to json format that also extract all URLs and calculate the words connections
-  bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bget api ncbi --xml2json pubmed -k "MAPK, MTOR, autophagy" --call-cor - | sed 's;}{;,;g' | bget fmt --json-to-slice - > final.json
+  bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bget api ncbi --xml2json pubmed -k "MAPK, MTOR, autophagy" --call-cor - | sed 's;}{;,;g' | bioctl fmt --json-to-slice - > final.json
 
   # query larger items
   k="algorithm, tool, model, pipleline, method, database, workflow, dataset, bioinformatics, sequencing, http, github.com, gitlab.com, bitbucket.org, RNA-Seq, DNA, profile, landscape"

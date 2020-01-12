@@ -4,9 +4,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/openbiox/butils/archive"
-	log "github.com/openbiox/butils/log"
-	stringo "github.com/openbiox/butils/stringo"
+	"github.com/openbiox/ligo/archive"
+	stringo "github.com/openbiox/ligo/stringo"
 )
 
 func PostKeyCmds(key string, dest []string, rawKey string) {

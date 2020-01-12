@@ -12,14 +12,16 @@ import (
 
 	"code.cloudfoundry.org/bytefmt"
 	"github.com/olekukonko/tablewriter"
-	"github.com/openbiox/bget/bapi/types"
-	cio "github.com/openbiox/butils/io"
-	"github.com/openbiox/butils/log"
-	cnet "github.com/openbiox/butils/net"
+	"github.com/openbiox/bget/api/types"
+	cio "github.com/openbiox/ligo/io"
+	cnet "github.com/openbiox/ligo/net"
 	mpb "github.com/vbauerster/mpb/v4"
 )
 
+// GdcAPIHost GDC API
 const GdcAPIHost = "https://api.gdc.cancer.gov"
+
+// GdcAPIHostLegacy GDC legacy API
 const GdcAPIHostLegacy = "https://api.gdc.cancer.gov/legacy"
 
 var gdcapis = []string{"status", "projects", "cases", "files", "annotations",
@@ -69,7 +71,7 @@ func Gdc(endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) {
 		defer resp.Body.Close()
 		of := cio.NewOutStream(outfn, req.URL.String())
 		if outfn != "" && endpoint.Data || endpoint.Slicing {
-			err = cnet.HttpGetURL(req.URL.String(), outfn, netopt)
+			err = cnet.HTTPGetURL(req.URL.String(), outfn, netopt)
 			if err != nil {
 				log.Warn(err)
 			}

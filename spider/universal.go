@@ -6,9 +6,8 @@ import (
 	"strings"
 
 	"github.com/gocolly/colly"
-	"github.com/openbiox/butils/log"
-	bspider "github.com/openbiox/butils/spider"
-	"github.com/openbiox/butils/stringo"
+	cnet "github.com/openbiox/ligo/net"
+	"github.com/openbiox/ligo/stringo"
 )
 
 func UniVersalDoiSpider(opt *DoiSpiderOpt) (urls []string) {
@@ -16,7 +15,7 @@ func UniVersalDoiSpider(opt *DoiSpiderOpt) (urls []string) {
 		colly.AllowedDomains("doi.org"),
 		colly.MaxDepth(1),
 	)
-	bspider.SetSpiderProxy(c, opt.Proxy, opt.Timeout)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	if opt.URL != nil {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
 	}

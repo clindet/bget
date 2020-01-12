@@ -15,7 +15,7 @@
 package main
 
 import (
-	"github.com/openbiox/bget/bapi/cmd"
+	"github.com/openbiox/bget/api/cmd"
 )
 
 func main() {

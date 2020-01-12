@@ -2,7 +2,7 @@ package urlpool
 
 var toolsLinks = []bgetToolsURLType{
 	{
-		Name: "image/imagej",
+		Name: "imagej",
 		URL: map[string][]string{
 			"Linux":   []string{"http://wsr.imagej.net/distros/linux/ij{{version}}-linux64-java8.zip"},
 			"Mac":     []string{"http://wsr.imagej.net/distros/osx/ij{{version}}-osx-java8.zip"},
@@ -19,7 +19,7 @@ var toolsLinks = []bgetToolsURLType{
 		Versions: []string{"1.2.11", "1.2.10", "1.2.9", "1.2.7", "1.2.8", "1.2.6", "1.2.5", "1.2.4", "1.2.3", "1.2.1", "1.1.4", "1.1.3"},
 	},
 	{
-		Name: "anno/vcfanno",
+		Name: "vcfanno",
 		URL: map[string][]string{
 			"Linux": []string{"https://github.com/brentp/vcfanno/releases/download/{{version}}/vcfanno_linux64"},
 			"Mac":   []string{"https://github.com/brentp/vcfanno/releases/download/{{version}}/vcfanno_osx"},
@@ -118,11 +118,11 @@ var toolsLinks = []bgetToolsURLType{
 		},
 	},
 	{
-		Name: "bapi",
+		Name: "bioctl",
 		URL: map[string][]string{
-			"Linux": []string{"https://github.com/openbiox/bapi/releases/download/{{version}}/bapi_linux64"},
-			"Mac":   []string{"https://github.com/openbiox/bapi/releases/download/{{version}}/bapi_osx"},
-			"Win":   []string{"https://github.com/openbiox/bapi/releases/download/{{version}}/bapi.exe"},
+			"Linux": []string{"https://github.com/openbiox/bioctl/releases/download/{{version}}/bioctl_linux64"},
+			"Mac":   []string{"https://github.com/openbiox/api/releases/download/{{version}}/bioctl_osx"},
+			"Win":   []string{"https://github.com/openbiox/api/releases/download/{{version}}/bioctl.exe"},
 		},
 	},
 }

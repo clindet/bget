@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/openbiox/bget/bapi/fetch"
-	"github.com/openbiox/bget/bapi/types"
+	"github.com/openbiox/bget/api/fetch"
+	"github.com/openbiox/bget/api/types"
 	"github.com/spf13/cobra"
 )
 
@@ -58,7 +58,7 @@ func init() {
   bget api gdc -p -q TARGET-NBL --json-pretty
   bget api gdc -p --format tsv > tcga_projects.tsv
   bget api gdc -p --format csv > tcga_projects.csv
-  bget api gdc -p --from 1 --szie 2
+  bget api gdc -p --from 1 --size 2
   # check GDC portal status (https://portal.gdc.cancer.gov/)
   bget api gdc -s
   # retrive cases info from GDC portal
