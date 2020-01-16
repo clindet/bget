@@ -12,12 +12,12 @@ var bioToolsCmd = &cobra.Command{
 	Short: "Query https://bio.tools/ website APIs.",
 	Long:  `Query https://bio.tools/ website APIs. Detail see https://biotools.readthedocs.io/en/latest/api_reference.html`,
 	Run: func(cmd *cobra.Command, args []string) {
-		bioToolsCmdRunOptions(cmd)
+		bioToolsCmdRunOptions(cmd, args)
 	},
 }
 
-func bioToolsCmdRunOptions(cmd *cobra.Command) {
-	if fetch.BioTools(&bioToolsEndp, &BapiClis) {
+func bioToolsCmdRunOptions(cmd *cobra.Command, args []string) {
+	if fetch.BioTools(&bioToolsEndp, &BapiClis, func() { initCmd(cmd, args) }) {
 		BapiClis.HelpFlags = false
 	}
 	if BapiClis.HelpFlags {
@@ -35,8 +35,6 @@ func init() {
 	bioToolsCmd.Flags().StringVarP(&bioToolsEndp.DataFormat, "dfmt", "", "", `Fuzzy search over input and output for EDAM Format (term)`)
 	bioToolsCmd.Flags().StringVarP(&bioToolsEndp.OutputFormat, "ofmt", "", "", `Fuzzy search over output for EDAM Format (term)`)
 	bioToolsCmd.Flags().StringVarP(&bioToolsEndp.Publication, "publication", "", "", `Fuzzy search over publication (DOI, PMID, PMCID, publication type and tool version)`)
-
-	bioToolsCmd.Flags().StringVarP(&BapiClis.Outfn, "outfn", "o", "", `Out specifies destination of the returned data (default to stdout).`)
 
 	bioToolsCmd.Example = `  # query item detail
   bget api biots --tool signalp

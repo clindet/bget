@@ -17,12 +17,12 @@ func setNetOpt(bapiClis *types.BapiClisT) *cnet.Params {
 	var netopt = &cnet.Params{
 		Pbar: pg,
 	}
-	netopt.Quiet = bapiClis.Quiet == "true"
+	netopt.Quiet = bapiClis.Verbose == 0
 	netopt.Retries = bapiClis.Retries
 	netopt.Timeout = bapiClis.Timeout
 	netopt.RetSleepTime = bapiClis.RetSleepTime
 	netopt.Proxy = bapiClis.Proxy
-	SetLogStream(bapiClis.Quiet == "true", bapiClis.SaveLog == "true", fmt.Sprintf("%s/%s.log", bapiClis.LogDir, bapiClis.TaskID))
+	SetLogStream(bapiClis.Verbose == 0, bapiClis.SaveLog, fmt.Sprintf("%s/%s.log", bapiClis.LogDir, bapiClis.TaskID))
 	return netopt
 }
 

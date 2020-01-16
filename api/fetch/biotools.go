@@ -10,7 +10,7 @@ import (
 const BioToolsHost = "https://bio.tools/api/tool/"
 
 // BioTools access https://clinicaltrials.gov API
-func BioTools(endpoints *types.BioToolsEndpoints, bapiClis *types.BapiClisT) bool {
+func BioTools(endpoints *types.BioToolsEndpoints, bapiClis *types.BapiClisT, f func()) bool {
 	if bapiClis.Format == "" {
 		bapiClis.Format = "json"
 	}
@@ -19,6 +19,7 @@ func BioTools(endpoints *types.BioToolsEndpoints, bapiClis *types.BapiClisT) boo
 	if url == BioToolsHost || url == BioToolsHost+"?format=json" {
 		return false
 	}
+	f()
 	queryAPI("bio.tools", url, bapiClis, netopt)
 
 	return true

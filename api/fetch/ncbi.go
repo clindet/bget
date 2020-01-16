@@ -16,7 +16,7 @@ import (
 
 // Ncbi modified from https://github.com/biogo/ncbi BSD license
 func Ncbi(bapiClis *types.BapiClisT, ncbiClis *types.NcbiClisT) {
-	SetLogStream(bapiClis.Quiet == "true", bapiClis.SaveLog == "true", fmt.Sprintf("%s/%s.log", bapiClis.LogDir, bapiClis.TaskID))
+	SetLogStream(bapiClis.Verbose == 0, bapiClis.SaveLog, fmt.Sprintf("%s/%s.log", bapiClis.LogDir, bapiClis.TaskID))
 	ncbi.SetTimeout(time.Duration(bapiClis.Timeout) * time.Second)
 	tool := "entrez.example"
 	h := entrez.History{}

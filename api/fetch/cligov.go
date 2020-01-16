@@ -10,7 +10,7 @@ import (
 const CligovHost = "https://clinicaltrials.gov/api/"
 
 // Cligov access https://clinicaltrials.gov API
-func Cligov(endpoints *types.CligovEndpoints, bapiClis *types.BapiClisT) bool {
+func Cligov(endpoints *types.CligovEndpoints, bapiClis *types.BapiClisT, f func()) bool {
 	if bapiClis.Format == "" {
 		bapiClis.Format = "json"
 	}
@@ -19,6 +19,7 @@ func Cligov(endpoints *types.CligovEndpoints, bapiClis *types.BapiClisT) bool {
 	if url == CligovHost || url == CligovHost+"?fmt=json" {
 		return false
 	}
+	f()
 	queryAPI("clinicaltrials.gov", url, bapiClis, netopt)
 
 	return true

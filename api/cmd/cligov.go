@@ -12,12 +12,12 @@ var cligovCmd = &cobra.Command{
 	Short: "Query https://clinicaltrials.gov/ website APIs.",
 	Long:  `Query https://clinicaltrials.gov/ website APIs. Detail see https://clinicaltrials.gov/api/gui/ref/api_urls`,
 	Run: func(cmd *cobra.Command, args []string) {
-		cligovCmdRunOptions(cmd)
+		cligovCmdRunOptions(cmd, args)
 	},
 }
 
-func cligovCmdRunOptions(cmd *cobra.Command) {
-	if fetch.Cligov(&cligovEndp, &BapiClis) {
+func cligovCmdRunOptions(cmd *cobra.Command, args []string) {
+	if fetch.Cligov(&cligovEndp, &BapiClis, func() { initCmd(cmd, args) }) {
 		BapiClis.HelpFlags = false
 	}
 	if BapiClis.HelpFlags {
@@ -41,8 +41,6 @@ func init() {
 
 	cligovCmd.Flags().StringVarP(&cligovEndp.Fields, "fields", "", "", `Specifies which fields to return results for in a Study Fields query.`)
 	cligovCmd.Flags().StringVarP(&cligovEndp.Field, "field", "", "", `Specifies which field to collect values for in a Field Values query.`)
-
-	cligovCmd.Flags().StringVarP(&BapiClis.Outfn, "outfn", "o", "", `Out specifies destination of the returned data (default to stdout).`)
 
 	cligovCmd.Example = `  # returns the date when the ClinicalTrials.gov dataset was posted.
   bget api cligov --info-dat-vers

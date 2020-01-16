@@ -20,11 +20,11 @@ var ncbiCmd = &cobra.Command{
 	Short: "Query ncbi website APIs.",
 	Long:  `Query ncbi website APIs.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		ncbiCmdRunOptions(cmd)
+		ncbiCmdRunOptions(cmd, args)
 	},
 }
 
-func ncbiCmdRunOptions(cmd *cobra.Command) {
+func ncbiCmdRunOptions(cmd *cobra.Command, args []string) {
 	cleanArgs := []string{}
 	var stdin []byte
 	var err error
@@ -40,6 +40,7 @@ func ncbiCmdRunOptions(cmd *cobra.Command) {
 		BapiClis.Format = "XML"
 	}
 	if BapiClis.Email != "" && BapiClis.Query != "" {
+		initCmd(cmd, args)
 		fetch.Ncbi(&BapiClis, &ncbiClis)
 		BapiClis.HelpFlags = false
 	}
@@ -64,7 +65,6 @@ func init() {
 	ncbiCmd.Flags().StringVarP(&ncbiClis.NcbiKeywords, "keywords", "k", "algorithm, tool, model, pipleline, method, database, workflow, dataset, bioinformatics, sequencing, http, github.com, gitlab.com, bitbucket.org", "Keywords to extracted from abstract.")
 	ncbiCmd.Flags().IntVarP(&BapiClis.Thread, "thread", "t", 2, "Thread to process.")
 	ncbiCmd.Flags().BoolVarP(&BapiClis.CallCor, "call-cor", "", false, "Wheather to calculate the corelated keywords, and return the sentence contains >=2 keywords.")
-	ncbiCmd.Flags().StringVarP(&BapiClis.Outfn, "outfn", "o", "", "Out specifies destination of the returned data (default to stdout).")
 	ncbiCmd.Flags().StringVarP(&BapiClis.Email, "email", "e", "your_email@domain.com", "Email specifies the email address to be sent to the server (NCBI website is required).")
 
 	ncbiCmd.Example = `  # query pubmed with 'B-ALL'

@@ -7,13 +7,9 @@ import (
 
 	"github.com/openbiox/bget/api/types"
 	cio "github.com/openbiox/ligo/io"
-	clog "github.com/openbiox/ligo/log"
 	"github.com/openbiox/ligo/stringo"
 	"github.com/spf13/cobra"
 )
-
-var log = clog.Logger
-var wd = ""
 
 // BapiClis is the param to run bapi
 var BapiClis = types.BapiClisT{}
@@ -51,8 +47,9 @@ func init() {
 
 	BapiCmd.PersistentFlags().StringVarP(&(BapiClis.TaskID), "task-id", "", stringo.RandString(15), "Task ID (random).")
 	BapiCmd.PersistentFlags().StringVarP(&(BapiClis.LogDir), "log-dir", "", path.Join(wd, "_log"), "Log dir.")
-	BapiCmd.PersistentFlags().StringVarP(&(BapiClis.Quiet), "quiet", "", "false", "No log output.")
-	BapiCmd.PersistentFlags().StringVarP(&(BapiClis.SaveLog), "save-log", "", "true", "Save download log to local file.")
+	BapiCmd.PersistentFlags().IntVarP(&(BapiClis.Verbose), "verbose", "", 1, "verbose level (0:no output, 1: basic level, 2: with env info)")
+	BapiCmd.PersistentFlags().BoolVarP(&(BapiClis.SaveLog), "save-log", "", false, "Save log to local file.")
+	BapiCmd.PersistentFlags().StringVarP(&BapiClis.Outfn, "outfn", "o", "", "Out specifies destination of the returned data (default to stdout).")
 
 	BapiCmd.Version = BapiClis.Version
 }

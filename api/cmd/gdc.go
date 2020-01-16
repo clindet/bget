@@ -13,11 +13,11 @@ var gdcCmd = &cobra.Command{
 	Short: "Query GDC portal website APIs.",
 	Long:  `Query GDC portal website APIs.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		gdcCmdRunOptions(cmd)
+		gdcCmdRunOptions(cmd, args)
 	},
 }
 
-func gdcCmdRunOptions(cmd *cobra.Command) {
+func gdcCmdRunOptions(cmd *cobra.Command, args []string) {
 	endp.ExtraParams.From = BapiClis.From
 	endp.ExtraParams.Size = BapiClis.Size
 	endp.ExtraParams.Format = BapiClis.Format
@@ -27,6 +27,7 @@ func gdcCmdRunOptions(cmd *cobra.Command) {
 		endp.ExtraParams.Format = "json"
 	}
 	if endp.Status || endp.Projects || endp.Cases || endp.Files || endp.Annotations || endp.Data || endp.Manifest || endp.Slicing {
+		initCmd(cmd, args)
 		fetch.Gdc(&endp, &BapiClis)
 		BapiClis.HelpFlags = false
 	}
@@ -51,7 +52,6 @@ func init() {
 	gdcCmd.Flags().StringVarP(&endp.ExtraParams.Token, "token", "", "", "Token to access GDC.")
 	gdcCmd.Flags().StringVarP(&endp.ExtraParams.Sort, "sort", "", "", "Sort parameters.")
 	gdcCmd.Flags().StringVarP(&endp.ExtraParams.Fields, "fields", "", "", "Fields parameters.")
-	gdcCmd.Flags().StringVarP(&BapiClis.Outfn, "outfn", "o", "", "Out specifies destination of the returned data (default to stdout).")
 	gdcCmd.Example = `  # retrive projects meta info from GDC portal
   bget api gdc -p
   bget api gdc -p --json-pretty

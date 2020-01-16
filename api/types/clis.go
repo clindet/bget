@@ -2,8 +2,8 @@ package types
 
 type BapiClisT struct {
 	TaskID       string
-	Quiet        string
-	SaveLog      string
+	Verbose      int
+	SaveLog      bool
 	LogDir       string
 	HelpFlags    bool
 	Version      string
