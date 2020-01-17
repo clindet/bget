@@ -10,22 +10,23 @@ import (
 const BioToolsHost = "https://bio.tools/api/tool/"
 
 // BioTools access https://clinicaltrials.gov API
-func BioTools(endpoints *types.BioToolsEndpoints, bapiClis *types.BapiClisT, f func()) bool {
-	if bapiClis.Format == "" {
-		bapiClis.Format = "json"
+func BioTools(endpoints *types.BioToolsEndpoints, BapiClis *types.BapiClisT, f func()) bool {
+	setLog(BapiClis)
+	if BapiClis.Format == "" {
+		BapiClis.Format = "json"
 	}
-	netopt := setNetOpt(bapiClis)
-	url := BioToolsHost + setBioToolsQuerySuffix(endpoints, bapiClis)
+	netopt := setNetOpt(BapiClis)
+	url := BioToolsHost + setBioToolsQuerySuffix(endpoints, BapiClis)
 	if url == BioToolsHost || url == BioToolsHost+"?format=json" {
 		return false
 	}
 	f()
-	queryAPI("bio.tools", url, bapiClis, netopt)
+	queryAPI("bio.tools", url, BapiClis, netopt)
 
 	return true
 }
 
-func setBioToolsQuerySuffix(endpoints *types.BioToolsEndpoints, bapiClis *types.BapiClisT) (suffix string) {
+func setBioToolsQuerySuffix(endpoints *types.BioToolsEndpoints, BapiClis *types.BapiClisT) (suffix string) {
 	suffixList := []string{}
 	if endpoints.Tool != "" {
 		suffix = suffix + endpoints.Tool + "/"
@@ -51,17 +52,17 @@ func setBioToolsQuerySuffix(endpoints *types.BioToolsEndpoints, bapiClis *types.
 	if endpoints.Publication != "" {
 		suffixList = append(suffixList, `publication=`+endpoints.Publication)
 	}
-	if bapiClis.Query != "" {
-		suffixList = append(suffixList, "q="+bapiClis.Query)
+	if BapiClis.Query != "" {
+		suffixList = append(suffixList, "q="+BapiClis.Query)
 	}
-	if bapiClis.Format != "" {
-		suffixList = append(suffixList, "format="+bapiClis.Format)
+	if BapiClis.Format != "" {
+		suffixList = append(suffixList, "format="+BapiClis.Format)
 	}
-	if bapiClis.Size != -1 {
-		suffixList = append(suffixList, "page="+strconv.Itoa(bapiClis.From+bapiClis.Size))
+	if BapiClis.Size != -1 {
+		suffixList = append(suffixList, "page="+strconv.Itoa(BapiClis.From+BapiClis.Size))
 	}
-	if bapiClis.Extra != "" {
-		suffixList = append(suffixList, bapiClis.Extra)
+	if BapiClis.Extra != "" {
+		suffixList = append(suffixList, BapiClis.Extra)
 	}
 	if len(suffixList) > 0 {
 		suffix = suffix + "?" + strings.Join(suffixList, "&")

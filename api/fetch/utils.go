@@ -6,12 +6,19 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/openbiox/bget/api/types"
 	cio "github.com/openbiox/ligo/io"
+	clog "github.com/openbiox/ligo/log"
 	cnet "github.com/openbiox/ligo/net"
 	"github.com/tidwall/pretty"
 )
+
+var log = clog.Logger
+var logPrefix string
+var logCon io.Writer
 
 func setNetOpt(bapiClis *types.BapiClisT) *cnet.Params {
 	var netopt = &cnet.Params{
@@ -22,7 +29,6 @@ func setNetOpt(bapiClis *types.BapiClisT) *cnet.Params {
 	netopt.Timeout = bapiClis.Timeout
 	netopt.RetSleepTime = bapiClis.RetSleepTime
 	netopt.Proxy = bapiClis.Proxy
-	SetLogStream(bapiClis.Verbose == 0, bapiClis.SaveLog, fmt.Sprintf("%s/%s.log", bapiClis.LogDir, bapiClis.TaskID))
 	return netopt
 }
 
@@ -65,4 +71,16 @@ func queryAPI(siteName, url string, bapiClis *types.BapiClisT, netopt *cnet.Para
 	defer of.Close()
 
 	return
+}
+
+func setLog(BapiClis *types.BapiClisT) {
+	if BapiClis.SaveLog {
+		if BapiClis.LogDir == "" {
+			BapiClis.LogDir = filepath.Join(os.TempDir(), "_log")
+		}
+		logPrefix = fmt.Sprintf("%s/%s", BapiClis.LogDir, BapiClis.TaskID)
+		cio.CreateDir(BapiClis.LogDir)
+		logCon, _ = cio.Open(logPrefix + ".log")
+	}
+	clog.SetLogStream(log, BapiClis.Verbose == 0, BapiClis.SaveLog, &logCon)
 }

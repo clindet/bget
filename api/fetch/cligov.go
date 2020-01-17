@@ -10,22 +10,23 @@ import (
 const CligovHost = "https://clinicaltrials.gov/api/"
 
 // Cligov access https://clinicaltrials.gov API
-func Cligov(endpoints *types.CligovEndpoints, bapiClis *types.BapiClisT, f func()) bool {
-	if bapiClis.Format == "" {
-		bapiClis.Format = "json"
+func Cligov(endpoints *types.CligovEndpoints, BapiClis *types.BapiClisT, f func()) bool {
+	setLog(BapiClis)
+	if BapiClis.Format == "" {
+		BapiClis.Format = "json"
 	}
-	netopt := setNetOpt(bapiClis)
-	url := CligovHost + setCligovQuerySuffix(endpoints, bapiClis)
+	netopt := setNetOpt(BapiClis)
+	url := CligovHost + setCligovQuerySuffix(endpoints, BapiClis)
 	if url == CligovHost || url == CligovHost+"?fmt=json" {
 		return false
 	}
 	f()
-	queryAPI("clinicaltrials.gov", url, bapiClis, netopt)
+	queryAPI("clinicaltrials.gov", url, BapiClis, netopt)
 
 	return true
 }
 
-func setCligovQuerySuffix(endpoints *types.CligovEndpoints, bapiClis *types.BapiClisT) (suffix string) {
+func setCligovQuerySuffix(endpoints *types.CligovEndpoints, BapiClis *types.BapiClisT) (suffix string) {
 	suffixList := []string{}
 	if endpoints.InfoDataVrs {
 		suffix = "info/data_vrs"
@@ -48,8 +49,8 @@ func setCligovQuerySuffix(endpoints *types.CligovEndpoints, bapiClis *types.Bapi
 	} else if endpoints.FieldValues {
 		suffix = "query/field_values"
 	}
-	if bapiClis.Query != "" {
-		suffixList = append(suffixList, "expr="+bapiClis.Query)
+	if BapiClis.Query != "" {
+		suffixList = append(suffixList, "expr="+BapiClis.Query)
 	}
 	if endpoints.Field != "" {
 		suffixList = append(suffixList, "field="+endpoints.Field)
@@ -57,19 +58,19 @@ func setCligovQuerySuffix(endpoints *types.CligovEndpoints, bapiClis *types.Bapi
 	if endpoints.Fields != "" {
 		suffixList = append(suffixList, "fields="+endpoints.Fields)
 	}
-	if bapiClis.Format != "" {
-		suffixList = append(suffixList, "fmt="+bapiClis.Format)
+	if BapiClis.Format != "" {
+		suffixList = append(suffixList, "fmt="+BapiClis.Format)
 	}
-	if bapiClis.From != -1 {
-		suffixList = append(suffixList, "min_rnk="+strconv.Itoa(bapiClis.From))
+	if BapiClis.From != -1 {
+		suffixList = append(suffixList, "min_rnk="+strconv.Itoa(BapiClis.From))
 	}
-	if bapiClis.Size != -1 && bapiClis.From != -1 {
-		suffixList = append(suffixList, "max_rnk="+strconv.Itoa(bapiClis.From+bapiClis.Size))
-	} else if bapiClis.Size != -1 {
-		suffixList = append(suffixList, "max_rnk="+strconv.Itoa(1+bapiClis.Size))
+	if BapiClis.Size != -1 && BapiClis.From != -1 {
+		suffixList = append(suffixList, "max_rnk="+strconv.Itoa(BapiClis.From+BapiClis.Size))
+	} else if BapiClis.Size != -1 {
+		suffixList = append(suffixList, "max_rnk="+strconv.Itoa(1+BapiClis.Size))
 	}
-	if bapiClis.Extra != "" {
-		suffixList = append(suffixList, bapiClis.Extra)
+	if BapiClis.Extra != "" {
+		suffixList = append(suffixList, BapiClis.Extra)
 	}
 	if len(suffixList) > 0 {
 		suffix = suffix + "?" + strings.Join(suffixList, "&")

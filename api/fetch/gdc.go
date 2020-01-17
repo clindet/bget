@@ -30,8 +30,9 @@ var gdcapis = []string{"status", "projects", "cases", "files", "annotations",
 var pg *mpb.Progress
 
 // Gdc accesss https://api.gdc.cancer.gov data
-func Gdc(endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) {
-	netopt := setNetOpt(bapiClis)
+func Gdc(endpoint *types.GdcEndpoints, BapiClis *types.BapiClisT) {
+	setLog(BapiClis)
+	netopt := setNetOpt(BapiClis)
 	client := cnet.NewHTTPClient(netopt.Timeout, netopt.Proxy)
 	host := GdcAPIHost
 	if endpoint.Legacy {
@@ -48,9 +49,9 @@ func Gdc(endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) {
 		queryFlag = ""
 		f := v.Field(i)
 		if f.Kind() == reflect.String && f.String() != "" {
-			req, queryFlag = setGdcReq(host, i, endpoint, bapiClis)
+			req, queryFlag = setGdcReq(host, i, endpoint, BapiClis)
 		} else if f.Kind() == reflect.Bool && f.Bool() {
-			req, queryFlag = setGdcReq(host, i, endpoint, bapiClis)
+			req, queryFlag = setGdcReq(host, i, endpoint, BapiClis)
 		}
 		if queryFlag == "" {
 			continue
@@ -66,7 +67,7 @@ func Gdc(endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) {
 		} else {
 			return
 		}
-		outfn := cnet.ParseOutfnFromHeader(bapiClis.Outfn, resp, endpoint.ExtraParams.RemoteName)
+		outfn := cnet.ParseOutfnFromHeader(BapiClis.Outfn, resp, endpoint.ExtraParams.RemoteName)
 
 		defer resp.Body.Close()
 		of := cio.NewOutStream(outfn, req.URL.String())
@@ -89,9 +90,9 @@ func Gdc(endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) {
 	}
 }
 
-func setGdcReq(host string, i int, endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) (*http.Request, string) {
+func setGdcReq(host string, i int, endpoint *types.GdcEndpoints, BapiClis *types.BapiClisT) (*http.Request, string) {
 	queryFlag := gdcapis[i]
-	suffix := setGdcQuerySuffix(queryFlag, endpoint, bapiClis)
+	suffix := setGdcQuerySuffix(queryFlag, endpoint, BapiClis)
 	method := "GET"
 	req, err := http.NewRequest(method, host+"/"+gdcapis[i]+suffix, nil)
 	cnet.SetDefaultReqHeader(req)
@@ -101,7 +102,7 @@ func setGdcReq(host string, i int, endpoint *types.GdcEndpoints, bapiClis *types
 	return req, queryFlag
 }
 
-func setGdcQuerySuffix(queryFlag string, endpoint *types.GdcEndpoints, bapiClis *types.BapiClisT) (suffix string) {
+func setGdcQuerySuffix(queryFlag string, endpoint *types.GdcEndpoints, BapiClis *types.BapiClisT) (suffix string) {
 	queryStr := ""
 	suffixList := []string{}
 	if endpoint.ExtraParams.Query != "" {
@@ -148,8 +149,8 @@ func setGdcQuerySuffix(queryFlag string, endpoint *types.GdcEndpoints, bapiClis 
 	if endpoint.ExtraParams.Pretty {
 		suffixList = append(suffixList, "pretty=true")
 	}
-	if bapiClis.Extra != "" {
-		suffixList = append(suffixList, bapiClis.Extra)
+	if BapiClis.Extra != "" {
+		suffixList = append(suffixList, BapiClis.Extra)
 	}
 	if len(suffixList) > 0 && queryStr != "" {
 		if !strings.Contains(queryStr, "?") {

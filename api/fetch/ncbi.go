@@ -2,7 +2,6 @@ package fetch
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"os"
 	"time"
@@ -15,48 +14,48 @@ import (
 )
 
 // Ncbi modified from https://github.com/biogo/ncbi BSD license
-func Ncbi(bapiClis *types.BapiClisT, ncbiClis *types.NcbiClisT) {
-	SetLogStream(bapiClis.Verbose == 0, bapiClis.SaveLog, fmt.Sprintf("%s/%s.log", bapiClis.LogDir, bapiClis.TaskID))
-	ncbi.SetTimeout(time.Duration(bapiClis.Timeout) * time.Second)
+func Ncbi(BapiClis *types.BapiClisT, ncbiClis *types.NcbiClisT) {
+	setLog(BapiClis)
+	ncbi.SetTimeout(time.Duration(BapiClis.Timeout) * time.Second)
 	tool := "entrez.example"
 	h := entrez.History{}
 	parms := entrez.Parameters{
 		APIKey: "193124979d2e7f360c150dadc5b1e3bfec09",
 	}
-	s, err := entrez.DoSearch(ncbiClis.NcbiDB, bapiClis.Query, &parms, &h, tool, bapiClis.Email)
+	s, err := entrez.DoSearch(ncbiClis.NcbiDB, BapiClis.Query, &parms, &h, tool, BapiClis.Email)
 	if err != nil {
 		log.Fatalf("error: %v\n", err)
 	}
 	log.Infof("Available retrieve %d records.", s.Count)
-	from, end := cnet.SetQueryFromEnd(bapiClis.From, bapiClis.Size, s.Count)
+	from, end := cnet.SetQueryFromEnd(BapiClis.From, BapiClis.Size, s.Count)
 	log.Infof("Will retrieve %d records, from %d to %d.", end-from, from+1, end)
 
-	of := cio.NewOutStream(bapiClis.Outfn, "")
+	of := cio.NewOutStream(BapiClis.Outfn, "")
 	defer of.Close()
 	var (
 		buf   = &bytes.Buffer{}
-		p     = &entrez.Parameters{RetMax: ncbiClis.NcbiRetmax, RetType: bapiClis.Format, RetMode: "text"}
+		p     = &entrez.Parameters{RetMax: ncbiClis.NcbiRetmax, RetType: BapiClis.Format, RetMode: "text"}
 		bn, n int64
 	)
 	if p.RetMax > end-from {
 		p.RetMax = end - from
 	}
 	for p.RetStart = from; p.RetStart < end; p.RetStart += p.RetMax {
-		log.Infof("Attempting to retrieve %d records: %d-%d with %d retries.", p.RetMax, p.RetStart+1, p.RetMax+p.RetStart, bapiClis.Retries)
+		log.Infof("Attempting to retrieve %d records: %d-%d with %d retries.", p.RetMax, p.RetStart+1, p.RetMax+p.RetStart, BapiClis.Retries)
 		var t int
-		for t = 0; t < bapiClis.Retries; t++ {
+		for t = 0; t < BapiClis.Retries; t++ {
 			buf.Reset()
 			var (
 				r   io.ReadCloser
 				_bn int64
 			)
-			r, err = entrez.Fetch(ncbiClis.NcbiDB, p, tool, bapiClis.Email, &h)
+			r, err = entrez.Fetch(ncbiClis.NcbiDB, p, tool, BapiClis.Email, &h)
 			if err != nil {
 				if r != nil {
 					r.Close()
 				}
-				log.Warnf("Failed to retrieve on attempt %d... error: %v ... retrying after %d seconds.", t+1, err, bapiClis.RetSleepTime)
-				time.Sleep(time.Duration(bapiClis.RetSleepTime) * time.Second)
+				log.Warnf("Failed to retrieve on attempt %d... error: %v ... retrying after %d seconds.", t+1, err, BapiClis.RetSleepTime)
+				time.Sleep(time.Duration(BapiClis.RetSleepTime) * time.Second)
 				continue
 			}
 			_bn, err = io.Copy(buf, r)
@@ -65,8 +64,8 @@ func Ncbi(bapiClis *types.BapiClisT, ncbiClis *types.NcbiClisT) {
 				bn += _bn
 				break
 			}
-			log.Warnf("Failed to buffer on attempt %d... error: %v ... retrying after %d seconds.", t+1, err, bapiClis.RetSleepTime)
-			time.Sleep(time.Duration(bapiClis.RetSleepTime) * time.Second)
+			log.Warnf("Failed to buffer on attempt %d... error: %v ... retrying after %d seconds.", t+1, err, BapiClis.RetSleepTime)
+			time.Sleep(time.Duration(BapiClis.RetSleepTime) * time.Second)
 		}
 		if err != nil {
 			os.Exit(1)

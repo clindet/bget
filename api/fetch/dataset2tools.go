@@ -10,14 +10,15 @@ import (
 const Dataset2toolsHost = "http://amp.pharm.mssm.edu/datasets2tools/api/search?"
 
 // Dataset2tools access http://amp.pharm.mssm.edu/datasets2tools/ API
-func Dataset2tools(endpoints *types.Datasets2toolsEndpoints, bapiClis *types.BapiClisT) {
-	netopt := setNetOpt(bapiClis)
-	url := Dataset2toolsHost + setDatasets2toolsQuerySuffix(endpoints, bapiClis)
-	queryAPI("datasets2tools", url, bapiClis, netopt)
+func Dataset2tools(endpoints *types.Datasets2toolsEndpoints, BapiClis *types.BapiClisT) {
+	setLog(BapiClis)
+	netopt := setNetOpt(BapiClis)
+	url := Dataset2toolsHost + setDatasets2toolsQuerySuffix(endpoints, BapiClis)
+	queryAPI("datasets2tools", url, BapiClis, netopt)
 	return
 }
 
-func setDatasets2toolsQuerySuffix(endpoints *types.Datasets2toolsEndpoints, bapiClis *types.BapiClisT) (suffix string) {
+func setDatasets2toolsQuerySuffix(endpoints *types.Datasets2toolsEndpoints, BapiClis *types.BapiClisT) (suffix string) {
 	suffixList := []string{}
 	if endpoints.ObjectType != "" {
 		suffixList = append(suffixList, "object_type="+endpoints.ObjectType)
@@ -43,8 +44,8 @@ func setDatasets2toolsQuerySuffix(endpoints *types.Datasets2toolsEndpoints, bapi
 	if endpoints.PageSize != -1 {
 		suffixList = append(suffixList, "page_size="+strconv.Itoa(endpoints.PageSize))
 	}
-	if bapiClis.Extra != "" {
-		suffixList = append(suffixList, bapiClis.Extra)
+	if BapiClis.Extra != "" {
+		suffixList = append(suffixList, BapiClis.Extra)
 	}
 	if len(suffixList) > 0 {
 		suffix = strings.Join(suffixList, "&")
