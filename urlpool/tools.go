@@ -121,8 +121,16 @@ var toolsLinks = []bgetToolsURLType{
 		Name: "bioctl",
 		URL: map[string][]string{
 			"Linux": []string{"https://github.com/openbiox/bioctl/releases/download/{{version}}/bioctl_linux64"},
-			"Mac":   []string{"https://github.com/openbiox/api/releases/download/{{version}}/bioctl_osx"},
-			"Win":   []string{"https://github.com/openbiox/api/releases/download/{{version}}/bioctl.exe"},
+			"Mac":   []string{"https://github.com/openbiox/bioctl/releases/download/{{version}}/bioctl_osx"},
+			"Win":   []string{"https://github.com/openbiox/bioctl/releases/download/{{version}}/bioctl.exe"},
+		},
+	},
+	{
+		Name: "bioextr",
+		URL: map[string][]string{
+			"Linux": []string{"https://github.com/openbiox/bioextr/releases/download/{{version}}/bioextr_linux64"},
+			"Mac":   []string{"https://github.com/openbiox/bioextr/releases/download/{{version}}/bioextr_osx"},
+			"Win":   []string{"https://github.com/openbiox/bioextr/releases/download/{{version}}/bioextr.exe"},
 		},
 	},
 }

@@ -83,7 +83,7 @@ func setKeyListFlag(cmd *cobra.Command, bgetClis *bgetCliT, keyName string) {
 func setGlobalFlag(cmd *cobra.Command, bgetClis *bgetCliT) {
 	cmd.PersistentFlags().StringVarP(&(bgetClis.Proxy), "proxy", "", "", "HTTP proxy to download.")
 	cmd.PersistentFlags().IntVarP(&(bgetClis.Thread), "thread", "t", 1, "Concurrency download thread.")
-	cmd.PersistentFlags().StringVarP(&(bgetClis.DownloadDir), "outdir", "o", filepath.Join(wd, "_download"), "Set the download dir.")
+	cmd.PersistentFlags().StringVarP(&(bgetClis.DownloadDir), "outdir", "o", wd, "Set the download dir.")
 	cmd.PersistentFlags().StringVarP(&(bgetClis.Seperator), "seperator", "s", ",", "Optional 'url1{seperator}url2' for multiple keys, urls, or seqs.")
 	cmd.PersistentFlags().BoolVar(&(bgetClis.Ignore), "ignore", false, "Contine to download and skip the check of existed files.")
 	cmd.PersistentFlags().StringVarP(&(bgetClis.CmdExtraFromFlag), "extra-cmd", "e", "", "Extra flags and values pass to internal CMDs")

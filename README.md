@@ -12,6 +12,11 @@ Supported types:
 - Papers material
 - ......
 
+Downstream tool:
+
+- [bioctl](https://github.com/openbiox/bioctl): convert, format, and other functions
+- [bioextr](https://github.com/openbiox/bioextr): text-mining functions
+
 ## Prerequisities
 
 For website spider (optional):
@@ -28,15 +33,15 @@ For raw sequencing data query (optional):
 
 ```bash
 # windows
-wget https://github.com/openbiox/bget/releases/download/v0.2.3/bget.exe
+wget https://github.com/openbiox/bget/releases/download/v0.2.4/bget.exe
 
 # osx
-wget https://github.com/openbiox/bget/releases/download/v0.2.3/bget_osx
+wget https://github.com/openbiox/bget/releases/download/v0.2.4/bget_osx
 mv bget_osx bget
 chmod a+x bget
 
 # linux
-wget https://github.com/openbiox/bget/releases/download/v0.2.3/bget_linux64
+wget https://github.com/openbiox/bget/releases/download/v0.2.4/bget_linux64
 mv bget_linux64 bget
 chmod a+x bget
 
@@ -52,13 +57,7 @@ Command line outputs see [here](https://github.com/openbiox/bget/blob/master/doc
 
 `bget api` can be used to query serveral website APIs, such as PubMed, Datasetdataset2tools, and GDC portal website.
 
-In addition, you can use the `bget api` to conduct the simple text-mining of PubMed abstract at the sentence level.
-
-- support calculate correlations between any keywords at the sentence level (PubMed)
-- support extract URLs from Pubmed abstract
-- support convert PubMed abstract from XML => JSON
-- support to prettify JSON stream
-- support convert key-value JSON to slice JSON
+In addition, you can use the downstream tool [bioctl](https://github.com/openbiox/bioctl) to conduct the simple text-mining of PubMed abstract at the sentence level.
 
 ```bash
 # NCBI eutils
@@ -66,7 +65,7 @@ In addition, you can use the `bget api` to conduct the simple text-mining of Pub
 bget api ncbi -d pubmed -q B-ALL --format XML -e your_email@domain.com
 
 # query pubmed and convert it to json format that also extract all URLs and calculate the words connections
-bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bget api ncbi --xml2json pubmed -w "MAPK, MTOR, autophagy" --call-cor - > final.json
+bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bioctl cvrt --xml2json pubmed -
 
 # datasetdataset2tools API
 # query canned analysis accession	, e.g. DCA00000060.

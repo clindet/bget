@@ -67,6 +67,18 @@ func QueryBgetTools(name string, env *map[string]string) (urls, postShellCmd, ve
 				versions = GitHubVersionSpider(BgetToolsPool[i].VersionsAPI, true)
 			} else if BgetToolsPool[i].VersionsAPI != "" && strings.Contains(BgetToolsPool[i].VersionsAPI, "://bitbucket.org") {
 				versions = BitbucketVersionSpider(BgetToolsPool[i].VersionsAPI)
+			} else if strings.Contains(BgetToolsPool[i].URL["Linux"][0], "github.com") {
+				versions = GitHubVersionSpider(BgetToolsPool[i].URL["Linux"][0], true)
+			} else if strings.Contains(BgetToolsPool[i].URL["Linux"][0], "bitbucket.org") {
+				versions = BitbucketVersionSpider(BgetToolsPool[i].URL["Linux"][0])
+			} else if strings.Contains(BgetToolsPool[i].URL["Mac"][0], "github.com") {
+				versions = GitHubVersionSpider(BgetToolsPool[i].URL["Mac"][0], true)
+			} else if strings.Contains(BgetToolsPool[i].URL["Mac"][0], "bitbucket.org") {
+				versions = BitbucketVersionSpider(BgetToolsPool[i].URL["Mac"][0])
+			} else if strings.Contains(BgetToolsPool[i].URL["Win"][0], "github.com") {
+				versions = GitHubVersionSpider(BgetToolsPool[i].URL["Win"][0], true)
+			} else if strings.Contains(BgetToolsPool[i].URL["Win"][0], "bitbucket.org") {
+				versions = BitbucketVersionSpider(BgetToolsPool[i].URL["Win"][0])
 			} else {
 				versions = BgetToolsPool[i].Versions
 			}

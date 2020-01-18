@@ -1,8 +1,8 @@
 2020-01-18 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
-		* use pubmed and sra xml struct
 		* --task-id add -k
-		* api ncbi -k flag rename to -w
+		* move convert and text-mining function to bioctl and bioextr pkg
+		* support git version parse in `bget key` tools
 
 2020-01-16 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 

@@ -19,7 +19,6 @@ type BapiClisT struct {
 	RemoteName   bool
 	Timeout      int
 	RetSleepTime int
-	CallCor      bool
 	PrettyJSON   bool
 	Indent       int
 	SortKeys     bool

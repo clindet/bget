@@ -20,9 +20,9 @@ Main interface
     #> Flags:
     #>       --clean            remove _download and _log in current dir.
     #>   -h, --help             help for bget
-    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --log-dir string   log dir. (default "/Users/apple/Documents/github/bget/doc/_log")
     #>       --save-log         Save log to file.
-    #>       --task-id string   task ID (default is random). (default "d2f5zd0wwtkrde3")
+    #>   -k, --task-id string   task ID (default is random). (default "v082skd895m9bao")
     #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
     #>       --version          version for bget
     #> 
@@ -47,13 +47,13 @@ bget api
     #> 
     #> Flags:
     #>   -h, --help           help for api
-    #>       --quiet string   No log output. (default "false")
+    #>   -o, --outfn string   Out specifies destination of the returned data (default to stdout).
     #> 
     #> Global Flags:
     #>       --clean            remove _download and _log in current dir.
-    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --log-dir string   log dir. (default "/Users/apple/Documents/github/bget/doc/_log")
     #>       --save-log         Save log to file.
-    #>       --task-id string   task ID (default is random). (default "qpd0stvs09b7sca")
+    #>   -k, --task-id string   task ID (default is random). (default "mddf25021rlilor")
     #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
     #> 
     #> Use "bget api [command] --help" for more information about a command.
@@ -68,15 +68,13 @@ bget api
     #>   # query pubmed with 'B-ALL'
     #>   bget api ncbi -d pubmed -q B-ALL --format XML -e your_email@domain.com
     #> 
-    #>   # query pubmed and convert it to json format that also extract all URLs and calculate the words connections
-    #>   bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bget api ncbi --xml2json pubmed -k "MAPK, MTOR, autophagy" --call-cor - | sed 's;}{;,;g' | bioctl fmt --json-to-slice - > final.json
+    #>   # query pubmed and convert it to json format
+    #>   bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bioctl cvrt --xml2json pubmed - > final.json
     #> 
     #>   # query larger items
-    #>   k="algorithm, tool, model, pipleline, method, database, workflow, dataset, bioinformatics, sequencing, http, github.com, gitlab.com, bitbucket.org, RNA-Seq, DNA, profile, landscape"
-    #>   bget api ncbi -q "dataset and RNA-seq and bioinformatics[journal]" -e "your_email@domain.com" -m 20 | awk '/<[?]xml version="1.0" [?]>/{close(f); f="abstract.http.XML.tmp" ++c;next} {print>f;}' && bget api ncbi --xml2json pubmed abstract.http.XML.tmp* -k "${k}" --call-cor -t 11 | sed 's;}{;,;g' > final.json
+    #>   bget api ncbi -q "dataset and RNA-seq and bioinformatics[journal]" -e "your_email@domain.com" -m 20 | awk '/<[?]xml version="1.0" [?]>/{close(f); f="abstract.http.XML.tmp" ++c;next} {print>f;}' && bioctl cvrt --xml2json pubmed abstract.http.XML.tmp* -t 11 > final.json
     #> 
     #> Flags:
-    #>       --call-cor                 Wheather to calculate the corelated keywords, and return the sentence contains >=2 keywords.
     #>   -d, --db string                Db specifies the database to search (default "pubmed")
     #>   -e, --email string             Email specifies the email address to be sent to the server (NCBI website is required). (default "your_email@domain.com")
     #>       --extra string             Extra query parameters.
@@ -85,8 +83,6 @@ bget api
     #>   -h, --help                     help for ncbi
     #>       --indent int               Control the indent of output json files. (default 4)
     #>       --json-pretty              Pretty json files.
-    #>   -k, --keywords string          Keywords to extracted from abstract. (default "algorithm, tool, model, pipleline, method, database, workflow, dataset, bioinformatics, sequencing, http, github.com, gitlab.com, bitbucket.org")
-    #>   -o, --outfn string             Out specifies destination of the returned data (default to stdout).
     #>   -m, --per-size int             Retmax specifies the number of records to be retrieved per request. (default 100)
     #>   -q, --query string             Query specifies the search query for record retrieval (required).
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
@@ -95,15 +91,14 @@ bget api
     #>       --sort-keys                Control wheather to sort JSON key.
     #>   -t, --thread int               Thread to process. (default 2)
     #>       --timeout int              Set the timeout of per request. (default 35)
-    #>       --xml2json string          Convert XML files to json [e.g. pubmed].
     #> 
     #> Global Flags:
-    #>       --clean             remove _download and _log in current dir.
-    #>       --log-dir string    Log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
-    #>       --quiet string      No log output. (default "false")
-    #>       --save-log string   Save download log to local file. (default "true")
-    #>       --task-id string    Task ID (random). (default "gfw8ps9ooxsgdxw")
-    #>       --verbose int       verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
+    #>       --clean            remove _download and _log in current dir.
+    #>       --log-dir string   Log dir. (default "/Users/apple/Documents/github/bget/doc/_log")
+    #>   -o, --outfn string     Out specifies destination of the returned data (default to stdout).
+    #>       --save-log         Save log to local file.
+    #>   -k, --task-id string   Task ID (random). (default "mn0jrnl37bnlfi1")
+    #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
     bget api gdc -h
     #> Query GDC portal website APIs.
@@ -149,7 +144,6 @@ bget api
     #>       --json-pretty              Pretty json files.
     #>   -l, --legacy                   Use legacy API of GDC portal.
     #>   -m, --manifest                 Retrive /manifest data from GDC portal.
-    #>   -o, --outfn string             Out specifies destination of the returned data (default to stdout).
     #>   -p, --projects                 Retrive projects meta info from GDC portal.
     #>   -q, --query string             Query specifies the search query for record retrieval (required).
     #>   -n, --remote-name              Use remote defined filename.
@@ -164,12 +158,12 @@ bget api
     #>       --token string             Token to access GDC.
     #> 
     #> Global Flags:
-    #>       --clean             remove _download and _log in current dir.
-    #>       --log-dir string    Log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
-    #>       --quiet string      No log output. (default "false")
-    #>       --save-log string   Save download log to local file. (default "true")
-    #>       --task-id string    Task ID (random). (default "1588c52afmgukkz")
-    #>       --verbose int       verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
+    #>       --clean            remove _download and _log in current dir.
+    #>       --log-dir string   Log dir. (default "/Users/apple/Documents/github/bget/doc/_log")
+    #>   -o, --outfn string     Out specifies destination of the returned data (default to stdout).
+    #>       --save-log         Save log to local file.
+    #>   -k, --task-id string   Task ID (random). (default "pqpf3q7ibk9bzwz")
+    #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
     bget api dta -h
     #> Query dataset2tools website APIs: datasets (d), tools (t), and canned analysis (a).
@@ -198,7 +192,6 @@ bget api
     #>   -h, --help                     help for dta
     #>       --indent int               Control the indent of output json files. (default 4)
     #>       --json-pretty              Pretty json files.
-    #>   -o, --outfn string             Out specifies destination of the returned data (default to stdout).
     #>   -q, --query string             Query specifies the search query for record retrieval (required).
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
     #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
@@ -209,12 +202,12 @@ bget api
     #>       --type string              Object type [tool, dataset, canned_analysis].
     #> 
     #> Global Flags:
-    #>       --clean             remove _download and _log in current dir.
-    #>       --log-dir string    Log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
-    #>       --quiet string      No log output. (default "false")
-    #>       --save-log string   Save download log to local file. (default "true")
-    #>       --task-id string    Task ID (random). (default "h39wy98l5zgnd5q")
-    #>       --verbose int       verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
+    #>       --clean            remove _download and _log in current dir.
+    #>       --log-dir string   Log dir. (default "/Users/apple/Documents/github/bget/doc/_log")
+    #>   -o, --outfn string     Out specifies destination of the returned data (default to stdout).
+    #>       --save-log         Save log to local file.
+    #>   -k, --task-id string   Task ID (random). (default "kf2ztgplgcuwks6")
+    #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
     bget api cligov -h
     #> Query https://clinicaltrials.gov/ website APIs. Detail see https://clinicaltrials.gov/api/gui/ref/api_urls
@@ -261,7 +254,6 @@ bget api
     #>       --info-study-stat          Returns an annotated version of the Study Structure info URL.
     #>       --info-study-struct        Returns all available data elements for a single study record.
     #>       --json-pretty              Pretty json files.
-    #>   -o, --outfn string             Out specifies destination of the returned data (default to stdout).
     #>   -q, --query string             Query specifies the search query for record retrieval (required).
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
     #>       --retries-sleep-time int   Sleep time after one retry. (default 5)
@@ -271,12 +263,12 @@ bget api
     #>       --timeout int              Set the timeout of per request. (default 35)
     #> 
     #> Global Flags:
-    #>       --clean             remove _download and _log in current dir.
-    #>       --log-dir string    Log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
-    #>       --quiet string      No log output. (default "false")
-    #>       --save-log string   Save download log to local file. (default "true")
-    #>       --task-id string    Task ID (random). (default "j4gyfel9c9uiqxw")
-    #>       --verbose int       verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
+    #>       --clean            remove _download and _log in current dir.
+    #>       --log-dir string   Log dir. (default "/Users/apple/Documents/github/bget/doc/_log")
+    #>   -o, --outfn string     Out specifies destination of the returned data (default to stdout).
+    #>       --save-log         Save log to local file.
+    #>   -k, --task-id string   Task ID (random). (default "y9l2a26ydflmgk9")
+    #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
     bget api biots -h
     #> Query https://bio.tools/ website APIs. Detail see https://biotools.readthedocs.io/en/latest/api_reference.html
@@ -306,7 +298,6 @@ bget api
     #>       --json-pretty              Pretty json files.
     #>       --name string              Search for bio.tools tool name e.g signalp)
     #>       --ofmt string              Fuzzy search over output for EDAM Format (term)
-    #>   -o, --outfn string             Out specifies destination of the returned data (default to stdout).
     #>       --publication string       Fuzzy search over publication (DOI, PMID, PMCID, publication type and tool version)
     #>   -q, --query string             Query specifies the search query for record retrieval (required).
     #>   -r, --retries int              Retry specifies the number of attempts to retrieve the data. (default 5)
@@ -318,12 +309,12 @@ bget api
     #>       --topic string             Search for EDAM Topic (term)
     #> 
     #> Global Flags:
-    #>       --clean             remove _download and _log in current dir.
-    #>       --log-dir string    Log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
-    #>       --quiet string      No log output. (default "false")
-    #>       --save-log string   Save download log to local file. (default "true")
-    #>       --task-id string    Task ID (random). (default "gnljjndv4gv829a")
-    #>       --verbose int       verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
+    #>       --clean            remove _download and _log in current dir.
+    #>       --log-dir string   Log dir. (default "/Users/apple/Documents/github/bget/doc/_log")
+    #>   -o, --outfn string     Out specifies destination of the returned data (default to stdout).
+    #>       --save-log         Save log to local file.
+    #>   -k, --task-id string   Task ID (random). (default "lc151rm2vu7p51l")
+    #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
 bget doi
 --------
@@ -368,9 +359,9 @@ bget doi
     #> 
     #> Global Flags:
     #>       --clean            remove _download and _log in current dir.
-    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --log-dir string   log dir. (default "/Users/apple/Documents/github/bget/doc/_log")
     #>       --save-log         Save log to file.
-    #>       --task-id string   task ID (default is random). (default "mh5noe6dp7czkk8")
+    #>   -k, --task-id string   task ID (default is random). (default "1xxx3bea7yisfgi")
     #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
 ### bget seq
@@ -411,7 +402,7 @@ bget doi
     #>       --ignore                   Contine to download and skip the check of existed files.
     #>   -l, --list-file string         A file contains accession ids for download.
     #>   -m, --mirror string            Set the mirror of resources.
-    #>   -o, --outdir string            Set the download dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_download")
+    #>   -o, --outdir string            Set the download dir. (default "/Users/apple/Documents/github/bget/doc/_download")
     #>   -f, --overwrite                Logical indicating that whether to overwrite existing files.
     #>       --proxy string             HTTP proxy to download.
     #>       --query-gpl                Wheather fetch GPL files from GEO database.
@@ -429,9 +420,9 @@ bget doi
     #> 
     #> Global Flags:
     #>       --clean            remove _download and _log in current dir.
-    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --log-dir string   log dir. (default "/Users/apple/Documents/github/bget/doc/_log")
     #>       --save-log         Save log to file.
-    #>       --task-id string   task ID (default is random). (default "qb1fh59pbaocb3r")
+    #>   -k, --task-id string   task ID (default is random). (default "upa4ud5pwa1cj5h")
     #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
 ### bget url
@@ -468,7 +459,7 @@ bget doi
     #>   -l, --list-file string                A file contains urls for download.
     #>   -m, --mirror string                   Set the mirror of resources.
     #>       --only-github-assets              Logical indicating that whether to only download github repo assets files.
-    #>   -o, --outdir string                   Set the download dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_download")
+    #>   -o, --outdir string                   Set the download dir. (default "/Users/apple/Documents/github/bget/doc/_download")
     #>   -f, --overwrite                       Logical indicating that whether to overwrite existing files.
     #>       --proxy string                    HTTP proxy to download.
     #>   -n, --remote-name                     Use remote defined filename.
@@ -483,9 +474,9 @@ bget doi
     #> 
     #> Global Flags:
     #>       --clean            remove _download and _log in current dir.
-    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --log-dir string   log dir. (default "/Users/apple/Documents/github/bget/doc/_log")
     #>       --save-log         Save log to file.
-    #>       --task-id string   task ID (default is random). (default "a521eqvm5q8w94r")
+    #>   -k, --task-id string   task ID (default is random). (default "atl5o1t2dl18d7t")
     #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
 ### bget key
@@ -497,15 +488,24 @@ bget doi
     #>   bget key [key1 key2 key3...] [flags]
     #> 
     #> Examples:
-    #>   bget key bwa
-    #>   bget key -a // get all available keys
-    #>   bget key samtools -v // view all samtools available versions in table
-    #>   bget key samtools -v --formt json // view all samtools available versions in JSON
-    #>   bget key "reffa/defuse@GRCh38 #97" -t 10 -f
+    #>   # download bwa source (with task env info)
+    #>   bget key bwa --verbose 2
+    #>   # get all available keys
+    #>   bget key -a
+    #>   # in JSON format
+    #>   bget key -a --format json
+    #>   # view all bwa and samtools available tags in table
+    #>   bget key bwa samtools -v
+    #>   # view all bwa and samtools available tags in json
+    #>   bget key bwa samtools -v --format json
+    #>  
+    #>   # force download defuse reference (with task env info and save log to file)
+    #>   bget key "reffa/defuse@GRCh38 #97" -t 10 -f --verbose 2 --save-log
     #>   bget key reffa/defuse@GRCh38 release=97 -t 10 -f
+    #>   # download annovar reference
     #>   bget key db/annovar@clinvar_20170501 db/annovar@clinvar_20180603 builder=hg38
     #> 
-    #>   bget key db/annovar -v --out-text
+    #>   bget key db/annovar -v --formt text
     #>   bget key db/annovar version='clinvar_20131105, clinvar_20140211, clinvar_20140303, clinvar_20140702, clinvar_20140902, clinvar_20140929, clinvar_20150330, clinvar_20150629, clinvar_20151201, clinvar_20160302, clinvar_20161128, clinvar_20170130, clinvar_20170501, clinvar_20170905, clinvar_20180603, avsnp150, avsnp147, avsnp144, avsnp142, avsnp138, cadd, caddgt10, caddgt20, cadd13, cadd13gt10, cadd13gt20, cg69, cg46, cosmic70, cosmic68wgs, cosmic68, cosmic67wgs, cosmic67, cosmic65, cosmic64, dbnsfp35a, dbnsfp33a, dbnsfp31a_interpro, dbnsfp30a, dbscsnv11, eigen, esp6500siv2_ea, esp6500siv2_aa, esp6500siv2_all, exac03nontcga, exac03nonpsych, exac03, fathmm, gerp++gt2, gme, gnomad_exome, gnomad_genome, gwava, hrcr1, icgc21, intervar_20170202, kaviar_20150923, ljb26_all, mcap, mitimpact2, mitimpact24, nci60, popfreq_max_20150413, popfreq_all_20150413, revel, regsnpintron' builder=hg19 -t 10 -f
     #> 
     #> Flags:
@@ -534,9 +534,9 @@ bget doi
     #> 
     #> Global Flags:
     #>       --clean            remove _download and _log in current dir.
-    #>       --log-dir string   log dir. (default "/home/ljf/repositories/github/openbiox/bget/doc/_log")
+    #>       --log-dir string   log dir. (default "/Users/apple/Documents/github/bget/doc/_log")
     #>       --save-log         Save log to file.
-    #>       --task-id string   task ID (default is random). (default "hv9vl4i0o6ez4mj")
+    #>   -k, --task-id string   task ID (default is random). (default "pod8h3sp103bgkc")
     #>       --verbose int      verbose level (0:no output, 1: basic level, 2: with env info) (default 1)
 
     ## show all supported items
