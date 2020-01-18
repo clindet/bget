@@ -45,7 +45,7 @@ func init() {
 	BapiCmd.AddCommand(cligovCmd)
 	wd, _ := os.Getwd()
 
-	BapiCmd.PersistentFlags().StringVarP(&(BapiClis.TaskID), "task-id", "", stringo.RandString(15), "Task ID (random).")
+	BapiCmd.PersistentFlags().StringVarP(&(BapiClis.TaskID), "task-id", "k", stringo.RandString(15), "Task ID (random).")
 	BapiCmd.PersistentFlags().StringVarP(&(BapiClis.LogDir), "log-dir", "", path.Join(wd, "_log"), "Log dir.")
 	BapiCmd.PersistentFlags().IntVarP(&(BapiClis.Verbose), "verbose", "", 1, "verbose level (0:no output, 1: basic level, 2: with env info)")
 	BapiCmd.PersistentFlags().BoolVarP(&(BapiClis.SaveLog), "save-log", "", false, "Save log to local file.")

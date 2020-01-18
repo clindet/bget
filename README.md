@@ -66,7 +66,7 @@ In addition, you can use the `bget api` to conduct the simple text-mining of Pub
 bget api ncbi -d pubmed -q B-ALL --format XML -e your_email@domain.com
 
 # query pubmed and convert it to json format that also extract all URLs and calculate the words connections
-bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bget api ncbi --xml2json pubmed -k "MAPK, MTOR, autophagy" --call-cor - | sed 's;}{;,;g' | bioctl fmt --json-to-slice - > final.json
+bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bget api ncbi --xml2json pubmed -w "MAPK, MTOR, autophagy" --call-cor - > final.json
 
 # datasetdataset2tools API
 # query canned analysis accession	, e.g. DCA00000060.

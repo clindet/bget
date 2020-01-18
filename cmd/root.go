@@ -11,8 +11,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var version = "v0.2.3-1"
-
 type bgetCliT struct {
 	DownloadDir        string
 	Mirror             string
@@ -94,7 +92,7 @@ func init() {
 	rootCmd.AddCommand(SeqCmd)
 	rootCmd.AddCommand(api.BapiCmd)
 	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.Clean), "clean", "", false, "remove _download and _log in current dir.")
-	rootCmd.PersistentFlags().StringVarP(&(bgetClis.TaskID), "task-id", "", stringo.RandString(15), "task ID (default is random).")
+	rootCmd.PersistentFlags().StringVarP(&(bgetClis.TaskID), "task-id", "k", stringo.RandString(15), "task ID (default is random).")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.LogDir), "log-dir", "", path.Join(wd, "_log"), "log dir.")
 	rootCmd.PersistentFlags().IntVarP(&(bgetClis.Verbose), "verbose", "", 1, "verbose level (0:no output, 1: basic level, 2: with env info)")
 	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.SaveLog), "save-log", "", false, "Save log to file.")
