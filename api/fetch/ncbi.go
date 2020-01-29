@@ -33,8 +33,11 @@ func Ncbi(BapiClis *types.BapiClisT, ncbiClis *types.NcbiClisT) {
 	from, end := cnet.SetQueryFromEnd(BapiClis.From, BapiClis.Size, s.Count)
 	if from == 0 {
 		from = 1
-		end = end + 1
+	    end = end + 1
 	}
+    if BapiClis.Size != -1 {
+	    end = end + 1
+    }
 	log.Infof("Will retrieve %d records, from %d to %d.", end-from, from, end-1)
 
 	of := cio.NewOutStream(BapiClis.Outfn, "")
@@ -44,12 +47,11 @@ func Ncbi(BapiClis *types.BapiClisT, ncbiClis *types.NcbiClisT) {
 		p     = &entrez.Parameters{RetMax: ncbiClis.NcbiRetmax, RetType: BapiClis.Format, RetMode: "text"}
 		bn, n int64
 	)
-	if p.RetMax > end-from {
-		p.RetMax = end - from + 1
-	}
-	log.Infof("p.RetMax: %d", p.RetMax)
+    if p.RetMax > end-from {
+       p.RetMax = end - from
+    }
 	for p.RetStart = from - 1; p.RetStart < end-1; p.RetStart += p.RetMax {
-		log.Infof("Attempting to retrieve %d records: %d-%d with %d retries.", p.RetMax, p.RetStart, p.RetMax+p.RetStart, BapiClis.Retries)
+		log.Infof("Attempting to retrieve %d records: %d-%d with %d retries.", p.RetMax, p.RetStart+1, p.RetMax+p.RetStart, BapiClis.Retries)
 		var t int
 		for t = 0; t < BapiClis.Retries; t++ {
 			buf.Reset()
