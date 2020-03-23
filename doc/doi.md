@@ -1812,7 +1812,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">209</td>
 <td style="text-align: left;">IEEE Transactions on Neural Networks and Learning Systems</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TNNLS.2019.2945111</td>
 <td style="text-align: left;">NA</td>
@@ -2100,7 +2100,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">243</td>
 <td style="text-align: left;">PROCEEDINGS OF THE IEEE</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/JPROC.2019.2905423</td>
 <td style="text-align: left;">NA</td>
@@ -2217,7 +2217,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">257</td>
 <td style="text-align: left;">IEEE Transactions on Smart Grid</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TSG.2017.2680742</td>
 <td style="text-align: left;">NA</td>
@@ -2262,7 +2262,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">263</td>
 <td style="text-align: left;">IEEE Transactions on Cybernetics</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TCYB.2019.2947859</td>
 <td style="text-align: left;">NA</td>
@@ -2271,7 +2271,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">264</td>
 <td style="text-align: left;">IEEE COMMUNICATIONS MAGAZINE</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/MCOM.2018.8466348</td>
 <td style="text-align: left;">NA</td>
@@ -2550,7 +2550,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">295</td>
 <td style="text-align: left;">IEEE Internet of Things Journal</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/JIOT.2019.2911010</td>
 <td style="text-align: left;">NA</td>
@@ -3099,7 +3099,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">357</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON EVOLUTIONARY COMPUTATION</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TEVC.2016.2592185</td>
 <td style="text-align: left;">NA</td>
@@ -3576,7 +3576,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">410</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON MEDICAL IMAGING</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TMI.2019.2951465</td>
 <td style="text-align: left;">NA</td>
@@ -3756,7 +3756,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">430</td>
 <td style="text-align: left;">IEEE Transactions on Sustainable Energy</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TSTE.2018.2789685</td>
 <td style="text-align: left;">NA</td>
@@ -3774,7 +3774,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">433</td>
 <td style="text-align: left;">IEEE SIGNAL PROCESSING MAGAZINE</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/MSP.2018.2875863</td>
 <td style="text-align: left;">NA</td>
@@ -3882,7 +3882,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">446</td>
 <td style="text-align: left;">IEEE NETWORK</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/ICESI.2019.8863033</td>
 <td style="text-align: left;">NA</td>
@@ -3891,7 +3891,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">446</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TIE.2017.2733456</td>
 <td style="text-align: left;">NA</td>
@@ -3963,7 +3963,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">456</td>
 <td style="text-align: left;">IEEE Transactions on Industrial Informatics</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TII.2015.2462803</td>
 <td style="text-align: left;">NA</td>
@@ -4161,7 +4161,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">480</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON POWER ELECTRONICS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TPEL.2018.2812882</td>
 <td style="text-align: left;">NA</td>
@@ -4719,7 +4719,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">545</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON POWER SYSTEMS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TPWRS.2018.2801121</td>
 <td style="text-align: left;">NA</td>
@@ -4755,7 +4755,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">549</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON IMAGE PROCESSING</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TIP.2019.2949929</td>
 <td style="text-align: left;">NA</td>
@@ -4854,7 +4854,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">560</td>
 <td style="text-align: left;">IEEE Journal of Selected Topics in Signal Processing</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/JSTSP.2018.2877842</td>
 <td style="text-align: left;">NA</td>
@@ -5142,7 +5142,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">592</td>
 <td style="text-align: left;">IEEE Transactions on Robotics</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TRO.2019.2917817</td>
 <td style="text-align: left;">NA</td>
@@ -5259,7 +5259,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">605</td>
 <td style="text-align: left;">IEEE Transactions on Dependable and Secure Computing</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TDSC.2015.2484326</td>
 <td style="text-align: left;">NA</td>
@@ -5313,7 +5313,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">612</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON WIRELESS COMMUNICATIONS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TWC.2018.2819653</td>
 <td style="text-align: left;">NA</td>
@@ -5502,7 +5502,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">634</td>
 <td style="text-align: left;">IEEE Transactions on Affective Computing</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TAFFC.2017.2678472</td>
 <td style="text-align: left;">NA</td>
@@ -5583,7 +5583,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">644</td>
 <td style="text-align: left;">IEEE CONTROL SYSTEMS MAGAZINE</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/MCS.2018.2866605</td>
 <td style="text-align: left;">NA</td>
@@ -6402,7 +6402,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">736</td>
 <td style="text-align: left;">IEEE Computational Intelligence Magazine</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/MCI.2018.2840660</td>
 <td style="text-align: left;">NA</td>
@@ -6654,7 +6654,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">766</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON INTELLIGENT TRANSPORTATION SYSTEMS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TITS.2018.2795381</td>
 <td style="text-align: left;">NA</td>
@@ -7671,7 +7671,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">885</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON CONTROL SYSTEMS TECHNOLOGY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TCST.2016.2643566</td>
 <td style="text-align: left;">NA</td>
@@ -7707,7 +7707,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">890</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON VEHICULAR TECHNOLOGY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TVT.2019.2909829</td>
 <td style="text-align: left;">NA</td>
@@ -7941,7 +7941,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">917</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON SIGNAL PROCESSING</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TSP.2019.2940122</td>
 <td style="text-align: left;">NA</td>
@@ -7968,7 +7968,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">920</td>
 <td style="text-align: left;">IEEE Transactions on Automation Science and Engineering</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TASE.2017.2726689</td>
 <td style="text-align: left;">NA</td>
@@ -8130,7 +8130,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">938</td>
 <td style="text-align: left;">IEEE JOURNAL OF SOLID-STATE CIRCUITS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/JSSC.2018.2884322</td>
 <td style="text-align: left;">NA</td>
@@ -8400,7 +8400,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">969</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON AUTOMATIC CONTROL</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TAC.2017.2648040</td>
 <td style="text-align: left;">NA</td>
@@ -8886,7 +8886,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1025</td>
 <td style="text-align: left;">IEEE-ASME TRANSACTIONS ON MECHATRONICS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TMECH.2019.2906887</td>
 <td style="text-align: left;">NA</td>
@@ -9462,7 +9462,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1094</td>
 <td style="text-align: left;">IEEE Transactions on Control of Network Systems</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TCNS.2017.2687824</td>
 <td style="text-align: left;">NA</td>
@@ -10038,7 +10038,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1160</td>
 <td style="text-align: left;">IEEE JOURNAL OF SELECTED TOPICS IN QUANTUM ELECTRONICS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/JSTQE.2018.2854597</td>
 <td style="text-align: left;">NA</td>
@@ -10605,7 +10605,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1226</td>
 <td style="text-align: left;">IEEE Transactions on Computational Imaging</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TCI.2018.2880326</td>
 <td style="text-align: left;">NA</td>
@@ -10866,7 +10866,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1256</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON BIOMEDICAL ENGINEERING</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TBME.2019.2951082</td>
 <td style="text-align: left;">NA</td>
@@ -10992,7 +10992,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1271</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON MOBILE COMPUTING</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TMC.2018.2842751</td>
 <td style="text-align: left;">NA</td>
@@ -11082,7 +11082,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1282</td>
 <td style="text-align: left;">IEEE INTELLIGENT SYSTEMS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/MIS.2018.012001556</td>
 <td style="text-align: left;">NA</td>
@@ -11100,7 +11100,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1283</td>
 <td style="text-align: left;">IEEE Systems Journal</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/JSYST.2016.2538082</td>
 <td style="text-align: left;">NA</td>
@@ -12279,7 +12279,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1420</td>
 <td style="text-align: left;">IEEE Transactions on Biomedical Circuits and Systems</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TBCAS.2019.2951539</td>
 <td style="text-align: left;">NA</td>
@@ -12396,7 +12396,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1435</td>
 <td style="text-align: left;">IEEE Journal of Biomedical and Health Informatics</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/JBHI.2019.2951024</td>
 <td style="text-align: left;">NA</td>
@@ -12792,7 +12792,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1478</td>
 <td style="text-align: left;">JOURNAL OF LIGHTWAVE TECHNOLOGY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/JLT.2018.2880957</td>
 <td style="text-align: left;">NA</td>
@@ -13260,7 +13260,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1534</td>
 <td style="text-align: left;">IEEE Access</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/ACCESS.2019.2933614</td>
 <td style="text-align: left;">NA</td>
@@ -13368,7 +13368,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1547</td>
 <td style="text-align: left;">SIGNAL PROCESSING</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TSP.2019.2940122</td>
 <td style="text-align: left;">NA</td>
@@ -15393,7 +15393,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1786</td>
 <td style="text-align: left;">IEEE PERVASIVE COMPUTING</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/MPRV.2017.3971134</td>
 <td style="text-align: left;">NA</td>
@@ -15951,7 +15951,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1851</td>
 <td style="text-align: left;">IEEE ELECTRON DEVICE LETTERS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/LED.2018.2844545</td>
 <td style="text-align: left;">NA</td>
@@ -17400,7 +17400,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2022</td>
 <td style="text-align: left;">IEEE-ACM TRANSACTIONS ON NETWORKING</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TNET.2017.2728638</td>
 <td style="text-align: left;">NA</td>
@@ -17769,7 +17769,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2063</td>
 <td style="text-align: left;">COMPUTER</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/MC.2018.2883280</td>
 <td style="text-align: left;">NA</td>
@@ -18156,7 +18156,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2108</td>
 <td style="text-align: left;">IEEE Geoscience and Remote Sensing Letters</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/LGRS.2018.2881102</td>
 <td style="text-align: left;">NA</td>
@@ -18498,7 +18498,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2149</td>
 <td style="text-align: left;">IEEE Antennas and Wireless Propagation Letters</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/LAWP.2016.2561903</td>
 <td style="text-align: left;">NA</td>
@@ -19110,7 +19110,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2217</td>
 <td style="text-align: left;">IEEE COMMUNICATIONS LETTERS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/LCOMM.2018.2879476</td>
 <td style="text-align: left;">NA</td>
@@ -19389,7 +19389,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2253</td>
 <td style="text-align: left;">IEEE Journal on Emerging and Selected Topics in Circuits and Systems</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/JETCAS.2018.2818185</td>
 <td style="text-align: left;">NA</td>
@@ -19848,7 +19848,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2307</td>
 <td style="text-align: left;">IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/JSTARS.2019.2910565</td>
 <td style="text-align: left;">NA</td>
@@ -20415,7 +20415,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2373</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON INDUSTRY APPLICATIONS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TIA.2018.2804322</td>
 <td style="text-align: left;">NA</td>
@@ -20559,7 +20559,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2388</td>
 <td style="text-align: left;">IEEE Transactions on Human-Machine Systems</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/THMS.2018.2791562</td>
 <td style="text-align: left;">NA</td>
@@ -21270,7 +21270,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2471</td>
 <td style="text-align: left;">IEEE SIGNAL PROCESSING LETTERS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/LSP.2018.2878066</td>
 <td style="text-align: left;">NA</td>
@@ -21981,7 +21981,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2554</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON INFORMATION THEORY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TIT.2018.2851224</td>
 <td style="text-align: left;">NA</td>
@@ -22746,7 +22746,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2643</td>
 <td style="text-align: left;">IEEE Transactions on Signal and Information Processing over Networks</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TSIPN.2017.2743561</td>
 <td style="text-align: left;">NA</td>
@@ -22989,7 +22989,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2674</td>
 <td style="text-align: left;">IEEE TRANSACTIONS ON COMPUTERS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TC.2018.2874662</td>
 <td style="text-align: left;">NA</td>
@@ -23808,7 +23808,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2771</td>
 <td style="text-align: left;">IEEE SENSORS JOURNAL</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/JSEN.2018.2880576</td>
 <td style="text-align: left;">NA</td>
@@ -24474,7 +24474,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2846</td>
 <td style="text-align: left;">IEEE Transactions on Terahertz Science and Technology</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/TTHZ.2017.2771754</td>
 <td style="text-align: left;">NA</td>
@@ -24780,7 +24780,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2883</td>
 <td style="text-align: left;">IEEE SPECTRUM</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1109/MSPEC.2017.7864754</td>
 <td style="text-align: left;">NA</td>

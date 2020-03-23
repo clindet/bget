@@ -1,6 +1,7 @@
 2020-03-23 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* support cellimagelibrary.org (10.7295) in doi pool
+		* support ieeexplore.ieee.org (10.1109) in doi pool
 		* add GWAS Catalog db links: `bget key db/gwas-catalog -n`
 		* rename --pmc flag to --enable-pmc in `bget doi`
 		* add --enable-scihub flag in `bget doi`

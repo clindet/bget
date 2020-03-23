@@ -106,6 +106,13 @@ func PmcSpider(opt *DoiSpiderOpt) (urls []string) {
 	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	if opt.FullText {
+		c.OnHTML(".links a", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			if strings.Contains(link, "pdf") {
+				link = "https://www.ncbi.nlm.nih.gov" + link
+				urls = append(urls, link)
+			}
+		})
 		c.OnHTML(fmt.Sprintf(".doi b:contains('%s')", opt.Doi), func(e *colly.HTMLElement) {
 			e.DOM.Parents().Filter(".rslt").Find(".aux .links a.view").Each(func(i int, s *goquery.Selection) {
 				link, _ := s.Attr("href")

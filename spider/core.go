@@ -3,6 +3,7 @@ package spider
 import (
 	"fmt"
 	"net/url"
+	"path"
 	"strings"
 	"time"
 
@@ -522,6 +523,39 @@ func CellimageLibrarySpider(opt *DoiSpiderOpt) (urls []string) {
 	})
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
+	})
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func IeeexploreSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "ieeexplore.ieee.org"),
+		colly.MaxDepth(2),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	c.OnHTML("a.download_menu_anchor", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		if strings.Contains(link, ".zip") {
+			urls = append(urls, linkFilter(link, opt.URL))
+		}
+	})
+	var done bool
+	c.OnResponse(func(r *colly.Response) {
+		if done {
+			return
+		}
+		done = true
+		link := fmt.Sprintf("/stamp/stamp.jsp?arnumber=%s", path.Base(r.Request.URL.String()))
+		c.OnHTML("iframe", func(e *colly.HTMLElement) {
+			link := e.Attr("src")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+		c.Visit(linkFilter(link, opt.URL))
 	})
 	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls

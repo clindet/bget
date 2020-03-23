@@ -160,5 +160,6 @@ func init() {
   echo ${dois}
   bget doi ${dois}
   bget doi 10.1080/15548627.2018.1505155 --proxy http://username:password@hostname:port
-  bget doi 10.1182/blood.2019000200 --enable-scihub`, exampleXML2Json)
+  bget doi 10.1182/blood.2019000200 --enable-scihub
+  bget doi 10.1109/JPROC.2019.2905423 -n`, exampleXML2Json)
 }
