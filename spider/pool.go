@@ -57,6 +57,7 @@ var DoiSpidersPool = map[string]func(opt *DoiSpiderOpt) []string{
 	"10.5578":  KosuyoluheartjournalSpider,
 	"10.5665":  OupComSpider,
 	"10.6084":  FigshareSpider,
+	"10.7295":  CellimageLibrarySpider,
 	"10.7554":  ElifeSpider,
 	"10.7717":  PeerjSpider,
 	"10.12890": EjcrimSpider,

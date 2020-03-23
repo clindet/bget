@@ -35,6 +35,7 @@ func init() {
 	bioToolsCmd.Flags().StringVarP(&bioToolsEndp.DataFormat, "dfmt", "", "", `Fuzzy search over input and output for EDAM Format (term)`)
 	bioToolsCmd.Flags().StringVarP(&bioToolsEndp.OutputFormat, "ofmt", "", "", `Fuzzy search over output for EDAM Format (term)`)
 	bioToolsCmd.Flags().StringVarP(&bioToolsEndp.Publication, "publication", "", "", `Fuzzy search over publication (DOI, PMID, PMCID, publication type and tool version)`)
+	bioToolsCmd.Flags().IntVarP(&BapiClis.Size, "page", "", 1, "Page index.")
 
 	bioToolsCmd.Example = `  # query item detail
   bget api biots --tool signalp

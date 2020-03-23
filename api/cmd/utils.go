@@ -60,7 +60,5 @@ func setGlobalFlag(cmd *cobra.Command, bapiClis *types.BapiClisT) {
 	cmd.PersistentFlags().IntVarP(&BapiClis.Timeout, "timeout", "", 35, "Set the timeout of per request.")
 	cmd.PersistentFlags().IntVarP(&BapiClis.RetSleepTime, "retries-sleep-time", "", 5, "Sleep time after one retry.")
 	cmd.PersistentFlags().StringVarP(&BapiClis.Query, "query", "q", "", "Query specifies the search query for record retrieval (required).")
-	cmd.PersistentFlags().IntVarP(&BapiClis.From, "from", "", -1, "Parameters of API control the start item of retrived data.")
-	cmd.PersistentFlags().IntVarP(&BapiClis.Size, "size", "", -1, "Parameters of API control the lenth of retrived data. Default is auto determined.")
 	cmd.PersistentFlags().StringVarP(&BapiClis.Extra, "extra", "", "", "Extra query parameters.")
 }

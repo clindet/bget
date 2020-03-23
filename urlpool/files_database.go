@@ -155,8 +155,8 @@ var annovarLinks = []bgetFilesURLType{
 	},
 	{
 		Name:     "db/denovo_db",
-		URL:      []string{"http://denovo-db.gs.washington.edu/denovo-db.variants.v.{{version}}.tsv.gz"},
-		Versions: []string{"1.5"},
+		URL:      []string{"http://denovo-db.gs.washington.edu/denovo-db.non-ssc-samples.variants.tsv.gz", "http://denovo-db.gs.washington.edu/denovo-db.non-ssc-samples.variants.vcf.gz", "http://denovo-db.gs.washington.edu/denovo-db.ssc-samples.variants.tsv.gz", "http://denovo-db.gs.washington.edu/denovo-db.ssc-samples.variants.vcf.gz", "http://denovo-db.gs.washington.edu/denovo-db.v.{{version}}.pdf"},
+		Versions: []string{"1.6.1"},
 	},
 	{
 		Name:     "db/dgidb",

@@ -41,6 +41,8 @@ func init() {
 
 	cligovCmd.Flags().StringVarP(&cligovEndp.Fields, "fields", "", "", `Specifies which fields to return results for in a Study Fields query.`)
 	cligovCmd.Flags().StringVarP(&cligovEndp.Field, "field", "", "", `Specifies which field to collect values for in a Field Values query.`)
+	cligovCmd.Flags().IntVarP(&BapiClis.From, "from", "", -1, "Parameters of API control the start item of retrived data.")
+	cligovCmd.Flags().IntVarP(&BapiClis.Size, "size", "", -1, "Parameters of API control the lenth of retrived data. Default is auto determined.")
 
 	cligovCmd.Example = `  # returns the date when the ClinicalTrials.gov dataset was posted.
   bget api cligov --info-dat-vers

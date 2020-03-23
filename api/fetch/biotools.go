@@ -59,7 +59,7 @@ func setBioToolsQuerySuffix(endpoints *types.BioToolsEndpoints, BapiClis *types.
 		suffixList = append(suffixList, "format="+BapiClis.Format)
 	}
 	if BapiClis.Size != -1 {
-		suffixList = append(suffixList, "page="+strconv.Itoa(BapiClis.From+BapiClis.Size))
+		suffixList = append(suffixList, "page="+strconv.Itoa(BapiClis.Size))
 	}
 	if BapiClis.Extra != "" {
 		suffixList = append(suffixList, BapiClis.Extra)

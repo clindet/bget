@@ -506,3 +506,23 @@ func JournalsApsSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
+
+func CellimageLibrarySpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.cellimagelibrary.org"),
+		colly.MaxDepth(2),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnHTML("a.download_menu_anchor", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		if strings.Contains(link, ".zip") {
+			urls = append(urls, linkFilter(link, opt.URL))
+		}
+	})
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
