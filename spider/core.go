@@ -2,6 +2,7 @@ package spider
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 	"path"
 	"strings"
@@ -495,12 +496,14 @@ func JournalsApsSpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
-	c.OnHTML(".article-nav-actions a", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		if strings.Contains(link, "/pdf/") {
-			urls = append(urls, linkFilter(link, opt.URL))
-		}
-	})
+	if opt.FullText {
+		c.OnHTML(".article-nav-actions a", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			if strings.Contains(link, "/pdf/") {
+				urls = append(urls, linkFilter(link, opt.URL))
+			}
+		})
+	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
@@ -515,12 +518,14 @@ func CellimageLibrarySpider(opt *DoiSpiderOpt) (urls []string) {
 	)
 	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
-	c.OnHTML("a.download_menu_anchor", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		if strings.Contains(link, ".zip") {
-			urls = append(urls, linkFilter(link, opt.URL))
-		}
-	})
+	if opt.FullText {
+		c.OnHTML("a.download_menu_anchor", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			if strings.Contains(link, ".zip") {
+				urls = append(urls, linkFilter(link, opt.URL))
+			}
+		})
+	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
@@ -538,12 +543,14 @@ func IeeexploreSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.OnHTML("a.download_menu_anchor", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		if strings.Contains(link, ".zip") {
-			urls = append(urls, linkFilter(link, opt.URL))
-		}
-	})
+	if opt.FullText {
+		c.OnHTML("a.download_menu_anchor", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			if strings.Contains(link, ".zip") {
+				urls = append(urls, linkFilter(link, opt.URL))
+			}
+		})
+	}
 	var done bool
 	c.OnResponse(func(r *colly.Response) {
 		if done {
@@ -558,5 +565,59 @@ func IeeexploreSpider(opt *DoiSpiderOpt) (urls []string) {
 		c.Visit(linkFilter(link, opt.URL))
 	})
 	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func SagepubComSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "journals.sagepub.com"),
+		colly.MaxDepth(2),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML(".pdf-access a", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			if strings.Contains(link, "/pdf/") {
+				urls = append(urls, linkFilter(link, opt.URL))
+			}
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	if len(urls) == 0 {
+		urls = append(urls, "http://sage.cnpereading.com/paragraph/download/"+opt.Doi)
+	}
+	return urls
+}
+
+func LwwComSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "journals.lww.com", "links.lww.com", "download.lww.com"),
+		colly.MaxDepth(2),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("div.ejp-article-wrapper #js-ejp-article-tools", func(e *colly.HTMLElement) {
+			link := e.Attr("data-pdf-url")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	if opt.Supplementary {
+		c.OnHTML("#ej-article-sam-container a", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			client := cnet.NewHTTPClient(opt.Timeout, opt.Proxy)
+			req, _ := http.NewRequest("HEAD", link, nil)
+			resp, _ := client.Do(req)
+			urls = append(urls, resp.Request.URL.String())
+		})
+	}
+	c.Visit(fmt.Sprintf("https://journals.lww.com/%s", opt.Doi))
 	return urls
 }
