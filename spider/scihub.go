@@ -9,8 +9,8 @@ import (
 	stringo "github.com/openbiox/ligo/stringo"
 )
 
-// Scihucnet access http://sci-hub.tw/ files via spider
-func Scihucnet(opt *DoiSpiderOpt) (urls []string) {
+// ScihupSpider access http://sci-hub.tw/ files via spider
+func ScihupSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := colly.NewCollector(
 		colly.AllowedDomains("doi.org", "sci-hub.tw"),
 		colly.MaxDepth(1),

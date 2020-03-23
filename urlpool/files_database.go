@@ -441,4 +441,8 @@ var annovarLinks = []bgetFilesURLType{
 		Name: "db/clingov",
 		URL:  []string{"https://ClinicalTrials.gov/AllAPIJSON.zip"},
 	},
+	{
+		Name: "db/gwas-catalog",
+		URL:  []string{"https://www.ebi.ac.uk/gwas/api/search/downloads/full", "https://www.ebi.ac.uk/gwas/api/search/downloads/alternative", "https://www.ebi.ac.uk/gwas/api/search/downloads/studies", "https://www.ebi.ac.uk/gwas/api/search/downloads/studies_alternative", "https://www.ebi.ac.uk/gwas/api/search/downloads/ancestry"},
+	},
 }

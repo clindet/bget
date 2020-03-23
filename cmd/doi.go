@@ -20,6 +20,7 @@ var fullText string
 var suppl bool
 var pmc bool
 var universeSpider bool
+var scihub bool
 
 var DoiCmd = &cobra.Command{
 	Use:   "doi [doi1 doi2 doi3...]",
@@ -97,6 +98,16 @@ func doiSpiders(doi string) (urls []string) {
 		urls = spider.PmcSpider(&opt)
 		if len(urls) > 0 && !suppl {
 			return urls
+		} else if len(urls) == 0 {
+			return
+		}
+	}
+	if len(urls) == 0 && scihub {
+		urls = spider.ScihupSpider(&opt)
+		if len(urls) > 0 && !suppl {
+			return urls
+		} else if len(urls) == 0 {
+			return
 		}
 	}
 	if len(urls) > 0 {
@@ -133,8 +144,9 @@ func doiSpiders(doi string) (urls []string) {
 }
 
 func init() {
-	DoiCmd.Flags().BoolVarP(&universeSpider, "universe", "", true, "try universe spider.")
-	DoiCmd.Flags().BoolVarP(&pmc, "pmc", "", false, "try PMC database.")
+	universeSpider = true
+	DoiCmd.Flags().BoolVarP(&scihub, "enable-scihub", "", false, "enable try scihub spider.")
+	DoiCmd.Flags().BoolVarP(&pmc, "enable-pmc", "", false, "enable try PMC database.")
 	DoiCmd.Flags().StringVarP(&fullText, "full-text", "", "true", "access full text.")
 	DoiCmd.Flags().BoolVarP(&suppl, "suppl", "", false, "access supplementary files.")
 	setGlobalFlag(DoiCmd, &bgetClis)
@@ -147,5 +159,6 @@ func init() {
   dois=%s
   echo ${dois}
   bget doi ${dois}
-  bget doi 10.1080/15548627.2018.1505155 --proxy http://username:password@hostname:port`, exampleXML2Json)
+  bget doi 10.1080/15548627.2018.1505155 --proxy http://username:password@hostname:port
+  bget doi 10.1182/blood.2019000200 --enable-scihub`, exampleXML2Json)
 }
