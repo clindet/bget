@@ -21,7 +21,7 @@ func Cligov(endpoints *types.CligovEndpoints, BapiClis *types.BapiClisT, f func(
 		return false
 	}
 	f()
-	queryAPI("clinicaltrials.gov", url, BapiClis, netopt)
+	GetReq("clinicaltrials.gov", url, BapiClis, netopt)
 
 	return true
 }

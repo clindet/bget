@@ -32,7 +32,20 @@ func setNetOpt(bapiClis *types.BapiClisT) *cnet.Params {
 	return netopt
 }
 
-func queryAPI(siteName, url string, bapiClis *types.BapiClisT, netopt *cnet.Params) {
+func PostReq(siteName, url string, data []byte, bapiClis *types.BapiClisT, netopt *cnet.Params) {
+	method := "POST"
+	client := cnet.NewHTTPClient(bapiClis.Timeout, bapiClis.Proxy)
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(data))
+	cnet.SetDefaultReqHeader(req)
+	if err != nil {
+		log.Warn(err)
+	}
+	log.Infof("Query %s API: %s.", siteName, url)
+	log.Infof("POST Data:\n%v", string(data))
+	query(client, req, bapiClis, netopt)
+}
+
+func GetReq(siteName, url string, bapiClis *types.BapiClisT, netopt *cnet.Params) {
 	method := "GET"
 	client := cnet.NewHTTPClient(bapiClis.Timeout, bapiClis.Proxy)
 	req, err := http.NewRequest(method, url, nil)
@@ -41,8 +54,13 @@ func queryAPI(siteName, url string, bapiClis *types.BapiClisT, netopt *cnet.Para
 		log.Warn(err)
 	}
 	log.Infof("Query %s API: %s.", siteName, url)
+	query(client, req, bapiClis, netopt)
+}
+
+func query(client *http.Client, req *http.Request, bapiClis *types.BapiClisT, netopt *cnet.Params) {
 	resp, err := cnet.RetriesClient(client, req, netopt)
 	if err != nil {
+		log.Warnln(err)
 		return
 	}
 	if resp != nil {
@@ -51,7 +69,11 @@ func queryAPI(siteName, url string, bapiClis *types.BapiClisT, netopt *cnet.Para
 		return
 	}
 	of := cio.NewOutStream(bapiClis.Outfn, req.URL.String())
-	buf, _ := ioutil.ReadAll(resp.Body)
+	buf, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Warnln(err)
+		return
+	}
 	if bapiClis.PrettyJSON {
 		indent := ""
 		for i := 0; i < bapiClis.Indent; i++ {

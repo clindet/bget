@@ -21,7 +21,7 @@ func BioTools(endpoints *types.BioToolsEndpoints, BapiClis *types.BapiClisT, f f
 		return false
 	}
 	f()
-	queryAPI("bio.tools", url, BapiClis, netopt)
+	GetReq("bio.tools", url, BapiClis, netopt)
 
 	return true
 }

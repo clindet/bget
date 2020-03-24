@@ -38,11 +38,12 @@ func Execute() {
 
 func init() {
 	BapiClis.HelpFlags = true
-	BapiCmd.AddCommand(bioToolsCmd)
-	BapiCmd.AddCommand(ncbiCmd)
-	BapiCmd.AddCommand(gdcCmd)
-	BapiCmd.AddCommand(dataset2toolsCmd)
-	BapiCmd.AddCommand(cligovCmd)
+	BapiCmd.AddCommand(BioToolsCmd)
+	BapiCmd.AddCommand(MgRastCmd)
+	BapiCmd.AddCommand(NcbiCmd)
+	BapiCmd.AddCommand(GdcCmd)
+	BapiCmd.AddCommand(Dataset2toolsCmd)
+	BapiCmd.AddCommand(CligovCmd)
 	wd, _ := os.Getwd()
 
 	BapiCmd.PersistentFlags().StringVarP(&(BapiClis.TaskID), "task-id", "k", stringo.RandString(15), "Task ID (random).")

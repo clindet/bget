@@ -14,16 +14,16 @@ import (
 
 var ncbiClis types.NcbiClisT
 
-var ncbiCmd = &cobra.Command{
+var NcbiCmd = &cobra.Command{
 	Use:   "ncbi",
 	Short: "Query ncbi website APIs.",
 	Long:  `Query ncbi website APIs.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		ncbiCmdRunOptions(cmd, args)
+		NcbiCmdRunOptions(cmd, args)
 	},
 }
 
-func ncbiCmdRunOptions(cmd *cobra.Command, args []string) {
+func NcbiCmdRunOptions(cmd *cobra.Command, args []string) {
 	var stdin []byte
 	var err error
 	if _, hasStdin := flag.CheckStdInFlag(cmd); hasStdin {
@@ -51,15 +51,16 @@ func ncbiCmdRunOptions(cmd *cobra.Command, args []string) {
 }
 
 func init() {
-	setGlobalFlag(ncbiCmd, &BapiClis)
-	ncbiCmd.Flags().StringVarP(&ncbiClis.NcbiDB, "db", "d", "pubmed", "Db specifies the database to search")
-	ncbiCmd.Flags().IntVarP(&ncbiClis.NcbiRetmax, "per-size", "m", 100, "Retmax specifies the number of records to be retrieved per request.")
-	ncbiCmd.Flags().IntVarP(&BapiClis.Thread, "thread", "t", 2, "Thread to process.")
-	ncbiCmd.Flags().StringVarP(&BapiClis.Email, "email", "e", "your_email@domain.com", "Email specifies the email address to be sent to the server (NCBI website is required).")
-	ncbiCmd.Flags().IntVarP(&BapiClis.From, "from", "", -1, "Parameters of API control the start item of retrived data.")
-	ncbiCmd.Flags().IntVarP(&BapiClis.Size, "size", "", -1, "Parameters of API control the lenth of retrived data. Default is auto determined.")
+	setGlobalFlag(NcbiCmd, &BapiClis)
+	NcbiCmd.Flags().StringVarP(&ncbiClis.NcbiDB, "db", "d", "pubmed", "Db specifies the database to search")
+	NcbiCmd.Flags().IntVarP(&ncbiClis.NcbiRetmax, "per-size", "m", 100, "Retmax specifies the number of records to be retrieved per request.")
+	NcbiCmd.Flags().IntVarP(&BapiClis.Thread, "thread", "t", 2, "Thread to process.")
+	NcbiCmd.Flags().StringVarP(&BapiClis.Email, "email", "e", "your_email@domain.com", "Email specifies the email address to be sent to the server (NCBI website is required).")
+	NcbiCmd.Flags().IntVarP(&BapiClis.From, "from", "", -1, "Parameters of API control the start item of retrived data.")
+	NcbiCmd.Flags().IntVarP(&BapiClis.Size, "size", "", -1, "Parameters of API control the lenth of retrived data. Default is auto determined.")
+	NcbiCmd.Flags().StringVarP(&BapiClis.Query, "query", "q", "", "Query specifies the search query for record retrieval (required).")
 
-	ncbiCmd.Example = `  # query pubmed with 'B-ALL'
+	NcbiCmd.Example = `  # query pubmed with 'B-ALL'
   bget api ncbi -d pubmed -q B-ALL --format XML -e your_email@domain.com
 
   # query pubmed and convert it to json format

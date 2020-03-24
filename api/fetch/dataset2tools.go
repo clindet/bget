@@ -14,7 +14,7 @@ func Dataset2tools(endpoints *types.Datasets2toolsEndpoints, BapiClis *types.Bap
 	setLog(BapiClis)
 	netopt := setNetOpt(BapiClis)
 	url := Dataset2toolsHost + setDatasets2toolsQuerySuffix(endpoints, BapiClis)
-	queryAPI("datasets2tools", url, BapiClis, netopt)
+	GetReq("datasets2tools", url, BapiClis, netopt)
 	return
 }
 

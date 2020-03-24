@@ -90,12 +90,13 @@ func init() {
 	rootCmd.AddCommand(DoiCmd)
 	rootCmd.AddCommand(KeyCmd)
 	rootCmd.AddCommand(SeqCmd)
-	rootCmd.AddCommand(api.BapiCmd)
-	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.Clean), "clean", "", false, "remove _download and _log in current dir.")
+	rootCmd.Flags().BoolVarP(&(bgetClis.Clean), "clean", "", false, "remove _download and _log in current dir.")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.TaskID), "task-id", "k", stringo.RandString(15), "task ID (default is random).")
 	rootCmd.PersistentFlags().StringVarP(&(bgetClis.LogDir), "log-dir", "", path.Join(wd, "_log"), "log dir.")
 	rootCmd.PersistentFlags().IntVarP(&(bgetClis.Verbose), "verbose", "", 1, "verbose level (0:no output, 1: basic level, 2: with env info)")
 	rootCmd.PersistentFlags().BoolVarP(&(bgetClis.SaveLog), "save-log", "", false, "Save log to file.")
+
+	rootCmd.AddCommand(api.BapiCmd)
 	bgetClis.Env = make(map[string]string)
 	bgetClis.Env["osType"] = runtime.GOOS
 	bgetClis.Env["wd"] = wd
