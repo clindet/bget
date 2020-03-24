@@ -422,8 +422,10 @@ func HaematologicaSpider(opt *DoiSpiderOpt) (urls []string) {
 // WileyComSpider access https://onlinelibrary.wiley.com files via spider
 func WileyComSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := colly.NewCollector(
-		colly.AllowedDomains("doi.org", "onlinelibrary.wiley.com", "doi.wiley.com", "aasldpubs.onlinelibrary.wiley.com", "currentprotocols.onlinelibrary.wiley.com",
-			"bpspubs.onlinelibrary.wiley.com", "stemcellsjournals.onlinelibrary.wiley.com"),
+		colly.AllowedDomains("doi.org", "onlinelibrary.wiley.com", "doi.wiley.com",
+			"aasldpubs.onlinelibrary.wiley.com", "currentprotocols.onlinelibrary.wiley.com",
+			"bpspubs.onlinelibrary.wiley.com", "stemcellsjournals.onlinelibrary.wiley.com",
+			"agupubs.onlinelibrary.wiley.com"),
 		colly.MaxDepth(1),
 	)
 	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)

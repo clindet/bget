@@ -1,12 +1,33 @@
 2020-03-24 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
-		* support journals.lww.com (10.1097) in doi pool
-		* support journals.sagepub.com (10.1177) in doi pool
+		* support journals.lww.com (10.1097)
+		* support journals.sagepub.com (10.1177)
+		* support www.liebertpub.com (10.1089)
+		* support ard.bmj.com, adc.bmj.com, casereports.bmj.com, ebm.bmj.com,
+		gh.bmj.com, informatics.bmj.com, innovations.bmj.com,
+		bmjleader.bmj.com, militaryhealth.bmj.com, neurologyopen.bmj.com,
+		nutrition.bmj.com, bmjopen.bmj.com, drc.bmj.com,
+		bmjopengastro.bmj.com, bmjophth.bmj.com, qir.bmj.com,
+		bmjopenrespres.bmj.com, openscience.bmj.com, bmjopensem.bmj.com,
+		qualitysafety.bmj.com, bmjpaedsopen.bmj.com, srh.bmj.com,
+		stel.bmj.com, spcare.bmj.com, sit.bmj.com, bjo.bmj.com, bjsm.bmj.com,
+		considerations.bmj.com, dtb.bmj.com, ep.bmj.com, emj.bmj.com,
+		esmoopen.bmj.com, ejhp.bmj.com, ebmh.bmj.com, ebn.bmj.com,
+		fmch.bmj.com, fn.bmj.com, fg.bmj.com, gpsych.bmj.com, heart.bmj.com,
+		heartasia.bmj.com, injuryprevention.bmj.com, inpractice.bmj.com,
+		ihj.bmj.com, ijgc.bmj.com, jitc.bmj.com, jcp.bmj.com, jech.bmj.com,
+		jim.bmj.com, jisakos.bmj.com, jme.bmj.com, jmg.bmj.com, jnnp.bmj.com,
+		jnis.bmj.com, lupus.bmj.com, mh.bmj.com, oem.bmj.com,
+		openheart.bmj.com, pmj.bmj.com, pn.bmj.com, rapm.bmj.com,
+		rmdopen.bmj.com, sti.bmj.com, svn.bmj.com, thorax.bmj.com,
+		tobaccocontrol.bmj.com, tsaco.bmj.com, veterinaryrecord.bmj.com,
+		vetrecordcasereports.bmj.com, vetrecordopen.bmj.com, wjps.bmj.com
+		(10.1136)
 
 2020-03-23 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
-		* support cellimagelibrary.org (10.7295) in doi pool
-		* support ieeexplore.ieee.org (10.1109) in doi pool
+		* support cellimagelibrary.org (10.7295)
+		* support ieeexplore.ieee.org (10.1109)
 		* add GWAS Catalog db links: `bget key db/gwas-catalog -n`
 		* rename --pmc flag to --enable-pmc in `bget doi`
 		* add --enable-scihub flag in `bget doi`

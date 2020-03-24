@@ -414,8 +414,7 @@ func TandfonlineSpider(opt *DoiSpiderOpt) (urls []string) {
 // BmjComSpider access www.bmj.com files via spider
 func BmjComSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := colly.NewCollector(
-		colly.AllowedDomains("doi.org", "www.bmj.com", "gut.bmj.com"),
-		colly.MaxDepth(1),
+		colly.AllowedDomains("doi.org", "ard.bmj.com", "adc.bmj.com", "casereports.bmj.com", "ebm.bmj.com", "gh.bmj.com", "informatics.bmj.com", "innovations.bmj.com", "bmjleader.bmj.com", "militaryhealth.bmj.com", "neurologyopen.bmj.com", "nutrition.bmj.com", "bmjopen.bmj.com", "drc.bmj.com", "bmjopengastro.bmj.com", "bmjophth.bmj.com", "qir.bmj.com", "bmjopenrespres.bmj.com", "openscience.bmj.com", "bmjopensem.bmj.com", "qualitysafety.bmj.com", "bmjpaedsopen.bmj.com", "srh.bmj.com", "stel.bmj.com", "spcare.bmj.com", "sit.bmj.com", "bjo.bmj.com", "bjsm.bmj.com", "considerations.bmj.com", "dtb.bmj.com", "ep.bmj.com", "emj.bmj.com", "esmoopen.bmj.com", "ejhp.bmj.com", "ebmh.bmj.com", "ebn.bmj.com", "fmch.bmj.com", "fn.bmj.com", "fg.bmj.com", "gpsych.bmj.com", "gut.bmj.com", "heart.bmj.com", "heartasia.bmj.com", "injuryprevention.bmj.com", "inpractice.bmj.com", "ihj.bmj.com", "ijgc.bmj.com", "jitc.bmj.com", "jcp.bmj.com", "jech.bmj.com", "jim.bmj.com", "jisakos.bmj.com", "jme.bmj.com", "jmg.bmj.com", "jnnp.bmj.com", "jnis.bmj.com", "lupus.bmj.com", "mh.bmj.com", "oem.bmj.com", "openheart.bmj.com", "pmj.bmj.com", "pn.bmj.com", "rapm.bmj.com", "rmdopen.bmj.com", "sti.bmj.com", "svn.bmj.com", "www.bmj.com", "thorax.bmj.com", "tobaccocontrol.bmj.com", "tsaco.bmj.com", "veterinaryrecord.bmj.com", "vetrecordcasereports.bmj.com", "vetrecordopen.bmj.com", "wjps.bmj.com"),
 	)
 	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
@@ -423,13 +422,12 @@ func BmjComSpider(opt *DoiSpiderOpt) (urls []string) {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
 	}
 	fulltextUrl := ""
-	if opt.URL.Hostname() == "gut.bmj.com" {
+	if opt.URL.Hostname() != "www.bmj.com" {
 		if opt.FullText {
 			c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
 				urls = append(urls, e.Attr("content"))
 			})
 		}
-
 	} else {
 		c.OnHTML("a.pdf-link[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -619,5 +617,28 @@ func LwwComSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	c.Visit(fmt.Sprintf("https://journals.lww.com/%s", opt.Doi))
+	return urls
+}
+
+func LiebertpubSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.liebertpub.com"),
+		colly.MaxDepth(2),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		urls = append(urls, linkFilter("/doi/pdfplus/"+opt.Doi, opt.URL))
+	}
+	if opt.Supplementary {
+		c.OnHTML("a.ext-link", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	c.Visit(fmt.Sprintf("https://www.liebertpub.com/doi/%s", opt.Doi))
 	return urls
 }

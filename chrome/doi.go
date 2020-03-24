@@ -9,7 +9,6 @@ import (
 	glog "github.com/openbiox/ligo/log"
 	stringo "github.com/openbiox/ligo/stringo"
 
-	"github.com/chromedp/chromedp"
 	cdp "github.com/chromedp/chromedp"
 )
 
@@ -20,9 +19,9 @@ func DoiSupplURLs(url string, timeout time.Duration, proxy string) []string {
 	// create context
 	o := append(cdp.DefaultExecAllocatorOptions[:],
 		//... any options here
-		chromedp.ProxyServer(proxy),
+		cdp.ProxyServer(proxy),
 	)
-	cx, cancel := chromedp.NewExecAllocator(context.Background(), o...)
+	cx, cancel := cdp.NewExecAllocator(context.Background(), o...)
 	ctx, cancel := cdp.NewContext(cx)
 	ctx, cancel = context.WithTimeout(ctx, timeout)
 	defer cancel()
