@@ -642,3 +642,151 @@ func LiebertpubSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.Visit(fmt.Sprintf("https://www.liebertpub.com/doi/%s", opt.Doi))
 	return urls
 }
+
+func PhysiologyOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	if opt.FullText {
+		urls = append(urls, linkFilter("/doi/pdfplus/"+opt.Doi, opt.URL))
+	}
+	return urls
+}
+
+func RoyalsocietypublishingOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	if opt.FullText {
+		urls = append(urls, linkFilter("/doi/pdf/"+opt.Doi, opt.URL))
+	}
+	return urls
+}
+
+func AmetsocOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	if opt.FullText {
+		urls = append(urls, linkFilter("/doi/pdf/"+opt.Doi, opt.URL))
+	}
+	return urls
+}
+
+func AmegroupsSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "tlcr.amegroups.com"),
+		colly.MaxDepth(2),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("li a.pdf", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			link = strings.ReplaceAll(link, "view", "download")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func JmirOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "tlcr.amegroups.com"),
+		colly.MaxDepth(2),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		link := opt.URL.String()
+		urls = append(urls, link+"/pdf")
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func ThiemeConnectDeSpider(opt *DoiSpiderOpt) (urls []string) {
+	if opt.FullText {
+		link := opt.URL.String()
+		link = strings.ReplaceAll(link, "/abstract/", "/pdf/")
+		urls = append(urls, link+".pdf")
+	}
+	return urls
+}
+
+func UchicagoEduSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.journals.uchicago.edu"),
+		colly.MaxDepth(2),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		link := opt.URL.String()
+		link = strings.ReplaceAll(link, "/doi/", "/doi/pdfplus/")
+		urls = append(urls, link)
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func AcmOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	if opt.FullText {
+		link := opt.URL.String()
+		link = strings.ReplaceAll(link, "/doi/", "/doi/pdf/")
+		urls = append(urls, link+"?download=true")
+	}
+	return urls
+}
+
+/*func DegruyterComSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.degruyter.com"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+			link := e.Attr("content")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}*/
+
+func FuturemedicineSpider(opt *DoiSpiderOpt) (urls []string) {
+	if opt.FullText {
+		link := opt.URL.String()
+		link = strings.ReplaceAll(link, "/doi/", "/doi/pdfplus/")
+		urls = append(urls, link)
+	}
+	return urls
+}
+
+func ThnoOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.thno.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("a.textbutton", func(e *colly.HTMLElement) {
+			link := "/" + e.Attr("href")
+			if strings.Contains(link, ".pdf") {
+				urls = append(urls, linkFilter(link, opt.URL))
+			}
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}

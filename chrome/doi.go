@@ -2,6 +2,7 @@ package chrome
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -9,6 +10,7 @@ import (
 	glog "github.com/openbiox/ligo/log"
 	stringo "github.com/openbiox/ligo/stringo"
 
+	"github.com/chromedp/chromedp"
 	cdp "github.com/chromedp/chromedp"
 )
 
@@ -136,3 +138,53 @@ func visibleWiley(url string, ctx context.Context) cdp.Tasks {
     url := "https://www.sciencedirect.com/science/article/pii/S1934590919303078?via=ihub"
     fmt.Println(Chrome2URLs(url))
 }*/
+
+func GetURLFile(url string, timeout time.Duration, proxy string) {
+	// create context
+	o := append(cdp.DefaultExecAllocatorOptions[:],
+		//... any options here
+		cdp.ProxyServer(proxy),
+	)
+	cx, cancel := cdp.NewExecAllocator(context.Background(), o...)
+	ctx, cancel := cdp.NewContext(cx)
+	ctx, cancel = context.WithTimeout(ctx, timeout)
+	defer cancel()
+	var err error
+	var attbs []map[string]string
+	urls := []string{}
+	err = cdp.Run(ctx, visibleDownloadTask(url, ctx))
+	if err != nil {
+		log.Fatal(err)
+	}
+	for i := range attbs {
+		for k, v := range attbs[i] {
+			if k == "href" {
+				urls = append(urls, v)
+			} else if strings.Contains(k, "http") {
+				urls = append(urls, v)
+			}
+		}
+	}
+}
+
+func visibleDownloadTask(url string, ctx context.Context) cdp.Tasks {
+	var body string
+	tsk := cdp.Tasks{
+		cdp.Navigate(url),
+		cdp.ActionFunc(func(context.Context) error {
+			return nil
+		}),
+		cdp.WaitVisible(`#main-container`, cdp.ByQuery),
+		chromedp.OuterHTML("html", &body),
+		cdp.ActionFunc(func(context.Context) error {
+			fmt.Println(body)
+			return nil
+		}),
+		cdp.WaitReady("body"),
+	}
+	return tsk
+}
+
+//func main() {
+//GetURLFile("https://linkinghub.elsevier.com/retrieve/pii/S2215036619303943", 145*time.Second, "http://lee_jianfeng:hhshsmuljf!@inproxy.sjtu.edu.cn:8000")
+//}

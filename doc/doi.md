@@ -489,7 +489,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">51</td>
 <td style="text-align: left;">PHYSIOLOGICAL REVIEWS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1152/physrev.00005.2019</td>
 <td style="text-align: left;">NA</td>
@@ -2838,7 +2838,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">327</td>
 <td style="text-align: left;">REVIEW OF EDUCATIONAL RESEARCH</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.3102/0034654317749187</td>
 <td style="text-align: left;">NA</td>
@@ -3351,7 +3351,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">385</td>
 <td style="text-align: left;">BULLETIN OF THE AMERICAN METEOROLOGICAL SOCIETY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1175/BAMS-D-17-0223.1</td>
 <td style="text-align: left;">NA</td>
@@ -3396,7 +3396,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">390</td>
 <td style="text-align: left;">Theranostics</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.7150/thno.35737</td>
 <td style="text-align: left;">NA</td>
@@ -5133,7 +5133,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">591</td>
 <td style="text-align: left;">ACM TRANSACTIONS ON GRAPHICS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1145/3306346.3322944</td>
 <td style="text-align: left;">NA</td>
@@ -5349,7 +5349,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">616</td>
 <td style="text-align: left;">ENDOSCOPY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1055/a-1028-6899</td>
 <td style="text-align: left;">NA</td>
@@ -5358,7 +5358,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">618</td>
 <td style="text-align: left;">PHYSIOLOGY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1152/physiol.00023.2019</td>
 <td style="text-align: left;">NA</td>
@@ -5421,7 +5421,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">625</td>
 <td style="text-align: left;">JOURNAL OF POLITICAL ECONOMY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1086/701425</td>
 <td style="text-align: left;">NA</td>
@@ -5871,7 +5871,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">677</td>
 <td style="text-align: left;">ACM COMPUTING SURVEYS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1145/3150225</td>
 <td style="text-align: left;">NA</td>
@@ -7545,7 +7545,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">870</td>
 <td style="text-align: left;">COMMUNICATIONS OF THE ACM</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1145/1042091.1042118</td>
 <td style="text-align: left;">NA</td>
@@ -8877,7 +8877,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1024</td>
 <td style="text-align: left;">JOURNAL OF MEDICAL INTERNET RESEARCH</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2196/16942</td>
 <td style="text-align: left;">NA</td>
@@ -9435,7 +9435,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1091</td>
 <td style="text-align: left;">Translational Lung Cancer Research</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.21037/tlcr.2019.09.06</td>
 <td style="text-align: left;">NA</td>
@@ -9822,7 +9822,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1135</td>
 <td style="text-align: left;">Nanomedicine</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2217/nnm-2019-0206</td>
 <td style="text-align: left;">NA</td>
@@ -10344,7 +10344,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1195</td>
 <td style="text-align: left;">ULTRASCHALL IN DER MEDIZIN</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1055/a-1021-1616</td>
 <td style="text-align: left;">NA</td>
@@ -11010,7 +11010,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1274</td>
 <td style="text-align: left;">International Journal of Nanomedicine</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2147/IJN.S219749</td>
 <td style="text-align: left;">NA</td>
@@ -11433,7 +11433,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1322</td>
 <td style="text-align: left;">Epigenomics</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2217/epi-2019-0050</td>
 <td style="text-align: left;">NA</td>
@@ -11973,7 +11973,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1383</td>
 <td style="text-align: left;">JMIR mHealth and uHealth</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2196/13236</td>
 <td style="text-align: left;">NA</td>
@@ -12819,7 +12819,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1482</td>
 <td style="text-align: left;">JOURNAL OF HYDROMETEOROLOGY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1175/JHM-D-18-0021.1</td>
 <td style="text-align: left;">NA</td>
@@ -13476,7 +13476,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">1561</td>
 <td style="text-align: left;">International Journal of Biological Sciences</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.7150/ijbs.37481</td>
 <td style="text-align: left;">NA</td>
@@ -14421,7 +14421,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1671</td>
 <td style="text-align: left;">PLANT AND CELL PHYSIOLOGY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1152/ajpcell.00030.2019</td>
 <td style="text-align: left;">NA</td>
@@ -14619,7 +14619,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1695</td>
 <td style="text-align: left;">Hepatobiliary Surgery and Nutrition</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.21037/hbsn.2019.08.10</td>
 <td style="text-align: left;">NA</td>
@@ -14781,7 +14781,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1713</td>
 <td style="text-align: left;">Open Biology</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1098/rsob.190187</td>
 <td style="text-align: left;">NA</td>
@@ -15015,7 +15015,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1743</td>
 <td style="text-align: left;">AMERICAN NATURALIST</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1086/705837</td>
 <td style="text-align: left;">NA</td>
@@ -16545,7 +16545,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">1924</td>
 <td style="text-align: left;">Annals of Translational Medicine</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.21037/atm.2019.07.88</td>
 <td style="text-align: left;">NA</td>
@@ -17886,7 +17886,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2078</td>
 <td style="text-align: left;">AMERICAN JOURNAL OF PHYSIOLOGY-CELL PHYSIOLOGY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1152/ajpcell.00053.2019</td>
 <td style="text-align: left;">NA</td>
@@ -18372,7 +18372,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2135</td>
 <td style="text-align: left;">QUARTERLY REVIEW OF BIOLOGY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1086/693847</td>
 <td style="text-align: left;">NA</td>
@@ -19074,7 +19074,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2216</td>
 <td style="text-align: left;">SEMINARS IN LIVER DISEASE</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1055/s-0039-3399502</td>
 <td style="text-align: left;">NA</td>
@@ -19866,7 +19866,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2309</td>
 <td style="text-align: left;">JOURNAL OF PHYSICAL OCEANOGRAPHY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1175/JPO-D-16-0229.1</td>
 <td style="text-align: left;">NA</td>
@@ -19911,7 +19911,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2313</td>
 <td style="text-align: left;">Educational Researcher</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.3102/0013189X17737739</td>
 <td style="text-align: left;">NA</td>
@@ -20127,7 +20127,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2339</td>
 <td style="text-align: left;">CELLULAR &amp; MOLECULAR BIOLOGY LETTERS</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1098/rsbl.2019.0068</td>
 <td style="text-align: left;">NA</td>
@@ -20379,7 +20379,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2369</td>
 <td style="text-align: left;">JMIR Serious Games</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2196/14924</td>
 <td style="text-align: left;">NA</td>
@@ -20667,7 +20667,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2401</td>
 <td style="text-align: left;">Biology Letters</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1098/rsbl.2019.0740</td>
 <td style="text-align: left;">NA</td>
@@ -20685,7 +20685,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2401</td>
 <td style="text-align: left;">AMERICAN JOURNAL OF PHYSIOLOGY-RENAL PHYSIOLOGY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1152/ajprenal.00282.2019</td>
 <td style="text-align: left;">NA</td>
@@ -21144,7 +21144,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2457</td>
 <td style="text-align: left;">JOURNAL OF THE ATMOSPHERIC SCIENCES</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1175/JAS-D-17-0070.1</td>
 <td style="text-align: left;">NA</td>
@@ -21207,7 +21207,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2463</td>
 <td style="text-align: left;">International Journal of Chronic Obstructive Pulmonary Disease</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2147/COPD.S217317</td>
 <td style="text-align: left;">NA</td>
@@ -21864,7 +21864,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2539</td>
 <td style="text-align: left;">Journal of the Royal Society Interface</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1098/rsif.2010.0608</td>
 <td style="text-align: left;">NA</td>
@@ -22260,7 +22260,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2583</td>
 <td style="text-align: left;">JMIR Medical Informatics</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2196/12000</td>
 <td style="text-align: left;">NA</td>
@@ -22287,7 +22287,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2589</td>
 <td style="text-align: left;">Journal of Cancer</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.7150/jca.30731</td>
 <td style="text-align: left;">NA</td>
@@ -22341,7 +22341,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2595</td>
 <td style="text-align: left;">Clinical Epidemiology</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2147/CLEP.S213677</td>
 <td style="text-align: left;">NA</td>
@@ -22494,7 +22494,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2611</td>
 <td style="text-align: left;">AMERICAN EDUCATIONAL RESEARCH JOURNAL</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.3102/0002831216674804</td>
 <td style="text-align: left;">NA</td>
@@ -22854,7 +22854,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2658</td>
 <td style="text-align: left;">MONTHLY WEATHER REVIEW</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1175/MWR-D-18-0117.1</td>
 <td style="text-align: left;">NA</td>
@@ -22926,7 +22926,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2667</td>
 <td style="text-align: left;">JOURNAL OF APPLIED PHYSIOLOGY</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1152/japplphysiol.00035.2019</td>
 <td style="text-align: left;">NA</td>
@@ -23556,7 +23556,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2742</td>
 <td style="text-align: left;">Interface Focus</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.1098/rsfs.2019.0107</td>
 <td style="text-align: left;">NA</td>
@@ -23826,7 +23826,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2773</td>
 <td style="text-align: left;">Quantitative Imaging in Medicine and Surgery</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.21037/qims.2019.09.06</td>
 <td style="text-align: left;">NA</td>
@@ -24132,7 +24132,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2808</td>
 <td style="text-align: left;">Nature and Science of Sleep</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2147/NSS.S228100</td>
 <td style="text-align: left;">NA</td>
@@ -24240,7 +24240,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2820</td>
 <td style="text-align: left;">OncoTargets and Therapy</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2147/OTT.S216118</td>
 <td style="text-align: left;">NA</td>
@@ -24546,7 +24546,7 @@ Supported DOI by bget (Journal)
 <tr class="odd">
 <td style="text-align: right;">2857</td>
 <td style="text-align: left;">Immunotherapy</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2217/imt-2019-0113</td>
 <td style="text-align: left;">NA</td>
@@ -24987,7 +24987,7 @@ Supported DOI by bget (Journal)
 <tr class="even">
 <td style="text-align: right;">2903</td>
 <td style="text-align: left;">Infection and Drug Resistance</td>
-<td style="text-align: left;">todo</td>
+<td style="text-align: left;">done</td>
 <td style="text-align: left;"></td>
 <td style="text-align: left;">10.2147/IDR.S227643</td>
 <td style="text-align: left;">NA</td>
