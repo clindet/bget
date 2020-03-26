@@ -133,4 +133,22 @@ var toolsLinks = []bgetToolsURLType{
 			"Win":   []string{"https://github.com/openbiox/bioextr/releases/download/{{version}}/bioextr.exe"},
 		},
 	},
+	{
+		Name: "xpdf-tools",
+		URL: map[string][]string{
+			"Linux": []string{"https://xpdfreader-dl.s3.amazonaws.com/xpdf-tools-linux-{{version}}.tar.gz"},
+			"Mac":   []string{"https://xpdfreader-dl.s3.amazonaws.com/xpdf-tools-mac-{{version}}.tar.gz"},
+			"Win":   []string{"https://xpdfreader-dl.s3.amazonaws.com/xpdf-tools-win-{{version}}.tar.gz"},
+		},
+		Versions: []string{"4.02"},
+	},
+	{
+		Name: "r",
+		URL: map[string][]string{
+			"Linux": []string{"https://mirrors.tuna.tsinghua.edu.cn/CRAN/src/base/R-3/R-{{version}}.tar.gz"},
+			"Mac":   []string{"https://mirrors.tuna.tsinghua.edu.cn/CRAN/bin/macosx/bin/macosx/R-{{version}}.pkg"},
+			"Win":   []string{"https://mirrors.tuna.tsinghua.edu.cn/CRAN/bin/windows/base/R-{{version}}-win.exe"},
+		},
+		Versions: []string{"3.6.3"},
+	},
 }

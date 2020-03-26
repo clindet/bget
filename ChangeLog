@@ -1,3 +1,22 @@
+2020-03-27 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
+		* support 10.35946, 10.20882, 10.17712, 10.17645, 10.14309, 10.7326,
+		10.7189, 10.7185, 10.5853, 10.5694, 10.5670, 10.5598, 10.4158,
+		10.4155, 10.4110, 10.3982, 10.3835, 10.3386, 10.3348, 10.3238,
+		10.3233, 10.3168, 10.2807, 10.2471, 10.2340, 10.2136, 10.2113,
+		10.2105, 10.1681, 10.1556, 10.1513, 10.1373, 10.1289, 10.1287, 
+		10.1257, 10.1246, 10.1210, 10.1176, 10.1137, 10.1130, 10.1107,
+		10.1096, 10.1094, 10.1042
+		* add functions (AddPdfSpider, AddPdfplusSpider, DirectSpider,
+		AddPdfplusWithSupplSpider, AddPdfWithSupplSpider, AddLastPdfSpider,
+		AddDownloadSpider, KoreaMedSpider, ReplaceHtmlSpider, and
+		RetriveRedirectLink) in spider/universal.go
+
+2020-03-26 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
+		* support 10.3233 and 10.7185
+		* add r in `bget key`
+
 2020-03-25 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* support bget api mgrast (anno, compute, darkmatter, download modules)

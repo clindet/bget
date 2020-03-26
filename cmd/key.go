@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"net/url"
 	"os"
 	"os/exec"
@@ -13,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/olekukonko/tablewriter"
+	"github.com/openbiox/bget/spider"
 	"github.com/openbiox/bget/urlpool"
 	vers "github.com/openbiox/bget/versions"
 	"github.com/openbiox/ligo/archive"
@@ -143,8 +143,11 @@ func downloadKey() {
 
 func preURLFilter(url string) string {
 	if strings.Contains(url, "doaj.org") {
-		req, _ := http.Head(url)
-		return req.Request.URL.String()
+		url, err := spider.RetriveRedirectLink(url, bgetClis.Timeout, bgetClis.Proxy)
+		if err != nil {
+			log.Warnln(err)
+			return url
+		}
 	}
 	return url
 }

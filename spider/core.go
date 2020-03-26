@@ -75,36 +75,30 @@ func ScienseComSpider(opt *DoiSpiderOpt) (urls []string) {
 	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
 	extensions.RandomUserAgent(c)
 	extensions.Referer(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
 	if opt.URL != nil {
 		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
 	}
 	if opt.FullText {
 		c.OnHTML("div.panels-ajax-tab-wrap-jnl_sci_tab_pdf a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
+		c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+			link := e.Attr("content")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+		c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	}
-	c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
-		link := e.Attr("content")
-		u, _ := url.Parse(link)
-		link = u.Scheme + "://" + u.Host + u.Path
-		if opt.FullText {
-			urls = append(urls, link)
-		}
-		if opt.Supplementary {
-			c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
-				link := e.Attr("href")
-				u2, _ := url.Parse(link)
-				link = u.Scheme + "://" + u.Host + u2.Path
-				urls = append(urls, link)
-			})
-			c.Visit(strings.Replace(link, ".full.pdf", "", 1) + "/tab-figures-data")
-		}
-	})
-	c.OnRequest(func(r *colly.Request) {
-		log.Infof("Visiting %s", r.URL.String())
-	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	if opt.Supplementary {
+		c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+		c.Visit(opt.URL.String() + "/tab-figures-data")
+	}
 	return urls
 }
 
@@ -208,7 +202,7 @@ func CellComSpider(opt *DoiSpiderOpt) []string {
 // BloodJournalSpider access http://www.bloodjournal.org files via spider
 func BloodJournalSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := colly.NewCollector(
-		colly.AllowedDomains("doi.org", "signin.hematology.org", "www.bloodjournal.org"),
+		colly.AllowedDomains("doi.org", "signin.hematology.org", "www.bloodjournal.org", "ashpublications.org"),
 		colly.MaxDepth(1),
 	)
 	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
@@ -457,35 +451,6 @@ func BmjComSpider(opt *DoiSpiderOpt) (urls []string) {
 	return urls
 }
 
-// AtsjournalsOrgSpider access www.atsjournals.org files via spider
-func AtsjournalsOrgSpider(opt *DoiSpiderOpt) (urls []string) {
-	c := colly.NewCollector(
-		colly.AllowedDomains("doi.org", "www.atsjournals.org"),
-		colly.MaxDepth(2),
-	)
-	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
-	extensions.RandomUserAgent(c)
-	if opt.URL != nil {
-		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
-	}
-	c.OnRequest(func(r *colly.Request) {
-		log.Infof("Visiting %s", r.URL.String())
-	})
-	log.Infof("Visiting https://www.atsjournals.org/doi/full/%s", opt.Doi)
-	if opt.FullText {
-		urls = append(urls, "https://www.atsjournals.org/doi/pdf/"+opt.Doi)
-	}
-	if opt.Supplementary {
-		c.OnHTML(".suppl_list a[href]", func(e *colly.HTMLElement) {
-			link := e.Attr("href")
-			link = "https://" + opt.URL.Hostname() + link
-			urls = append(urls, link)
-		})
-		c.Visit("https://www.atsjournals.org/doi/suppl/" + opt.Doi)
-	}
-	return urls
-}
-
 // JournalsApsSpider access https://journals.aps.org/ files via spider
 func JournalsApsSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := colly.NewCollector(
@@ -712,37 +677,10 @@ func ThiemeConnectDeSpider(opt *DoiSpiderOpt) (urls []string) {
 	return urls
 }
 
-func UchicagoEduSpider(opt *DoiSpiderOpt) (urls []string) {
-	c := colly.NewCollector(
-		colly.AllowedDomains("doi.org", "www.journals.uchicago.edu"),
-		colly.MaxDepth(2),
-	)
-	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
-	extensions.RandomUserAgent(c)
-	c.OnRequest(func(r *colly.Request) {
-		log.Infof("Visiting %s", r.URL.String())
-	})
-	if opt.FullText {
-		link := opt.URL.String()
-		link = strings.ReplaceAll(link, "/doi/", "/doi/pdfplus/")
-		urls = append(urls, link)
-	}
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
-	return urls
-}
-
-func AcmOrgSpider(opt *DoiSpiderOpt) (urls []string) {
-	if opt.FullText {
-		link := opt.URL.String()
-		link = strings.ReplaceAll(link, "/doi/", "/doi/pdf/")
-		urls = append(urls, link+"?download=true")
-	}
-	return urls
-}
-
 /*func DegruyterComSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := colly.NewCollector(
-		colly.AllowedDomains("doi.org", "www.degruyter.com"),
+		colly.AllowedDomains("doi.org", "www.degruyter.com", "www.degruyter.com:443", "46.51.207.106",
+			"108.128.99.123", "46.51.207.106:443"),
 		colly.MaxDepth(5),
 	)
 	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
@@ -756,18 +694,12 @@ func AcmOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
-	return urls
-}*/
-
-func FuturemedicineSpider(opt *DoiSpiderOpt) (urls []string) {
-	if opt.FullText {
-		link := opt.URL.String()
-		link = strings.ReplaceAll(link, "/doi/", "/doi/pdfplus/")
-		urls = append(urls, link)
+	err := c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	if err != nil {
+		fmt.Println(err)
 	}
 	return urls
-}
+}*/
 
 func ThnoOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := colly.NewCollector(
@@ -785,6 +717,364 @@ func ThnoOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 			if strings.Contains(link, ".pdf") {
 				urls = append(urls, linkFilter(link, opt.URL))
 			}
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func GeochemicalperspectivesOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.geochemicalperspectives.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML(".entry-content p a", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			if strings.Contains(link, ".pdf") {
+				urls = append(urls, linkFilter(link, opt.URL))
+			}
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func IospressComSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.medra.org", "content.iospress.com", "content.iospress.com:443"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("meta[name='citation_pdf_url']", func(e *colly.HTMLElement) {
+			link := e.Attr("content")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	c.Visit(fmt.Sprintf("https://content.iospress.com/doi/%s", opt.Doi))
+	return urls
+}
+
+func IucrOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "journals.iucr.org", "scripts.iucr.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML(".bubbleInfo .sidebutton a[title=PDF]", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	if opt.Supplementary {
+		c.OnHTML(".file_links_other p a", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func GeoscienceworldOrg(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "pubs.geoscienceworld.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML(".article-pdfLink", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, "https://pubs.geoscienceworld.org"+link)
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func AeawebOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "pubs.aeaweb.org", "www.aeaweb.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML(".download a", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	if opt.Supplementary {
+		c.OnHTML("#additionalMaterials li a", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	c.Visit(fmt.Sprintf("https://www.aeaweb.org/articles?id=%s", opt.Doi))
+	return urls
+}
+
+func InformsOrgSPider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "pubsonline.informs.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	urls = AddPdfSpider(opt)
+	if opt.Supplementary {
+		c.OnHTML(".article-section__content p a", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+		supplHost := stringo.StrReplaceAll(opt.URL.String(), "/doi/", "/doi/suppl/")
+		c.Visit(supplHost)
+	}
+	return urls
+}
+
+func AsnjournalsOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "jasn.asnjournals.org", "www.jasn.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("a[data-panel-name=jnl_asnjnls_tab_pdf]", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	if opt.Supplementary {
+		c.OnHTML("a.rewritten", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+		c.Visit(opt.URL.String() + "/tab-figures-data")
+	}
+	return urls
+}
+
+func CogitatiopressComSpider(opt *DoiSpiderOpt) (urls []string) {
+	if opt.FullText {
+		urls = append(urls, stringo.StrReplaceAll(opt.URL.String(),
+			"/view/", "/download/")+"/"+path.Base(opt.URL.String()))
+	}
+	return urls
+}
+
+func AdiccionesEsSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.adicciones.es"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("#articleFullText a:nth-child(3)", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			link = strings.ReplaceAll(link, "/view/", "/download/")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func EurosurveillanceOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.eurosurveillance.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML(".pdfItem a.pdf", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			if !strings.Contains(link, "suppdata") {
+				link, _ = RetriveRedirectLink(linkFilter(link, opt.URL), opt.Timeout, opt.Proxy)
+				urls = append(urls, link)
+			}
+		})
+	}
+	if opt.Supplementary {
+		c.OnHTML(".pdfItem a.pdf", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			if strings.Contains(link, "suppdata") {
+				link, _ = RetriveRedirectLink(linkFilter(link, opt.URL), opt.Timeout, opt.Proxy)
+				urls = append(urls, link)
+			}
+		})
+	}
+	c.Visit(fmt.Sprintf("https://www.eurosurveillance.org/content/%s#html_fulltext", opt.Doi))
+	return urls
+}
+
+func AerzteblattDeSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.aerzteblatt.de"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("a.pdfLink", func(e *colly.HTMLElement) {
+			c.OnHTML("div.save a", func(e *colly.HTMLElement) {
+				link := e.Attr("href")
+				link = stringo.StrReplaceAll(link, "[?].*", "")
+				urls = append(urls, linkFilter(link, opt.URL))
+			})
+			link := e.Attr("href")
+			c.Visit(linkFilter(link, opt.URL))
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func KjronlineOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	return KoreaMedSpider(opt, "kjronline.org")
+}
+
+func ImmunenetworkOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	return KoreaMedSpider(opt, "immunenetwork.org")
+}
+
+func TosOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "tos.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML(".large-links-blue a", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			if strings.Contains(link, "docs") {
+				urls = append(urls, linkFilter(link, opt.URL))
+			}
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func JstrokeOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "www.j-stroke.org", "j-stroke.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+			link := e.Attr("content")
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func AnnalsOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "annals.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("#tagmasterPDF", func(e *colly.HTMLElement) {
+			link := e.Attr("data-article-url")
+			urls = append(urls, "https://annals.org"+link)
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func PortlandpressComSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "portlandpress.com"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("a.article-pdfLink", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, "https://portlandpress.com"+link)
+		})
+	}
+	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func GeoscienceworldOrgSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := colly.NewCollector(
+		colly.AllowedDomains("doi.org", "pubs.geoscienceworld.org"),
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.FullText {
+		c.OnHTML("a.article-pdfLink", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			urls = append(urls, "https://pubs.geoscienceworld.org"+link)
 		})
 	}
 	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))

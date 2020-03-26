@@ -439,6 +439,9 @@ func WileyComSpider(opt *DoiSpiderOpt) (urls []string) {
 			link = stringo.StrReplaceAll(link, "/doi/pdf/", "/doi/pdfdirect/")
 			urls = append(urls, linkFilter(link, opt.URL))
 		})
+		if strings.Contains(opt.Doi, "10.3982/") {
+			urls = append(urls, "https://onlinelibrary.wiley.com/doi/pdfdirect/"+opt.Doi)
+		}
 	}
 	if opt.Supplementary {
 		c.OnHTML(".support-info__table td a[href]", func(e *colly.HTMLElement) {
