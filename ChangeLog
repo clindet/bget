@@ -11,6 +11,7 @@
 		AddPdfplusWithSupplSpider, AddPdfWithSupplSpider, AddLastPdfSpider,
 		AddDownloadSpider, KoreaMedSpider, ReplaceHtmlSpider, and
 		RetriveRedirectLink) in spider/universal.go
+		* mgrast api add library, proj, and sample command
 
 2020-03-26 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 

@@ -57,6 +57,48 @@ var MgRastDownloadCmd = &cobra.Command{
 	},
 }
 
+var MgRastProjectCmd = &cobra.Command{
+	Use:   "proj",
+	Short: "Query http://api.mg-rast.org/project website compute APIs.",
+	Long:  `Query http://api.mg-rast.org/project website compute APIs. Detail see http://api.mg-rast.org/api.html`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) > 0 {
+			MgRastEndp.Project = args[0]
+		} else {
+			MgRastEndp.Project = "nil"
+		}
+		MgRastCmdRunOptions(cmd, args)
+	},
+}
+
+var MgRastLibraryCmd = &cobra.Command{
+	Use:   "library [id]",
+	Short: "Query http://api.mg-rast.org/library website compute APIs.",
+	Long:  `Query http://api.mg-rast.org/library website compute APIs. Detail see http://api.mg-rast.org/api.html`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) > 0 {
+			MgRastEndp.Library = args[0]
+		} else {
+			MgRastEndp.Library = "nil"
+		}
+		MgRastCmdRunOptions(cmd, args)
+	},
+}
+
+var MgRastSampleCmd = &cobra.Command{
+	Use:   "sample [id]",
+	Short: "Query http://api.mg-rast.org/sample website compute APIs.",
+	Long:  `Query http://api.mg-rast.org/sample website compute APIs. Detail see http://api.mg-rast.org/api.html`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) > 0 {
+			MgRastEndp.Sample = args[0]
+		} else {
+			MgRastEndp.Sample = "nil"
+		}
+		MgRastCmdRunOptions(cmd, args)
+	},
+}
+
 func MgRastCmdRunOptions(cmd *cobra.Command, args []string) {
 	if fetch.MgRast(&MgRastEndp, &BapiClis, func() { initCmd(cmd, args) }) {
 		BapiClis.HelpFlags = false
@@ -120,6 +162,16 @@ func init() {
 	MgRastDownloadCmd.Flags().BoolVarP(&MgRastEndp.ParamsDownload.Force, "force", "", false, `if true, recreate document in Shock from AWE.`)
 	MgRastDownloadCmd.Flags().StringVarP(&MgRastEndp.ID, "id", "", "", `unique metagenome identifier`)
 
+	MgRastProjectCmd.Flags().IntVarP(&MgRastEndp.ParamsProjOrLibrary.Limit, "size", "", 20, `maximum number of items requested`)
+	MgRastProjectCmd.Flags().IntVarP(&MgRastEndp.ParamsProjOrLibrary.Offset, "from", "", 0, `zero based index of the first data object to be returned`)
+	MgRastProjectCmd.Flags().StringVarP(&MgRastEndp.ParamsProjOrLibrary.Order, "order", "", "id", `This parameter value can be chosen from the following (the first being default): id, name`)
+	MgRastProjectCmd.Flags().StringVarP(&MgRastEndp.ParamsProjOrLibrary.Verbosity, "verbosity", "", "minimal", `This parameter value can be chosen from the following (the first being default): minimal, verbose, full`)
+
+	MgRastLibraryCmd.Flags().IntVarP(&MgRastEndp.ParamsProjOrLibrary.Limit, "size", "", 20, `maximum number of items requested`)
+	MgRastLibraryCmd.Flags().IntVarP(&MgRastEndp.ParamsProjOrLibrary.Offset, "from", "", 0, `zero based index of the first data object to be returned`)
+	MgRastLibraryCmd.Flags().StringVarP(&MgRastEndp.ParamsProjOrLibrary.Order, "order", "", "id", `This parameter value can be chosen from the following (the first being default): id, name`)
+	MgRastLibraryCmd.Flags().StringVarP(&MgRastEndp.ParamsProjOrLibrary.Verbosity, "verbosity", "", "minimal", `This parameter value can be chosen from the following (the first being default): minimal, verbose, full`)
+
 	//MgRastCmd.Flags().BoolVarP(&MgRastEndp.Download, "download", "", false, ``)
 	//MgRastCmd.Flags().BoolVarP(&MgRastEndp.Inbox, "inbox", "", false, ``)
 	//MgRastCmd.Flags().BoolVarP(&MgRastEndp.Library, "lib", "", false, ``)
@@ -144,6 +196,9 @@ func init() {
 	MgRastCmd.AddCommand(MgRastComputeCmd)
 	MgRastCmd.AddCommand(MgRastDarkMatterCmd)
 	MgRastCmd.AddCommand(MgRastDownloadCmd)
+	MgRastCmd.AddCommand(MgRastProjectCmd)
+	MgRastCmd.AddCommand(MgRastLibraryCmd)
+	MgRastCmd.AddCommand(MgRastSampleCmd)
 
 	MgRastAnnoCmd.Example = `  bget api mgrast anno --info
   # retrieval of SwissProt taxonomy annotations with a cut-off 10^100 for dataset mgm4447943.3
@@ -167,5 +222,14 @@ func init() {
 
 	MgRastDownloadCmd.Example = `  bget api mgrast download --id mgm4447943.3 --file 350.1
   bget api mgrast download --history --id mgm4447943.3
-  bget api mgrast download --id mgm4447943.3 --stage 650`
+	bget api mgrast download --id mgm4447943.3 --stage 650`
+
+	MgRastProjectCmd.Example = `  bget api mgrast proj
+	bget api mgrast proj mgp128 --verbosity full`
+
+	MgRastLibraryCmd.Example = `  bget api mgrast library 
+	bget api mgrast library mgl52924 --verbosity full`
+
+	MgRastSampleCmd.Example = `  bget api mgrast sample 
+  bget api mgrast sample mgs25823 --verbosity full`
 }

@@ -84,16 +84,28 @@ type MgRastDownloadEndpoints struct {
 	Stage  string `json:"stage"`
 }
 
+type MgRastProjLibEndpoints struct {
+	Limit     int    `json:"limit"`
+	Offset    int    `json:"offset"`
+	Order     string `json:"order"`
+	Verbosity string `json:"Verbosity"`
+}
+
 type MgRastEndpoints struct {
 	Info bool
 
-	Annotation bool   `json:"annotation"`
-	Similarity bool   `json:"similarity"`
-	Sequence   string `json:"sequence"`
+	Annotation     bool   `json:"annotation"`
+	Similarity     bool   `json:"similarity"`
+	Sequence       string `json:"sequence"`
+	Project        string
+	ResearchObject string
+	Library        string
+	Sample         string
 
-	ParamsAnno     MgRastAnnoEndpoints
-	ParamsCompute  MgRastComputeEndpoints
-	ParamsDownload MgRastDownloadEndpoints
+	ParamsAnno          MgRastAnnoEndpoints
+	ParamsCompute       MgRastComputeEndpoints
+	ParamsDownload      MgRastDownloadEndpoints
+	ParamsProjOrLibrary MgRastProjLibEndpoints
 
 	Compute               bool
 	ComputeAlphadiversity bool
@@ -114,20 +126,16 @@ type MgRastEndpoints struct {
 	Download        bool
 	DownloadHistory bool
 
-	Inbox          bool
-	Library        bool
-	M5nr           bool
-	Matrix         bool
-	MetaData       bool
-	MetaGenome     bool
-	Mixs           bool
-	Profile        bool
-	Project        bool
-	ResearchObject bool
-	Sample         bool
-	Search         bool
-	Submission     bool
-	Validation     bool
+	Inbox      bool
+	M5nr       bool
+	Matrix     bool
+	MetaData   bool
+	MetaGenome bool
+	Mixs       bool
+	Profile    bool
+	Search     bool
+	Submission bool
+	Validation bool
 
 	Auth string
 }

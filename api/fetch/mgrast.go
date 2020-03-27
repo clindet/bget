@@ -33,11 +33,11 @@ func MgRast(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT, f func(
 }
 
 func mgRastGetMode(endpoints *types.MgRastEndpoints) bool {
-	return (len(endpoints.ParamsAnno.Md5s) == 0 && endpoints.Annotation) || (len(endpoints.ParamsCompute.Data) == 0 && len(endpoints.ParamsCompute.Rows) == 0 && len(endpoints.ParamsCompute.Columns) == 0 && endpoints.Compute) || endpoints.DarkMatter || endpoints.Download
+	return (len(endpoints.ParamsAnno.Md5s) == 0 && endpoints.Annotation) || (len(endpoints.ParamsCompute.Data) == 0 && len(endpoints.ParamsCompute.Rows) == 0 && len(endpoints.ParamsCompute.Columns) == 0 && endpoints.Compute) || endpoints.DarkMatter || endpoints.Download || endpoints.Project != "" || endpoints.Library != "" || endpoints.Sample != ""
 }
 
 func emptyURL(url string, endpoints *types.MgRastEndpoints) bool {
-	if (endpoints.Annotation || endpoints.Compute || endpoints.DarkMatter || endpoints.Download) && (endpoints.ID != "" || endpoints.Sequence != "" || endpoints.Info || len(endpoints.ParamsCompute.Columns) > 0 || len(endpoints.ParamsCompute.Rows) > 0 || len(endpoints.ParamsCompute.Data) > 0) {
+	if (endpoints.Annotation || endpoints.Compute || endpoints.DarkMatter || endpoints.Download) && (endpoints.ID != "" || endpoints.Sequence != "" || endpoints.Info || len(endpoints.ParamsCompute.Columns) > 0 || len(endpoints.ParamsCompute.Rows) > 0 || len(endpoints.ParamsCompute.Data) > 0) || endpoints.Project != "" || endpoints.Library != "" || endpoints.Sample != "" {
 		return false
 	}
 	return true
@@ -85,6 +85,8 @@ func setMgRastQuerySuffix(endpoints *types.MgRastEndpoints, BapiClis *types.Bapi
 		suffix, suffixList = setComputeSuffix(endpoints, BapiClis)
 	} else if endpoints.Download {
 		suffix, suffixList = setDownloadSuffix(endpoints, BapiClis)
+	} else if endpoints.Project != "" || endpoints.Library != "" || endpoints.Sample != "" {
+		suffix, suffixList = setProjOrLibrarySuffix(endpoints, BapiClis)
 	}
 	suffixOther, suffixListOther := setOtherSuffix(endpoints, BapiClis)
 	suffix = suffix + suffixOther
@@ -103,17 +105,7 @@ func setAnnoSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT) 
 		suffix = suffix + "sequence/" + endpoints.Sequence
 	}
 	if mgRastGetMode(endpoints) {
-		mgrastAnno, _ := json.MarshalIndent(endpoints.ParamsAnno, "", " ")
-		var mgrastAnnoMap map[string]interface{}
-		json.Unmarshal(mgrastAnno, &mgrastAnnoMap)
-		for k, v := range mgrastAnnoMap {
-			if k == "md5s" {
-				continue
-			}
-			if v != "" {
-				suffixList = append(suffixList, k+"="+fmt.Sprintf("%v", v))
-			}
-		}
+		suffixList = struct2suffixList(endpoints.ParamsAnno)
 	}
 	return suffix, suffixList
 }
@@ -136,17 +128,7 @@ func setComputeSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClis
 		suffix = suffix + "pcoa" + endpoints.Sequence
 	}
 	if mgRastGetMode(endpoints) {
-		mgrastCompute, _ := json.MarshalIndent(endpoints.ParamsCompute, "", " ")
-		var mgrastComputeMap map[string]interface{}
-		json.Unmarshal(mgrastCompute, &mgrastComputeMap)
-		for k, v := range mgrastComputeMap {
-			if k == "columns" || k == "data" || k == "rows" || k == "seq_num" && v == 0 {
-				continue
-			}
-			if v != "" {
-				suffixList = append(suffixList, k+"="+fmt.Sprintf("%v", v))
-			}
-		}
+		suffixList = struct2suffixList(endpoints.ParamsCompute)
 	}
 	return suffix, suffixList
 }
@@ -158,16 +140,41 @@ func setDownloadSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiCli
 		suffix = suffix + "download/" + endpoints.ID
 	}
 	if mgRastGetMode(endpoints) {
-		mgrastDownload, _ := json.MarshalIndent(endpoints.ParamsDownload, "", " ")
-		var mgrastDownloadMap map[string]interface{}
-		json.Unmarshal(mgrastDownload, &mgrastDownloadMap)
-		for k, v := range mgrastDownloadMap {
-			if v != "" && v != false {
-				suffixList = append(suffixList, k+"="+fmt.Sprintf("%v", v))
-			}
-		}
+		suffixList = struct2suffixList(endpoints.ParamsDownload)
 	}
 	return suffix, suffixList
+}
+
+func setProjOrLibrarySuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT) (suffix string, suffixList []string) {
+	if endpoints.Project == "nil" {
+		suffix = suffix + "project/"
+	} else if endpoints.Project != "" && endpoints.Project != "nil" {
+		suffix = suffix + "project/" + endpoints.Project
+	} else if endpoints.Library == "nil" {
+		suffix = suffix + "library/"
+	} else if endpoints.Library != "" && endpoints.Library != "nil" {
+		suffix = suffix + "library/" + endpoints.Library
+	} else if endpoints.Sample == "nil" {
+		suffix = suffix + "sample/"
+	} else if endpoints.Sample != "" && endpoints.Sample != "nil" {
+		suffix = suffix + "sample/" + endpoints.Sample
+	}
+	if mgRastGetMode(endpoints) {
+		suffixList = struct2suffixList(endpoints.ParamsProjOrLibrary)
+	}
+	return suffix, suffixList
+}
+
+func struct2suffixList(dat interface{}) (suffixList []string) {
+	mgrast, _ := json.MarshalIndent(dat, "", " ")
+	var mgrastMap map[string]interface{}
+	json.Unmarshal(mgrast, &mgrastMap)
+	for k, v := range mgrastMap {
+		if v != "" && v != false && v != nil {
+			suffixList = append(suffixList, k+"="+fmt.Sprintf("%v", v))
+		}
+	}
+	return suffixList
 }
 
 func setOtherSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT) (suffix string, suffixList []string) {
@@ -176,9 +183,6 @@ func setOtherSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT)
 	}
 	if endpoints.Inbox {
 		suffix = suffix + "inbox/"
-	}
-	if endpoints.Library {
-		suffix = suffix + "library/"
 	}
 	if endpoints.M5nr {
 		suffix = suffix + "m5nr/"
@@ -197,15 +201,6 @@ func setOtherSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT)
 	}
 	if endpoints.Profile {
 		suffix = suffix + "profile/"
-	}
-	if endpoints.Project {
-		suffix = suffix + "project/"
-	}
-	if endpoints.ResearchObject {
-		suffix = suffix + "researchobject/"
-	}
-	if endpoints.Sample {
-		suffix = suffix + "sample/"
 	}
 	if endpoints.Search {
 		suffix = suffix + "search/"
