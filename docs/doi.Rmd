@@ -1,0 +1,53 @@
+---
+title: "Supported DOI by bget"
+author: "Jianfeng"
+date: Sys.Date()
+output: 
+  prettydoc::html_pretty:
+    toc: true
+    theme: cayman
+    highlight: github
+  pdf_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+lengthMenu = list(list(5,10, 25, 50, -1),list(5, 10, 25, 50, "All"))
+buttons = c("copy", "csv", "excel", "pdf", "print")
+extensions = c("Buttons", "FixedColumns", "Scroller")
+columnDefs = list(list(width = "100px", targets = "_all"))
+showTb <- function(dat){
+  DT::datatable(
+    dat, 
+    rownames = FALSE, editable = FALSE, 
+    escape = FALSE, extensions = extensions,
+    options = list(autoWidth = TRUE, dom = "Bfrtlip", deferRender = TRUE,
+                   searchHighlight = TRUE, scrollX = TRUE, lengthMenu = lengthMenu,
+                   buttons = buttons, columnDefs = columnDefs), selection = "none"
+  )
+}
+```
+
+## Supported Data Hub DOI
+
+```{r echo=FALSE, warning=FALSE}
+doi.list <- read.table("./doi.list.datahub.txt", sep = "\t", header = TRUE)
+showTb(doi.list)
+
+```
+
+## Supported High Impact Journals DOI
+
+```{r echo=FALSE, warning=FALSE}
+doi.list <- read.csv("./doi.list.himp.journal.txt", sep = "\t", header = TRUE)
+showTb(doi.list)
+```
+
+## Supported Open Access Journals DOI
+
+```{r echo=FALSE, warning=FALSE}
+doi.list <- read.csv("./doi.list.oa.journal.txt", sep = "\t", header = TRUE)
+colnames(doi.list)[c(3, 4, 29)] <- c("ISSN-Print", "EISSN", "Allow-Crawl")
+showTb(doi.list[,c(1:7, 29, 34, 48)])
+```

@@ -535,8 +535,9 @@ func ThiemeConnectDeSpider(opt *DoiSpiderOpt) (urls []string) {
 }*/
 
 func ThnoOrgSpider(opt *DoiSpiderOpt) (urls []string) {
-	c := initColley(opt, "https://www.thno.org")
-	c.AllowedDomains = []string{"doi.org", "www.thno.org"}
+	c := initColley(opt, "")
+	c.AllowedDomains = []string{"doi.org", "www.thno.org", "www.jcancer.org", "www.ntno.org",
+		"www.ijbs.com", "www.medsci.org", "www.jgenomics.com", "www.jbji.net"}
 	if opt.FullText {
 		c.OnHTML("a.textbutton", func(e *colly.HTMLElement) {
 			link := "/" + e.Attr("href")
@@ -795,7 +796,20 @@ func GeoscienceworldOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("a.article-pdfLink", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, "https://pubs.geoscienceworld.org"+link)
+			urls = append(urls, linkFilter(link, opt.URL))
+		})
+	}
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	return urls
+}
+
+func SpringerComSpider(opt *DoiSpiderOpt) (urls []string) {
+	c := initColley(opt, "https://link.springer.com")
+	c.AllowedDomains = []string{"doi.org", "link.springer.com", "idp.springer.com"}
+	if opt.FullText {
+		c.OnHTML("meta[name=citation_pdf_url]", func(e *colly.HTMLElement) {
+			link := e.Attr("content")
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))

@@ -25,6 +25,7 @@ type QuerySpiderOpt struct {
 var DoiSpidersPool = map[string]func(opt *DoiSpiderOpt) []string{
 	"10.1001":  JamaNetworkSpider,
 	"10.1002":  WileyComSpider,
+	"10.1007":  SpringerComSpider,
 	"10.1016":  CellComSpider,
 	"10.1021":  PubsacsSpider,
 	"10.1029":  WileyComSpider,
