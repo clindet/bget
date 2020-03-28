@@ -58,12 +58,12 @@ func UniVersalDoiSpider(opt *DoiSpiderOpt) (urls []string) {
 			urls = append(urls, linkFilter(link, opt.URL))
 		})
 
-		c.Visit(supplPage)
+		Visit(c, supplPage)
 	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -112,7 +112,7 @@ func AddPdfplusWithSupplSpider(opt *DoiSpiderOpt) (urls []string) {
 			link = "https://" + opt.URL.Hostname() + link
 			urls = append(urls, link)
 		})
-		c.Visit(stringo.StrReplaceAll(opt.URL.String(), "/doi/", "/doi/suppl/"))
+		Visit(c, stringo.StrReplaceAll(opt.URL.String(), "/doi/", "/doi/suppl/"))
 	}
 	return urls
 }
@@ -137,7 +137,7 @@ func AddPdfWithSupplSpider(opt *DoiSpiderOpt) (urls []string) {
 			link = "https://" + opt.URL.Hostname() + link
 			urls = append(urls, link)
 		})
-		c.Visit(stringo.StrReplaceAll(opt.URL.String(), "/doi/", "/doi/suppl/"))
+		Visit(c, stringo.StrReplaceAll(opt.URL.String(), "/doi/", "/doi/suppl/"))
 	}
 	return urls
 }
@@ -182,10 +182,10 @@ func KoreaMedSpider(opt *DoiSpiderOpt, hostname string) (urls []string) {
 			c.OnHTML(".supplementary-material-item a", func(e *colly.HTMLElement) {
 				urls = append(urls, "https://"+hostname+"/"+e.Attr("href"))
 			})
-			c.Visit(fmt.Sprintf("%s/%s", hostname, link))
+			Visit(c, fmt.Sprintf("%s/%s", hostname, link))
 		})
 	}
-	c.Visit(fmt.Sprintf("https://"+hostname+"/DOIx.php?id=%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://"+hostname+"/DOIx.php?id=%s", opt.Doi))
 	return urls
 }
 
@@ -225,4 +225,32 @@ func suppl2page(opt *DoiSpiderOpt) (link string) {
 
 func static2pdf(opt *DoiSpiderOpt) (url string) {
 	return url
+}
+
+func initColley(opt *DoiSpiderOpt, host string) *colly.Collector {
+	c := colly.NewCollector(
+		colly.MaxDepth(5),
+	)
+	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
+	extensions.RandomUserAgent(c)
+	extensions.Referer(c)
+	c.OnRequest(func(r *colly.Request) {
+		log.Infof("Visiting %s", r.URL.String())
+	})
+	if opt.URL == nil && host != "" {
+		u, _ := neturl.Parse(host)
+		opt.URL = u
+	}
+	if opt.URL != nil {
+		c.AllowedDomains = append(c.AllowedDomains, opt.URL.Host)
+	}
+	return c
+}
+
+func Visit(c *colly.Collector, url string) error {
+	err := c.Visit(url)
+	if err != nil {
+		log.Warnln(err)
+	}
+	return err
 }

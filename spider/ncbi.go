@@ -81,7 +81,7 @@ func GeoSpider(opt *QuerySpiderOpt, gpl bool) (gseURLs []string, gplURLs []strin
 		c.OnHTML("table td a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			if strings.Contains(link, "geo/query/acc.cgi?acc=GPL") && !strings.Contains(link, "targ=self") {
-				c.Visit("https://www.ncbi.nlm.nih.gov" + link)
+				Visit(c, "https://www.ncbi.nlm.nih.gov"+link)
 			}
 		})
 	}
@@ -95,7 +95,7 @@ func GeoSpider(opt *QuerySpiderOpt, gpl bool) (gseURLs []string, gplURLs []strin
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s", opt.Query))
+	Visit(c, fmt.Sprintf("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s", opt.Query))
 	return gseURLs, gplURLs, sraLink
 }
 func PmcSpider(opt *DoiSpiderOpt) (urls []string) {
@@ -126,6 +126,6 @@ func PmcSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://www.ncbi.nlm.nih.gov/pmc/?term=%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://www.ncbi.nlm.nih.gov/pmc/?term=%s", opt.Doi))
 	return urls
 }

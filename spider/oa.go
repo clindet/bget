@@ -23,17 +23,15 @@ func ZenodoSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("tbody a.filename[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			if strings.Contains(link, "?download=1") && opt.FullText {
-				u, _ := url.Parse(link)
-				link = "https://zenodo.org" + u.Host + u.Path
-				urls = append(urls, link)
+			if strings.Contains(link, "?download=1") {
+				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
 	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -64,7 +62,7 @@ func CshlpSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 		c.OnHTML(".pane-biorxiv-supplementary-fragment a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			c.Visit(opt.URL.Host + link)
+			Visit(c, opt.URL.Host+link)
 		})
 		c.OnHTML(".supplementary-material-expansion a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -78,13 +76,13 @@ func CshlpSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 		c.OnHTML("a[rel=supplemental-data]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			c.Visit(linkFilter(link, opt.URL))
+			Visit(c, linkFilter(link, opt.URL))
 		})
 	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -102,9 +100,7 @@ func BiomedcentralSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML(".c-pdf-download a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			u, _ := url.Parse(link)
-			link = "https://" + u.Host + u.Path
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
@@ -119,7 +115,7 @@ func BiomedcentralSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -137,30 +133,28 @@ func PnasSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("a[data-trigger=tab-pdf]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://www.pnas.org" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML("a['data-trigger'='tab-figures-data']", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			c.Visit(link)
+			Visit(c, link)
 		})
 		c.OnHTML("a.rewritten[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://www.pnas.org" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 		c.OnResponse(func(r *colly.Response) {
 			if !strings.HasSuffix(r.Request.URL.String(), "/tab-figures-data") {
-				c.Visit(r.Request.URL.String() + "/tab-figures-data")
+				Visit(c, r.Request.URL.String()+"/tab-figures-data")
 			}
 		})
 	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -178,22 +172,21 @@ func PlosSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("#downloadPdf", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://journals.plos.org" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML(".supplementary-material a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			if strings.Contains(link, "doi.org") {
-				urls = append(urls, link)
+				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
 	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -211,25 +204,24 @@ func FrontiersinSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("a.download-files-pdf", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://www.frontiersin.org" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML("a.fs-download-button[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	c.OnResponse(func(r *colly.Response) {
 		if !strings.HasSuffix(r.Request.URL.String(), "#supplementary-material") {
-			c.Visit(r.Request.URL.String() + "#supplementary-material")
+			Visit(c, r.Request.URL.String()+"#supplementary-material")
 		}
 	})
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -248,32 +240,30 @@ func PeerjSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("a[data-format=PDF]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://peerj.com" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Citations {
 		c.OnHTML("a[data-format=BibText]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://peerj.com" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML("a.article-supporting-download[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	c.OnResponse(func(r *colly.Response) {
 		if !strings.HasSuffix(r.Request.URL.String(), "#supplementary-material") {
-			c.Visit(r.Request.URL.String() + "#supplementary-material")
+			Visit(c, r.Request.URL.String()+"#supplementary-material")
 		}
 	})
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -304,7 +294,7 @@ func OupComSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -322,21 +312,19 @@ func EmbopressSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("div.article-action a[aria-label=PDF]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://www.embopress.org" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML(".article-section__supporting a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://www.embopress.org" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -354,29 +342,27 @@ func AscopubsSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML(".pdfTools a[download]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://ascopubs.org" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML("article.article ul li a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://ascopubs.org" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	c.OnResponse(func(r *colly.Response) {
 		if r.Request.URL.String() == "https://ascopubs.org/doi/"+opt.Doi && opt.FullText {
-			c.Visit("https://ascopubs.org/doi/pdf/" + opt.Doi)
+			Visit(c, "https://ascopubs.org/doi/pdf/"+opt.Doi)
 		}
 		if r.Request.URL.String() == "https://ascopubs.org/doi/"+opt.Doi && opt.Supplementary {
-			c.Visit("https://ascopubs.org/doi/suppl/" + opt.Doi)
+			Visit(c, "https://ascopubs.org/doi/suppl/"+opt.Doi)
 		}
 	})
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -394,28 +380,26 @@ func HaematologicaSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML(".pdfTools a[download]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://ascopubs.org" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML("article.article ul li a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			link = "https://ascopubs.org" + link
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	c.OnResponse(func(r *colly.Response) {
 		if !strings.HasSuffix(r.Request.URL.String(), ".figures-only") && opt.FullText {
 			urls = append(urls, r.Request.URL.String()+".pdf")
 		} else if opt.Supplementary {
-			c.Visit(r.Request.URL.String() + ".figures-only")
+			Visit(c, r.Request.URL.String()+".figures-only")
 		}
 	})
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -456,7 +440,7 @@ func WileyComSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -471,24 +455,24 @@ func ElifeSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("a[data-download-type='pdf-article']", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML("a.additional-asset__link--download[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	c.OnResponse(func(r *colly.Response) {
 		if strings.Contains(r.Request.URL.String(), "elifesciences.org") && !strings.HasSuffix(r.Request.URL.String(), "figures") && opt.Supplementary {
-			c.Visit(r.Request.URL.String() + "/figures")
+			Visit(c, r.Request.URL.String()+"/figures")
 		}
 	})
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -514,18 +498,18 @@ func JciSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.Supplementary {
 		c.OnHTML("#supplemental-material a[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			c.Visit(host + link)
+			Visit(c, host+link)
 		})
 	}
 	c.OnResponse(func(r *colly.Response) {
 		if strings.Contains(r.Request.URL.String(), "https://www.jci.org") && !strings.HasSuffix(r.Request.URL.String(), "pdf") && opt.FullText {
-			c.Visit(r.Request.URL.String() + "/pdf")
+			Visit(c, r.Request.URL.String()+"/pdf")
 		}
 	})
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -540,19 +524,19 @@ func JstatsoftSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("a.file[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	if opt.Supplementary {
 		c.OnHTML("a.action[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -574,7 +558,7 @@ func EjcrimSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -604,7 +588,7 @@ func DovepressSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -619,13 +603,13 @@ func AutopsyandcasereportsSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("a.pdfType1[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, "https://autopsyandcasereports.org"+link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://autopsyandcasereports.org/article/doi/%s", opt.Doi))
 	return urls
 }
 
@@ -640,13 +624,13 @@ func FigshareSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		c.OnHTML("a.download-button[href]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
-			urls = append(urls, link)
+			urls = append(urls, linkFilter(link, opt.URL))
 		})
 	}
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -665,7 +649,7 @@ func PubsacsSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -684,7 +668,7 @@ func PubsRscSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }
 
@@ -703,6 +687,6 @@ func AnnualReviewsSpider(opt *DoiSpiderOpt) (urls []string) {
 	c.OnRequest(func(r *colly.Request) {
 		log.Infof("Visiting %s", r.URL.String())
 	})
-	c.Visit(fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	return urls
 }

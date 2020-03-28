@@ -1,3 +1,8 @@
+2020-03-28 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
+		* fix peerj doi query
+		* add initColley function in spider
+
 2020-03-27 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* support 10.35946, 10.20882, 10.17712, 10.17645, 10.14309, 10.7326,

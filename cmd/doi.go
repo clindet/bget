@@ -51,6 +51,8 @@ func downloadDoi() {
 	var destDirArray []string
 	if bgetClis.Doi != "" && strings.Contains(bgetClis.Doi, bgetClis.Seperator) {
 		doi = strings.Split(bgetClis.Doi, bgetClis.Seperator)
+	} else if bgetClis.Doi != "" && strings.Contains(bgetClis.Doi, "\n") {
+		doi = strings.Split(bgetClis.Doi, "\n")
 	} else if bgetClis.Doi != "" {
 		doi = []string{bgetClis.Doi}
 	} else if bgetClis.ListFile != "" {
@@ -114,10 +116,13 @@ func doiSpiders(doi string) (urls []string) {
 		opt.FullText = false
 	}
 	client := cnet.NewHTTPClient(opt.Timeout, opt.Proxy)
-	req, _ := http.NewRequest("GET", "https://doi.org/"+opt.Doi, nil)
+	req, _ := http.NewRequest("HEAD", "https://doi.org/"+opt.Doi, nil)
 	resp, err := client.Do(req)
-	if err != nil {
-		log.Warn(err)
+	if err != nil && strings.Contains(err.Error(), "http") {
+		link := stringo.StrExtract(err.Error(), `".*"`, 1)[0]
+		link = stringo.StrReplaceAll(link, `"`, "")
+		u, _ := neturl.Parse(link)
+		opt.URL = u
 	} else {
 		defer resp.Body.Close()
 		u, _ := neturl.Parse(resp.Request.URL.String())
@@ -151,11 +156,13 @@ func init() {
 	DoiCmd.Flags().BoolVarP(&suppl, "suppl", "", false, "access supplementary files.")
 	setGlobalFlag(DoiCmd, &bgetClis)
 	setKeyListFlag(DoiCmd, &bgetClis, "dois")
-	exampleXML2Json := "`bget api ncbi --xml2json pubmed titleSearch.XML |grep Doi| tr -d ' ,(Doi:)\"'`"
+	exampleXML2Json := "`bioctl cvrt --xml2json pubmed titleSearch.XML | bioextr --mode pubmed - | grep Doi | tr -d ' ,(Doi:)\"'`"
 	DoiCmd.Example = fmt.Sprintf(`  bget doi 10.5281/zenodo.3363060 10.5281/zenodo.3357455 10.5281/zenodo.3351812 -t 3
   bget doi 10.1016/j.devcel.2017.03.001 10.1016/j.stem.2019.07.009 10.1016/j.celrep.2018.03.072 -t 2
 
   bget api ncbi -q '((The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability[Title]) OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR[Title])' -o titleSearch.XML
+	
+  # github.com/openbiox/bioctl / github.com/openbiox/bioextr
   dois=%s
   echo ${dois}
   bget doi ${dois}
