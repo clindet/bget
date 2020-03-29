@@ -9,7 +9,6 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
-	"github.com/gocolly/colly/extensions"
 	"github.com/openbiox/ligo/archive"
 	cnet "github.com/openbiox/ligo/net"
 	"github.com/openbiox/ligo/stringo"
@@ -55,12 +54,8 @@ func Geofetch(geo string, outDir string, gpl bool,
 
 // GeoSpider access https://www.ncbi.nlm.nih.gov/geo files via spider
 func GeoSpider(opt *QuerySpiderOpt, gpl bool) (gseURLs []string, gplURLs []string, sraLink string) {
-	c := colly.NewCollector(
-		colly.AllowedDomains("www.ncbi.nlm.nih.gov"),
-		colly.MaxDepth(1),
-	)
-	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
-	extensions.RandomUserAgent(c)
+	c := initQueryColley(opt, "")
+	c.AllowedDomains = append(c.AllowedDomains, []string{"www.ncbi.nlm.nih.gov"}...)
 	c.OnHTML("table td a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		if strings.Contains(link, "/geo/download/?acc=GS") {
@@ -92,19 +87,12 @@ func GeoSpider(opt *QuerySpiderOpt, gpl bool) (gseURLs []string, gplURLs []strin
 			sraLink = link
 		}
 	})
-	c.OnRequest(func(r *colly.Request) {
-		log.Infof("Visiting %s", r.URL.String())
-	})
 	Visit(c, fmt.Sprintf("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=%s", opt.Query))
 	return gseURLs, gplURLs, sraLink
 }
 func PmcSpider(opt *DoiSpiderOpt) (urls []string) {
-	c := colly.NewCollector(
-		colly.AllowedDomains("www.ncbi.nlm.nih.gov"),
-		colly.MaxDepth(1),
-	)
-	cnet.SetCollyProxy(c, opt.Proxy, opt.Timeout)
-	extensions.RandomUserAgent(c)
+	c := initDoiColley(opt, "")
+	c.AllowedDomains = append(c.AllowedDomains, []string{"www.ncbi.nlm.nih.gov"}...)
 	if opt.FullText {
 		c.OnHTML(".links a", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
@@ -123,9 +111,6 @@ func PmcSpider(opt *DoiSpiderOpt) (urls []string) {
 			})
 		})
 	}
-	c.OnRequest(func(r *colly.Request) {
-		log.Infof("Visiting %s", r.URL.String())
-	})
 	Visit(c, fmt.Sprintf("https://www.ncbi.nlm.nih.gov/pmc/?term=%s", opt.Doi))
 	return urls
 }

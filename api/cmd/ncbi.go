@@ -9,6 +9,7 @@ import (
 	"github.com/openbiox/bget/api/fetch"
 	"github.com/openbiox/bget/api/types"
 	"github.com/openbiox/ligo/flag"
+	cio "github.com/openbiox/ligo/io"
 	"github.com/spf13/cobra"
 )
 
@@ -32,33 +33,34 @@ func NcbiCmdRunOptions(cmd *cobra.Command, args []string) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		BapiClis.Query = BapiClis.Query + " " + string(stdin)
+		bapiClis.Query = bapiClis.Query + " " + string(stdin)
 	}
 	if len(args) > 0 {
-		BapiClis.Query = BapiClis.Query + " " + strings.Join(args, " OR ")
+		bapiClis.Query = bapiClis.Query + " " + strings.Join(args, " OR ")
 	}
-	if BapiClis.Format == "" {
-		BapiClis.Format = "XML"
+	if bapiClis.Format == "" {
+		bapiClis.Format = "XML"
 	}
-	if BapiClis.Email != "" && BapiClis.Query != "" {
+	if bapiClis.Email != "" && bapiClis.Query != "" {
 		initCmd(cmd, args)
-		fetch.Ncbi(&BapiClis, &ncbiClis)
-		BapiClis.HelpFlags = false
+		of := cio.NewOutStream(bapiClis.Outfn, "")
+		fetch.Ncbi(&bapiClis, &ncbiClis, of)
+		bapiClis.HelpFlags = false
 	}
-	if BapiClis.HelpFlags {
+	if bapiClis.HelpFlags {
 		cmd.Help()
 	}
 }
 
 func init() {
-	setGlobalFlag(NcbiCmd, &BapiClis)
+	setGlobalFlag(NcbiCmd, &bapiClis)
 	NcbiCmd.Flags().StringVarP(&ncbiClis.NcbiDB, "db", "d", "pubmed", "Db specifies the database to search")
 	NcbiCmd.Flags().IntVarP(&ncbiClis.NcbiRetmax, "per-size", "m", 100, "Retmax specifies the number of records to be retrieved per request.")
-	NcbiCmd.Flags().IntVarP(&BapiClis.Thread, "thread", "t", 2, "Thread to process.")
-	NcbiCmd.Flags().StringVarP(&BapiClis.Email, "email", "e", "your_email@domain.com", "Email specifies the email address to be sent to the server (NCBI website is required).")
-	NcbiCmd.Flags().IntVarP(&BapiClis.From, "from", "", -1, "Parameters of API control the start item of retrived data.")
-	NcbiCmd.Flags().IntVarP(&BapiClis.Size, "size", "", -1, "Parameters of API control the lenth of retrived data. Default is auto determined.")
-	NcbiCmd.Flags().StringVarP(&BapiClis.Query, "query", "q", "", "Query specifies the search query for record retrieval (required).")
+	NcbiCmd.Flags().IntVarP(&bapiClis.Thread, "thread", "t", 2, "Thread to process.")
+	NcbiCmd.Flags().StringVarP(&bapiClis.Email, "email", "e", "your_email@domain.com", "Email specifies the email address to be sent to the server (NCBI website is required).")
+	NcbiCmd.Flags().IntVarP(&bapiClis.From, "from", "", -1, "Parameters of API control the start item of retrived data.")
+	NcbiCmd.Flags().IntVarP(&bapiClis.Size, "size", "", -1, "Parameters of API control the lenth of retrived data. Default is auto determined.")
+	NcbiCmd.Flags().StringVarP(&bapiClis.Query, "query", "q", "", "Query specifies the search query for record retrieval (required).")
 
 	NcbiCmd.Example = `  # query pubmed with 'B-ALL'
   bget api ncbi -d pubmed -q B-ALL --format XML -e your_email@domain.com

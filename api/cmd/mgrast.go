@@ -9,8 +9,8 @@ import (
 var MgRastEndp types.MgRastEndpoints
 var MgRastCmd = &cobra.Command{
 	Use:   "mgrast",
-	Short: "Query http://api.mg-rast.org/ website APIs.",
-	Long:  `Query http://api.mg-rast.org/ website APIs. Detail see http://api.mg-rast.org/api.html`,
+	Short: "Query mg-rast website APIs.",
+	Long:  `Query mg-rast website APIs. Detail see http://api.mg-rast.org/api.html`,
 	Run: func(cmd *cobra.Command, args []string) {
 		MgRastCmdRunOptions(cmd, args)
 	},
@@ -32,7 +32,7 @@ var MgRastComputeCmd = &cobra.Command{
 	Long:  `Query http://api.mg-rast.org/compute website compute APIs. Detail see http://api.mg-rast.org/api.html`,
 	Run: func(cmd *cobra.Command, args []string) {
 		MgRastEndp.Compute = true
-		MgRastEndp.ParamsCompute.Retry = BapiClis.Retries
+		MgRastEndp.ParamsCompute.Retry = bapiClis.Retries
 		MgRastCmdRunOptions(cmd, args)
 	},
 }
@@ -100,16 +100,16 @@ var MgRastSampleCmd = &cobra.Command{
 }
 
 func MgRastCmdRunOptions(cmd *cobra.Command, args []string) {
-	if fetch.MgRast(&MgRastEndp, &BapiClis, func() { initCmd(cmd, args) }) {
-		BapiClis.HelpFlags = false
+	if fetch.MgRast(&MgRastEndp, &bapiClis, func() { initCmd(cmd, args) }, nil) {
+		bapiClis.HelpFlags = false
 	}
-	if BapiClis.HelpFlags {
+	if bapiClis.HelpFlags {
 		cmd.Help()
 	}
 }
 
 func init() {
-	setGlobalFlag(MgRastCmd, &BapiClis)
+	setGlobalFlag(MgRastCmd, &bapiClis)
 
 	// annotation module
 	MgRastAnnoCmd.Flags().BoolVarP(&MgRastEndp.Similarity, "sim", "", false, `annotate the similarity`)

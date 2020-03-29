@@ -1,6 +1,7 @@
 package fetch
 
 import (
+	"io"
 	"strconv"
 	"strings"
 
@@ -10,11 +11,11 @@ import (
 const Dataset2toolsHost = "http://amp.pharm.mssm.edu/datasets2tools/api/search?"
 
 // Dataset2tools access http://amp.pharm.mssm.edu/datasets2tools/ API
-func Dataset2tools(endpoints *types.Datasets2toolsEndpoints, BapiClis *types.BapiClisT) {
+func Dataset2tools(endpoints *types.Datasets2toolsEndpoints, BapiClis *types.BapiClisT, of io.Writer) {
 	setLog(BapiClis)
 	netopt := setNetOpt(BapiClis)
 	url := Dataset2toolsHost + setDatasets2toolsQuerySuffix(endpoints, BapiClis)
-	GetReq("datasets2tools", url, BapiClis, netopt)
+	GetReq("datasets2tools", url, BapiClis, netopt, of)
 	return
 }
 

@@ -1,8 +1,14 @@
 ---
 title: "Command line help of bget"
-author: "Jianfeng Li"
 date: "`r Sys.Date()`"
-output: md_document
+author: "Jianfeng"
+output: 
+  prettydoc::html_pretty:
+    toc: true
+    theme: cayman
+    highlight: github
+  pdf_document:
+    toc: true
 ---
 
 ```{r, echo = FALSE}
@@ -21,24 +27,46 @@ bget -h
 bget api -h
 ```
 
+### ncbi
+
 ```{bash}
 bget api ncbi -h
 ```
+
+### gdc
 
 ```{bash}
 bget api gdc -h
 ```
 
+### dta
+
 ```{bash}
 bget api dta -h
 ```
+
+### cligov
 
 ```{bash}
 bget api cligov -h
 ```
 
+### biots
+
 ```{bash}
 bget api biots -h
+```
+
+### crf
+
+```{bash}
+bget api crf -h
+```
+
+### mgrast
+
+```{bash}
+bget api mgrast -h
 ```
 
 ## bget doi
@@ -47,19 +75,19 @@ bget api biots -h
 bget doi -h
 ```
 
-### bget seq
+## bget seq
 
 ```{bash}
 bget seq -h
 ```
 
-### bget url
+## bget url
 
 ```{bash}
 bget url -h
 ```
 
-### bget key
+## bget key
 
 ```{bash}
 bget key -h

@@ -9,24 +9,24 @@ import (
 var bioToolsEndp types.BioToolsEndpoints
 var BioToolsCmd = &cobra.Command{
 	Use:   "biots",
-	Short: "Query https://bio.tools/ website APIs.",
-	Long:  `Query https://bio.tools/ website APIs. Detail see https://biotools.readthedocs.io/en/latest/api_reference.html`,
+	Short: "Query bio.tools website APIs.",
+	Long:  `Query bio.tools website APIs. Detail see https://biotools.readthedocs.io/en/latest/api_reference.html`,
 	Run: func(cmd *cobra.Command, args []string) {
 		BioToolsCmdRunOptions(cmd, args)
 	},
 }
 
 func BioToolsCmdRunOptions(cmd *cobra.Command, args []string) {
-	if fetch.BioTools(&bioToolsEndp, &BapiClis, func() { initCmd(cmd, args) }) {
-		BapiClis.HelpFlags = false
+	if fetch.BioTools(&bioToolsEndp, &bapiClis, func() { initCmd(cmd, args) }, nil) {
+		bapiClis.HelpFlags = false
 	}
-	if BapiClis.HelpFlags {
+	if bapiClis.HelpFlags {
 		cmd.Help()
 	}
 }
 
 func init() {
-	setGlobalFlag(BioToolsCmd, &BapiClis)
+	setGlobalFlag(BioToolsCmd, &bapiClis)
 	BioToolsCmd.Flags().StringVarP(&bioToolsEndp.Tool, "tool", "", "", `Obtain information about a single tool (https://bio.tools/api/tool/:id/).`)
 	BioToolsCmd.Flags().StringVarP(&bioToolsEndp.ID, "id", "", "", `Search for bio.tools tool ID e.g signalp)`)
 	BioToolsCmd.Flags().StringVarP(&bioToolsEndp.Name, "name", "", "", `Search for bio.tools tool name e.g signalp)`)
@@ -35,8 +35,8 @@ func init() {
 	BioToolsCmd.Flags().StringVarP(&bioToolsEndp.DataFormat, "dfmt", "", "", `Fuzzy search over input and output for EDAM Format (term)`)
 	BioToolsCmd.Flags().StringVarP(&bioToolsEndp.OutputFormat, "ofmt", "", "", `Fuzzy search over output for EDAM Format (term)`)
 	BioToolsCmd.Flags().StringVarP(&bioToolsEndp.Publication, "publication", "", "", `Fuzzy search over publication (DOI, PMID, PMCID, publication type and tool version)`)
-	BioToolsCmd.Flags().IntVarP(&BapiClis.Size, "page", "", 1, "Page index.")
-	BioToolsCmd.Flags().StringVarP(&BapiClis.Query, "query", "q", "", "Query specifies the search query for record retrieval (required).")
+	BioToolsCmd.Flags().IntVarP(&bapiClis.Size, "page", "", 1, "Page index.")
+	BioToolsCmd.Flags().StringVarP(&bapiClis.Query, "query", "q", "", "Query specifies the search query for record retrieval (required).")
 
 	BioToolsCmd.Example = `  # query item detail
   bget api biots --tool signalp

@@ -3,6 +3,7 @@ package fetch
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"strconv"
 	"strings"
 
@@ -14,20 +15,20 @@ import (
 const MgRastHost = "http://api.mg-rast.org/"
 
 // MgRast access https://clinicaltrials.gov API
-func MgRast(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT, f func()) bool {
-	setLog(BapiClis)
-	netopt := setNetOpt(BapiClis)
+func MgRast(endpoints *types.MgRastEndpoints, bapiClis *types.BapiClisT, f func(), of io.Writer) bool {
+	setLog(bapiClis)
+	netopt := setNetOpt(bapiClis)
 	cvrtMgRastList(endpoints)
-	url := MgRastHost + setMgRastQuerySuffix(endpoints, BapiClis)
+	url := MgRastHost + setMgRastQuerySuffix(endpoints, bapiClis)
 	if emptyURL(url, endpoints) {
 		return false
 	}
 	f()
 	if mgRastGetMode(endpoints) {
-		GetReq("api.mg-rast.org", url, BapiClis, netopt)
+		GetReq("api.mg-rast.org", url, bapiClis, netopt, of)
 	} else {
-		postData := setMgRastQueryData(endpoints, BapiClis)
-		PostReq("api.mg-rast.org", url, postData, BapiClis, netopt)
+		postData := setMgRastQueryData(endpoints, bapiClis)
+		PostReq("api.mg-rast.org", url, postData, bapiClis, netopt, of)
 	}
 	return true
 }
@@ -68,7 +69,7 @@ func cvrtMgRastList(endpoints *types.MgRastEndpoints) {
 	}
 }
 
-func setMgRastQueryData(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT) (data []byte) {
+func setMgRastQueryData(endpoints *types.MgRastEndpoints, bapiClis *types.BapiClisT) (data []byte) {
 	if endpoints.Annotation {
 		data, _ = json.MarshalIndent(endpoints.ParamsAnno, "", " ")
 	} else if endpoints.Compute {
@@ -77,18 +78,18 @@ func setMgRastQueryData(endpoints *types.MgRastEndpoints, BapiClis *types.BapiCl
 	return data
 }
 
-func setMgRastQuerySuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT) (suffix string) {
+func setMgRastQuerySuffix(endpoints *types.MgRastEndpoints, bapiClis *types.BapiClisT) (suffix string) {
 	suffixList := []string{}
 	if endpoints.Annotation {
-		suffix, suffixList = setAnnoSuffix(endpoints, BapiClis)
+		suffix, suffixList = setAnnoSuffix(endpoints, bapiClis)
 	} else if endpoints.Compute {
-		suffix, suffixList = setComputeSuffix(endpoints, BapiClis)
+		suffix, suffixList = setComputeSuffix(endpoints, bapiClis)
 	} else if endpoints.Download {
-		suffix, suffixList = setDownloadSuffix(endpoints, BapiClis)
+		suffix, suffixList = setDownloadSuffix(endpoints, bapiClis)
 	} else if endpoints.Project != "" || endpoints.Library != "" || endpoints.Sample != "" {
-		suffix, suffixList = setProjOrLibrarySuffix(endpoints, BapiClis)
+		suffix, suffixList = setProjOrLibrarySuffix(endpoints, bapiClis)
 	}
-	suffixOther, suffixListOther := setOtherSuffix(endpoints, BapiClis)
+	suffixOther, suffixListOther := setOtherSuffix(endpoints, bapiClis)
 	suffix = suffix + suffixOther
 	suffixList = append(suffixList, suffixListOther...)
 	if len(suffixList) > 0 {
@@ -97,7 +98,7 @@ func setMgRastQuerySuffix(endpoints *types.MgRastEndpoints, BapiClis *types.Bapi
 	return suffix
 }
 
-func setAnnoSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT) (suffix string, suffixList []string) {
+func setAnnoSuffix(endpoints *types.MgRastEndpoints, bapiClis *types.BapiClisT) (suffix string, suffixList []string) {
 	suffix = suffix + "annotation/"
 	if endpoints.Similarity {
 		suffix = suffix + "similarity/" + endpoints.Sequence
@@ -110,7 +111,7 @@ func setAnnoSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT) 
 	return suffix, suffixList
 }
 
-func setComputeSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT) (suffix string, suffixList []string) {
+func setComputeSuffix(endpoints *types.MgRastEndpoints, bapiClis *types.BapiClisT) (suffix string, suffixList []string) {
 	suffix = suffix + "compute/"
 	if endpoints.ComputeAlphadiversity {
 		suffix = suffix + "alphadiversity/" + endpoints.Sequence
@@ -133,7 +134,7 @@ func setComputeSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClis
 	return suffix, suffixList
 }
 
-func setDownloadSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT) (suffix string, suffixList []string) {
+func setDownloadSuffix(endpoints *types.MgRastEndpoints, bapiClis *types.BapiClisT) (suffix string, suffixList []string) {
 	if endpoints.Download && endpoints.DownloadHistory {
 		suffix = suffix + "download/history/" + endpoints.ID
 	} else if endpoints.Download {
@@ -145,7 +146,7 @@ func setDownloadSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiCli
 	return suffix, suffixList
 }
 
-func setProjOrLibrarySuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT) (suffix string, suffixList []string) {
+func setProjOrLibrarySuffix(endpoints *types.MgRastEndpoints, bapiClis *types.BapiClisT) (suffix string, suffixList []string) {
 	if endpoints.Project == "nil" {
 		suffix = suffix + "project/"
 	} else if endpoints.Project != "" && endpoints.Project != "nil" {
@@ -177,7 +178,7 @@ func struct2suffixList(dat interface{}) (suffixList []string) {
 	return suffixList
 }
 
-func setOtherSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT) (suffix string, suffixList []string) {
+func setOtherSuffix(endpoints *types.MgRastEndpoints, bapiClis *types.BapiClisT) (suffix string, suffixList []string) {
 	if endpoints.DarkMatter {
 		suffix = suffix + "darkmatter/" + endpoints.ID
 	}
@@ -218,11 +219,11 @@ func setOtherSuffix(endpoints *types.MgRastEndpoints, BapiClis *types.BapiClisT)
 	if endpoints.Auth != "" {
 		suffixList = append(suffixList, `auth=`+endpoints.Auth)
 	}
-	if BapiClis.Format != "" {
-		suffixList = append(suffixList, "format="+BapiClis.Format)
+	if bapiClis.Format != "" {
+		suffixList = append(suffixList, "format="+bapiClis.Format)
 	}
-	if BapiClis.Extra != "" {
-		suffixList = append(suffixList, BapiClis.Extra)
+	if bapiClis.Extra != "" {
+		suffixList = append(suffixList, bapiClis.Extra)
 	}
 	return suffix, suffixList
 }

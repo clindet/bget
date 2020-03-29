@@ -51,7 +51,7 @@ go get -u github.com/openbiox/bget
 
 ## Usage
 
-Command line outputs see [here](https://github.com/openbiox/bget/blob/master/doc/cli.md)
+Command line outputs see [here](https://openbiox.github.io/bget/cli.html)
 
 ### Query webiste API
 

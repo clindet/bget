@@ -23,6 +23,7 @@ type BapiClisT struct {
 	Indent       int
 	SortKeys     bool
 	Extra        string
+	XML2json     bool
 }
 
 type NcbiClisT struct {

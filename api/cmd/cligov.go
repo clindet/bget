@@ -9,24 +9,24 @@ import (
 var cligovEndp types.CligovEndpoints
 var CligovCmd = &cobra.Command{
 	Use:   "cligov",
-	Short: "Query https://clinicaltrials.gov/ website APIs.",
-	Long:  `Query https://clinicaltrials.gov/ website APIs. Detail see https://clinicaltrials.gov/api/gui/ref/api_urls`,
+	Short: "Query clinicaltrials.gov website APIs.",
+	Long:  `Query clinicaltrials.gov website APIs. Detail see https://clinicaltrials.gov/api/gui/ref/api_urls`,
 	Run: func(cmd *cobra.Command, args []string) {
 		CligovCmdRunOptions(cmd, args)
 	},
 }
 
 func CligovCmdRunOptions(cmd *cobra.Command, args []string) {
-	if fetch.Cligov(&cligovEndp, &BapiClis, func() { initCmd(cmd, args) }) {
-		BapiClis.HelpFlags = false
+	if fetch.Cligov(&cligovEndp, &bapiClis, func() { initCmd(cmd, args) }, nil) {
+		bapiClis.HelpFlags = false
 	}
-	if BapiClis.HelpFlags {
+	if bapiClis.HelpFlags {
 		cmd.Help()
 	}
 }
 
 func init() {
-	setGlobalFlag(CligovCmd, &BapiClis)
+	setGlobalFlag(CligovCmd, &bapiClis)
 	CligovCmd.Flags().BoolVarP(&cligovEndp.InfoDataVrs, "info-dat-vers", "", false, `Returns the date when the ClinicalTrials.gov dataset was posted.`)
 	CligovCmd.Flags().BoolVarP(&cligovEndp.InfoAPIVrs, "info-api-vers", "", false, `Returns the current version number of the ClinicalTrials.gov API.`)
 	CligovCmd.Flags().BoolVarP(&cligovEndp.InfoAPIDefs, "info-api-defs", "", false, `Returns detailed definitions.`)
@@ -41,9 +41,9 @@ func init() {
 
 	CligovCmd.Flags().StringVarP(&cligovEndp.Fields, "fields", "", "", `Specifies which fields to return results for in a Study Fields query.`)
 	CligovCmd.Flags().StringVarP(&cligovEndp.Field, "field", "", "", `Specifies which field to collect values for in a Field Values query.`)
-	CligovCmd.Flags().IntVarP(&BapiClis.From, "from", "", -1, "Parameters of API control the start item of retrived data.")
-	CligovCmd.Flags().IntVarP(&BapiClis.Size, "size", "", -1, "Parameters of API control the lenth of retrived data. Default is auto determined.")
-	CligovCmd.Flags().StringVarP(&BapiClis.Query, "query", "q", "", "Query specifies the search query for record retrieval (required).")
+	CligovCmd.Flags().IntVarP(&bapiClis.From, "from", "", -1, "Parameters of API control the start item of retrived data.")
+	CligovCmd.Flags().IntVarP(&bapiClis.Size, "size", "", -1, "Parameters of API control the lenth of retrived data. Default is auto determined.")
+	CligovCmd.Flags().StringVarP(&bapiClis.Query, "query", "q", "", "Query specifies the search query for record retrieval (required).")
 
 	CligovCmd.Example = `  # returns the date when the ClinicalTrials.gov dataset was posted.
   bget api cligov --info-dat-vers

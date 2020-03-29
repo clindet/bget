@@ -1,6 +1,7 @@
 package fetch
 
 import (
+	"io"
 	"strconv"
 	"strings"
 
@@ -10,7 +11,7 @@ import (
 const BioToolsHost = "https://bio.tools/api/tool/"
 
 // BioTools access https://clinicaltrials.gov API
-func BioTools(endpoints *types.BioToolsEndpoints, BapiClis *types.BapiClisT, f func()) bool {
+func BioTools(endpoints *types.BioToolsEndpoints, BapiClis *types.BapiClisT, f func(), of io.Writer) bool {
 	setLog(BapiClis)
 	if BapiClis.Format == "" {
 		BapiClis.Format = "json"
@@ -21,7 +22,7 @@ func BioTools(endpoints *types.BioToolsEndpoints, BapiClis *types.BapiClisT, f f
 		return false
 	}
 	f()
-	GetReq("bio.tools", url, BapiClis, netopt)
+	GetReq("bio.tools", url, BapiClis, netopt, of)
 
 	return true
 }

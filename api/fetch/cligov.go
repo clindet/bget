@@ -1,6 +1,7 @@
 package fetch
 
 import (
+	"io"
 	"strconv"
 	"strings"
 
@@ -10,7 +11,7 @@ import (
 const CligovHost = "https://clinicaltrials.gov/api/"
 
 // Cligov access https://clinicaltrials.gov API
-func Cligov(endpoints *types.CligovEndpoints, BapiClis *types.BapiClisT, f func()) bool {
+func Cligov(endpoints *types.CligovEndpoints, BapiClis *types.BapiClisT, f func(), of io.Writer) bool {
 	setLog(BapiClis)
 	if BapiClis.Format == "" {
 		BapiClis.Format = "json"
@@ -21,7 +22,7 @@ func Cligov(endpoints *types.CligovEndpoints, BapiClis *types.BapiClisT, f func(
 		return false
 	}
 	f()
-	GetReq("clinicaltrials.gov", url, BapiClis, netopt)
+	GetReq("clinicaltrials.gov", url, BapiClis, netopt, of)
 
 	return true
 }

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"os"
 	"reflect"
 	"strconv"
 	"strings"
@@ -30,7 +29,7 @@ var gdcapis = []string{"status", "projects", "cases", "files", "annotations",
 var pg *mpb.Progress
 
 // Gdc accesss https://api.gdc.cancer.gov data
-func Gdc(endpoint *types.GdcEndpoints, BapiClis *types.BapiClisT) {
+func Gdc(endpoint *types.GdcEndpoints, BapiClis *types.BapiClisT, of io.Writer) {
 	setLog(BapiClis)
 	netopt := setNetOpt(BapiClis)
 	client := cnet.NewHTTPClient(netopt.Timeout, netopt.Proxy)
@@ -70,7 +69,9 @@ func Gdc(endpoint *types.GdcEndpoints, BapiClis *types.BapiClisT) {
 		outfn := cnet.ParseOutfnFromHeader(BapiClis.Outfn, resp, endpoint.ExtraParams.RemoteName)
 
 		defer resp.Body.Close()
-		of := cio.NewOutStream(outfn, req.URL.String())
+		if of == nil {
+			of = cio.NewOutStream(outfn, req.URL.String())
+		}
 		if outfn != "" && endpoint.Data || endpoint.Slicing {
 			err = cnet.HTTPGetURL(req.URL.String(), outfn, netopt)
 			if err != nil {
@@ -85,7 +86,6 @@ func Gdc(endpoint *types.GdcEndpoints, BapiClis *types.BapiClisT) {
 			}
 			return
 		}
-		defer of.Close()
 		postGdcQuery(&queryFlag, resp, endpoint, of)
 	}
 }
@@ -167,7 +167,7 @@ func setGdcQuerySuffix(queryFlag string, endpoint *types.GdcEndpoints, BapiClis 
 	return suffix
 }
 
-func postGdcQuery(queryFlag *string, resp *http.Response, endpoint *types.GdcEndpoints, of *os.File) {
+func postGdcQuery(queryFlag *string, resp *http.Response, endpoint *types.GdcEndpoints, of io.Writer) {
 	if *queryFlag == "projects" {
 		postGdcProj(resp, endpoint, of)
 	}
@@ -194,7 +194,7 @@ func postGdcQuery(queryFlag *string, resp *http.Response, endpoint *types.GdcEnd
 	}
 }
 
-func postGdcStatus(resp *http.Response, endpoint *types.GdcEndpoints, of *os.File) {
+func postGdcStatus(resp *http.Response, endpoint *types.GdcEndpoints, of io.Writer) {
 	var status types.GdcStatus
 	if err := json.NewDecoder(resp.Body).Decode(&status); err != nil {
 		log.Warn(err)
@@ -206,7 +206,7 @@ func postGdcStatus(resp *http.Response, endpoint *types.GdcEndpoints, of *os.Fil
 	table.Render()
 }
 
-func postGdcProj(resp *http.Response, endpoint *types.GdcEndpoints, of *os.File) {
+func postGdcProj(resp *http.Response, endpoint *types.GdcEndpoints, of io.Writer) {
 	var projects types.GdcProjects
 	if err := json.NewDecoder(resp.Body).Decode(&projects); err != nil {
 		log.Warn(err)
@@ -226,7 +226,7 @@ func postGdcProj(resp *http.Response, endpoint *types.GdcEndpoints, of *os.File)
 	log.Infof("From %d to %d GDC portal projects (%d records) done.", projects.Data.Pagination.From, projects.Data.Pagination.From+projects.Data.Pagination.Count, projects.Data.Pagination.Total)
 }
 
-func postGdcCases(resp *http.Response, endpoint *types.GdcEndpoints, of *os.File) {
+func postGdcCases(resp *http.Response, endpoint *types.GdcEndpoints, of io.Writer) {
 	var cases types.GdcCases
 	if err := json.NewDecoder(resp.Body).Decode(&cases); err != nil {
 		log.Warn(err)
@@ -245,7 +245,7 @@ func postGdcCases(resp *http.Response, endpoint *types.GdcEndpoints, of *os.File
 	log.Infof("From %d to %d GDC portal cases (%d records) done.", cases.Data.Pagination.From, cases.Data.Pagination.From+cases.Data.Pagination.Count, cases.Data.Pagination.Total)
 }
 
-func postGdcFiles(resp *http.Response, endpoint *types.GdcEndpoints, of *os.File) {
+func postGdcFiles(resp *http.Response, endpoint *types.GdcEndpoints, of io.Writer) {
 	var files types.GdcFiles
 	if err := json.NewDecoder(resp.Body).Decode(&files); err != nil {
 		log.Warn(err)
@@ -264,7 +264,7 @@ func postGdcFiles(resp *http.Response, endpoint *types.GdcEndpoints, of *os.File
 	log.Infof("From %d to %d GDC portal files (%d records) done.", files.Data.Pagination.From, files.Data.Pagination.From+files.Data.Pagination.Count, files.Data.Pagination.Total)
 }
 
-func postGdcAnnotations(resp *http.Response, endpoint *types.GdcEndpoints, of *os.File) {
+func postGdcAnnotations(resp *http.Response, endpoint *types.GdcEndpoints, of io.Writer) {
 	var annotations types.GdcAnnotations
 	if err := json.NewDecoder(resp.Body).Decode(&annotations); err != nil {
 		log.Warn(err)
@@ -284,25 +284,25 @@ func postGdcAnnotations(resp *http.Response, endpoint *types.GdcEndpoints, of *o
 	log.Infof("From %d to %d GDC portal annotations (%d records) done.", annotations.Data.Pagination.From, annotations.Data.Pagination.From+annotations.Data.Pagination.Count, annotations.Data.Pagination.Total)
 }
 
-func postGdcData(resp *http.Response, endpoint *types.GdcEndpoints, of *os.File) {
+func postGdcData(resp *http.Response, endpoint *types.GdcEndpoints, of io.Writer) {
 	_, err := io.Copy(of, resp.Body)
 	if err != nil {
 		log.Warn(err)
 	}
 }
-func postGdcManifest(resp *http.Response, endpoint *types.GdcEndpoints, of *os.File) {
+func postGdcManifest(resp *http.Response, endpoint *types.GdcEndpoints, of io.Writer) {
 	_, err := io.Copy(of, resp.Body)
 	if err != nil {
 		log.Warn(err)
 	}
 }
-func postGdcSlicing(resp *http.Response, endpoint *types.GdcEndpoints, of *os.File) {
+func postGdcSlicing(resp *http.Response, endpoint *types.GdcEndpoints, of io.Writer) {
 	_, err := io.Copy(of, resp.Body)
 	if err != nil {
 		log.Warn(err)
 	}
 }
-func newCmdlineRenderTable(header []string, of *os.File) (table *tablewriter.Table) {
+func newCmdlineRenderTable(header []string, of io.Writer) (table *tablewriter.Table) {
 	table = tablewriter.NewWriter(of)
 	table.SetRowLine(true)
 	table.SetRowSeparator("-")

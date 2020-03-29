@@ -18,26 +18,26 @@ var GdcCmd = &cobra.Command{
 }
 
 func GdcCmdRunOptions(cmd *cobra.Command, args []string) {
-	endp.ExtraParams.From = BapiClis.From
-	endp.ExtraParams.Size = BapiClis.Size
-	endp.ExtraParams.Format = BapiClis.Format
-	endp.ExtraParams.Query = BapiClis.Query
-	endp.ExtraParams.Pretty = BapiClis.PrettyJSON
+	endp.ExtraParams.From = bapiClis.From
+	endp.ExtraParams.Size = bapiClis.Size
+	endp.ExtraParams.Format = bapiClis.Format
+	endp.ExtraParams.Query = bapiClis.Query
+	endp.ExtraParams.Pretty = bapiClis.PrettyJSON
 	if endp.ExtraParams.JSON {
 		endp.ExtraParams.Format = "json"
 	}
 	if endp.Status || endp.Projects || endp.Cases || endp.Files || endp.Annotations || endp.Data || endp.Manifest || endp.Slicing {
 		initCmd(cmd, args)
-		fetch.Gdc(&endp, &BapiClis)
-		BapiClis.HelpFlags = false
+		fetch.Gdc(&endp, &bapiClis, nil)
+		bapiClis.HelpFlags = false
 	}
-	if BapiClis.HelpFlags {
+	if bapiClis.HelpFlags {
 		cmd.Help()
 	}
 }
 
 func init() {
-	setGlobalFlag(GdcCmd, &BapiClis)
+	setGlobalFlag(GdcCmd, &bapiClis)
 	GdcCmd.Flags().BoolVarP(&endp.ExtraParams.RemoteName, "remote-name", "n", false, "Use remote defined filename.")
 	GdcCmd.Flags().BoolVarP(&endp.Status, "status", "s", false, "Check GDC portal status (https://portal.gdc.cancer.gov/).")
 	GdcCmd.Flags().BoolVarP(&endp.Cases, "cases", "c", false, "Retrive cases info from GDC portal.")
@@ -52,9 +52,9 @@ func init() {
 	GdcCmd.Flags().StringVarP(&endp.ExtraParams.Token, "token", "", "", "Token to access GDC.")
 	GdcCmd.Flags().StringVarP(&endp.ExtraParams.Sort, "sort", "", "", "Sort parameters.")
 	GdcCmd.Flags().StringVarP(&endp.ExtraParams.Fields, "fields", "", "", "Fields parameters.")
-	GdcCmd.Flags().IntVarP(&BapiClis.From, "from", "", -1, "Parameters of API control the start item of retrived data.")
-	GdcCmd.Flags().IntVarP(&BapiClis.Size, "size", "", -1, "Parameters of API control the lenth of retrived data. Default is auto determined.")
-	GdcCmd.Flags().StringVarP(&BapiClis.Query, "query", "q", "", "Query specifies the search query for record retrieval (required).")
+	GdcCmd.Flags().IntVarP(&bapiClis.From, "from", "", -1, "Parameters of API control the start item of retrived data.")
+	GdcCmd.Flags().IntVarP(&bapiClis.Size, "size", "", -1, "Parameters of API control the lenth of retrived data. Default is auto determined.")
+	GdcCmd.Flags().StringVarP(&bapiClis.Query, "query", "q", "", "Query specifies the search query for record retrieval (required).")
 
 	GdcCmd.Example = `  # retrive projects meta info from GDC portal
   bget api gdc -p

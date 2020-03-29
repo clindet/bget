@@ -1,3 +1,11 @@
+2020-03-31 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
+		* new '--print-meta' flag in `bget doi`
+		* new '--print-crossref' flag in `bget doi`
+		* new '--xml2json' flag in `bget api`
+		* add `crf` subcommand in `bget api`
+		* expand suported doi list
+
 2020-03-28 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* fix peerj doi query
