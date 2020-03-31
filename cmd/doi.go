@@ -21,6 +21,7 @@ import (
 	"github.com/openbiox/ligo/slice"
 	stringo "github.com/openbiox/ligo/stringo"
 	"github.com/spf13/cobra"
+	"github.com/tidwall/pretty"
 )
 
 var fullText string
@@ -102,6 +103,7 @@ func parseArgsDoi() (doi []string) {
 func outputSiteMetaData(outDir string, opt *spider.DoiSpiderOpt) {
 	var err error
 	var of io.Writer
+	var buf *bytes.Buffer
 	metaJSON, _ := json.Marshal(*opt.CitationMeta)
 	log.Infof("Website metadata of %s: %s", opt.Doi, string(metaJSON))
 	outfn := path.Join(outDir, "website.meta.json")
@@ -112,7 +114,16 @@ func outputSiteMetaData(outDir string, opt *spider.DoiSpiderOpt) {
 		if err != nil {
 			log.Warnln(err)
 		} else {
-			io.Copy(of, strings.NewReader(string(metaJSON)))
+			indent := ""
+			for i := 0; i < 2; i++ {
+				indent = indent + " "
+			}
+			opt := pretty.Options{
+				Indent:   indent,
+				SortKeys: false,
+			}
+			buf = bytes.NewBuffer(pretty.PrettyOptions(metaJSON, &opt))
+			io.Copy(of, buf)
 		}
 	}
 }
@@ -148,7 +159,16 @@ func outputCrossRefData(outDir string, opt *spider.DoiSpiderOpt,
 		if err != nil {
 			log.Warnln(err)
 		} else {
-			io.Copy(of, &buf)
+			indent := ""
+			for i := 0; i < 2; i++ {
+				indent = indent + " "
+			}
+			opt := pretty.Options{
+				Indent:   indent,
+				SortKeys: false,
+			}
+			bufTmp := bytes.NewBuffer(pretty.PrettyOptions(buf.Bytes(), &opt))
+			io.Copy(of, bufTmp)
 		}
 	}
 }
