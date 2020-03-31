@@ -101,7 +101,6 @@ func parseArgsDoi() (doi []string) {
 
 func outputSiteMetaData(outDir string, opt *spider.DoiSpiderOpt) {
 	var err error
-	var buf bytes.Buffer
 	var of io.Writer
 	metaJSON, _ := json.Marshal(*opt.CitationMeta)
 	log.Infof("Website metadata of %s: %s", opt.Doi, string(metaJSON))
@@ -113,7 +112,7 @@ func outputSiteMetaData(outDir string, opt *spider.DoiSpiderOpt) {
 		if err != nil {
 			log.Warnln(err)
 		} else {
-			io.Copy(of, &buf)
+			io.Copy(of, strings.NewReader(string(metaJSON)))
 		}
 	}
 }

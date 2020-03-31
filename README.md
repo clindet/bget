@@ -131,6 +131,17 @@ bget api biots --topic Proteomics
 bget api biots --dtype 'Protein sequence'
 bget api biots --dfmt FASTA
 bget api biots --ofmt 'ClustalW format'
+
+# crossref
+bget api crf --doi 10.1073/pnas.1814397115
+bget api crf --doi 10.1073/pnas.1814397115 --xml2json --json-pretty --indent 1
+
+# mgrast
+bget api mgrast anno --info
+# retrieval of SwissProt taxonomy annotations with a cut-off 10^100 for dataset mgm4447943.3
+bget api mgrast anno --evalue 100 --type organism --source SwissProt --seq mgm4447943.3
+
+bget api mgrast compute --info
 ```
 
 ### Query DOI resources
@@ -147,11 +158,13 @@ bget doi 10.1016/j.devcel.2017.03.001 10.1016/j.stem.2019.07.009 10.1016/j.celre
 ## query publications with supplementary files
 bget doi 10.1038/s41586-019-1844-5 --suppl
 
+# query pdf and meta data using PubMed ID
+dois=`bget api ncbi --xml2json --json-pretty -q '30487223[pmid] or 30402350[pmid] or 29279377[pmid]' --size 3 -m 3 | grep / | grep 10. | sed 's/ .* "//' | tr -d '",' | sort -u` && echo ${dois} && bget doi ${dois} --print-meta --print-crossref
 ```
 
 We can query PDF of the manuscript via using Endnote or sci-hub. However, you can not easily get the supplementary files of scientific papers based on the two ways.
 
-![doi demo](https://github.com/openbiox/bget/raw/master/doc/static/doi.gif)
+![doi demo](https://github.com/openbiox/bget/raw/master/docs/static/doi.gif)
 
 Here, we are developing and sharing an open-source tool bget with `doi` subcommand to query supplementary files of scientific papers. The journals with high impact factors or those integrative publishers are a higher priority in our development plan, see [here](http://openbiox.github.io/bget/doi.html)
 
