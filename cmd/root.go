@@ -27,7 +27,7 @@ type bgetCliT struct {
 	KeysAll            bool
 	Clean              bool
 	PrintFormat        string
-	AxelThread         int
+	ThreadQuery        int
 	Thread             int
 	Timeout            int
 	RetSleepTime       int

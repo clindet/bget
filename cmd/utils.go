@@ -93,8 +93,8 @@ func setGlobalFlag(cmd *cobra.Command, bgetClis *bgetCliT) {
 	cmd.Flags().IntVarP(&bgetClis.RetSleepTime, "retries-sleep-time", "", 5, "Sleep time after one retry.")
 	cmd.Flags().BoolVarP(&bgetClis.RemoteName, "remote-name", "n", false, "Use remote defined filename.")
 	cmd.Flags().StringVarP(&(bgetClis.Mirror), "mirror", "m", "", "Set the mirror of resources.")
-	cmd.Flags().StringVarP(&(bgetClis.Engine), "engine", "g", "go-http", "Point the download engine: go-http, wget, curl, axel, git, and rsync.")
-	cmd.Flags().IntVarP(&(bgetClis.AxelThread), "thread-axel", "", 5, "Set the thread of axel.")
+	cmd.Flags().StringVarP(&(bgetClis.Engine), "engine", "g", "default", "Point the download engine: default, simplego, wget, curl, axel, git, and rsync. Don't need the external tool using the 'default' or 'simplego' mode.")
+	cmd.Flags().IntVarP(&(bgetClis.ThreadQuery), "thread-req", "", 1, "Set the thread of request number of per URL.")
 }
 
 func checkArgs(cmd *cobra.Command, subcmd string) {
@@ -135,7 +135,7 @@ func setNetParams(bgetClis *bgetCliT) (netOpt *cnet.Params) {
 		TaskID:         bgetClis.TaskID,
 		Mirror:         bgetClis.Mirror,
 		Thread:         bgetClis.Thread,
-		AxelThread:     bgetClis.AxelThread,
+		ThreadQuery:    bgetClis.ThreadQuery,
 		Overwrite:      bgetClis.Overwrite,
 		Ignore:         bgetClis.Ignore,
 		Quiet:          bgetClis.Verbose == 0,

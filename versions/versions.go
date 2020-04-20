@@ -36,7 +36,9 @@ func DefaultVersions(key string, env *map[string]string) {
 }
 
 // QueryKeysInfo get keys URL and post shell command
-func QueryKeysInfo(keys []string, env *map[string]string) (urls, postShellCmd, vers map[string][]string) {
+func QueryKeysInfo(keys []string, env *map[string]string,
+	BgetToolsPool *[]urlpool.BgetToolsURLType,
+	BgetFilesPool *[]urlpool.BgetFilesURLType) (urls, postShellCmd, vers map[string][]string) {
 	urls = make(map[string][]string)
 	postShellCmd = make(map[string][]string)
 	vers = make(map[string][]string)
@@ -52,21 +54,21 @@ func QueryKeysInfo(keys []string, env *map[string]string) (urls, postShellCmd, v
 			(*env)["release"] = release
 		}
 		DefaultVersions(key, env)
-		_, _, defaultVers := urlpool.QueryBgetTools(key, env)
+		_, _, defaultVers := urlpool.QueryBgetTools(key, env, BgetToolsPool)
 		if (*env)["version"] == "" && len(defaultVers) > 0 {
 			(*env)["version"] = defaultVers[0]
 		}
-		tmp, tmp2, _ := urlpool.QueryBgetTools(key, env)
+		tmp, tmp2, _ := urlpool.QueryBgetTools(key, env, BgetToolsPool)
 		if len(tmp) > 0 {
 			urls[key] = append(urls[key], tmp...)
 			postShellCmd[key] = append(postShellCmd[key], tmp2...)
 			vers[key] = append(vers[key], defaultVers...)
 		}
-		_, _, defaultVers = urlpool.QueryBgetFiles(key, env)
+		_, _, defaultVers = urlpool.QueryBgetFiles(key, env, BgetFilesPool)
 		if (*env)["version"] == "" && len(defaultVers) > 0 {
 			(*env)["version"] = defaultVers[0]
 		}
-		tmp, tmp2, _ = urlpool.QueryBgetFiles(key, env)
+		tmp, tmp2, _ = urlpool.QueryBgetFiles(key, env, BgetFilesPool)
 		if len(tmp) > 0 {
 			urls[key] = append(urls[key], tmp...)
 			postShellCmd[key] = append(postShellCmd[key], tmp2...)
@@ -84,7 +86,9 @@ func QueryKeysInfo(keys []string, env *map[string]string) (urls, postShellCmd, v
 }
 
 // QueryKeysVersions get keys versions
-func QueryKeysVersions(keys []string, env *map[string]string) map[string][]string {
+func QueryKeysVersions(keys []string, env *map[string]string,
+	BgetToolsPool *[]urlpool.BgetToolsURLType,
+	BgetFilesPool *[]urlpool.BgetFilesURLType) map[string][]string {
 	versions := make(map[string][]string)
 	table := tablewriter.NewWriter(os.Stdout)
 	if (*env)["PrintFormat"] == "table" {
@@ -96,7 +100,7 @@ func QueryKeysVersions(keys []string, env *map[string]string) map[string][]strin
 	wg := sync.WaitGroup{}
 	for i := range keys {
 		wg.Add(1)
-		urls, _, vers := QueryKeysInfo([]string{keys[i]}, env)
+		urls, _, vers := QueryKeysInfo([]string{keys[i]}, env, BgetToolsPool, BgetFilesPool)
 		key, _, _, _ := ParseMeta(keys[i])
 		if len(vers[key]) > 0 {
 			versions[key] = vers[key]

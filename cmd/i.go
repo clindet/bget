@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/url"
 	"os"
 	"os/exec"
+	"os/user"
 	"path"
 	"sort"
 	"strings"
@@ -24,10 +26,34 @@ import (
 )
 
 var keyVs map[string][]string
+var fileLinks []urlpool.BgetFilesURLType
+var toolLinks []urlpool.BgetToolsURLType
+var netOpt *cnet.Params
 
-// KeyCmd is the cobra command object to run bget key
+var entryLink string
+var updateCache bool
+
+var defaultEntry = map[string][]string{
+	"baseURL": []string{
+		"{{HOME}}/.config/bget/meta",
+		"http://61.129.70.139:3030/api/view_user_file/?path=/62dcd780-0db6-11e9-855b-bb4c4b386613/meta/bget",
+		"https://raw.githubusercontent.com/openbiox/bget/master/",
+	},
+	"tools": []string{"tools/main.json"},
+	"files": []string{
+		"files/db.json",
+		"files/github.json",
+		"files/github_other.json",
+		"files/journal.json",
+		"files/other.json",
+		"files/reffa.json",
+		"files/wkfl.json",
+	},
+}
+
+// KeyCmd is the cobra command object to run bget i
 var KeyCmd = &cobra.Command{
-	Use:   "key [key1 key2 key3...]",
+	Use:   "i [name1 name2 name3...]",
 	Short: "Can be used to access URLs via a key string.",
 	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version #releaseVersion', : bwa, reffa-defuse@GRCh38 #97. More see here https://github.com/openbiox/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -38,6 +64,9 @@ var KeyCmd = &cobra.Command{
 func keyCmdRunOptions(cmd *cobra.Command, args []string) {
 	initCmd(cmd, args)
 	checkArgs(cmd, "key")
+	if updateCache || bgetClis.ShowVersions || bgetClis.KeysAll || bgetClis.Keys != "" || bgetClis.ListFile != "" {
+		initLinks()
+	}
 	if bgetClis.ShowVersions {
 		log.Infoln("Featching versions from local and remote website...")
 		keys := parseKeys()
@@ -45,7 +74,7 @@ func keyCmdRunOptions(cmd *cobra.Command, args []string) {
 			bgetClis.PrintFormat = "table"
 		}
 		bgetClis.Env["PrintFormat"] = bgetClis.PrintFormat
-		keyVs = vers.QueryKeysVersions(keys, &bgetClis.Env)
+		keyVs = vers.QueryKeysVersions(keys, &bgetClis.Env, &toolLinks, &fileLinks)
 		return
 	}
 	if bgetClis.KeysAll {
@@ -58,7 +87,7 @@ func keyCmdRunOptions(cmd *cobra.Command, args []string) {
 		downloadKey()
 		bgetClis.HelpFlags = false
 	}
-	if bgetClis.HelpFlags {
+	if !updateCache && bgetClis.HelpFlags {
 		cmd.Help()
 	}
 }
@@ -76,11 +105,12 @@ func parseKeys() (keys []string) {
 
 func downloadKey() {
 	keys := parseKeys()
-	urls, postShellCmd, _ := vers.QueryKeysInfo(keys, &bgetClis.Env)
+	initLinks()
+	urls, postShellCmd, _ := vers.QueryKeysInfo(keys, &bgetClis.Env, &toolLinks, &fileLinks)
 	done := make(map[string][]string)
 	var destDirArray []string
-	netOpt := setNetParams(&bgetClis)
 	sem := make(chan bool, bgetClis.Thread)
+	netOpt = setNetParams(&bgetClis)
 	for key, v := range urls {
 		for i := range v {
 			v[i] = preURLFilter(v[i])
@@ -167,11 +197,11 @@ func postCmdRender(oldCmd string, dest string) (newCmd string) {
 }
 
 func getAllKeys() (keys []string) {
-	for i := range urlpool.BgetToolsPool {
-		keys = append(keys, urlpool.BgetToolsPool[i].Name)
+	for i := range toolLinks {
+		keys = append(keys, toolLinks[i].Name)
 	}
-	for i := range urlpool.BgetFilesPool {
-		keys = append(keys, urlpool.BgetFilesPool[i].Name)
+	for i := range fileLinks {
+		keys = append(keys, fileLinks[i].Name)
 	}
 	keys = slice.DropSliceDup(keys)
 	sort.Strings(keys)
@@ -208,7 +238,108 @@ func getAllKeys() (keys []string) {
 	return keys
 }
 
+func initLinks() {
+	netOpt = setNetParams(&bgetClis)
+	netOpt.Overwrite = true
+	netOpt.Thread = 10
+	us, _ := user.Current()
+	defaultEntry["baseURL"][0] = strings.ReplaceAll(defaultEntry["baseURL"][0],
+		"{{HOME}}", us.HomeDir)
+	if entryLink == "" {
+		if loadLocalCache(&defaultEntry) && !updateCache {
+			return
+		}
+		loadEntryData(&defaultEntry)
+	} else if strings.Contains(entryLink, "http") {
+		cnet.HTTPGetURLs([]string{entryLink}, []string{defaultEntry["baseURL"][0]}, netOpt)
+		destFn := path.Join(defaultEntry["baseURL"][0], path.Base(entryLink))
+		if hasFile, _ := cio.PathExists(destFn); hasFile {
+			fcon, _ := cio.Open(destFn)
+			jsData, _ := ioutil.ReadAll(fcon)
+			tmp := make(map[string][]string)
+			json.Unmarshal(jsData, &tmp)
+			tmp["baseURL"][0] = strings.ReplaceAll(tmp["baseURL"][0],
+				"{{HOME}}", us.HomeDir)
+			if loadLocalCache(&tmp) && !updateCache {
+				return
+			}
+			loadEntryData(&tmp)
+		}
+	} else if hasFile, _ := cio.PathExists(entryLink); hasFile {
+		fcon, _ := cio.Open(entryLink)
+		jsData, _ := ioutil.ReadAll(fcon)
+		tmp := make(map[string][]string)
+		json.Unmarshal(jsData, &tmp)
+		tmp["baseURL"][0] = strings.ReplaceAll(tmp["baseURL"][0],
+			"{{HOME}}", us.HomeDir)
+		if loadLocalCache(&tmp) && !updateCache {
+			return
+		}
+		loadEntryData(&tmp)
+	}
+}
+
+func loadEntryData(entry *map[string][]string) {
+	for _, v := range (*entry)["baseURL"][1:len((*entry)["baseURL"])] {
+		links := []string{}
+		var destDir []string
+
+		for _, v2 := range (*entry)["tools"] {
+			links = append(links, strings.Replace(path.Join(v, v2), ":/", "://", 1))
+			destDir = append(destDir, path.Join((*entry)["baseURL"][0], path.Dir(v2)))
+		}
+		for _, v2 := range (*entry)["files"] {
+			links = append(links, strings.Replace(path.Join(v, v2), ":/", "://", 1))
+			destDir = append(destDir, path.Join((*entry)["baseURL"][0], path.Dir(v2)))
+		}
+		log.Infof("Updating bget meta data from %s.", v)
+		netOpt = setNetParams(&bgetClis)
+		netOpt.Overwrite = true
+		netOpt.Thread = 10
+		cnet.HTTPGetURLs(links, destDir, netOpt)
+		if loadLocalCache(entry) {
+			break
+		}
+	}
+}
+
+func loadLocalCache(entry *map[string][]string) bool {
+	toolsJSON := []string{}
+	filesJSON := []string{}
+	for _, v := range (*entry)["tools"] {
+		toolsJSON = append(toolsJSON, path.Join((*entry)["baseURL"][0], v))
+	}
+	for _, v := range (*entry)["files"] {
+		filesJSON = append(filesJSON, path.Join((*entry)["baseURL"][0], v))
+	}
+	for _, v := range filesJSON {
+		if hasFile, _ := cio.PathExists(v); hasFile {
+			fcon, _ := cio.Open(v)
+			jsData, _ := ioutil.ReadAll(fcon)
+			tmp := []urlpool.BgetFilesURLType{}
+			json.Unmarshal(jsData, &tmp)
+			fileLinks = append(fileLinks, tmp...)
+		}
+	}
+	for _, v := range toolsJSON {
+		if hasFile, _ := cio.PathExists(v); hasFile {
+			fcon, _ := cio.Open(v)
+			jsData, _ := ioutil.ReadAll(fcon)
+			tmp := []urlpool.BgetToolsURLType{}
+			json.Unmarshal(jsData, &tmp)
+			toolLinks = append(toolLinks, tmp...)
+		}
+	}
+	if len(toolLinks) > 0 && len(fileLinks) > 0 {
+		return true
+	}
+	return false
+}
+
 func init() {
+	KeyCmd.Flags().BoolVarP(&updateCache, "update", "", false, "Logical indicating that whether to update local cache of meta files.")
+	KeyCmd.Flags().StringVarP(&entryLink, "channel", "c", "", "Entry meta file of bget.")
+
 	KeyCmd.Flags().BoolVar(&(bgetClis.AutoPath), "autopath", false, "Logical indicating that whether to create subdir in download dir: e.g. reffa/{{key}}/")
 	KeyCmd.Flags().BoolVarP(&(bgetClis.ShowVersions), "show-versions", "v", false, "Show all available versions of key.")
 	KeyCmd.Flags().StringVarP(&(bgetClis.PrintFormat), "format", "", "", "Output format (text, json, table)")
@@ -217,23 +348,25 @@ func init() {
 	setGlobalFlag(KeyCmd, &bgetClis)
 	setUncompressFlag(KeyCmd, &bgetClis)
 	setKeyListFlag(KeyCmd, &bgetClis, "keys")
-	KeyCmd.Example = `  # download bwa source (with task env info)
-  bget key bwa --verbose 2
+	KeyCmd.Example = `  # update cache
+  bget i --update
+  # download bwa source (with task env info)
+  bget i bwa --verbose 2
   # get all available keys
-  bget key -a
+  bget i -a
   # in JSON format
-  bget key -a --format json
+  bget i -a --format json
   # view all bwa and samtools available tags in table
-  bget key bwa samtools -v
+  bget i bwa samtools -v
   # view all bwa and samtools available tags in json
-  bget key bwa samtools -v --format json
+  bget i bwa samtools -v --format json
 	
   # force download defuse reference (with task env info and save log to file)
-  bget key "reffa/defuse@GRCh38 #97" -t 10 -f --verbose 2 --save-log
-  bget key reffa/defuse@GRCh38 release=97 -t 10 -f
+  bget i "reffa/defuse@GRCh38 #97" -t 10 -f --verbose 2 --save-log
+  bget i reffa/defuse@GRCh38 release=97 -t 10 -f
   # download annovar reference
-  bget key db/annovar@clinvar_20170501 db/annovar@clinvar_20180603 builder=hg38
+  bget i db/annovar@clinvar_20170501 db/annovar@clinvar_20180603 builder=hg38
 
-  bget key db/annovar -v --formt text
-  bget key db/annovar version='clinvar_20131105, clinvar_20140211, clinvar_20140303, clinvar_20140702, clinvar_20140902, clinvar_20140929, clinvar_20150330, clinvar_20150629, clinvar_20151201, clinvar_20160302, clinvar_20161128, clinvar_20170130, clinvar_20170501, clinvar_20170905, clinvar_20180603, avsnp150, avsnp147, avsnp144, avsnp142, avsnp138, cadd, caddgt10, caddgt20, cadd13, cadd13gt10, cadd13gt20, cg69, cg46, cosmic70, cosmic68wgs, cosmic68, cosmic67wgs, cosmic67, cosmic65, cosmic64, dbnsfp35a, dbnsfp33a, dbnsfp31a_interpro, dbnsfp30a, dbscsnv11, eigen, esp6500siv2_ea, esp6500siv2_aa, esp6500siv2_all, exac03nontcga, exac03nonpsych, exac03, fathmm, gerp++gt2, gme, gnomad_exome, gnomad_genome, gwava, hrcr1, icgc21, intervar_20170202, kaviar_20150923, ljb26_all, mcap, mitimpact2, mitimpact24, nci60, popfreq_max_20150413, popfreq_all_20150413, revel, regsnpintron' builder=hg19 -t 10 -f`
+  bget i db/annovar -v --formt text
+  bget i db/annovar version='clinvar_20131105, clinvar_20140211, clinvar_20140303, clinvar_20140702, clinvar_20140902, clinvar_20140929, clinvar_20150330, clinvar_20150629, clinvar_20151201, clinvar_20160302, clinvar_20161128, clinvar_20170130, clinvar_20170501, clinvar_20170905, clinvar_20180603, avsnp150, avsnp147, avsnp144, avsnp142, avsnp138, cadd, caddgt10, caddgt20, cadd13, cadd13gt10, cadd13gt20, cg69, cg46, cosmic70, cosmic68wgs, cosmic68, cosmic67wgs, cosmic67, cosmic65, cosmic64, dbnsfp35a, dbnsfp33a, dbnsfp31a_interpro, dbnsfp30a, dbscsnv11, eigen, esp6500siv2_ea, esp6500siv2_aa, esp6500siv2_all, exac03nontcga, exac03nonpsych, exac03, fathmm, gerp++gt2, gme, gnomad_exome, gnomad_genome, gwava, hrcr1, icgc21, intervar_20170202, kaviar_20150923, ljb26_all, mcap, mitimpact2, mitimpact24, nci60, popfreq_max_20150413, popfreq_all_20150413, revel, regsnpintron' builder=hg19 -t 10 -f`
 }

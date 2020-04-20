@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "db/journal-doaj",
+    "Description": "",
+    "URL": [
+      "https://doaj.org/csv"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  }
+]
+

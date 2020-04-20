@@ -1,0 +1,628 @@
+[
+  {
+    "Name": "wdl/encode-chipseq2",
+    "Description": "",
+    "URL": [
+      "https://github.com/ENCODE-DCC/chip-seq-pipeline2"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": [
+      "pipeline",
+      "chipseq"
+    ],
+    "PostShellCmd": [
+      "pip3 install caper || pip install caper"
+    ]
+  },
+  {
+    "Name": "wdl/antonkulaga",
+    "Description": "",
+    "URL": [
+      "https://github.com/antonkulaga/antonkulaga"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/bgm-cwg-whole-exome-sequencing",
+    "Description": "",
+    "URL": [
+      "https://github.com/bgm-cwg/Whole-Exome-Sequencing-Workflow"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/bgm-cwg-whole-genome-sequencing",
+    "Description": "",
+    "URL": [
+      "https://github.com/bgm-cwg/Whole-Genome-Sequencing-Workflow"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-aligning",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/aligning"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-bam-to-gvcf",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/bam-to-gvcf"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-chip-seq",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/ChIP-seq"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-gams",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/gams"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-germline-dna",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/germline-DNA"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-jointgenotyping",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/jointgenotyping"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-pipeline-template",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/pipeline-template"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-qc",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/QC"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-rna-seq",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/RNA-seq"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-somatic-variantcalling",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/somatic-variantcalling"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-tasks",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/tasks"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/biowdl-virus-assembly",
+    "Description": "",
+    "URL": [
+      "https://github.com/biowdl/virus-assembly"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/tsca-firecloud",
+    "Description": "",
+    "URL": [
+      "https://github.com/broadinstitute/TSCA_firecloud_WDLS"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/pacbio-tools",
+    "Description": "",
+    "URL": [
+      "https://github.com/camccowan/PacBio-WDL-Tools"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/brass",
+    "Description": "",
+    "URL": [
+      "https://github.com/cancerit/BRASS-wdl"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/deepvariant-glnexus",
+    "Description": "",
+    "URL": [
+      "https://github.com/dnanexus-rnd/DeepVariant-GLnexus-WDL"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/firecloud-tools",
+    "Description": "",
+    "URL": [
+      "https://github.com/edawson/firecloud-tools"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-wgs-germline-snps-indels",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/broad-prod-wgs-germline-snps-indels"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-five-dollar-genome-analysis",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/five-dollar-genome-analysis-pipeline"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-3-4-rnaseq-germline-snps-indels",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/gatk3-4-rnaseq-germline-snps-indels"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-3-data-processing",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/gatk3-data-processing"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-4-data-processing",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/gatk4-data-processing"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-4-germline-snps-indels",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/gatk4-germline-snps-indels"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-4-somatic-cnvs",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/gatk4-somatic-cnvs"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-4-somatic-snvs-indels",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/gatk4-somatic-snvs-indels"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-4-somatic-with-preprocessing",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/gatk4-somatic-with-preprocessing"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-intel-faster-alternative-samples",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/intel-faster-alternative-samples"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-3-4-intel-germline-snps-indels",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/intel-gatk3-4-germline-snps-indels"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-3-intel-germline-snps-indels",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/intel-gatk3-germline-snps-indels"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-4-intel-germline-snps-indels",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/intel-gatk4-germline-snps-indels"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-4-intel-somatic-with-preprocessing",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/intel-gatk4-somatic-with-preprocessing"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-seq-format-conversion",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/seq-format-conversion"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/gatk-seq-format-validation",
+    "Description": "",
+    "URL": [
+      "https://github.com/gatk-workflows/seq-format-validation"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/genomics-iter-developers-wgs-wes-germline",
+    "Description": "",
+    "URL": [
+      "https://github.com/genomicsITER-developers/wdl"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/hongiiv-gatk-workflows",
+    "Description": "",
+    "URL": [
+      "https://github.com/hongiiv/gatk-workflows"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/uofabio",
+    "Description": "",
+    "URL": [
+      "https://github.com/jimmybgammyknee/uofaBioWDL"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/jimmybgammyknee-workflows",
+    "Description": "",
+    "URL": [
+      "https://github.com/jimmybgammyknee/workflows"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/johnmous-chip-seq",
+    "Description": "",
+    "URL": [
+      "https://github.com/johnmous/ChIPseq"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/mgs-sop",
+    "Description": "",
+    "URL": [
+      "https://github.com/karlrl/mgs_sop"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/kurt-hetrick-variants",
+    "Description": "",
+    "URL": [
+      "https://github.com/Kurt-Hetrick/WDL"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/saige",
+    "Description": "",
+    "URL": [
+      "https://github.com/manning-lab/saigeWdl"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/wgsa-parsr",
+    "Description": "",
+    "URL": [
+      "https://github.com/manning-lab/wgsaParsrWdl"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/deepvar",
+    "Description": "",
+    "URL": [
+      "https://github.com/mkim55/deepvar-wdl"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/mayomics-vc",
+    "Description": "",
+    "URL": [
+      "https://github.com/ncsa/MayomicsVC"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/metagenophile",
+    "Description": "",
+    "URL": [
+      "https://github.com/omixer/metagenophile"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/oskarvid-germline-pipeline",
+    "Description": "",
+    "URL": [
+      "https://github.com/oskarvid/wdl_germline_pipeline"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/ottojolanki-kallisto",
+    "Description": "",
+    "URL": [
+      "https://github.com/ottojolanki/kallisto-wdl"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/raisok-rnaseq",
+    "Description": "",
+    "URL": [
+      "https://github.com/raisok/RNAseq_WDL"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/sanderest-cromwell",
+    "Description": "",
+    "URL": [
+      "https://github.com/SanderEST/cromwell_wdl"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "wdl/seonwhee-genome-gatk",
+    "Description": "",
+    "URL": [
+      "https://github.com/Seonwhee-Genome/GATK_WDL"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": null
+  },
+  {
+    "Name": "snakemake/dna-seq-gatk-variant-calling",
+    "Description": "",
+    "URL": [
+      "https://github.com/snakemake-workflows/dna-seq-gatk-variant-calling"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "snakemake/sequana",
+    "Description": "",
+    "URL": [
+      "https://github.com/sequana/sequana"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  }
+]
+

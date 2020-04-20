@@ -1,0 +1,2902 @@
+[
+  {
+    "Name": "gitlab/leen",
+    "Description": "",
+    "URL": [
+      "https://gitlab.com/bioai/leen"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/acdc",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/dudleylab/acdc"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/phd",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/miroslavradojevic/phd"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/bioescorte-suggestion",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/ipk_bit_team/bioescorte-suggestion"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/pipit",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/biovizleuven/pipit"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/purge-haplotigs",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/mroachawri/purge_haplotigs"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/aa-stat",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/j_bale/aa_stat"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/infiniumpurify",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/zhengxiaoqi/infiniumpurify"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/bacmeta",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/aleksisipola/bacmeta"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/dd-detection",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/mkroon/dd_detection"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/ldetect",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/nygcresearch/ldetect"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/ldetect-data",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/nygcresearch/ldetect-data"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/flexscore",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/mjamroz/flexscore"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/vdjpuzzle2",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/kirbyvisp/vdjpuzzle2"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/pancanceramaretto",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/gevaertlab/pancanceramaretto"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/aikyatan",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/cellsandmachines/aikyatan"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/biobranch",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sulab/biobranch"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/biosubg",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/akittas/biosubg"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/m2lite",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/paiyetan/m2lite"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/bam-matcher",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sacgf/bam-matcher"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/badtrip",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/nicofmay/badtrip"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/jqcml",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/proteinspector/jqcml"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/metaphinder",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/genomicepidemiology/metaphinder"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/pheno-deep-counter",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/tuttoweb/pheno-deep-counter"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/metabat",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/berkeleylab/metabat"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/jra-src",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jointreadalignment/jra-src"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/wanding/duprecover/overview",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/wanding/duprecover/overview"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/pbrit",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/medgenua/pbrit"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/pyseqlab",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/a_2/pyseqlab"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/l.u.st",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/afro-juju/l.u.st"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/pli",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/astexuk/pli"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mageck-nest",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/liulab/mageck_nest"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cophesim",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/izhbannikov/cophesim"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/scg",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/aroth85/scg"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/venomix",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jasonmacrander/venomix"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/read",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/tguenther/read"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/iso-ktsp",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/regulatorygenomicsupf/iso-ktsp"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/intervene",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/cbgr/intervene"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cl-dash",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/booz-allen-sci-comp-team/cl-dash"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/norgal",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/kosaidtu/norgal"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/hogan",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/xavmeyer/hogan"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/brainformat",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/oruebel/brainformat"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/tcellxtalk",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/lp-csic-uab/tcellxtalk"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/phyparts",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/blackrim/phyparts"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/lipidhunter",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sysmedos/lipidhunter"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/domainoid",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sonnhammergroup/domainoid"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/simlord",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/genomeinformatics/simlord"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cabsflex",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/lcbio/cabsflex"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/alpha",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/thekswenson/alpha"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/gabi",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/mhowison/gabi"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/metaprob",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/samu661/metaprob"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/svd-phy",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/andrea/svd-phy"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/sparkseq",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/mwiewiorka/sparkseq"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/chimiric",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/leslielab/chimiric"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/granger-causality",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/dtyu/granger-causality"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/phylogenomic-dataset-construction",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/yangya/phylogenomic_dataset_construction"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/fastsimbac",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/nicofmay/fastsimbac"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/digtyper",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jana_ebler/digtyper"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/oncodriveclustl",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/bbglab/oncodriveclustl"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mutationmotif",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/pycogent3/mutationmotif"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/fbb",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/irenerodriguez/fbb"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/seql-nrps",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/dansondergaard/seql-nrps"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/biofilmanalyzer",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/rogex/biofilmanalyzer"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/percolator-upgrade",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jthalloran/percolator_upgrade"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mngsg",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sm_islam/mngsg"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/sandpuma",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/chevrm/sandpuma"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/nightshift",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/akdehof/nightshift"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/xpiwit",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jstegmaier/xpiwit"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/chemdistillerpython",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/ianalytica/chemdistillerpython"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/hgvs",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/hgvs/hgvs"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/logminer",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/kleinstein/logminer"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/locality",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/thekswenson/locality"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/benchmarks",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/biodbqual/benchmarks"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cutruntools",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/qzhudfci/cutruntools"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/orange-reliability",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/biolab/orange-reliability"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/godon",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/davydov/godon"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/libsleipnir.bitbucket.org",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/libsleipnir/libsleipnir.bitbucket.org"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/triovis",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/biovizleuven/triovis"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/hicapp",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/mthjwu/hicapp"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/kit",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jarmond/kit"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/elsa",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/charade/elsa"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/deepscope",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/aschaumberg/deepscope"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/infusion",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/kokonech/infusion"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/enzymer",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/casraz/enzymer"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mageck-vispr",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/liulab/mageck-vispr"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/avishkar",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/cellsandmachines/avishkar"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/ddr",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/rso24/ddr"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/g-tris",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/bereste/g-tris"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/depthfinder",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jerlar73/depthfinder"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/nsclc-paper",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/youngjh/nsclc_paper"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/vsclust",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/veitveit/vsclust"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/oncorep",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sulab/oncorep"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/rucs",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/genomicepidemiology/rucs"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/glbase",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/oaxiom/glbase"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/hdgmcm",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/cdal/hdgmcm"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/classyfire-api",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/wishartlab/classyfire_api"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/srg-extractor",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jerlar73/srg-extractor"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/shoelaces",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/valenlab/shoelaces"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/miraw",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/account/user/bipous/projects/miraw"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/metamodules",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/alimay/metamodules"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/subcons-web-server",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/salvatore_marco/subcons-web-server"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mlm-gs-supplement",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jwliang/mlm_gs_supplement"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/scavager",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/markmipt/scavager"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cellsandmachines",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/cellsandmachines"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mistrvar",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/compbio/mistrvar"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/protie",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/compbio/protie"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/rppa-preprocess",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/rppa_preprocess/rppa_preprocess"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/smart-viewpoint-computation-lib",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/rranon/smart-viewpoint-computation-lib"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/neri",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sergionery/neri"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/kernelsvmspark",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/cellsandmachines/kernelsvmspark"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/stereodist",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/oesperlab/stereodist"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/arpeggio",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/harryjubb/arpeggio"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/em-dawid",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/a_2/em_dawid"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/bioner",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/ianalytica/bioner"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/warpiv",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/berkeleylab/warpiv"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/rgaugury",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/yaanlpc/rgaugury"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/drseq",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/tarela/drseq"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/libfmftsaxs",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/abc-group/libfmftsaxs"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/forqs",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/dkessner/forqs"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mrmplusgui",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/paiyetan/mrmplusgui"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/vcf2networks",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/dalloliogm/vcf2networks"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/sequence-shape",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/wenxiu/sequence-shape"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/genediseaserepositioning",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/ncl-intbio/genediseaserepositioning"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/pia",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/osiris_phylogenetics/pia"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/phyloskeleton",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/lionelguy/phyloskeleton"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cabsdock",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/lcbio/cabsdock"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/last-split-pe",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/splitpairedend/last-split-pe"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cytostruct",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sergeyn/cytostruct"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/autometa",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jason_c_kwan/autometa"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/resistome-release",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jdwinkler/resistome_release"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/laser-release",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jdwinkler/laser_release"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/shades",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/satsumaimo/shades"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mzjava",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sib-pig/mzjava"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/jaspar",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/cbgr/jaspar"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/vispa2",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/andreacalabria/vispa2"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/omics-pipe",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sulab/omics_pipe"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/qc-analysis",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/proteinspector/qc_analysis"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/fit3d",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/fkaiser/fit3d"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/bioa",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/nmancuso/bioa"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/repgenhmm",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/yuvalel/repgenhmm"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/diprog",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/farahani/diprog"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/jgi-sparc",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/berkeleylab/jgi-sparc"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/aodp-v2.0-release",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/wenchen_aafc/aodp_v2.0_release"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/genomemining",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/batlabucd/genomemining"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mulcch",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/roygroup/mulcch"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/micomplete",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/evolegiolab/micomplete"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/sparcc",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/yonatanf/sparcc"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/galaxytoolfactory",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/fubar/galaxytoolfactory"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/readdi",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/readdi/readdi"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/fimtyper",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/genomicepidemiology/fimtyper"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/fimtyper-db",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/genomicepidemiology/fimtyper_db"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/bart",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/luisa_amaral/bart"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/sorting-by-network-completion",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/mattbiggs/sorting_by_network_completion"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/aggrescan3d",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/lcbio/aggrescan3d"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/spurio",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/bateman-group/spurio"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/remixt",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/dranew/remixt"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/sist-codes",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/benhamlab/sist_codes"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/agalma",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/caseywdunn/agalma"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/splot",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/lkalesinskas/splot"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/densitycut-dev",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jerry00/densitycut_dev"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/sl1p",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/fwhelan/sl1p"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/biotransformerjar",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/djoumbou/biotransformerjar"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/banner-chemdner",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/tsendeemts/banner-chemdner"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/taxmapper",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/dbeisser/taxmapper"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/rawmsa",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/clami66/rawmsa"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/fast",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/baderlab/fast"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/dmml",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/anthakki/dmml"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/comorbidity",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/ibi_group/comorbidity"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/proteogenomics",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/andreyto/proteogenomics"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/tpes",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/l0ka/tpes"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/hh-suite",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/soedinglab/hh-suite"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/magicmicrorna",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/mutgx/magicmicrorna"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/vptissue",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/vptissue/vptissue"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/catkern",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/elies_ramon/catkern"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/moleculedatabaseframework",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/kienerj/moleculedatabaseframework"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/svist4get",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/artegorov/svist4get"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/chromawalker",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/zhenwahtan/chromawalker"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cytodx-study-code",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/zichenghu_ucsf/cytodx_study_code"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cystine-stabilized-proteins",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sm_islam/cystine-stabilized-proteins"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/ht-altfrac",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/oesperlab/ht-altfrac"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cfs-toolbox",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/mikkonuutinen/cfs_toolbox"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mgmapper",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/genomicepidemiology/mgmapper"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/genespider",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/sonnhammergrni/genespider"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/phosfox",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/phintsan/phosfox"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/defcom",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/bryancquach/defcom"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/phylogenize",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/pbradz/phylogenize"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/monovar",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/hamimzafar/monovar"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/immunediversity",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/immunediversity/immunediversity"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/ciml-lib",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/ciml-ufjf/ciml-lib"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/profileseq",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/regulatorygenomicsupf/profileseq"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/clonocalc-plot",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/clonosuite/clonocalc-plot"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cafe",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/cob87icw6z/cafe"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/rsbiodiv",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/rsbiodiv"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/disconica",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/masauburn/disconica"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/protwis",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/gpcr/protwis"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/cypreact",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/leon_ti/cypreact"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/gsoa",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/srp33/gsoa"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/caviarbf",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/wenan/caviarbf"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/glycoprofileassigner",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/fergaljd/glycoprofileassigner"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/pymonaco",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/hgugmradiofisica/pymonaco"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/rna-motifs",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/rogrro/rna_motifs"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/metamarker",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/mkoohim/metamarker"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/decaf",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/marta-sd/decaf"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/qtlsearch",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/alex-warwickvesztrocy/qtlsearch"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/md-analysis-with-matlab",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/niekdeklerk/md-analysis-with-matlab"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mechrna",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/compbio/mechrna"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/bbcontacts",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/soedinglab/bbcontacts"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/ccmpred",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/soedinglab/ccmpred"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/3depiloop",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/4dnucleome/3depiloop"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/mugbas",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/capemaster/mugbas"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/sensa",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/floettma/sensa"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/visualmcmc",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/rhali/visualmcmc"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/hapzipper",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/pchanda/hapzipper"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/whatshap",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/whatshap/whatshap"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/samu661/fsh/overview",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/samu661/fsh/overview"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/suppa",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/regulatorygenomicsupf/suppa"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/imondb",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/proteinspector/imondb"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/dyss",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/ban-m/dyss"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/virus-vg",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/jbaaijens/virus-vg"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/glycome-analytics-platform",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/scientificomputing/glycome-analytics-platform"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/xglycscan",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/paiyetan/xglycscan"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/dendsort",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/biovizleuven/dendsort"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  },
+  {
+    "Name": "bitbucket/trust",
+    "Description": "",
+    "URL": [
+      "https://bitbucket.org/liulab/trust"
+    ],
+    "Versions": null,
+    "VersionsAPI": "",
+    "Tags": null,
+    "PostShellCmd": [
+      "cd {{dest}} \u0026\u0026 git checkout {{version}}"
+    ]
+  }
+]
+

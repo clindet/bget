@@ -25,9 +25,9 @@ For website spider (optional):
 
 For raw sequencing data query (optional):
 
-- [sra-tools](https://github.com/ncbi/sra-tools) for SRA and dbGAP database: MAC and Windows user `bget key base/sratools@2.9.6-1`, Linux user `bget key base/sratools`;
+- [sra-tools](https://github.com/ncbi/sra-tools) for SRA and dbGAP database: MAC and Windows user `bget i base/sratools@2.9.6-1`, Linux user `bget i base/sratools`;
 - [pyega3](https://github.com/EGA-archive/ega-download-client) for EGA database: `pip3 install pyega3`;
-- [gdc-client](https://gdc.cancer.gov/access-data/gdc-data-transfer-tool) for GDC portal: `bget key base/gdc-client@1.4.0 -u`.
+- [gdc-client](https://gdc.cancer.gov/access-data/gdc-data-transfer-tool) for GDC portal: `bget i base/gdc-client@1.4.0 -u`.
 
 ## Installation
 
@@ -172,28 +172,28 @@ Here, we are developing and sharing an open-source tool bget with `doi` subcomma
 
 ### Query files via alias key
 
-`bget key` can be used to query a set of files via the alias key, such as bwa, samtools, reffa/defuse, and db/annovar.
+`bget i` can be used to query a set of files via the alias key, such as bwa, samtools, reffa/defuse, and db/annovar.
 
 ```bash
 # download bwa source (with task env info)
-bget key bwa --verbose 2
+bget i bwa --verbose 2
 # get all available keys
-bget key -a
+bget i -a
 # in JSON format
-bget key -a --format json
+bget i -a --format json
 # view all bwa and samtools available tags in table
-bget key bwa samtools -v
+bget i bwa samtools -v
 # view all bwa and samtools available tags in json
-bget key bwa samtools -v --format json
+bget i bwa samtools -v --format json
 
 # force download defuse reference (with task env info and save log to file)
-bget key "reffa/defuse@GRCh38 #97" -t 10 -f
-bget key reffa/defuse@GRCh38 release=97 -t 10 -f
+bget i "reffa/defuse@GRCh38 #97" -t 10 -f
+bget i reffa/defuse@GRCh38 release=97 -t 10 -f
 # download annovar reference
-bget key db/annovar@clinvar_20170501 db/annovar@clinvar_20180603 builder=hg38
+bget i db/annovar@clinvar_20170501 db/annovar@clinvar_20180603 builder=hg38
 
-bget key db/annovar -v --formt text
-bget key db/annovar version='clinvar_20131105, clinvar_20140211, clinvar_20140303, clinvar_20140702, clinvar_20140902, clinvar_20140929, clinvar_20150330, clinvar_20150629, clinvar_20151201, clinvar_20160302, clinvar_20161128, clinvar_20170130, clinvar_20170501, clinvar_20170905, clinvar_20180603, avsnp150, avsnp147, avsnp144, avsnp142, avsnp138, cadd, caddgt10, caddgt20, cadd13, cadd13gt10, cadd13gt20, cg69, cg46, cosmic70, cosmic68wgs, cosmic68, cosmic67wgs, cosmic67, cosmic65, cosmic64, dbnsfp35a, dbnsfp33a, dbnsfp31a_interpro, dbnsfp30a, dbscsnv11, eigen, esp6500siv2_ea, esp6500siv2_aa, esp6500siv2_all, exac03nontcga, exac03nonpsych, exac03, fathmm, gerp++gt2, gme, gnomad_exome, gnomad_genome, gwava, hrcr1, icgc21, intervar_20170202, kaviar_20150923, ljb26_all, mcap, mitimpact2, mitimpact24, nci60, popfreq_max_20150413, popfreq_all_20150413, revel, regsnpintron' builder=hg19 -t 10 -f
+bget i db/annovar -v --formt text
+bget i db/annovar version='clinvar_20131105, clinvar_20140211, clinvar_20140303, clinvar_20140702, clinvar_20140902, clinvar_20140929, clinvar_20150330, clinvar_20150629, clinvar_20151201, clinvar_20160302, clinvar_20161128, clinvar_20170130, clinvar_20170501, clinvar_20170905, clinvar_20180603, avsnp150, avsnp147, avsnp144, avsnp142, avsnp138, cadd, caddgt10, caddgt20, cadd13, cadd13gt10, cadd13gt20, cg69, cg46, cosmic70, cosmic68wgs, cosmic68, cosmic67wgs, cosmic67, cosmic65, cosmic64, dbnsfp35a, dbnsfp33a, dbnsfp31a_interpro, dbnsfp30a, dbscsnv11, eigen, esp6500siv2_ea, esp6500siv2_aa, esp6500siv2_all, exac03nontcga, exac03nonpsych, exac03, fathmm, gerp++gt2, gme, gnomad_exome, gnomad_genome, gwava, hrcr1, icgc21, intervar_20170202, kaviar_20150923, ljb26_all, mcap, mitimpact2, mitimpact24, nci60, popfreq_max_20150413, popfreq_all_20150413, revel, regsnpintron' builder=hg19 -t 10 -f
 ```
 
 ### Query FASTQ/CEL files from GEO/SRA/EGA/dbGAP/GDC
