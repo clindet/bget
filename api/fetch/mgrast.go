@@ -9,7 +9,7 @@ import (
 
 	"github.com/openbiox/ligo/stringo"
 
-	"github.com/openbiox/bget/api/types"
+	"github.com/openanno/bget/api/types"
 )
 
 const MgRastHost = "http://api.mg-rast.org/"

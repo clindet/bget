@@ -5,7 +5,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/openbiox/bget/api/types"
+	"github.com/openanno/bget/api/types"
 	cio "github.com/openbiox/ligo/io"
 	"github.com/openbiox/ligo/stringo"
 	"github.com/spf13/cobra"

@@ -2,7 +2,7 @@
     "baseURL": [
         "{{HOME}}/.config/bget/meta", 
         "http://61.129.70.139:3030/api/view_user_file/?path=/62dcd780-0db6-11e9-855b-bb4c4b386613/meta/bget", 
-        "https://raw.githubusercontent.com/openbiox/bget/master/_meta"
+        "https://raw.githubusercontent.com/openanno/bget/master/_meta"
     ],
     "tools": [
         "tools/main.json"

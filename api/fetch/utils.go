@@ -11,7 +11,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	xj "github.com/basgys/goxml2json"
-	"github.com/openbiox/bget/api/types"
+	"github.com/openanno/bget/api/types"
 	cio "github.com/openbiox/ligo/io"
 	clog "github.com/openbiox/ligo/log"
 	cnet "github.com/openbiox/ligo/net"

@@ -9,7 +9,7 @@ import (
 	"sync"
 
 	"github.com/olekukonko/tablewriter"
-	"github.com/openbiox/bget/urlpool"
+	"github.com/openanno/bget/urlpool"
 	"github.com/openbiox/ligo/stringo"
 )
 

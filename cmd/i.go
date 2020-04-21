@@ -14,9 +14,9 @@ import (
 	"strings"
 
 	"github.com/olekukonko/tablewriter"
-	"github.com/openbiox/bget/spider"
-	"github.com/openbiox/bget/urlpool"
-	vers "github.com/openbiox/bget/versions"
+	"github.com/openanno/bget/spider"
+	"github.com/openanno/bget/urlpool"
+	vers "github.com/openanno/bget/versions"
 	"github.com/openbiox/ligo/archive"
 	bexec "github.com/openbiox/ligo/exec"
 	cio "github.com/openbiox/ligo/io"
@@ -37,7 +37,7 @@ var defaultEntry = map[string][]string{
 	"baseURL": []string{
 		"{{HOME}}/.config/bget/meta",
 		"http://61.129.70.139:3030/api/view_user_file/?path=/62dcd780-0db6-11e9-855b-bb4c4b386613/meta/bget",
-		"https://raw.githubusercontent.com/openbiox/bget/master/",
+		"https://raw.githubusercontent.com/openanno/bget/master/",
 	},
 	"tools": []string{"tools/main.json"},
 	"files": []string{
@@ -55,7 +55,7 @@ var defaultEntry = map[string][]string{
 var KeyCmd = &cobra.Command{
 	Use:   "i [name1 name2 name3...]",
 	Short: "Can be used to access URLs via a key string.",
-	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version #releaseVersion', : bwa, reffa-defuse@GRCh38 #97. More see here https://github.com/openbiox/bget.`,
+	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version #releaseVersion', : bwa, reffa-defuse@GRCh38 #97. More see here https://github.com/openanno/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		keyCmdRunOptions(cmd, args)
 	},

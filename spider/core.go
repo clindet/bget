@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/gocolly/colly"
-	"github.com/openbiox/bget/chrome"
+	"github.com/openanno/bget/chrome"
 	glog "github.com/openbiox/ligo/log"
 	cnet "github.com/openbiox/ligo/net"
 	"github.com/openbiox/ligo/stringo"

@@ -13,9 +13,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/openbiox/bget/api/fetch"
-	"github.com/openbiox/bget/api/types"
-	"github.com/openbiox/bget/spider"
+	"github.com/openanno/bget/api/fetch"
+	"github.com/openanno/bget/api/types"
+	"github.com/openanno/bget/spider"
 	cio "github.com/openbiox/ligo/io"
 	cnet "github.com/openbiox/ligo/net"
 	"github.com/openbiox/ligo/slice"
@@ -35,7 +35,7 @@ var printCrossRefMeta bool
 var DoiCmd = &cobra.Command{
 	Use:   "doi [doi1 doi2 doi3...]",
 	Short: "Can be used to access files via DOI.",
-	Long:  `Can be used to access files via DOI. More see here https://github.com/openbiox/bget.`,
+	Long:  `Can be used to access files via DOI. More see here https://github.com/openanno/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		doiCmdRunOptions(cmd, args)
 	},

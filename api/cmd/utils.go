@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/openbiox/bget/api/types"
+	"github.com/openanno/bget/api/types"
 	cvrt "github.com/openbiox/ligo/convert"
 	cio "github.com/openbiox/ligo/io"
 	clog "github.com/openbiox/ligo/log"

@@ -1,4 +1,4 @@
-module github.com/openbiox/bget
+module github.com/openanno/bget
 
 go 1.13
 
@@ -20,8 +20,8 @@ require (
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/onsi/ginkgo v1.11.0 // indirect
 	github.com/onsi/gomega v1.8.1 // indirect
-	github.com/openbiox/ligo v0.0.0-20200421055148-fbc6d165cec4
-	github.com/pierrec/lz4 v2.5.1+incompatible // indirect
+	github.com/openbiox/ligo v0.0.0-20200421163414-9a04d08e537e
+	github.com/pierrec/lz4 v2.5.2+incompatible // indirect
 	github.com/sirupsen/logrus v1.5.0
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/pflag v1.0.5 // indirect

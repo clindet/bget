@@ -15,7 +15,7 @@
 package main
 
 import (
-	"github.com/openbiox/bget/cmd"
+	"github.com/openanno/bget/cmd"
 )
 
 func main() {

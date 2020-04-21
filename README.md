@@ -1,4 +1,4 @@
-<img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Life cycle: experimental"> <a href="https://godoc.org/github.com/openbiox/bget"><img src="https://godoc.org/github.com/openbiox/bget?status.svg" alt="GoDoc"></a>
+<img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Life cycle: experimental"> <a href="https://godoc.org/github.com/openanno/bget"><img src="https://godoc.org/github.com/openanno/bget?status.svg" alt="GoDoc"></a>
 
 # bget
 
@@ -14,8 +14,8 @@ Supported types:
 
 Downstream tool:
 
-- [bioctl](https://github.com/openbiox/bioctl): convert, format, and other functions
-- [bioextr](https://github.com/openbiox/bioextr): text-mining functions
+- [bioctl](https://github.com/openanno/bioctl): convert, format, and other functions
+- [bioextr](https://github.com/openanno/bioextr): text-mining functions
 
 ## Prerequisities
 
@@ -33,20 +33,20 @@ For raw sequencing data query (optional):
 
 ```bash
 # windows
-wget https://github.com/openbiox/bget/releases/download/v0.2.4/bget.exe
+wget https://github.com/openanno/bget/releases/download/v0.2.4/bget.exe
 
 # osx
-wget https://github.com/openbiox/bget/releases/download/v0.2.4/bget_osx
+wget https://github.com/openanno/bget/releases/download/v0.2.4/bget_osx
 mv bget_osx bget
 chmod a+x bget
 
 # linux
-wget https://github.com/openbiox/bget/releases/download/v0.2.4/bget_linux64
+wget https://github.com/openanno/bget/releases/download/v0.2.4/bget_linux64
 mv bget_linux64 bget
 chmod a+x bget
 
 # get latest version
-go get -u github.com/openbiox/bget
+go get -u github.com/openanno/bget
 ```
 
 ## Usage
@@ -57,7 +57,7 @@ Command line outputs see [here](https://openbiox.github.io/bget/cli.html)
 
 `bget api` can be used to query serveral website APIs, such as PubMed, Datasetdataset2tools, and GDC portal website.
 
-In addition, you can use the downstream tool [bioctl](https://github.com/openbiox/bioctl) to conduct the simple text-mining of PubMed abstract at the sentence level.
+In addition, you can use the downstream tool [bioctl](https://github.com/openanno/bioctl) to conduct the simple text-mining of PubMed abstract at the sentence level.
 
 ```bash
 # NCBI eutils
@@ -164,7 +164,7 @@ dois=`bget api ncbi --xml2json --json-pretty -q '30487223[pmid] or 30402350[pmid
 
 We can query PDF of the manuscript via using Endnote or sci-hub. However, you can not easily get the supplementary files of scientific papers based on the two ways.
 
-![doi demo](https://github.com/openbiox/bget/raw/master/docs/static/doi.gif)
+![doi demo](https://github.com/openanno/bget/raw/master/docs/static/doi.gif)
 
 Here, we are developing and sharing an open-source tool bget with `doi` subcommand to query supplementary files of scientific papers. The journals with high impact factors or those integrative publishers are a higher priority in our development plan, see [here](http://openbiox.github.io/bget/doi.html)
 
@@ -249,9 +249,9 @@ bget url -l /tmp/urls.list -o /tmp/download -f -t 3
 
 # query github repo (support assets files)
 bget url Miachol/github_demo --github
-bget url PapenfussLab/gridss openbiox/bget --with-github-assets -t 5 --github
-bget url PapenfussLab/gridss openbiox/bget --only-github-assets -t 5 --github
-bget url PapenfussLab/gridss openbiox/bget --with-github-assets --with-assets-versions v2.7.2,v0.1.3 -t 5 --github
+bget url PapenfussLab/gridss openanno/bget --with-github-assets -t 5 --github
+bget url PapenfussLab/gridss openanno/bget --only-github-assets -t 5 --github
+bget url PapenfussLab/gridss openanno/bget --with-github-assets --with-assets-versions v2.7.2,v0.1.3 -t 5 --github
 ```
 
 ## Maintainer

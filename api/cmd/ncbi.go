@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/openbiox/bget/api/fetch"
-	"github.com/openbiox/bget/api/types"
+	"github.com/openanno/bget/api/fetch"
+	"github.com/openanno/bget/api/types"
 	"github.com/openbiox/ligo/flag"
 	cio "github.com/openbiox/ligo/io"
 	"github.com/spf13/cobra"
