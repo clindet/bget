@@ -5,7 +5,7 @@ bget url ${urls}
 bget url https://dldir1.qq.com/weixin/Windows/WeChatSetup.exe https://dldir1.qq.com/qqfile/qq/PCQQ9.1.6/25786/QQ9.1.6.25786.exe --save-log
 bget url ${urls} -t 3 -o /tmp/download -f -g wget --save-log --verbose 2
 bget url ${urls} -t 2 -o /tmp/download --save-log --verbose 2
-bget url ${urls} -t 3 -o /tmp/download -g wget --ignore
+bget url ${urls} -t 3 -o /tmp/download -g wget --resume
 bget url -l /tmp/urls.list -o /tmp/download -f -t 3
 
 bget url Miachol/github_demo --github

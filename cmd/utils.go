@@ -85,7 +85,7 @@ func setGlobalFlag(cmd *cobra.Command, bgetClis *bgetCliT) {
 	cmd.Flags().IntVarP(&(bgetClis.Thread), "thread", "t", 1, "Concurrency download thread.")
 	cmd.Flags().StringVarP(&(bgetClis.DownloadDir), "outdir", "o", wd, "Set the download dir.")
 	cmd.Flags().StringVarP(&(bgetClis.Seperator), "seperator", "s", ",", "Optional 'url1{seperator}url2' for multiple keys, urls, or seqs.")
-	cmd.Flags().BoolVar(&(bgetClis.Ignore), "ignore", false, "Contine to download and skip the check of existed files.")
+	cmd.Flags().BoolVar(&(bgetClis.Ignore), "resume", false, "Contine to download and skip the check of existed files.")
 	cmd.Flags().StringVarP(&(bgetClis.CmdExtraFromFlag), "extra-cmd", "e", "", "Extra flags and values pass to internal CMDs")
 	cmd.Flags().BoolVarP(&(bgetClis.Overwrite), "overwrite", "f", false, "Logical indicating that whether to overwrite existing files.")
 	cmd.Flags().IntVarP(&bgetClis.Retries, "retries", "r", 5, "Retry specifies the number of attempts to retrieve the data.")
@@ -94,7 +94,7 @@ func setGlobalFlag(cmd *cobra.Command, bgetClis *bgetCliT) {
 	cmd.Flags().BoolVarP(&bgetClis.RemoteName, "remote-name", "n", false, "Use remote defined filename.")
 	cmd.Flags().StringVarP(&(bgetClis.Mirror), "mirror", "m", "", "Set the mirror of resources.")
 	cmd.Flags().StringVarP(&(bgetClis.Engine), "engine", "g", "default", "Point the download engine: default, simplego, wget, curl, axel, git, and rsync. Don't need the external tool using the 'default' or 'simplego' mode.")
-	cmd.Flags().IntVarP(&(bgetClis.ThreadQuery), "thread-req", "", 1, "Set the thread of request number of per URL.")
+	cmd.Flags().IntVarP(&(bgetClis.ThreadQuery), "thread-req", "d", 1, "Set the thread of request number of per URL.")
 }
 
 func checkArgs(cmd *cobra.Command, subcmd string) {

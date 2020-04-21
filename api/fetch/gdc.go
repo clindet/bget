@@ -14,7 +14,7 @@ import (
 	"github.com/openbiox/bget/api/types"
 	cio "github.com/openbiox/ligo/io"
 	cnet "github.com/openbiox/ligo/net"
-	mpb "github.com/vbauerster/mpb/v4"
+	mpb "github.com/vbauerster/mpb/v5"
 )
 
 // GdcAPIHost GDC API
