@@ -8,10 +8,13 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	"os/signal"
 	"os/user"
 	"path"
 	"sort"
 	"strings"
+	"syscall"
+	"time"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/openanno/bget/spider"
@@ -112,6 +115,13 @@ func downloadKey() {
 	var destDirArray []string
 	sem := make(chan bool, bgetClis.Thread)
 	netOpt = setNetParams(&bgetClis)
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan,
+		syscall.SIGHUP,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+		syscall.SIGQUIT)
+
 	for key, v := range urls {
 		for i := range v {
 			v[i] = preURLFilter(v[i])
@@ -128,12 +138,20 @@ func downloadKey() {
 			}
 		}
 		sem <- true
-		go func(key string, v []string, destDirArray []string) {
+		go func(key string, v []string, destDirArray []string, signalChan chan os.Signal) {
 			defer func() {
-				<-sem
+				select {
+				case <-signalChan:
+					//send par number of interrupt for each routine
+					time.Sleep(3 * time.Second)
+					os.Exit(130)
+					return
+				case <-sem:
+					return
+				}
 			}()
 			done[key] = cnet.HTTPGetURLs(v, destDirArray, netOpt)
-		}(key, v, destDirArray)
+		}(key, v, destDirArray, signalChan)
 	}
 	for i := 0; i < cap(sem); i++ {
 		sem <- true

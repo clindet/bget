@@ -53,14 +53,14 @@ func setBioToolsQuerySuffix(endpoints *types.BioToolsEndpoints, BapiClis *types.
 	if endpoints.Publication != "" {
 		suffixList = append(suffixList, `publication=`+endpoints.Publication)
 	}
+	if BapiClis.From != -1 && BapiClis.From > 10 {
+		suffixList = append(suffixList, `page=`+strconv.Itoa(1+BapiClis.From/10))
+	}
 	if BapiClis.Query != "" {
 		suffixList = append(suffixList, "q="+BapiClis.Query)
 	}
 	if BapiClis.Format != "" {
 		suffixList = append(suffixList, "format="+BapiClis.Format)
-	}
-	if BapiClis.Size != -1 {
-		suffixList = append(suffixList, "page="+strconv.Itoa(BapiClis.Size))
 	}
 	if BapiClis.Extra != "" {
 		suffixList = append(suffixList, BapiClis.Extra)

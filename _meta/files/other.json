@@ -1215,6 +1215,8 @@
       "http://tukaani.org/xz/xz-{{version}}.tar.gz"
     ],
     "Versions": [
+      "5.2.5",
+      "5.2.4",
       "5.2.3",
       "5.2.2"
     ],

@@ -61,17 +61,17 @@ func QueryBgetTools(name string, env *map[string]string, BgetToolsPool *[]BgetTo
 				versions = GitHubVersionSpider((*BgetToolsPool)[i].VersionsAPI, true)
 			} else if (*BgetToolsPool)[i].VersionsAPI != "" && strings.Contains((*BgetToolsPool)[i].VersionsAPI, "://bitbucket.org") {
 				versions = BitbucketVersionSpider((*BgetToolsPool)[i].VersionsAPI)
-			} else if strings.Contains((*BgetToolsPool)[i].URL["Linux"][0], "github.com") {
+			} else if (*BgetToolsPool)[i].URL["Linux"] != nil && strings.Contains((*BgetToolsPool)[i].URL["Linux"][0], "github.com") {
 				versions = GitHubVersionSpider((*BgetToolsPool)[i].URL["Linux"][0], true)
 			} else if strings.Contains((*BgetToolsPool)[i].URL["Linux"][0], "bitbucket.org") {
 				versions = BitbucketVersionSpider((*BgetToolsPool)[i].URL["Linux"][0])
-			} else if strings.Contains((*BgetToolsPool)[i].URL["Mac"][0], "github.com") {
+			} else if (*BgetToolsPool)[i].URL["Mac"] != nil && strings.Contains((*BgetToolsPool)[i].URL["Mac"][0], "github.com") {
 				versions = GitHubVersionSpider((*BgetToolsPool)[i].URL["Mac"][0], true)
-			} else if strings.Contains((*BgetToolsPool)[i].URL["Mac"][0], "bitbucket.org") {
+			} else if (*BgetToolsPool)[i].URL["Mac"] != nil && strings.Contains((*BgetToolsPool)[i].URL["Mac"][0], "bitbucket.org") {
 				versions = BitbucketVersionSpider((*BgetToolsPool)[i].URL["Mac"][0])
-			} else if strings.Contains((*BgetToolsPool)[i].URL["Win"][0], "github.com") {
+			} else if (*BgetToolsPool)[i].URL["Win"] != nil && strings.Contains((*BgetToolsPool)[i].URL["Win"][0], "github.com") {
 				versions = GitHubVersionSpider((*BgetToolsPool)[i].URL["Win"][0], true)
-			} else if strings.Contains((*BgetToolsPool)[i].URL["Win"][0], "bitbucket.org") {
+			} else if (*BgetToolsPool)[i].URL["Win"] != nil && strings.Contains((*BgetToolsPool)[i].URL["Win"][0], "bitbucket.org") {
 				versions = BitbucketVersionSpider((*BgetToolsPool)[i].URL["Win"][0])
 			} else {
 				versions = (*BgetToolsPool)[i].Versions
@@ -151,9 +151,9 @@ func QueryBgetFiles(name string, env *map[string]string, BgetFilesPool *[]BgetFi
 				versions = GitHubVersionSpider((*BgetFilesPool)[f].VersionsAPI, true)
 			} else if (*BgetFilesPool)[f].VersionsAPI != "" && strings.Contains((*BgetFilesPool)[f].VersionsAPI, "bitbucket.org") {
 				versions = BitbucketVersionSpider((*BgetFilesPool)[f].VersionsAPI)
-			} else if strings.Contains((*BgetFilesPool)[f].URL[0], "github.com") {
+			} else if (*BgetFilesPool)[f].URL != nil && strings.Contains((*BgetFilesPool)[f].URL[0], "github.com") {
 				versions = GitHubVersionSpider((*BgetFilesPool)[f].URL[0], true)
-			} else if strings.Contains((*BgetFilesPool)[f].URL[0], "bitbucket.org") {
+			} else if (*BgetFilesPool)[f].URL != nil && strings.Contains((*BgetFilesPool)[f].URL[0], "bitbucket.org") {
 				versions = BitbucketVersionSpider((*BgetFilesPool)[f].URL[0])
 			} else {
 				versions = (*BgetFilesPool)[f].Versions
@@ -161,6 +161,7 @@ func QueryBgetFiles(name string, env *map[string]string, BgetFilesPool *[]BgetFi
 			if (*env)["version"] == "" && len(versions) > 0 {
 				(*env)["version"] = versions[0]
 			}
+
 			for _, url := range (*BgetFilesPool)[f].URL {
 				tmp := ""
 				tmpSlice := []string{}

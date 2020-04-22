@@ -43,39 +43,43 @@ func QueryKeysInfo(keys []string, env *map[string]string,
 	postShellCmd = make(map[string][]string)
 	vers = make(map[string][]string)
 	for k := range keys {
+		envNew := make(map[string]string)
+		for k, v := range *env {
+			envNew[k] = v
+		}
 		key, version, site, release := ParseMeta(keys[k])
-		if (*env)["version"] == "" {
-			(*env)["version"] = version
+		if envNew["version"] == "" {
+			envNew["version"] = version
 		}
-		if (*env)["site"] == "" {
-			(*env)["site"] = site
+		if envNew["site"] == "" {
+			envNew["site"] = site
 		}
-		if (*env)["release"] == "" {
-			(*env)["release"] = release
+		if envNew["release"] == "" {
+			envNew["release"] = release
 		}
-		DefaultVersions(key, env)
-		_, _, defaultVers := urlpool.QueryBgetTools(key, env, BgetToolsPool)
-		if (*env)["version"] == "" && len(defaultVers) > 0 {
-			(*env)["version"] = defaultVers[0]
+		DefaultVersions(key, &envNew)
+		_, _, defaultVers := urlpool.QueryBgetTools(key, &envNew, BgetToolsPool)
+		if envNew["version"] == "" && len(defaultVers) > 0 {
+			envNew["version"] = defaultVers[0]
 		}
-		tmp, tmp2, _ := urlpool.QueryBgetTools(key, env, BgetToolsPool)
+		tmp, tmp2, _ := urlpool.QueryBgetTools(key, &envNew, BgetToolsPool)
 		if len(tmp) > 0 {
 			urls[key] = append(urls[key], tmp...)
 			postShellCmd[key] = append(postShellCmd[key], tmp2...)
 			vers[key] = append(vers[key], defaultVers...)
 		}
-		_, _, defaultVers = urlpool.QueryBgetFiles(key, env, BgetFilesPool)
-		if (*env)["version"] == "" && len(defaultVers) > 0 {
-			(*env)["version"] = defaultVers[0]
+		_, _, defaultVers = urlpool.QueryBgetFiles(key, &envNew, BgetFilesPool)
+		if envNew["version"] == "" && len(defaultVers) > 0 {
+			envNew["version"] = defaultVers[0]
 		}
-		tmp, tmp2, _ = urlpool.QueryBgetFiles(key, env, BgetFilesPool)
+		tmp, tmp2, _ = urlpool.QueryBgetFiles(key, &envNew, BgetFilesPool)
 		if len(tmp) > 0 {
 			urls[key] = append(urls[key], tmp...)
 			postShellCmd[key] = append(postShellCmd[key], tmp2...)
 			vers[key] = append(vers[key], defaultVers...)
 		}
 
-		if len(urls[key]) > 0 && strings.Contains(urls[key][0], "github.com") && (*env)["withAssets"] == "yes" {
+		if len(urls[key]) > 0 && strings.Contains(urls[key][0], "github.com") && envNew["withAssets"] == "yes" {
 			assetsUrls := urlpool.GitHubAssetsSpider(urls[key][0], vers[key][0])
 			if len(assetsUrls) > 0 {
 				urls[key] = append(urls[key], assetsUrls...)
