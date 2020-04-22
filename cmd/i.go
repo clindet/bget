@@ -36,9 +36,10 @@ var updateCache bool
 var defaultEntry = map[string][]string{
 	"baseURL": []string{
 		"{{HOME}}/.config/bget/meta",
-		"http://61.129.70.139:3030/api/view_user_file/?path=/62dcd780-0db6-11e9-855b-bb4c4b386613/meta/bget",
-		"https://raw.githubusercontent.com/openanno/bget/master/",
+		"http://61.129.70.140:8080/bget/_meta",
+		"https://raw.githubusercontent.com/openanno/bget/master/_meta/",
 	},
+	"entry": []string{"default.json"},
 	"tools": []string{"tools/main.json"},
 	"files": []string{
 		"files/db.json",
@@ -243,6 +244,14 @@ func initLinks() {
 	netOpt.Overwrite = true
 	netOpt.Thread = 10
 	us, _ := user.Current()
+	if entryLink == "" {
+		v := defaultEntry["entry"][0]
+		if hasFile, _ := cio.PathExists(v); hasFile {
+			fcon, _ := cio.Open(v)
+			jsData, _ := ioutil.ReadAll(fcon)
+			json.Unmarshal(jsData, &defaultEntry)
+		}
+	}
 	defaultEntry["baseURL"][0] = strings.ReplaceAll(defaultEntry["baseURL"][0],
 		"{{HOME}}", us.HomeDir)
 	if entryLink == "" {
@@ -280,9 +289,15 @@ func initLinks() {
 }
 
 func loadEntryData(entry *map[string][]string) {
+	fmt.Println((*entry)["baseURL"][1:len((*entry)["baseURL"])])
 	for _, v := range (*entry)["baseURL"][1:len((*entry)["baseURL"])] {
 		links := []string{}
 		var destDir []string
+
+		for _, v2 := range (*entry)["entry"] {
+			links = append(links, strings.Replace(path.Join(v, v2), ":/", "://", 1))
+			destDir = append(destDir, path.Join((*entry)["baseURL"][0], path.Dir(v2)))
+		}
 
 		for _, v2 := range (*entry)["tools"] {
 			links = append(links, strings.Replace(path.Join(v, v2), ":/", "://", 1))
@@ -296,8 +311,8 @@ func loadEntryData(entry *map[string][]string) {
 		netOpt = setNetParams(&bgetClis)
 		netOpt.Overwrite = true
 		netOpt.Thread = 10
-		cnet.HTTPGetURLs(links, destDir, netOpt)
-		if loadLocalCache(entry) {
+		destFns := cnet.HTTPGetURLs(links, destDir, netOpt)
+		if len(destFns) > 0 && loadLocalCache(entry) {
 			break
 		}
 	}
@@ -306,6 +321,7 @@ func loadEntryData(entry *map[string][]string) {
 func loadLocalCache(entry *map[string][]string) bool {
 	toolsJSON := []string{}
 	filesJSON := []string{}
+
 	for _, v := range (*entry)["tools"] {
 		toolsJSON = append(toolsJSON, path.Join((*entry)["baseURL"][0], v))
 	}

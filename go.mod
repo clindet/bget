@@ -20,7 +20,7 @@ require (
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/onsi/ginkgo v1.11.0 // indirect
 	github.com/onsi/gomega v1.8.1 // indirect
-	github.com/openbiox/ligo v0.0.0-20200421163414-9a04d08e537e
+	github.com/openbiox/ligo v0.0.0-20200422051958-25487db3f6f6
 	github.com/pierrec/lz4 v2.5.2+incompatible // indirect
 	github.com/sirupsen/logrus v1.5.0
 	github.com/spf13/cobra v1.0.0
@@ -28,5 +28,6 @@ require (
 	github.com/tidwall/pretty v1.0.1
 	github.com/ulikunitz/xz v0.5.7 // indirect
 	github.com/vbauerster/mpb/v5 v5.0.3
+	golang.org/x/net v0.0.0-20200421231249-e086a090c8fd // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 )
