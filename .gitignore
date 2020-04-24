@@ -7,3 +7,5 @@ vendor
 .DS_Store
 _log
 go.sum
+
+.XML.tmp*

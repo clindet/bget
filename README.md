@@ -25,23 +25,23 @@ For website spider (optional):
 
 For raw sequencing data query (optional):
 
-- [sra-tools](https://github.com/ncbi/sra-tools) for SRA and dbGAP database: MAC and Windows user `bget i base/sratools@2.9.6-1`, Linux user `bget i base/sratools`;
+- [sra-tools](https://github.com/ncbi/sra-tools) for SRA and dbGAP database: `bget i sratools`;
 - [pyega3](https://github.com/EGA-archive/ega-download-client) for EGA database: `pip3 install pyega3`;
-- [gdc-client](https://gdc.cancer.gov/access-data/gdc-data-transfer-tool) for GDC portal: `bget i base/gdc-client@1.4.0 -u`.
+- [gdc-client](https://gdc.cancer.gov/access-data/gdc-data-transfer-tool) for GDC portal: `bget i gdc-client@1.5.0 -u`.
 
 ## Installation
 
 ```bash
 # windows
-wget https://github.com/openanno/bget/releases/download/v0.2.4/bget.exe
+wget https://github.com/openanno/bget/releases/download/v0.3.0/bget.exe
 
 # osx
-wget https://github.com/openanno/bget/releases/download/v0.2.4/bget_osx
+wget https://github.com/openanno/bget/releases/download/v0.3.0/bget_osx
 mv bget_osx bget
 chmod a+x bget
 
 # linux
-wget https://github.com/openanno/bget/releases/download/v0.2.4/bget_linux64
+wget https://github.com/openanno/bget/releases/download/v0.3.0/bget_linux64
 mv bget_linux64 bget
 chmod a+x bget
 
@@ -142,6 +142,41 @@ bget api mgrast anno --info
 bget api mgrast anno --evalue 100 --type organism --source SwissProt --seq mgm4447943.3
 
 bget api mgrast compute --info
+
+# returns all data in the system. Warning: this request returns 8MB+ and takes 5+ seconds
+bget api covid19 --all
+# returns all countries and associated provinces
+bget api covid19 --cts
+# returns all cases by case type for a country from the first recorded case.
+bget api covid19 --ct --name China
+# returns all cases by case type for a country from the first recorded case.
+bget api covid19 --ct-d-one --name China
+# returns all cases by case type for a country.
+bget api covid19 --ct-d-one-total --name China
+# returns all cases by case type for a country from the first recorded case with the latest record being the live count.
+bget api covid19 --ct-st-d-one --name China --status confirmed
+# returns all cases by case type for a country from the first recorded case.
+bget api covid19 --ct-st-d-one-live --name China --status confirmed
+# returns all cases by case type for a country from the first recorded case
+bget api covid19 --ct-st-d-one-total --name China --status confirmed
+# returns all cases by case type for a country with the latest record being the live count.
+bget api covid19 --ct-st-live --name China --status confirmed
+# returns all cases by case type for a country.
+bget api covid19 --ct-st --name China --status confirmed
+# returns all cases by case type for a country.
+bget api covid19 --ct-st-total --name China --status confirmed
+# returns all cases of a country.
+bget api covid19 --ct-total --name China
+# returns all live cases by case type for a country.
+bget api covid19 --live-ct --name China
+# returns all live cases by case type for a country after a given date.
+bget api covid19 --live-ct-st-date --name China --status confirmed --date 2020-04-20T06:20:47Z
+# returns all live cases by case type for a country.
+bget api covid19 --live-ct-st --name China --status confirmed
+# a summary of new and total cases per country
+bget api covid19 --summary
+bget api covid19 --export
+bget api covid19 --webhook https://your_webhook.com
 ```
 
 ### Query DOI resources

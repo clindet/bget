@@ -139,3 +139,29 @@ type MgRastEndpoints struct {
 
 	Auth string
 }
+
+// Covid19Endpoints is https://api.covid19api.com/ website endpoints
+type Covid19Endpoints struct {
+	AllRoute                        bool
+	CountriesRoute                  bool
+	CountryDayOneRoute              bool
+	CountryDayOneTotalRoute         bool
+	CountryRoute                    bool
+	CountryStatusDayOneLiveRoute    bool
+	CountryStatusDayOneRoute        bool
+	CountryStatusDayOneTotalRoute   bool
+	CountryStatusLiveRoute          bool
+	CountryStatusRoute              bool
+	CountryStatusTotalRoute         bool
+	CountryTotalRoute               bool
+	ExportRoute                     bool
+	LiveCountryRoute                bool
+	LiveCountryStatusAfterDateRoute bool
+	LiveCountryStatusRoute          bool
+	SummaryRoute                    bool
+	WebhookRoute                    string
+
+	Country string
+	Status  string
+	Date    string
+}

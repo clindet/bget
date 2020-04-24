@@ -44,6 +44,7 @@ func init() {
 	BapiCmd.AddCommand(Dataset2toolsCmd)
 	BapiCmd.AddCommand(CligovCmd)
 	BapiCmd.AddCommand(CrossRefCmd)
+	BapiCmd.AddCommand(Covid19Cmd)
 	wd, _ := os.Getwd()
 
 	BapiCmd.PersistentFlags().StringVarP(&(bapiClis.TaskID), "task-id", "k", stringo.RandString(15), "Task ID (random).")

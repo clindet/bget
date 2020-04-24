@@ -35,6 +35,24 @@ bget api gdc -m -q "5b2974ad-f932-499b-90a3-93577a9f0573,556e5e3f-0ab9-4b6c-aa62
 bget api gdc -m -q "5b2974ad-f932-499b-90a3-93577a9f0573,556e5e3f-0ab9-4b6c-aa62-c42f6a6cf20c" -n
 bget api gdc -d -q "5b2974ad-f932-499b-90a3-93577a9f0573" -n
 bget api ncbi -q "Galectins control MTOR and AMPK in response to lysosomal damage to induce autophagy OR MTOR-independent autophagy induced by interrupted endoplasmic reticulum-mitochondrial Ca2+ communication: a dead end in cancer cells. OR The PARK10 gene USP24 is a negative regulator of autophagy and ULK1 protein stability OR Coordinate regulation of autophagy and the ubiquitin proteasome system by MTOR." | bioctl cvrt  --xml2json pubmed -
+bget api covid19 --all
+bget api covid19 --cts
+bget api covid19 --ct --name China
+bget api covid19 --ct-d-one --name China
+bget api covid19 --ct-d-one-total --name China
+bget api covid19 --ct-st-d-one --name China --status confirmed
+bget api covid19 --ct-st-d-one-live --name China --status confirmed
+bget api covid19 --ct-st-d-one-total --name China --status confirmed
+bget api covid19 --ct-st-live --name China --status confirmed
+bget api covid19 --ct-st --name China --status confirmed
+bget api covid19 --ct-st-total --name China --status confirmed
+bget api covid19 --ct-total --name China
+bget api covid19 --live-ct --name China
+bget api covid19 --live-ct-st-date --name China --status confirmed --date 2020-04-20T06:20:47Z
+bget api covid19 --live-ct-st --name China --status confirmed
+bget api covid19 --summary
+bget api covid19 --export
+bget api covid19 --webhook https://your_webhook.com
 
 cd ..
 bget --clean
