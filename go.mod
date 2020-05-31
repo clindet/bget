@@ -14,18 +14,15 @@ require (
 	github.com/gobwas/ws v1.0.3 // indirect
 	github.com/gocolly/colly v1.2.0
 	github.com/google/go-github/v27 v27.0.6
-	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
 	github.com/mailru/easyjson v0.7.1 // indirect
-	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/onsi/ginkgo v1.11.0 // indirect
 	github.com/onsi/gomega v1.8.1 // indirect
-	github.com/openbiox/ligo v0.0.0-20200429101038-6db14930de2a
-	github.com/sirupsen/logrus v1.5.0
+	github.com/openbiox/ligo v0.0.0-20200531093847-98ba340d9015
+	github.com/sirupsen/logrus v1.6.0
 	github.com/spf13/cobra v1.0.0
 	github.com/tidwall/pretty v1.0.1
-	github.com/vbauerster/mpb/v5 v5.0.4
-	golang.org/x/crypto v0.0.0-20200427165652-729f1e841bcc // indirect
+	github.com/vbauerster/mpb/v5 v5.2.2
+	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
-	golang.org/x/sys v0.0.0-20200428200454-593003d681fa // indirect
 )
