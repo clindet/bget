@@ -46,7 +46,7 @@ func setOsStr(env *map[string]string) (ostype string) {
 	if (*env)["osType"] == "linux" {
 		ostype = "Linux"
 	} else if (*env)["osType"] == "windows" {
-		ostype = "windows"
+		ostype = "Win"
 	} else {
 		ostype = "Mac"
 	}
