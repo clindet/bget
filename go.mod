@@ -1,6 +1,6 @@
 module github.com/openanno/bget
 
-go 1.13
+go 1.14
 
 require (
 	code.cloudfoundry.org/bytefmt v0.0.0-20200131002437-cf55d5288a48
@@ -18,7 +18,7 @@ require (
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/onsi/ginkgo v1.11.0 // indirect
 	github.com/onsi/gomega v1.8.1 // indirect
-	github.com/openbiox/ligo v0.0.0-20200531093847-98ba340d9015
+	github.com/openbiox/ligo v0.0.0-20200601095404-93839e91bfd1
 	github.com/sirupsen/logrus v1.6.0
 	github.com/spf13/cobra v1.0.0
 	github.com/tidwall/pretty v1.0.1
