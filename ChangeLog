@@ -1,3 +1,8 @@
+2020-06-05 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
+
+		* auto load http_proxy or https_proxy
+		* fix defuse genomeVersionConvertor
+
 2020-04-29 Li Jianfeng <lee_jianfeng@sjtu.edu.cn>
 
 		* support covid19 api

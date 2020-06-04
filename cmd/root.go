@@ -86,6 +86,7 @@ func rootCmdRunOptions(cmd *cobra.Command, args []string) {
 func init() {
 	wd, _ = os.Getwd()
 	bgetClis.HelpFlags = true
+
 	rootCmd.AddCommand(URLCmd)
 	rootCmd.AddCommand(DoiCmd)
 	rootCmd.AddCommand(KeyCmd)

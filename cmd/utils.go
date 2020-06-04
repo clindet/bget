@@ -25,6 +25,11 @@ var wd string
 var logCon io.Writer
 
 func initCmd(cmd *cobra.Command, args []string) {
+	for _, v := range []string{"https_proxy", "http_proxy"} {
+		if os.Getenv(v) != "" {
+			bgetClis.Proxy = os.Getenv(v)
+		}
+	}
 	setLog()
 	if bgetClis.Clean {
 		clearLogDownload()

@@ -57,7 +57,7 @@ func setGlobalFlag(cmd *cobra.Command, bapiClis *types.BapiClisT) {
 	cmd.PersistentFlags().BoolVarP(&bapiClis.PrettyJSON, "json-pretty", "", false, "Pretty json files.")
 	cmd.PersistentFlags().IntVarP(&bapiClis.Indent, "indent", "", 4, "Control the indent of output json files.")
 	cmd.PersistentFlags().BoolVarP(&bapiClis.SortKeys, "sort-keys", "", false, "Control wheather to sort JSON key.")
-	cmd.PersistentFlags().IntVarP(&bapiClis.Retries, "retries", "r", 5, "Retry specifies the number of attempts to retrieve the data.")
+	cmd.PersistentFlags().IntVarP(&bapiClis.Retries, "retries", "r", 2, "Retry specifies the number of attempts to retrieve the data.")
 	cmd.PersistentFlags().IntVarP(&bapiClis.Timeout, "timeout", "", 35, "Set the timeout of per request.")
 	cmd.PersistentFlags().StringVarP(&(bapiClis.Proxy), "proxy", "", "", "HTTP proxy to query.")
 	cmd.PersistentFlags().IntVarP(&bapiClis.RetSleepTime, "retries-sleep-time", "", 5, "Sleep time after one retry.")

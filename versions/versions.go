@@ -29,9 +29,9 @@ func DefaultVersions(key string, env *map[string]string) {
 		(*env)["version"] = "hg38"
 	}
 	if key == "reffa" && (*env)["site"] == "genecode" && (*env)["release"] == "" {
-		(*env)["release"] = "31"
+		(*env)["release"] = "34"
 	} else if key == "reffa" && (*env)["site"] == "ensemble" && (*env)["release"] == "" {
-		(*env)["release"] = "97"
+		(*env)["release"] = "100"
 	}
 }
 

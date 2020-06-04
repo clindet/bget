@@ -35,7 +35,6 @@ func gunzipDefuseReffa(dest []string) (errList []error) {
 			if err != nil {
 				log.Warn(err)
 			}
-			err = archive.UnarchiveLog(srcFn, destDir)
 		} else if stringo.StrDetect(fn, ".gz$") {
 			srcFn = fn
 			err = archive.UnarchiveLog(srcFn, destDir)

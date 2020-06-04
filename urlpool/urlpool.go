@@ -161,8 +161,8 @@ func QueryBgetFiles(name string, env *map[string]string, BgetFilesPool *[]BgetFi
 			if (*env)["version"] == "" && len(versions) > 0 {
 				(*env)["version"] = versions[0]
 			}
-
 			for _, url := range (*BgetFilesPool)[f].URL {
+				(*env)["version"] = genomeVersionConvertor(url, (*env)["version"])
 				tmp := ""
 				tmpSlice := []string{}
 				for k, v := range *env {
