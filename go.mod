@@ -18,11 +18,13 @@ require (
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/onsi/ginkgo v1.11.0 // indirect
 	github.com/onsi/gomega v1.8.1 // indirect
-	github.com/openbiox/ligo v0.0.0-20200601095404-93839e91bfd1
+	github.com/openbiox/ligo v0.0.0-20200607024921-dd2356ca56a1
 	github.com/sirupsen/logrus v1.6.0
 	github.com/spf13/cobra v1.0.0
 	github.com/tidwall/pretty v1.0.1
 	github.com/vbauerster/mpb/v5 v5.2.2
-	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 // indirect
+	golang.org/x/crypto v0.0.0-20200604202706-70a84ac30bf9 // indirect
+	golang.org/x/net v0.0.0-20200602114024-627f9648deb9 // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
+	golang.org/x/sys v0.0.0-20200602225109-6fdc65e7d980 // indirect
 )
