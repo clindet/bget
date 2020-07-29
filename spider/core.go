@@ -294,18 +294,23 @@ func BmjComSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := initDoiColley(opt, "")
 	c.AllowedDomains = append(c.AllowedDomains, BmjComJournalLinks...)
 	fulltextUrl := ""
-	if opt.URL.Hostname() == "www.bmj.com" {
-		c.OnHTML("a.pdf-link[href]", func(e *colly.HTMLElement) {
-			link := e.Attr("href")
-			fulltextUrl = "https://" + opt.URL.Hostname() + link
-			if opt.FullText {
-				urls = append(urls, fulltextUrl)
-			}
-			if opt.Supplementary {
-				Visit(c, stringo.StrReplaceAll(fulltextUrl, ".full.pdf", "/related"))
-			}
-		})
-	}
+	c.OnHTML("a.pdf-link[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		fulltextUrl = "https://" + opt.URL.Hostname() + link
+		if opt.FullText {
+			urls = append(urls, fulltextUrl)
+		}
+		if opt.Supplementary {
+			Visit(c, stringo.StrReplaceAll(fulltextUrl, ".full.pdf", "/related"))
+		}
+	})
+	c.OnHTML("a.article-pdf-download[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		fulltextUrl = "https://" + opt.URL.Hostname() + link
+		if opt.FullText {
+			urls = append(urls, fulltextUrl)
+		}
+	})
 	if opt.Supplementary {
 		c.OnHTML(".supplementary-material a[href]", func(e *colly.HTMLElement) {
 			urls = append(urls, e.Attr("href"))
