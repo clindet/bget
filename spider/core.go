@@ -50,6 +50,7 @@ func NatureComSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -72,6 +73,7 @@ func ScienseComSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 		Visit(c, opt.URL.String()+"/tab-figures-data")
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -105,31 +107,8 @@ func CellComSpider(opt *DoiSpiderOpt) (urls []string) {
 				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
-		c.OnHTML("div.PdfDownloadButton a[href]", func(e *colly.HTMLElement) {
-			link := e.Attr("href")
-			link = "https://www.sciencedirect.com" + link
-			if len(urls) == 0 {
-				urls = append(urls, link)
-			}
-		})
 	}
-	c.OnHTML("#redirectURL", func(e *colly.HTMLElement) {
-		link := e.Attr("value")
-		u, _ := url.Parse(link)
-		link, _ = url.QueryUnescape(u.Path)
-		Visit(c, link)
-	})
-	c.OnHTML("meta[HTTP-EQUIV=REFRESH]", func(e *colly.HTMLElement) {
-		link := e.Attr("content")
-		link = stringo.StrReplaceAll(link, ".* url='", "")
-		link = stringo.StrReplaceAll(link, "'$", "")
-		link = "https://linkinghub.elsevier.com" + link
-		Visit(c, link)
-	})
-	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
 	if opt.Supplementary {
-		urls = append(urls, chrome.DoiSupplURLs(fmt.Sprintf("https://doi.org/%s", opt.Doi),
-			time.Duration(opt.Timeout)*time.Second, opt.Proxy)...)
 		c.OnHTML("#appsec1 a[target=new]", func(e *colly.HTMLElement) {
 			link := e.Attr("href")
 			urls = append(urls, link)
@@ -148,6 +127,42 @@ func CellComSpider(opt *DoiSpiderOpt) (urls []string) {
 				urls = append(urls, linkFilter(link, opt.URL))
 			}
 		})
+		c.OnHTML(".supplemental-information__links a[href]", func(e *colly.HTMLElement) {
+			link := e.Attr("href")
+			if link != "#" {
+				urls = append(urls, linkFilter(link, opt.URL))
+			}
+		})
+	}
+	c.OnHTML("#redirectURL", func(e *colly.HTMLElement) {
+		link := e.Attr("value")
+		u, _ := url.Parse(link)
+		link, _ = url.QueryUnescape(u.Path)
+		link = stringo.StrReplaceAll(link, "http://.*/retrieve/pii/", "https://www.sciencedirect.com/science/article/pii/")
+		Visit(c, link)
+	})
+	c.OnHTML("meta[HTTP-EQUIV=REFRESH]", func(e *colly.HTMLElement) {
+		link := e.Attr("content")
+		link = stringo.StrReplaceAll(link, ".* url='", "")
+		link = stringo.StrReplaceAll(link, "'$", "")
+		link = "https://linkinghub.elsevier.com" + link
+		if stringo.StrDetect(link, "www.sciencedirect.com") {
+			Visit(c, link)
+		}
+	})
+	c.OnHTML("div.PdfDownloadButton a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		link = "https://www.sciencedirect.com" + link
+		if len(urls) == 0 && opt.FullText {
+			urls = append(urls, link)
+		}
+		Visit(c, link)
+	})
+	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
+	if opt.Supplementary && len(urls) > 0 {
+		link := stringo.StrReplaceAll(urls[0], "/pdfft?.*", "")
+		urls = append(urls, chrome.DoiSupplURLs(link, time.Duration(opt.Timeout)*time.Second, opt.Proxy)...)
 	}
 	postSpiderPrint(opt, &urls)
 	return urls
@@ -169,6 +184,7 @@ func BloodJournalSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -192,6 +208,7 @@ func NejmSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -210,6 +227,7 @@ func AhajournalsSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 		Visit(c, fmt.Sprintf("https://www.ahajournals.org/doi/suppl/%s", opt.Doi))
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -231,6 +249,7 @@ func JamaNetworkSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -256,6 +275,7 @@ func AacrJournalsSpider(opt *DoiSpiderOpt) (urls []string) {
 		}
 	})
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -285,6 +305,7 @@ func TandfonlineSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 		Visit(c, fmt.Sprintf("https://www.tandfonline.com/doi/suppl/%s", opt.Doi))
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -322,6 +343,7 @@ func BmjComSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -339,6 +361,7 @@ func JournalsApsSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -355,6 +378,7 @@ func CellimageLibrarySpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -384,6 +408,7 @@ func IeeexploreSpider(opt *DoiSpiderOpt) (urls []string) {
 		Visit(c, linkFilter(link, opt.URL))
 	})
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -403,6 +428,7 @@ func SagepubComSpider(opt *DoiSpiderOpt) (urls []string) {
 	if len(urls) == 0 {
 		urls = append(urls, "http://sage.cnpereading.com/paragraph/download/"+opt.Doi)
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -427,6 +453,7 @@ func LwwComSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://journals.lww.com/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -444,6 +471,7 @@ func LiebertpubSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://www.liebertpub.com/doi/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -452,6 +480,7 @@ func PhysiologyOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		urls = append(urls, linkFilter("/doi/pdfplus/"+opt.Doi, opt.URL))
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -460,6 +489,7 @@ func RoyalsocietypublishingOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		urls = append(urls, linkFilter("/doi/pdf/"+opt.Doi, opt.URL))
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -468,6 +498,7 @@ func AmetsocOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		urls = append(urls, linkFilter("/doi/pdf/"+opt.Doi, opt.URL))
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -483,6 +514,7 @@ func AmegroupsSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -495,6 +527,7 @@ func JmirOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		urls = append(urls, link+"/pdf")
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -505,6 +538,7 @@ func ThiemeConnectDeSpider(opt *DoiSpiderOpt) (urls []string) {
 		link = strings.ReplaceAll(link, "/abstract/", "/pdf/")
 		urls = append(urls, link+".pdf")
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -530,6 +564,7 @@ func ThiemeConnectDeSpider(opt *DoiSpiderOpt) (urls []string) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 return urls
 }*/
@@ -547,6 +582,7 @@ func ThnoOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -569,6 +605,7 @@ func GeochemicalperspectivesOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -577,6 +614,7 @@ func IospressComSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := initDoiColley(opt, "https://content.iospress.com")
 	c.AllowedDomains = append(c.AllowedDomains, []string{"www.medra.org", "content.iospress.com", "content.iospress.com:443"}...)
 	Visit(c, fmt.Sprintf("https://content.iospress.com/doi/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -597,6 +635,7 @@ func IucrOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -611,6 +650,7 @@ func GeoscienceworldOrg(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -631,6 +671,7 @@ func AeawebOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://www.aeaweb.org/articles?id=%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -647,6 +688,7 @@ func InformsOrgSPider(opt *DoiSpiderOpt) (urls []string) {
 		supplHost := stringo.StrReplaceAll(opt.URL.String(), "/doi/", "/doi/suppl/")
 		Visit(c, supplHost)
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -667,6 +709,7 @@ func AsnjournalsOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 		Visit(c, opt.URL.String()+"/tab-figures-data")
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -676,6 +719,7 @@ func CogitatiopressComSpider(opt *DoiSpiderOpt) (urls []string) {
 		urls = append(urls, stringo.StrReplaceAll(opt.URL.String(),
 			"/view/", "/download/")+"/"+path.Base(opt.URL.String()))
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -691,6 +735,7 @@ func AdiccionesEsSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -717,6 +762,7 @@ func EurosurveillanceOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://www.eurosurveillance.org/content/%s#html_fulltext", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -736,6 +782,7 @@ func AerzteblattDeSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -752,6 +799,7 @@ func TosOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -760,6 +808,7 @@ func JstrokeOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := initDoiColley(opt, "http://www.j-stroke.org")
 	c.AllowedDomains = append(c.AllowedDomains, []string{"www.j-stroke.org", "j-stroke.org"}...)
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -774,6 +823,7 @@ func AnnalsOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -788,6 +838,7 @@ func PortlandpressComSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -802,6 +853,7 @@ func GeoscienceworldOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -810,6 +862,7 @@ func SpringerComSpider(opt *DoiSpiderOpt) (urls []string) {
 	c := initDoiColley(opt, "https://link.springer.com")
 	c.AllowedDomains = append(c.AllowedDomains, []string{"link.springer.com", "idp.springer.com"}...)
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -823,6 +876,7 @@ func AomOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		}
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -845,6 +899,7 @@ func AltexOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 	}
 	Visit(c, fmt.Sprintf("https://doi.org/%s", opt.Doi))
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -855,6 +910,7 @@ func IopOrgSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		urls = append(urls, fmt.Sprintf("https://iopscience.iop.org/article/%s/pdf", opt.Doi))
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }

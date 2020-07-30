@@ -21,6 +21,7 @@ require (
 	github.com/openbiox/ligo v0.0.0-20200607024921-dd2356ca56a1
 	github.com/sirupsen/logrus v1.6.0
 	github.com/spf13/cobra v1.0.0
+	github.com/tebeka/selenium v0.9.9 // indirect
 	github.com/tidwall/pretty v1.0.1
 	github.com/vbauerster/mpb/v5 v5.2.2
 	golang.org/x/crypto v0.0.0-20200604202706-70a84ac30bf9 // indirect

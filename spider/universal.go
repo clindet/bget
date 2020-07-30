@@ -52,6 +52,7 @@ func UniVersalDoiSpider(opt *DoiSpiderOpt) (urls []string) {
 			Visit(c, supplPage)
 		}
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -186,6 +187,7 @@ func directDoiSites(opt *DoiSpiderOpt) (urls []string) {
 			urls = append(urls, DirectSpider(opt)...)
 		}
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -196,6 +198,7 @@ func AddPdfSpider(opt *DoiSpiderOpt) (urls []string) {
 		link = stringo.StrReplaceAll(link, "/doi/", "/doi/pdf/")
 		urls = append(urls, link)
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -205,6 +208,7 @@ func AddPdfSuffixSpider(opt *DoiSpiderOpt) (urls []string) {
 		link := opt.URL.String()
 		urls = append(urls, link+".pdf")
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -220,6 +224,7 @@ func AddTextPdfSuffixSpider(opt *DoiSpiderOpt) (urls []string) {
 			urls = append(urls, link)
 		}
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -230,6 +235,7 @@ func AddPdfplusSpider(opt *DoiSpiderOpt) (urls []string) {
 		link = stringo.StrReplaceAll(link, "/doi/", "/doi/pdfplus/")
 		urls = append(urls, link)
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -238,6 +244,7 @@ func DirectSpider(opt *DoiSpiderOpt) (urls []string) {
 	if opt.FullText {
 		urls = append(urls, opt.URL.String())
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -253,6 +260,7 @@ func AddPdfplusWithSupplSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 		Visit(c, stringo.StrReplaceAll(opt.URL.String(), "/doi/", "/doi/suppl/"))
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -268,12 +276,14 @@ func AddPdfWithSupplSpider(opt *DoiSpiderOpt) (urls []string) {
 		})
 		Visit(c, stringo.StrReplaceAll(opt.URL.String(), "/doi/", "/doi/suppl/"))
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
 
 func AddLastPdfSpider(opt *DoiSpiderOpt) (urls []string) {
 	urls = append(urls, opt.URL.String()+"/pdf")
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -287,6 +297,7 @@ func AddDownloadSpider(opt *DoiSpiderOpt) (urls []string) {
 		}
 		urls = append(urls, link)
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -296,6 +307,7 @@ func ReplaceHtmlSpider(opt *DoiSpiderOpt) (urls []string) {
 		link := stringo.StrReplaceAll(opt.URL.String(), ".htm$|.html$", ".pdf")
 		urls = append(urls, link)
 	}
+	addCitationPdfURL(opt, &urls)
 	postSpiderPrint(opt, &urls)
 	return urls
 }
@@ -413,16 +425,19 @@ func Visit(c *colly.Collector, url string) error {
 }
 
 func postSpiderPrint(opt *DoiSpiderOpt, urls *[]string) {
+	if len(*urls) > 0 {
+		*urls = slice.DropSliceDup(*urls)
+		log.Infof(`Finding total %d links from %s: ["%s"]`,
+			len(*urls), opt.Doi, strings.Join(*urls, `", "`))
+	}
+}
+
+func addCitationPdfURL(opt *DoiSpiderOpt, urls *[]string) {
 	if len(*urls) == 0 && opt.FullText {
 		for k, v := range *opt.CitationMeta {
 			if k == "citation_pdf_url" && v != "" {
 				*urls = append(*urls, v)
 			}
 		}
-	}
-	if len(*urls) > 0 {
-		*urls = slice.DropSliceDup(*urls)
-		log.Infof(`Finding total %d links from %s: ["%s"]`,
-			len(*urls), opt.Doi, strings.Join(*urls, `", "`))
 	}
 }

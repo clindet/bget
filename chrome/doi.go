@@ -32,7 +32,7 @@ func DoiSupplURLs(url string, timeout time.Duration, proxy string) []string {
 	//err := cdp.Run(ctx, visibleNejm("https://www.nejm.org/doi/full/10.1056/NEJMoa1902226", &attbs))
 	if strings.Contains(url, "www.nejm.org") {
 		err = cdp.Run(ctx, visibleNejm(url, &attbs))
-	} else if stringo.StrDetect(url, "sciencedirect.com|/10.1016/") {
+	} else if stringo.StrDetect(url, "sciencedirect.com|/10.1016/|www.cell.com") {
 		err = cdp.Run(ctx, visibleScienceDirect(url, &attbs))
 	} else if strings.Contains(url, "www.ncbi.nlm.nih.gov/Traces/study") {
 		err = cdp.Run(ctx, visibleSraRunSelect(url, &attbs, ctx))
@@ -177,5 +177,5 @@ func visibleDownloadTask(url string, ctx context.Context) cdp.Tasks {
 }
 
 //func main() {
-//GetURLFile("https://linkinghub.elsevier.com/retrieve/pii/S2215036619303943", 145*time.Second, "http://lee_jianfeng:hhshsmuljf!@inproxy.sjtu.edu.cn:8000")
+//DoiSupplURLs("https://www.sciencedirect.com/science/article/pii/S1934590919303078?via=ihub", 145*time.Second)
 //}

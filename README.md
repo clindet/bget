@@ -23,6 +23,30 @@ For website spider (optional):
 
 - Headless Chrome is required for some of website with JavaScript driven render pages. For windows users, you may need to create an alias of Chrome to make [chromedp](https://github.com/chromedp/chromedp) work.
 
+```bash
+# To resolve `[FATA] exec: "google-chrome": executable file not found in $PATH` error:
+# option 1: install Chrome in your OS
+## centos
+sudo yum install liberation-fonts
+sudo yum -y install libXss*
+sudo yum install libappindicator*
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm 
+sudo rpm -ivh google-chrome-stable_current_x86_64.rpm
+
+## ubuntu
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+sudo dpkg -i google-chrome-stable_current_amd64.deb
+sudo apt install -f
+
+# option 2: run bget in the headless-shell docker container
+docker run -d -p 9222:9222 --rm --name headless-shell -v /path_contains_bget/:/tmp/bget chromedp/headless-shell
+docker exec -it headless-shell /bin/bash
+
+# set more timeout for poor network access
+bget doi 10.1016/j.devcel.2017.03.001 --suppl --timeout 100
+```
+
+
 For raw sequencing data query (optional):
 
 - [sra-tools](https://github.com/ncbi/sra-tools) for SRA and dbGAP database: `bget i sratools`;
@@ -33,15 +57,15 @@ For raw sequencing data query (optional):
 
 ```bash
 # windows
-wget https://github.com/openanno/bget/releases/download/v0.3.0/bget.exe
+wget https://github.com/openanno/bget/releases/download/v0.3.1/bget.exe
 
 # osx
-wget https://github.com/openanno/bget/releases/download/v0.3.0/bget_osx
+wget https://github.com/openanno/bget/releases/download/v0.3.1/bget_osx
 mv bget_osx bget
 chmod a+x bget
 
 # linux
-wget https://github.com/openanno/bget/releases/download/v0.3.0/bget_linux64
+wget https://github.com/openanno/bget/releases/download/v0.3.1/bget_linux64
 mv bget_linux64 bget
 chmod a+x bget
 
