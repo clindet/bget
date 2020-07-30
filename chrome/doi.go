@@ -19,10 +19,8 @@ var log = glog.Logger
 // DoiSupplURLs query supplementary files from url
 func DoiSupplURLs(url string, timeout time.Duration, proxy string) []string {
 	// create context
-	o := append(cdp.DefaultExecAllocatorOptions[:],
-		//... any options here
-		cdp.ProxyServer(proxy),
-	)
+	o := append(cdp.DefaultExecAllocatorOptions[:]) //... any options here
+
 	cx, cancel := cdp.NewExecAllocator(context.Background(), o...)
 	ctx, cancel := cdp.NewContext(cx)
 	ctx, cancel = context.WithTimeout(ctx, timeout)
@@ -131,13 +129,6 @@ func visibleWiley(url string, ctx context.Context) cdp.Tasks {
 	cdp.CombinedOutput(fn)
 	return tsk
 }
-
-/*func main() {
-    // url := "https://bpspubs.onlinelibrary.wiley.com/doi/pdf/10.1111/bph.14580"
-	//fmt.Println(Chrome2URLs("https://bpspubs.onlinelibrary.wiley.com/doi/pdf/10.1111/bph.14580"))
-    url := "https://www.sciencedirect.com/science/article/pii/S1934590919303078?via=ihub"
-    fmt.Println(Chrome2URLs(url))
-}*/
 
 func GetURLFile(url string, timeout time.Duration, proxy string) {
 	// create context
