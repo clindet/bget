@@ -9,9 +9,9 @@ bget url ${urls} -t 3 -o /tmp/download -g wget --resume
 bget url -l /tmp/urls.list -o /tmp/download -f -t 3
 
 bget url Miachol/github_demo --github
-bget url PapenfussLab/gridss openanno/bget --with-github-assets -t 5 --github
-bget url PapenfussLab/gridss openanno/bget --only-github-assets -t 5 --github
-bget url PapenfussLab/gridss openanno/bget --with-github-assets --with-assets-versions v2.7.2,v0.1.3 -t 5 --github
+bget url PapenfussLab/gridss clindet/bget --with-github-assets -t 5 --github
+bget url PapenfussLab/gridss clindet/bget --only-github-assets -t 5 --github
+bget url PapenfussLab/gridss clindet/bget --with-github-assets --with-assets-versions v2.7.2,v0.1.3 -t 5 --github
 
 bget --clean
 

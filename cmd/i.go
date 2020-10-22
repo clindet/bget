@@ -17,9 +17,9 @@ import (
 	"time"
 
 	"github.com/olekukonko/tablewriter"
-	"github.com/openanno/bget/spider"
-	"github.com/openanno/bget/urlpool"
-	vers "github.com/openanno/bget/versions"
+	"github.com/clindet/bget/spider"
+	"github.com/clindet/bget/urlpool"
+	vers "github.com/clindet/bget/versions"
 	"github.com/openbiox/ligo/archive"
 	bexec "github.com/openbiox/ligo/exec"
 	cio "github.com/openbiox/ligo/io"
@@ -40,7 +40,7 @@ var defaultEntry = map[string][]string{
 	"baseURL": []string{
 		"{{HOME}}/.config/bget/meta",
 		"https://hiplot.com.cn/download/bget/_meta",
-		"https://raw.githubusercontent.com/openanno/bget/master/_meta/",
+		"https://raw.githubusercontent.com/clindet/bget/master/_meta/",
 	},
 	"entry": []string{"default.json"},
 	"tools": []string{"tools/main.json"},
@@ -59,7 +59,7 @@ var defaultEntry = map[string][]string{
 var KeyCmd = &cobra.Command{
 	Use:   "i [name1 name2 name3...]",
 	Short: "Can be used to access URLs via a key string.",
-	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version #releaseVersion', : bwa, reffa-defuse@GRCh38 #97. More see here https://github.com/openanno/bget.`,
+	Long:  `Can be used to access URLs via a key string. e.g. 'item' or 'item@version #releaseVersion', : bwa, reffa-defuse@GRCh38 #97. More see here https://github.com/clindet/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		keyCmdRunOptions(cmd, args)
 	},

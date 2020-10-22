@@ -11,7 +11,7 @@ import (
 
 	"code.cloudfoundry.org/bytefmt"
 	"github.com/olekukonko/tablewriter"
-	"github.com/openanno/bget/api/types"
+	"github.com/clindet/bget/api/types"
 	cio "github.com/openbiox/ligo/io"
 	cnet "github.com/openbiox/ligo/net"
 	mpb "github.com/vbauerster/mpb/v5"

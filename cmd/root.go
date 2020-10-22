@@ -6,7 +6,7 @@ import (
 	"path"
 	"runtime"
 
-	api "github.com/openanno/bget/api/cmd"
+	api "github.com/clindet/bget/api/cmd"
 	stringo "github.com/openbiox/ligo/stringo"
 	"github.com/spf13/cobra"
 )
@@ -58,7 +58,7 @@ var bgetClis bgetCliT
 var rootCmd = &cobra.Command{
 	Use:   "bget",
 	Short: "Lightweight downloader for bioinformatics data, databases and files.",
-	Long:  `Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/openanno/bget.`,
+	Long:  `Lightweight downloader for bioinformatics data, databases and files (under development). It will provides a simple and parallelized method to access various bioinformatics resoures. More see here https://github.com/clindet/bget.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		rootCmdRunOptions(cmd, args)
 	},

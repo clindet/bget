@@ -15,7 +15,7 @@
 package main
 
 import (
-	"github.com/openanno/bget/cmd"
+	"github.com/clindet/bget/cmd"
 )
 
 func main() {

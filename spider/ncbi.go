@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/gocolly/colly"
+	"github.com/gocolly/colly/v2"
 	"github.com/openbiox/ligo/archive"
 	cnet "github.com/openbiox/ligo/net"
 	"github.com/openbiox/ligo/stringo"

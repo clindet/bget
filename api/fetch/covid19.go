@@ -7,7 +7,7 @@ import (
 
 	"github.com/openbiox/ligo/stringo"
 
-	"github.com/openanno/bget/api/types"
+	"github.com/clindet/bget/api/types"
 )
 
 const Covid19Host = "https://api.covid19api.com/"

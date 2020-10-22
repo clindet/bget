@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/openanno/bget/api/types"
+	"github.com/clindet/bget/api/types"
 )
 
 const Dataset2toolsHost = "http://amp.pharm.mssm.edu/datasets2tools/api/search?"

@@ -2,7 +2,7 @@
     "baseURL": [
         "{{HOME}}/.config/bget/meta", 
         "https://hiplot.com.cn/download/bget/_meta",
-	"https://raw.githubusercontent.com/openanno/bget/master/_meta/"
+	"https://raw.githubusercontent.com/clindet/bget/master/_meta/"
     ],
     "entry": [
         "default.json"

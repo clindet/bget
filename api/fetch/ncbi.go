@@ -8,7 +8,7 @@ import (
 
 	"github.com/biogo/ncbi"
 	"github.com/biogo/ncbi/entrez"
-	"github.com/openanno/bget/api/types"
+	"github.com/clindet/bget/api/types"
 	cnet "github.com/openbiox/ligo/net"
 )
 

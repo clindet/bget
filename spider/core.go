@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gocolly/colly"
-	"github.com/openanno/bget/chrome"
+	"github.com/clindet/bget/chrome"
+	"github.com/gocolly/colly/v2"
 	glog "github.com/openbiox/ligo/log"
 	cnet "github.com/openbiox/ligo/net"
 	"github.com/openbiox/ligo/stringo"

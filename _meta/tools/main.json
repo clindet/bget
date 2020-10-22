@@ -375,13 +375,13 @@
     "Tags": null,
     "URL": {
       "Linux": [
-        "https://github.com/openanno/bget/releases/download/{{version}}/bget_linux64"
+        "https://github.com/clindet/bget/releases/download/{{version}}/bget_linux64"
       ],
       "Mac": [
-        "https://github.com/openanno/bget/releases/download/{{version}}/bget_osx"
+        "https://github.com/clindet/bget/releases/download/{{version}}/bget_osx"
       ],
       "Win": [
-        "https://github.com/openanno/bget/releases/download/{{version}}/bget.exe"
+        "https://github.com/clindet/bget/releases/download/{{version}}/bget.exe"
       ]
     },
     "PostShellCmd": null
@@ -394,13 +394,13 @@
     "Tags": null,
     "URL": {
       "Linux": [
-        "https://github.com/openanno/bioctl/releases/download/{{version}}/bioctl_linux64"
+        "https://github.com/clindet/bioctl/releases/download/{{version}}/bioctl_linux64"
       ],
       "Mac": [
-        "https://github.com/openanno/bioctl/releases/download/{{version}}/bioctl_osx"
+        "https://github.com/clindet/bioctl/releases/download/{{version}}/bioctl_osx"
       ],
       "Win": [
-        "https://github.com/openanno/bioctl/releases/download/{{version}}/bioctl.exe"
+        "https://github.com/clindet/bioctl/releases/download/{{version}}/bioctl.exe"
       ]
     },
     "PostShellCmd": null
@@ -413,13 +413,13 @@
     "Tags": null,
     "URL": {
       "Linux": [
-        "https://github.com/openanno/bioextr/releases/download/{{version}}/bioextr_linux64"
+        "https://github.com/clindet/bioextr/releases/download/{{version}}/bioextr_linux64"
       ],
       "Mac": [
-        "https://github.com/openanno/bioextr/releases/download/{{version}}/bioextr_osx"
+        "https://github.com/clindet/bioextr/releases/download/{{version}}/bioextr_osx"
       ],
       "Win": [
-        "https://github.com/openanno/bioextr/releases/download/{{version}}/bioextr.exe"
+        "https://github.com/clindet/bioextr/releases/download/{{version}}/bioextr.exe"
       ]
     },
     "PostShellCmd": null

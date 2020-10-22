@@ -3,7 +3,7 @@ package spider
 import (
 	"fmt"
 
-	"github.com/gocolly/colly"
+	"github.com/gocolly/colly/v2"
 	stringo "github.com/openbiox/ligo/stringo"
 )
 

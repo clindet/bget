@@ -10,7 +10,6 @@ import (
 	glog "github.com/openbiox/ligo/log"
 	stringo "github.com/openbiox/ligo/stringo"
 
-	"github.com/chromedp/chromedp"
 	cdp "github.com/chromedp/chromedp"
 )
 
@@ -166,7 +165,7 @@ func visibleDownloadTask(url string, ctx context.Context) cdp.Tasks {
 			return nil
 		}),
 		cdp.WaitVisible(`#main-container`, cdp.ByQuery),
-		chromedp.OuterHTML("html", &body),
+		cdp.OuterHTML("html", &body),
 		cdp.ActionFunc(func(context.Context) error {
 			fmt.Println(body)
 			return nil

@@ -1,0 +1,47 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+       - go mod download
+    # you may remove this if you don't need go generate
+       - go generate ./...
+builds:
+- env:
+  - CGO_ENABLED=0
+  goos:
+    - linux
+    - darwin
+    - windows
+archives:
+- replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: 32-bit   #i386
+    amd64: 64-bit #x86_64
+  format: tar.gz
+  files:
+    #- LICENSE.md
+    #- CHANGELOG.md
+    #- README.md
+    #- test_data/*
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+release:
+  github:
+    owner: clindet
+    name: bget
+  # You can change the name of the release.
+  # Default is `{{.Tag}}`
+  # name_template: "latest"
+
+project_name: bget

@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/openanno/bget/api/fetch"
-	"github.com/openanno/bget/api/types"
+	"github.com/clindet/bget/api/fetch"
+	"github.com/clindet/bget/api/types"
 	"github.com/spf13/cobra"
 )
 
