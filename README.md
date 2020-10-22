@@ -57,13 +57,13 @@ For raw sequencing data query (optional):
 
 ```bash
 # windows
-wget https://github.com/clindet/bget/releases/download/v0.3.1/bget_0.3.1_Windows_64-bit.tar.gz
+wget https://github.com/clindet/bget/releases/download/v0.3.2/bget_0.3.2_Windows_64-bit.tar.gz
 
 # osx
-wget https://github.com/clindet/bget/releases/download/v0.3.1/bget_0.3.1_Darwin_64-bit.tar.gz
+wget https://github.com/clindet/bget/releases/download/v0.3.2/bget_0.3.2_Darwin_64-bit.tar.gz
 
 # linux
-wget https://github.com/clindet/bget/releases/download/v0.3.1/bget_0.3.1_Linux_64-bit.tar.gz
+wget https://github.com/clindet/bget/releases/download/v0.3.2/bget_0.3.2_Linux_64-bit.tar.gz
 
 # get latest version
 go get -u github.com/clindet/bget

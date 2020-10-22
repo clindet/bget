@@ -39,7 +39,7 @@ var updateCache bool
 var defaultEntry = map[string][]string{
 	"baseURL": []string{
 		"{{HOME}}/.config/bget/meta",
-		"http://61.129.70.140:8080/bget/_meta",
+		"https://hiplot.com.cn/download/bget/_meta",
 		"https://raw.githubusercontent.com/openanno/bget/master/_meta/",
 	},
 	"entry": []string{"default.json"},
