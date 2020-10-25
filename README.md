@@ -65,7 +65,8 @@ wget https://github.com/clindet/bget/releases/download/v0.3.2/bget_0.3.2_Darwin_
 # linux
 wget https://github.com/clindet/bget/releases/download/v0.3.2/bget_0.3.2_Linux_64-bit.tar.gz
 
-# get latest version
+# get source and compile latest version
+# Golang Toolchain required: https://golang.org/dl/
 go get -u github.com/clindet/bget
 ```
 
