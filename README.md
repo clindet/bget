@@ -72,7 +72,7 @@ go get -u github.com/clindet/bget
 
 ## Usage
 
-Command line outputs see [here](https://openbiox.github.io/bget/cli.html)
+Command line outputs see [here](https://clindet.github.io/bget/cli.html)
 
 ### Query webiste API
 
@@ -222,7 +222,7 @@ We can query PDF of the manuscript via using Endnote or sci-hub. However, you ca
 
 ![doi demo](https://github.com/clindet/bget/raw/master/docs/static/doi.gif)
 
-Here, we are developing and sharing an open-source tool bget with `doi` subcommand to query supplementary files of scientific papers. The journals with high impact factors or those integrative publishers are a higher priority in our development plan, see [here](http://openbiox.github.io/bget/doi.html)
+Here, we are developing and sharing an open-source tool bget with `doi` subcommand to query supplementary files of scientific papers. The journals with high impact factors or those integrative publishers are a higher priority in our development plan, see [here](http://clindet.github.io/bget/doi.html)
 
 **Warn**: It is noted that we do not want to distribute any pirated resources or cause unnecessary network congestion. We hope this tool can provide an optional method to more easily query related files of scientific papers. Please use it in a non-invasive way (i.e. high concurrency, long continuous request). If you do not follow the policies of the relevant website (i.e. continuous download or limited copyright), you will lose the authorization to use this tool.
 
