@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"code.cloudfoundry.org/bytefmt"
-	"github.com/olekukonko/tablewriter"
 	"github.com/clindet/bget/api/types"
+	"github.com/olekukonko/tablewriter"
 	cio "github.com/openbiox/ligo/io"
 	cnet "github.com/openbiox/ligo/net"
-	mpb "github.com/vbauerster/mpb/v5"
+	mpb "github.com/vbauerster/mpb/v7"
 )
 
 // GdcAPIHost GDC API
